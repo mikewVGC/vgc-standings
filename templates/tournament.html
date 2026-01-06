@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Tournament Standings -- Reportworm Standings</title>
+
+    __TEMPLATE_HEAD__
+</head>
+
+<body>
+
+<div id="app">
+
+    __TEMPLATE_HEADER__
+
+    <component :is="currentView" v-bind="currentProps"></component>
+
+    __TEMPLATE_FOOTER__
+
+</div>
+
+<template id="loading-template">
+    <h2>Loading...</h2>
+</template>
+
+<template id="standings-main-template">
+
+    <h2>{{ eventInfo.name }} Standings</h2>
+
+    <table id="standings">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th colspan="3">Record</th>
+                <th>Drop</th>
+                <th>Res</th>
+                <th>OpRes</th>
+                <th>Team</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="player in standings">
+                <td>{{ player.place }}</td>
+                <td><a :href="`#/player/${player.code}`">{{ player.name }}</a></td>
+                <td>{{ player.record.w }}</td>
+                <td>-</td>
+                <td>{{ player.record.l }}</td>
+                <td>{{ player.drop != -1 ? player.drop : '' }}</td>
+                <td>{{ player.cut ? '' : getPct(player.res.opp, 5) }}</td>
+                <td>{{ player.cut ? '' : getPct(player.res.oppopp, 5) }}</td>
+                <td class="team-container">
+                    <template v-for="mon in player.team">
+                        <div
+                            class="monicon"
+                            :style="{ backgroundPosition: getSpritePos(mon.code) }"
+                            :title="mon.name"
+                        ></div>
+                    </template>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</template>
+
+<template id="player-template">
+
+    <h1>Player &mdash; {{ player.name }}</h1>
+
+    <table id="player-info">
+        <thead>
+            <tr>
+                <th>Placement</th>
+                <th>Record</th>
+                <th>Drop</th>
+                <th>Opp Win %</th>
+                <th>Opp Opp Win %</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ player.place }}</td>
+                <td>{{ player.record.w }} - {{ player.record.l }}</td>
+                <td>{{ player.drop != -1 ? player.drop : '-' }}</td>
+                <td>{{ getPct(player.res.opp) }}</td>
+                <td>{{ getPct(player.res.oppopp) }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Teamsheet <div id="team-copy" @click="teamCopy()">Copy</div></h2>
+
+    <p v-if="player.team.length == 0">No teamsheet currently available.</p>
+
+    <div id="team">
+        <div v-for="mon in player.team" class="paste-mon">
+            <div class="mon-big-img">
+                <img :src="`/static/img/art/${mon.dex}.png`" width="150" height="150" />
+            </div>
+            <div>{{ mon.name }} @ {{ mon.item }}  </div>
+            <div>Ability: {{ mon.ability }}  </div>
+            <div class="kinda-hide">Level: 50  </div>
+            <div>Tera Type: {{ mon.tera }}  </div>
+            <div v-for="move in mon.moves">- {{ move }}  </div>
+            <br />
+        </div>
+    </div>
+
+    <h2>Opponents</h2>
+
+    <table id="opponents">
+
+    <template v-for="phase in player.groupedRounds">
+        <thead>
+            <tr class="phase-header">
+                <th colspan="6">{{ getPhaseString(phase.phase) }}</th>
+            </tr>
+            <tr>
+                <th>Rnd</th>
+                <th>Opponent</th>
+                <th>Result</th>
+                <th>Record</th>
+                <th>Res</th>
+                <th>Team</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="opp in phase.rounds" :class="opp.res">
+                <td>{{ opp.round }}</td>
+                <td>
+                    <template v-if="opp.bye">Bye</template>
+                    <a v-else :href="`#/player/${opp.opp}`">{{ opponents[opp.opp].name }}</a>
+                </td>
+                <td :class="[ opp.bye ? '' : opp.res ]">{{ opp.bye ? "" : opp.res }}</td>
+                <td>
+                    <template v-if="opponents[opp.opp].record">
+                    ({{ opponents[opp.opp].record.w }} - {{ opponents[opp.opp].record.l }})
+                    </template>
+                </td>
+                <td>
+                    <template v-if="opponents[opp.opp].res">
+                    {{ !opp.cut ? getPct(opponents[opp.opp].res.opp) : "" }}
+                    </template>
+                </td>
+                <td>
+                    <template v-for="mon in opponents[opp.opp].team">
+                        <div
+                            class="monicon"
+                            :style="{ backgroundPosition: getSpritePos(mon.code) }"
+                            :title="mon.name"
+                        ></div>
+                    </template>
+                </td>
+            </tr>
+        </tbody>
+
+    </template>
+
+    </table>
+
+</template>
+
+__VUE__
+
+<script type="module">
+import { createApp } from 'vue';
+import App from '__SCRIPT_FILE__';
+export default App;
+const app = createApp(App).mount('#app');
+
+app.setSpriteCoords(JSON.parse('__SPRITE_COORDS_DATA__'));
+
+app.init();
+</script>
+
+</body>
+</html>

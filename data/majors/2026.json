@@ -1,0 +1,362 @@
+[
+    {
+        "name": "Frankfurt Regional",
+        "code": "frankfurt",
+        "region": "Europe",
+        "country": "Germany",
+        "start": "2025-09-13",
+        "end": "2025-09-14",
+        "game": "Scarlet & Violet",
+        "format": "Regulation H"
+    },
+    {
+        "name": "Pittsburgh Regional",
+        "code": "pittsburgh",
+        "region": "North America",
+        "country": "United States",
+        "start": "2025-09-20",
+        "end": "2025-09-21",
+        "game": "Scarlet & Violet",
+        "format": "Regulation H"
+    },
+    {
+        "name": "Monterrey Regional",
+        "code": "monterrey",
+        "region": "Latin America",
+        "country": "Mexico",
+        "start": "2025-09-13",
+        "end": "2025-09-14",
+        "game": "Scarlet & Violet",
+        "format": "Regulation H"
+    },
+    {
+        "name": "Belo Horizonte Regional",
+        "code": "belo-horizonte",
+        "region": "Latin America",
+        "country": "Brazil",
+        "start": "2025-10-11",
+        "end": "2025-10-12",
+        "game": "Scarlet & Violet",
+        "format": "Regulation H"
+    },
+    {
+        "name": "Milwaukee Regional",
+        "code": "milwaukee",
+        "region": "North America",
+        "country": "United States",
+        "start": "2025-10-11",
+        "end": "2025-10-12",
+        "game": "Scarlet & Violet",
+        "format": "Regulation H"
+    },
+    {
+        "name": "Lille Regional",
+        "code": "lille",
+        "region": "Europe",
+        "country": "France",
+        "start": "2025-10-25",
+        "end": "2025-10-26",
+        "game": "Scarlet & Violet",
+        "format": "Regulation H"
+    },
+    {
+        "name": "Brisbane Regional",
+        "code": "brisbane",
+        "region": "Oceania",
+        "country": "Australia",
+        "start": "2025-11-01",
+        "end": "2025-11-02",
+        "game": "Scarlet & Violet",
+        "format": "Regulation H"
+    },
+    {
+        "name": "Gdańsk Regional",
+        "code": "gdansk",
+        "region": "Europe",
+        "country": "Poland",
+        "start": "2025-11-01",
+        "end": "2025-11-02",
+        "game": "Scarlet & Violet",
+        "format": "Regulation H"
+    },
+    {
+        "name": "Las Vegas Regional",
+        "code": "las-vegas",
+        "region": "North America",
+        "country": "United States",
+        "start": "2025-11-15",
+        "end": "2025-11-16",
+        "game": "Scarlet & Violet",
+        "format": "Regulation H"
+    },
+    {
+        "name": "Buenos Aires Special Event",
+        "code": "buenos-aires",
+        "region": "Latin America",
+        "country": "Argentina",
+        "start": "2025-11-15",
+        "end": "2025-11-16",
+        "game": "Scarlet & Violet",
+        "format": "Regulation H"
+    },
+    {
+        "name": "Latin America International",
+        "code": "laic",
+        "region": "Latin America",
+        "country": "São Paulo, Brazil",
+        "start": "2025-11-21",
+        "end": "2025-11-23",
+        "game": "Scarlet & Violet",
+        "format": "Regulation H"
+    },
+    {
+        "name": "Stuttgart Regional",
+        "code": "stuttgart",
+        "region": "Europe",
+        "country": "Germany",
+        "start": "2025-11-29",
+        "end": "2025-11-30",
+        "game": "Scarlet & Violet",
+        "format": "Regulation H"
+    },
+    {
+        "name": "Toronto Regional",
+        "code": "toronto",
+        "region": "North America",
+        "country": "Canada",
+        "start": "2026-01-17",
+        "end": "2026-01-18",
+        "game": "Scarlet & Violet",
+        "format": "Regulation F"
+    },
+    {
+        "name": "Birmingham Regional",
+        "code": "birmingham",
+        "region": "Europe",
+        "country": "United Kingdom",
+        "start": "2026-01-24",
+        "end": "2026-01-25",
+        "game": "Scarlet & Violet",
+        "format": "Regulation F"
+    },
+    {
+        "name": "Mérida Regional",
+        "code": "merida",
+        "region": "Latin America",
+        "country": "Mexico",
+        "start": "2026-01-24",
+        "end": "2026-01-25",
+        "game": "Scarlet & Violet",
+        "format": "Regulation F"
+    },
+    {
+        "name": "Auckland Regional",
+        "code": "auckland",
+        "region": "Oceania",
+        "country": "New Zealand",
+        "start": "2026-01-24",
+        "end": "2026-01-25",
+        "game": "Scarlet & Violet",
+        "format": "Regulation F"
+    },
+    {
+        "name": "Sydney Regional",
+        "code": "sydney",
+        "region": "Oceania",
+        "country": "New Zealand",
+        "start": "2026-02-07",
+        "end": "2026-02-08",
+        "game": "Scarlet & Violet",
+        "format": "Regulation F"
+    },
+    {
+        "name": "Santiago Regional",
+        "code": "santiago",
+        "region": "Latin America",
+        "country": "Chile",
+        "start": "2026-02-07",
+        "end": "2026-02-08",
+        "game": "Scarlet & Violet",
+        "format": "Regulation F"
+    },
+    {
+        "name": "European International",
+        "code": "euic",
+        "region": "Europe",
+        "country": "London, United Kingdom",
+        "start": "2026-02-13",
+        "end": "2026-02-15",
+        "game": "Scarlet & Violet",
+        "format": "Regulation F"
+    },
+    {
+        "name": "Seattle Regional",
+        "code": "seattle",
+        "region": "North America",
+        "country": "United States",
+        "start": "2026-02-28",
+        "end": "2026-03-01",
+        "game": "Scarlet & Violet",
+        "format": "Regulation F"
+    },
+    {
+        "name": "San Juan Special Event",
+        "code": "san-juan",
+        "region": "Latin America",
+        "country": "Puerto Rico, United States",
+        "start": "2026-03-07",
+        "end": "2026-03-08",
+        "game": "Scarlet & Violet",
+        "format": "Regulation F"
+    },
+    {
+        "name": "Curitiba Regional",
+        "code": "curitiba",
+        "region": "Latin America",
+        "country": "Brazil",
+        "start": "2026-03-14",
+        "end": "2026-03-15",
+        "game": "Scarlet & Violet",
+        "format": "Regulation F"
+    },
+    {
+        "name": "Houston Regional",
+        "code": "houston",
+        "region": "North America",
+        "country": "United States",
+        "start": "2026-03-21",
+        "end": "2026-03-22",
+        "game": "Scarlet & Violet",
+        "format": "Regulation F"
+    },
+    {
+        "name": "Seville Special Event",
+        "code": "seville",
+        "region": "Europe",
+        "country": "Spain",
+        "start": "2026-03-28",
+        "end": "2026-03-29",
+        "game": "Scarlet & Violet",
+        "format": "Regulation F"
+    },
+    {
+        "name": "Orlando Regional",
+        "code": "orlando",
+        "region": "North America",
+        "country": "United States",
+        "start": "2026-04-04",
+        "end": "2026-04-05",
+        "game": "???",
+        "format": "???"
+    },
+    {
+        "name": "Querétaro Regional",
+        "code": "queretaro",
+        "region": "North America",
+        "country": "Mexico",
+        "start": "2026-04-04",
+        "end": "2026-04-05",
+        "game": "???",
+        "format": "???"
+    },
+    {
+        "name": "Prague Regional",
+        "code": "prague",
+        "region": "Europe",
+        "country": "Czechia",
+        "start": "2026-04-25",
+        "end": "2026-04-26",
+        "game": "???",
+        "format": "???"
+    },
+    {
+        "name": "Los Angeles Regional",
+        "code": "los-angeles",
+        "region": "North America",
+        "country": "United States",
+        "start": "2026-05-08",
+        "end": "2026-05-10",
+        "game": "???",
+        "format": "???"
+    },
+    {
+        "name": "Campinas Regional",
+        "code": "campinas",
+        "region": "Latin America",
+        "country": "Brazil",
+        "start": "2026-05-16",
+        "end": "2026-05-17",
+        "game": "???",
+        "format": "???"
+    },
+    {
+        "name": "Utrecht Regional",
+        "code": "utrecht",
+        "region": "Europe",
+        "country": "Netherlands",
+        "start": "2026-05-16",
+        "end": "2026-05-17",
+        "game": "???",
+        "format": "???"
+    },
+    {
+        "name": "Melbourne Regional",
+        "code": "utrecht",
+        "region": "Oceania",
+        "country": "Australia",
+        "start": "2026-05-23",
+        "end": "2026-05-24",
+        "game": "???",
+        "format": "???"
+    },
+    {
+        "name": "Lima Special Event",
+        "code": "lima",
+        "region": "Latin America",
+        "country": "Peru",
+        "start": "2026-05-23",
+        "end": "2026-05-24",
+        "game": "???",
+        "format": "???"
+    },
+    {
+        "name": "Indianapolis Regional",
+        "code": "indianapolis",
+        "region": "North America",
+        "country": "United States",
+        "start": "2026-05-29",
+        "end": "2026-05-30",
+        "game": "???",
+        "format": "???"
+    },
+    {
+        "name": "Turin Special Event",
+        "code": "turin",
+        "region": "Europe",
+        "country": "Italy",
+        "start": "2026-06-06",
+        "end": "2026-06-07",
+        "game": "???",
+        "format": "???"
+    },
+    {
+        "name": "North America International",
+        "code": "naic",
+        "region": "North America",
+        "country": "New Orleans, United States",
+        "start": "2026-06-12",
+        "end": "2026-06-14",
+        "game": "???",
+        "format": "???"
+    },
+    {
+        "name": "2026 World Championships",
+        "code": "worlds",
+        "region": "",
+        "country": "San Francisco, United States",
+        "start": "2026-08-28",
+        "end": "2026-08-30",
+        "game": "???",
+        "format": "???"
+    }
+]

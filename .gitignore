@@ -1,0 +1,8 @@
+data/common/pokedex.json
+data/majors/2026/*
+public/data/*
+public/static/*.html
+public/static/*.min.js
+public/static/*.min.css
+public/static/img/art/*
+__pycache__

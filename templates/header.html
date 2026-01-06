@@ -1,0 +1,9 @@
+    <header id="header">
+        <h1>Reportworm Standings</h1>
+
+        <div class="tabgroup">
+            <div v-for="item in nav" :class="[ item.active ? 'active' : '' ]" v-cloak>
+                <a :href="item.link">{{ item.text }}</a>
+            </div>
+        </div>
+    </header>

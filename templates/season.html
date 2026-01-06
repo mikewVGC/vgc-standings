@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>VGC Events -- Reportworm Standings</title>
+
+    __TEMPLATE_HEAD__
+</head>
+
+<body>
+
+<div id="app">
+
+    __TEMPLATE_HEADER__
+
+    <component :is="currentView" v-bind="currentProps"></component>
+
+    __TEMPLATE_FOOTER__
+
+</div>
+
+<template id="loading">
+    <h2>Loading...</h2>
+</template>
+
+<template id="season-main-template">
+
+    <h2>VGC Events For The {{ season }} Season</h2>
+
+    <h3>Completed Events</h3>
+
+    <table class="eventslist" id="eventslist-completed">
+        <thead>
+            <tr>
+                <th>Event</th>
+                <th>Dates</th>
+                <th>Region</th>
+                <th>Game</th>
+                <th>Format</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="major in majors">
+                <td>
+                    <a :href="`${season}/${major.code}`">{{ major.name }}</a>
+                    <div class="reg-location"><em>{{ major.country }}</em></div>
+                </td>
+                <td>{{ major.dates }}</td>
+                <td>{{ major.region }}</td>
+                <td>{{ major.game }}</td>
+                <td>{{ major.format }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Upcoming Events</h3>
+
+    <table class="eventslist" id="eventslist-future">
+        <thead>
+            <tr>
+                <th>Event</th>
+                <th>Dates</th>
+                <th>Region</th>
+                <th>Game</th>
+                <th>Format</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="major in futureMajors">
+                <td>
+                    {{ major.name }}
+                    <div class="reg-location"><em>{{ major.country }}</em></div>
+                </td>
+                <td>{{ major.dates }}</td>
+                <td>{{ major.region }}</td>
+                <td>{{ major.game }}</td>
+                <td>{{ major.format }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+</template>
+
+__VUE__
+
+<script type="module">
+import { createApp } from 'vue';
+import App from '__SCRIPT_FILE__';
+export default App;
+const app = createApp(App).mount('#app');
+
+app.init();
+</script>
+
+</body>
+</html>
