@@ -1,6 +1,7 @@
 data/common/pokedex.json
 data/majors/2026/*
 public/data/*
+public/index.html
 public/static/*.html
 public/static/*.min.js
 public/static/*.min.css
