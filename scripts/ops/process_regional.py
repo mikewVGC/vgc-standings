@@ -1,10 +1,19 @@
 
-import datetime
 import json
 import re
 
-from lib.util import make_code, fix_mon_name, make_mon_code
-from lib.tournament import get_tournament_structure, calculate_win_pct, calculate_res, calculate_oppopp
+from lib.util import (
+    make_code,
+    fix_mon_name,
+    make_mon_code,
+    make_nice_date_str,
+)
+from lib.tournament import (
+    get_tournament_structure,
+    calculate_win_pct,
+    calculate_res,
+    calculate_oppopp,
+)
 from lib.formes import get_mon_dex_num_from_code, get_mon_alt_from_code
 
 """
@@ -147,24 +156,7 @@ build the season json... this mostly just copies the corresponding <year>.json
 """
 def process_season(year, season_data):
     for code, event_data in season_data.items():
-        start = datetime.datetime.strptime(event_data['start'], "%Y-%m-%d")
-        end = datetime.datetime.strptime(event_data['end'], "%Y-%m-%d")
-
-        start_month = start.strftime('%b')
-        start_day = int(start.strftime('%d'))
-        end_month = end.strftime('%b')
-        end_day = int(end.strftime('%d'))
-
-        if start_month != 'May':
-            start_month = f"{start_month}."
-        if end_month != 'May':
-            end_month = f"{end_month}."
-
-        event_data["dates"] = f"{start_month} {start_day} - {end_day}"
-        if start_month != end_month:
-            event_data["dates"] = f"{start_month} {start_day} - {end_month} {end_day}"
-
-        event_data["dates"] = f"{event_data['dates']}, {end.strftime('%Y')}"
+        event_data["dates"] = make_nice_date_str(event_data['start'], event_data['end'])
 
     season_data = list(season_data.values())
     season_data.reverse()

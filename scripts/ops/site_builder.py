@@ -2,6 +2,9 @@
 import json
 import os
 
+from lib.util import make_season_info_str, make_nice_date_str
+
+
 def build_home(year, majors, prod = False):
     with open("templates/home.html", 'r') as homefile:
         home = homefile.read()
@@ -22,9 +25,8 @@ def build_home(year, majors, prod = False):
 
     bootstrap = {
         "currentSeason": year,
-        "seasonStatus": 'We are currently in the middle of', #make more robust
-        "seasonStart": first_major['start'],
-        "seasonEnd": last_major['start'],
+        "seasonStatus": make_season_info_str(majors),
+        "seasonDates": make_nice_date_str(first_major['start'], last_major['start'], 'through', True),
         "worldsDate": worlds['dates'],
         "recent": recent[0:3],
         "upcoming": upcoming[0:3],

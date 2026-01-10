@@ -157,6 +157,10 @@ tr.phase-header th {
     border-bottom: 1px solid #D8D8D8;
 }
 
+#creditsTitle {
+    cursor: pointer;
+}
+
 #team {
 }
 

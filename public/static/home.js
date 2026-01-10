@@ -3,11 +3,12 @@ export default {
         return {
             currentSeason: 0,
             seasonStatus: '',
-            seasonStart: '',
-            seasonEnd: '',
+            seasonDates: '',
             worldsDate: '',
             recent: [],
             upcoming: [],
+
+            showCredits: false,
 
             nav: [{
                 text: "𑁔",
@@ -20,11 +21,14 @@ export default {
         init() {
         },
 
+        toggleCredits() {
+            this.showCredits = !this.showCredits;
+        },
+
         setBootstrapData(data) {
             this.currentSeason = data.currentSeason;
             this.seasonStatus = data.seasonStatus;
-            this.seasonStart = data.seasonStart;
-            this.seasonEnd = data.seasonEnd;
+            this.seasonDates = data.seasonDates;
             this.worldsDate = data.worldsDate;
             this.recent = data.recent;
             this.upcoming = data.upcoming;

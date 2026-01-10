@@ -14,13 +14,13 @@
 
     <h1>Reportworm VGC Standings</h1>
 
-    <p>Welcome to <em>Reportworm Standings</em>, where you can find full standings and teamsheets for VGC majors. This is currently in </p>
+    <p>Welcome to <em>Reportworm Standings</em>, where you can find full standings and teamsheets for VGC majors!</p>
 
     <h2 id="current-season" v-cloak>
         Current Season: <a :href="`/${currentSeason}`">{{ currentSeason }} VGC Season</a>
     </h2>
 
-    <p v-cloak>{{ seasonStatus }} the <strong><a :href="`/${currentSeason}`">{{ currentSeason }} VGC Season</a></strong>. The season runs from {{ seasonStart }} through {{ seasonEnd }}. The {{ currentSeason }} World Championships will be played {{ worldsDate }}.</p>
+    <p v-cloak>{{ seasonStatus }} the <strong><a :href="`/${currentSeason}`">{{ currentSeason }} VGC Season</a></strong>. The season runs from {{ seasonDates }}. The {{ currentSeason }} World Championships will be played {{ worldsDate }}.</p>
 
     <h3>Most Recent Events</h3>
 
@@ -34,18 +34,20 @@
         <li v-for="event in upcoming"><p><strong>{{ event.name }}</strong> will be played on {{ event.dates }}.</p></li>
     </ul>
 
-    <h2>Credits</h2>
+    <h2 @click="toggleCredits()" id="creditsTitle">
+        Credits 
+        <span v-if="!showCredits" v-cloak>&#9660;</span>
+        <span v-if="showCredits" v-cloak>&#9650;</span>
+    </h2>
 
-    <ul>
-
-        <li><p>Programming and site design is by <a href="https://bsky.app/profile/mikew.reportworm.com" target="_blank">Mike W</a> (I also have <a href="http://twitter.com/mikewVGC" target="_blank">a Twitter</a>). You can also check out <a href="https://github.com/mikewVGC" target="_blank">my Github</a> if you like.</p></li>
+    <ul v-if="showCredits" v-cloak>
+        <li><p>Programming and site design is by <a href="https://bsky.app/profile/mikew.reportworm.com" target="_blank">Mike W</a>, who you can find on BlueSky, I guess (I also have <a href="http://twitter.com/mikewVGC" target="_blank">a Twitter</a>). A few VGC projects can be found <a href="https://github.com/mikewVGC" target="_blank">on Github</a>.</p></li>
 
         <li><p>Match data comes from <a href="https://www.pokedata.ovh" target="_blank">Pokedata</a>, which I assume gets it from <a href="https://rk9.gg" target="_blank">RK9</a>. I also manually pull standings from RK9 so that the standings order will match the official standings.</p></li>
 
         <li><p>The wonderful Reportworm logo is by <a href="https://twitter.com/Chufflepop" target="_blank">Chufflepop</a>.</p></li>
 
         <li><p>Small sprites come from <a href="https://play.pokemonshowdown.com/" target="_blank">Pokemon Showdown</a> (specifically the <a href="https://github.com/pkmn/ps" target="_blank">pkmn/ps</a> project, if you're interested), and teamsheet art is official Pokemon art, which have been helpfully collected in the <a href="https://github.com/PokeAPI/sprites" target="_blank">PokeAPI/sprites</a> repository (with a few additions by me).</p></li>
-
     </ul>
 
     __TEMPLATE_FOOTER__
