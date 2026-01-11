@@ -16,6 +16,13 @@ def main():
 
     cl = parser.parse_args()
 
+    config = {}
+    try:
+        with open(f"config.json") as file:
+            config = json.loads(file.read())
+    except FileNotFoundError:
+        ...
+
     majors = {}
     with open(f"data/majors/{cl.year}.json", encoding='utf8') as file:
         data = json.loads(file.read())
@@ -35,7 +42,7 @@ def main():
         print("Done!")
 
     print("Rebuilding tournament page... ", end="")
-    build_tournament(cl.prod)
+    build_tournament(cl.prod, config)
     print("Done!")
 
     print("Processing season data and building season page... ", end="")

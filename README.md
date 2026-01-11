@@ -8,6 +8,8 @@ This was basically built because I'm sad that Stalruth standings are gone. Is th
 
 ## Setup / Development
 
+It's a little annoying to set this up because I'm not including any of the data or images in this repo, so fair warning.
+
 * You need Python! So install that if you don't have it already.
 * If you plan on making production builds (I don't know why you'd want to), you also need Go.
 * Clone this repo to anywhere you like.

@@ -87,14 +87,14 @@
         </tbody>
     </table>
 
-    <h2>Teamsheet <div id="team-copy" @click="teamCopy()">Copy</div></h2>
+    <h2>Teamsheet <div id="team-copy" @click="teamCopy()" v-if="player.team.length > 0">Copy</div></h2>
 
     <p v-if="player.team.length == 0">No teamsheet currently available.</p>
 
     <div id="team">
         <div v-for="mon in player.team" class="paste-mon">
             <div class="mon-big-img">
-                <img :src="`/static/img/art/${mon.dex}.png`" width="150" height="150" />
+                <img :src="`${monImgBase}/${mon.dex}.png`" width="150" height="150" />
             </div>
             <div>{{ mon.name }} @ {{ mon.item }}  </div>
             <div>Ability: {{ mon.ability }}  </div>
@@ -168,6 +168,7 @@ export default App;
 const app = createApp(App).mount('#app');
 
 app.setSpriteCoords(JSON.parse('__SPRITE_COORDS_DATA__'));
+app.setMonImgBase('__MON_IMG_BASE__');
 
 app.init();
 </script>

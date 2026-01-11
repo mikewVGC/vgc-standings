@@ -19,6 +19,8 @@ export default {
 
             spriteCoords: {},
 
+            monImgBase: '',
+
             nav: [{
                 text: "𑁔",
                 link: '/',
@@ -95,6 +97,7 @@ export default {
                     return {
                         player: player,
                         opponents: opps,
+                        monImgBase: this.monImgBase,
                     };
             }
 
@@ -154,6 +157,10 @@ export default {
             });
         },
 
+        setMonImgBase(base) {
+            this.monImgBase = base;
+        },
+
         copyToClipboard(value) {
             navigator.clipboard.writeText(value);
         },
@@ -195,7 +202,7 @@ export default {
         },
         'player': {
             template: '#player-template',
-            props: [ 'opponents', 'player' ],
+            props: [ 'opponents', 'player', 'monImgBase' ],
             methods: {
                 getSpritePos(name) {
                     return this.$parent.getSpritePos(name);

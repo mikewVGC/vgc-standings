@@ -73,7 +73,7 @@ export default {
     },
     components: {
         'loading': {
-            template: '#loading',
+            template: '#loading-template',
         },
         'season-main': {
             template: '#season-main-template',

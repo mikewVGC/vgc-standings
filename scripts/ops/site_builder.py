@@ -50,13 +50,19 @@ def build_season(year, prod = False):
         file.write(season)
 
 
-def build_tournament(prod = False):
+def build_tournament(prod = False, config = {}):
+    img_base = '/static/img/art'
+    if prod and 'monImgBase' in config:
+        img_base = config['monImgBase']
+
     with open("templates/tournament.html", 'r') as tourfile:
         tour = tourfile.read()
 
         with open("data/common/map-coords.json", 'r') as spritefile:
             spritedata = spritefile.read()
             tour = tour.replace('__SPRITE_COORDS_DATA__', spritedata)
+
+        tour = tour.replace('__MON_IMG_BASE__', img_base)
 
         tour = add_script('tournament', tour, prod)
         tour = add_header_footer(tour, prod)
