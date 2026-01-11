@@ -292,6 +292,10 @@ tr.phase-header th {
         color: #E0E0E0;
     }
 
+    #current-season {
+        background: #808080;
+    }
+
     .light-mode-only {
         display: none;
     }
