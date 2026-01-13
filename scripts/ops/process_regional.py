@@ -10,6 +10,7 @@ from lib.util import (
 )
 from lib.tournament import (
     get_tournament_structure,
+    get_round_name,
     calculate_win_pct,
     calculate_res,
     calculate_oppopp,
@@ -89,6 +90,7 @@ def process_regional(year, code, event_info):
 
             rounds.append({
                 'round': int(rnd),
+                'rname': get_round_name(rnd, tour_format),
                 'opp': oppCode if oppCode not in [ 'bye', 'late', 'none' ] else '',
                 'res': opp['result'],
                 'bye': 1 if oppCode == "bye" else 0,

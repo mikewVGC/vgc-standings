@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Tournament Standings -- Reportworm Standings</title>
-
-    __TEMPLATE_HEAD__
-</head>
-
-<body>
+__TEMPLATE_HEAD__
 
 <div id="app">
 
@@ -125,7 +117,7 @@
         </thead>
         <tbody>
             <tr v-for="opp in phase.rounds" :class="opp.res">
-                <td>{{ opp.round }}</td>
+                <td>{{ opp.rname }}</td>
                 <td>
                     <template v-if="opp.bye">Bye</template>
                     <a v-else :href="`#/player/${opp.opp}`">{{ opponents[opp.opp].name }}</a>

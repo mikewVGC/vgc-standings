@@ -27,6 +27,26 @@ def get_tournament_structure(season, competitors):
 
     return None
 
+
+# get "fancy" round name: Cut, T8 etc
+# this only works for 2026 asym cut (max 16)
+def get_round_name(rnd, tour_format):
+    last_swiss = tour_format[0] + tour_format[1]
+    if int(rnd) <= last_swiss:
+        return rnd
+
+    if int(rnd) == last_swiss + 1:
+        return "Top Cut"
+    if int(rnd) == last_swiss + 2:
+        return "Top 8"
+    if int(rnd) == last_swiss + 3:
+        return "Top 4"
+    if int(rnd) == last_swiss + 4:
+        return "Finals"
+
+    return rnd
+
+
 """
 In order to get accurate res, we need to calculate both day 1 and day 2 win pct
 """
@@ -133,7 +153,9 @@ def calculate_res(player, players, tour_format):
 
 
 """
-ugh
+ugh... this mostly works but there are some instances where it doesn't match up with
+the official standings / order on rk9 ... I also need to validate the rk9 order matches
+the one on pokemon.com
 """
 def calculate_oppopp(player, players, tour_format):
     matches = players[player]['rounds']
