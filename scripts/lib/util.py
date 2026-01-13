@@ -18,16 +18,28 @@ def make_mon_code(name):
 
 
 # convert mon name from rk9 to showdown
+# this is missing anything not present in SV
 def fix_mon_name(name):
+    # these are "default" for multi-forme mons on Showdown
+    # they get removed: Urshifu [Single Strike Form] -> Urshifu
     ignored = (
         "Male",
         "Unremarkable",
+        "Counterfeit",
         "Family of Three",
         "Amped",
         "Curly",
         "Baile",
+        "Single Strike",
+        "Midday",
+        "Incarnate",
+        "Teal",
+        "Green", # Squawkabilly
+        "Red-Striped",
+        "Chest",
     )
 
+    # convert map -> rk9: Showdown
     converted = {
         "Female": "F",
         "Paldean Form - Aqua Breed": "Paldea-Aqua",
@@ -38,7 +50,21 @@ def fix_mon_name(name):
         "Galarian": "Galar",
         "Alolan": "Alola",
         "Family of Four": "Four",
+        "Rapid Strike": "Rapid-Strike",
     }
+
+    # these are present in rk9 but not in Showdown names
+    # basically if a name ends with this, chop it off
+    chopped = (
+        "Form",
+        "Forme",
+        "Mask",
+        "Style",
+        "Rotom",
+        "Rider",
+        "Plumage",
+        "Kyurem",
+    )
 
     monInfo = re.findall(r"([\w -]+)(\[(\w)\]){0,1}", name)
     fixedName = monInfo[0][0].strip()
@@ -46,10 +72,11 @@ def fix_mon_name(name):
     if len(monInfo) > 1:
         # this will have form/gender etc
         secondary = monInfo[1][0]
-        if secondary.endswith(" Form"):
-            secondary = secondary[:-5]
-        elif secondary.endswith(" Style") or secondary.endswith(" Rotom"):
-            secondary = secondary[:-6]
+
+        for chop in chopped:
+            if secondary.endswith(f" {chop}"):
+                secondary = secondary[:-(len(chop)+1)]
+                break
 
         if secondary in ignored:
             secondary = ""
@@ -62,7 +89,7 @@ def fix_mon_name(name):
     return fixedName
 
 
-# makes the empty part of the "________ the XXXX season!" string on the homa page
+# makes the "________ the XXXX season!" string on the homa page
 def make_season_info_str(majors):
     total = len(majors)
     complete = len(list(filter(lambda major: major['processed'] == True, list(majors.values()))))
