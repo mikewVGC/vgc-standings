@@ -45,11 +45,6 @@ def main():
             "dates": "",
         }
 
-    if cl.prod:
-        print(f"[{year}] Minifying js and css... ", end="")
-        subprocess.run(["go", "run", "scripts/packer/main.go"], capture_output=True)
-        print("Done!")
-
     current_majors = {}
     for year in manifest['seasons']:
         majors = {}
@@ -81,6 +76,11 @@ def main():
         process_season(year, majors)
         print("Done!")
 
+    if cl.prod:
+        print(f"[ALL] Minifying js and css... ", end="")
+        subprocess.run(["go", "run", "scripts/packer/main.go"], capture_output=True)
+        print("Done!")
+
     print(f"[ALL] Rebuilding season page... ", end="")
     builder.build_season()
     print("Done!")
@@ -90,7 +90,7 @@ def main():
     print("Done!")
 
     # the homepage does require a bunch of data, which I'll probably change
-    print(f"[{year}] Building home/index page...", end="")
+    print(f"[ALL] Building home/index page...", end="")
     builder.build_home(manifest['current'], current_majors, list(non_current_seasons.values()))
     print("Done!")
 
