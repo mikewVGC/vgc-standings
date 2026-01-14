@@ -42,7 +42,7 @@ class SiteBuilder():
             file.write(home)
 
 
-    def build_season(self, year):
+    def build_season(self):
         with open("templates/season.html", 'r') as seasonfile:
             season = seasonfile.read()
 

@@ -45,6 +45,11 @@ def main():
             "dates": "",
         }
 
+    if cl.prod:
+        print(f"[{year}] Minifying js and css... ", end="")
+        subprocess.run(["go", "run", "scripts/packer/main.go"], capture_output=True)
+        print("Done!")
+
     current_majors = {}
     for year in manifest['seasons']:
         majors = {}
@@ -72,20 +77,19 @@ def main():
             majors[event_code]['processed'] = process_regional(year, event_code, event_info)
             print("Done!")
 
-        if cl.prod:
-            print(f"[{year}] Minifying js and css... ", end="")
-            subprocess.run(["go", "run", "scripts/packer/main.go"], capture_output=True)
-            print("Done!")
-
-        print(f"[{year}] Processing season data and building season page... ", end="")
+        print(f"[{year}] Processing season data... ", end="")
         process_season(year, majors)
-        builder.build_season(year)
         print("Done!")
+
+    print(f"[ALL] Rebuilding season page... ", end="")
+    builder.build_season()
+    print("Done!")
 
     print(f"[ALL] Rebuilding tournament page... ", end="")
     builder.build_tournament()
     print("Done!")
 
+    # the homepage does require a bunch of data, which I'll probably change
     print(f"[{year}] Building home/index page...", end="")
     builder.build_home(manifest['current'], current_majors, list(non_current_seasons.values()))
     print("Done!")
