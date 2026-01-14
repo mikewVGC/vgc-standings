@@ -17,14 +17,14 @@ div#app {
 header#header {
     background-image: url(/static/img/logo-black.png);
     background-repeat: no-repeat;
-    background-size: auto 160px;
+    background-size: auto 150px;
     background-position-y: 10px;
     margin-top: .5em;
     position: relative;
 }
 
 header#header h1 {
-    height: 170px;
+    height: 160px;
     margin: 0;
     font-size: 0;
 }
@@ -75,10 +75,21 @@ footer p {
 }
 
 #current-season {
-    border-top: 1px double #000;
-    border-bottom: 1px double #000;
-    padding: .5em .5em;
-    background: #E8E8E8;
+    border: 1px solid #222;
+    background: #F8F8F8;
+    border-radius: .75em;
+    padding: .75em;
+}
+
+#current-season h2 {
+    border-bottom: 1px double #222;
+    padding: .5em 0;
+    margin: .2em 0;
+}
+
+#current-season h3 {
+    padding: .2em 0;
+    margin: 0;
 }
 
 table {
@@ -162,10 +173,13 @@ tr.phase-header th {
 }
 
 #team {
+    font: 15px "M+ 1m", monospace;
 }
 
 #team div {
     padding-left: 160px;
+    white-space: nowrap;
+    overflow: display;
 }
 
 #team .paste-mon {
@@ -175,6 +189,10 @@ tr.phase-header th {
     height: 160px;
     padding-left: 0;
     padding-top: .75em;
+}
+
+#team .paste-mon div {
+    padding-bottom: .1em;
 }
 
 #team .mon-big-img {
@@ -188,20 +206,6 @@ tr.phase-header th {
     -ms-user-select: none;
 }
 
-#player-info td {
-    background: #E8E8E8;
-}
-
-.eventslist .reg-location {
-    font-size: .9em;
-    color: #404040;
-    padding-top: .2em;
-}
-
-#team {
-    font: 15px "M+ 1m", monospace;
-}
-
 #team-copy {
     display: inline-block;
     float: right;
@@ -212,6 +216,40 @@ tr.phase-header th {
     cursor: pointer;
     background: #E8E8E8;
     color: #000;
+}
+
+/* stolen from pokepast.es !!! */
+.type-normal   { color: #A8A878; }
+.type-fighting { color: #C03028; }
+.type-flying   { color: #A890F0; }
+.type-poison   { color: #A040A0; }
+.type-ground   { color: #E0C068; }
+.type-rock     { color: #B8A038; }
+.type-bug      { color: #A8B820; }
+.type-ghost    { color: #705898; }
+.type-steel    { color: #B8B8D0; }
+.type-fire     { color: #F08030; }
+.type-water    { color: #6890F0 }
+.type-grass    { color: #78C850; }
+.type-electric { color: #F8D030; }
+.type-psychic  { color: #F85888; }
+.type-ice      { color: #98D8D8; }
+.type-dragon   { color: #7038F8; }
+.type-dark     { color: #705848; }
+.type-fairy    { color: #EE99AC; }
+
+.attr {
+    color: #666666;
+}
+
+#player-info td {
+    background: #E8E8E8;
+}
+
+.eventslist .reg-location {
+    font-size: .9em;
+    color: #404040;
+    padding-top: .2em;
 }
 
 .kinda-hide {
@@ -293,7 +331,11 @@ tr.phase-header th {
     }
 
     #current-season {
-        background: #808080;
+        background: #404040;
+    }
+
+    #current-season h2 {
+        border-bottom: 1px double #DDD;
     }
 
     .light-mode-only {
@@ -302,5 +344,9 @@ tr.phase-header th {
 
     .dark-mode-only {
         display: block;
+    }
+
+    .attr {
+        color: #D0D0D0;
     }
 }

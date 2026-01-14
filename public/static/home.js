@@ -8,6 +8,8 @@ export default {
             recent: [],
             upcoming: [],
 
+            pastSeasons: [],
+
             showCredits: false,
 
             nav: [{
@@ -32,6 +34,7 @@ export default {
             this.worldsDate = data.worldsDate;
             this.recent = data.recent;
             this.upcoming = data.upcoming;
+            this.pastSeasons = data.pastSeasons;
         },
     }
 }

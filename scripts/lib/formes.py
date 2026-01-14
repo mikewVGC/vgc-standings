@@ -7,14 +7,16 @@ with open("data/common/pokedex.json") as file:
     pokedex = json.loads(file.read())
 
 
-def get_mon_dex_num_from_code(mon_code):
+# return dex #, primary typing
+def get_mon_data_from_code(mon_code):
     if mon_code in pokedex:
-        return pokedex[mon_code]['num']
+        return pokedex[mon_code]['num'], pokedex[mon_code]['types'][0]
     
     if mon_code in cosmetic_forms:
-        return pokedex[cosmetic_forms[mon_code]]['num']
+        cosmetic_code = cosmetic_forms[mon_code]
+        return pokedex[cosmetic_code]['num'], pokedex[cosmetic_code]['types'][0]
 
-    return 0
+    return 0, ''
 
 
 # for mapping alternate forms to images
@@ -80,8 +82,8 @@ image_alts = {
     "zamazentacrowned": 10189,
     "urshifurapidstrike": 10191,
     # zarude
-    "calyrexshadowrider": 10194,
-    "calyrexicerider": 10193,
+    "calyrexshadow": 10194,
+    "calyrexice": 10193,
     "ursalunabloodmoon": 10272,
     "oinkolognef": 10254,
     "mausholdfour": 10257, # need to fix ts

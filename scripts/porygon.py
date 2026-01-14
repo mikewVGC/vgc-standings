@@ -5,6 +5,7 @@ import subprocess
 
 from ops.process_regional import process_regional, process_season
 from ops.site_builder import SiteBuilder
+from lib.util import get_season_bookends, make_nice_date_str
 
 
 def main():
@@ -37,20 +38,34 @@ def main():
 
     seasons_to_build = [] if not cl.seasons else cl.seasons.split(',')
 
+    non_current_seasons = {}
+    for season in list(filter(lambda s: s != manifest['current'], manifest['seasons'])):
+        non_current_seasons[season] = {
+            "year": season,
+            "dates": "",
+        }
+
+    current_majors = {}
     for year in manifest['seasons']:
-        if len(seasons_to_build) and year not in seasons_to_build:
-            print(f"Skipping build for {year}")
-            continue
-
-        print(f"Building {year}")
-
         majors = {}
         with open(f"data/majors/{year}.json", encoding='utf8') as file:
             data = json.loads(file.read())
             for item in data:
                 majors[item['code']] = item
+                if year == manifest['current']:
+                    current_majors[item['code']] = item
 
             del data
+
+        if year in non_current_seasons:
+            f, l, w = get_season_bookends(majors)
+            non_current_seasons[year]['dates'] = make_nice_date_str(f['start'], w['start'], use_full_months=True)
+
+        if len(seasons_to_build) and str(year) not in seasons_to_build:
+            print(f"Skipping build for {year}")
+            continue
+
+        print(f"Building {year}")
 
         for event_code, event_info in majors.items():
             print(f"[{year}] Processing data for '{event_code}'... ", end="")
@@ -62,19 +77,18 @@ def main():
             subprocess.run(["go", "run", "scripts/packer/main.go"], capture_output=True)
             print("Done!")
 
-        print(f"[{year}] Rebuilding tournament page... ", end="")
-        builder.build_tournament()
-        print("Done!")
-
         print(f"[{year}] Processing season data and building season page... ", end="")
         process_season(year, majors)
         builder.build_season(year)
         print("Done!")
 
-        if year == manifest['current']:
-            print(f"[{year}] Building home/index page...", end="")
-            builder.build_home(year, majors, manifest['seasons'])
-            print("Done!")
+    print(f"[ALL] Rebuilding tournament page... ", end="")
+    builder.build_tournament()
+    print("Done!")
+
+    print(f"[{year}] Building home/index page...", end="")
+    builder.build_home(manifest['current'], current_majors, list(non_current_seasons.values()))
+    print("Done!")
 
     print("All done!")
 

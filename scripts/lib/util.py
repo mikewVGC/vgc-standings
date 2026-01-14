@@ -3,13 +3,22 @@ import datetime
 import re
 import unicodedata
 
+from urllib.parse import quote
+
+
 # make player names URL friendly:
 #  Chuppa Cross IV -> chuppa-cross-iv
 #  Jérémy Côté     -> jeremy-cote
 def make_code(name):
     coded = re.sub(r"[^\w-]+", '', name.lower().replace(' ', '-'))
     coded = unicodedata.normalize('NFKD', coded)
-    return coded.encode('ascii', 'ignore').decode('utf-8')
+    coded = coded.encode('ascii', 'ignore').decode('utf-8')
+
+    # likely non-western characters, so we'll just url encode
+    if len(coded.replace('-', '')) == 0:
+        return quote(name)
+
+    return coded
 
 
 # make a lookup code from a mon name
@@ -114,6 +123,16 @@ def make_season_info_str(majors):
         return "We've completed"
 
     return "We are currently in the middle of"
+
+
+# get first, last, and worlds from a list of majors
+def get_season_bookends(majors):
+    major_codes = list(majors.keys())
+    first_major = majors[major_codes[0]]
+    last_major = majors[major_codes[len(major_codes) - 2]]
+    worlds = majors[major_codes[len(major_codes) - 1]]
+
+    return first_major, last_major, worlds
 
 
 # this makes lame-o 2025-10-15 - 2025-10-17 style dates into coolio Oct. 15 - 17, 2025 style

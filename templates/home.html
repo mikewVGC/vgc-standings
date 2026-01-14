@@ -8,30 +8,40 @@ __TEMPLATE_HEAD__
 
     <h1>Reportworm VGC Standings</h1>
 
-    <p>Welcome to <em>Reportworm Standings</em>, where you can find full standings and teamsheets for VGC majors!</p>
+    <p>Welcome to <em>Reportworm Standings</em>, where you can find full standings and teamsheets for VGC majors.</p>
 
-    <h2 id="current-season" v-cloak>
-        Current Season: <a :href="`/${currentSeason}`">{{ currentSeason }} VGC Season</a>
-    </h2>
+    <div id="current-season">
 
-    <p v-cloak>{{ seasonStatus }} the <strong><a :href="`/${currentSeason}`">{{ currentSeason }} VGC Season</a></strong>. The season runs from {{ seasonDates }}. The {{ currentSeason }} World Championships will be played {{ worldsDate }}.</p>
+        <h2 v-cloak>
+            Current Season: <a :href="`/${currentSeason}`">{{ currentSeason }} VGC Season</a>
+        </h2>
 
-    <h3>Most Recent Events</h3>
+        <p v-cloak>{{ seasonStatus }} the <strong><a :href="`/${currentSeason}`">{{ currentSeason }} VGC Season</a></strong>. The season runs from {{ seasonDates }}. The {{ currentSeason }} World Championships will be played {{ worldsDate }}.</p>
+
+        <h3>Most Recent Events</h3>
+
+        <ul v-cloak>
+            <li v-for="event in recent"><p><strong><a :href="`/${currentSeason}/${event.code}`">{{ event.name }}</a></strong> was played on {{ event.dates }}.</p></li>
+        </ul>
+
+        <h3>Upcoming Events</h3>
+
+        <ul v-cloak>
+            <li v-for="event in upcoming"><p><strong>{{ event.name }}</strong> will be played on {{ event.dates }}.</p></li>
+        </ul>
+
+    </div>
+
+    <h2 v-if="pastSeasons.length > 0">Past Seasons</h2>
 
     <ul v-cloak>
-        <li v-for="event in recent"><p><strong><a :href="`/${currentSeason}/${event.code}`">{{ event.name }}</a></strong> was played on {{ event.dates }}.</p></li>
-    </ul>
-
-    <h3>Upcoming Events</h3>
-
-    <ul v-cloak>
-        <li v-for="event in upcoming"><p><strong>{{ event.name }}</strong> will be played on {{ event.dates }}.</p></li>
+        <li v-for="season in pastSeasons"><a :href="`/${season.year}`"><p><strong>{{ season.year }} Season</strong></a> - Took place from {{ season.dates }}</p></li>
     </ul>
 
     <h2 @click="toggleCredits()" id="creditsTitle">
         Credits 
-        <span v-if="!showCredits" v-cloak>&#9660;</span>
-        <span v-if="showCredits" v-cloak>&#9650;</span>
+        <span v-if="!showCredits" v-cloak>&#9654;</span>
+        <span v-if="showCredits" v-cloak>&#9660;</span>
     </h2>
 
     <ul v-if="showCredits" v-cloak>
@@ -41,7 +51,7 @@ __TEMPLATE_HEAD__
 
         <li><p>The wonderful Reportworm logo is by <a href="https://twitter.com/Chufflepop" target="_blank">Chufflepop</a>.</p></li>
 
-        <li><p>Small sprites come from <a href="https://play.pokemonshowdown.com/" target="_blank">Pokemon Showdown</a> (specifically the <a href="https://github.com/pkmn/ps" target="_blank">pkmn/ps</a> project, if you're interested), and teamsheet art is official Pokemon art, which have been helpfully collected in the <a href="https://github.com/PokeAPI/sprites" target="_blank">PokeAPI/sprites</a> repository (with a few additions by me).</p></li>
+        <li><p>Small sprites come from <a href="https://play.pokemonshowdown.com/" target="_blank">Pokemon Showdown</a> (specifically the <a href="https://github.com/pkmn/ps" target="_blank">pkmn/ps</a> project, if you're interested), and teamsheet art is official Pokemon art, which have been helpfully collected in the <a href="https://github.com/PokeAPI/sprites" target="_blank">PokeAPI/sprites</a> repository.</p></li>
     </ul>
 
     __TEMPLATE_FOOTER__

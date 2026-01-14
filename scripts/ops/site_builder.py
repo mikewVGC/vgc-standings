@@ -2,7 +2,7 @@
 import json
 import os
 
-from lib.util import make_season_info_str, make_nice_date_str
+from lib.util import make_season_info_str, make_nice_date_str, get_season_bookends
 
 class SiteBuilder():
 
@@ -10,7 +10,7 @@ class SiteBuilder():
         self.config = config
         self.prod = prod
 
-    def build_home(self, year, majors, all_seasons):
+    def build_home(self, year, majors, all_other_seasons):
         with open("templates/home.html", 'r') as homefile:
             home = homefile.read()
 
@@ -19,10 +19,7 @@ class SiteBuilder():
         home = self._add_google_analytics(home)
         home = self._add_script('home', home)
 
-        major_codes = list(majors.keys())
-        first_major = majors[major_codes[0]]
-        last_major = majors[major_codes[len(major_codes) - 2]]
-        worlds = majors[major_codes[len(major_codes) - 1]]
+        first_major, last_major, worlds = get_season_bookends(majors)
 
         recent = list(filter(lambda major: major['processed'] == True, list(majors.values())))
         upcoming = list(filter(lambda major: major['processed'] == False, list(majors.values())))
@@ -36,6 +33,7 @@ class SiteBuilder():
             "worldsDate": worlds['dates'],
             "recent": recent[0:3],
             "upcoming": upcoming[0:3],
+            "pastSeasons": all_other_seasons,
         }
 
         home = home.replace('__BOOTSTRAP_DATA__', json.dumps(bootstrap))

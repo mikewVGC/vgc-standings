@@ -1,6 +1,30 @@
 
 # returns (day 1 rounds, day 2 rounds, top cut min)
 def get_tournament_structure(season, competitors):
+    if season == 2025:
+        if competitors >= 4097:
+            return (9, 5, 8)
+        elif competitors >= 2049:
+            return (9, 4, 8)
+        elif competitors >= 1025:
+            return (8, 4, 8)
+        elif competitors >= 513:
+            return (8, 3, 8)
+        elif competitors >= 257:
+            return (8, 2, 8)
+        elif competitors >= 129:
+            return (7, 2, 8)
+        elif competitors >= 65:
+            return (6, 2, 8)
+        elif competitors >= 33:
+            return (7, 0, 6)
+        elif competitors >= 17:
+            return (6, 0, 4)
+        elif competitors >= 9:
+            return (4, 0, 2)
+        elif competitors >= 4:
+            return (3, 0, 0)
+
     if season == 2026:
         if competitors >= 4097:
             return (9, 6, 8)
@@ -29,22 +53,22 @@ def get_tournament_structure(season, competitors):
 
 
 # get "fancy" round name: Cut, T8 etc
-# this only works for 2026 asym cut (max 16)
-def get_round_name(rnd, tour_format):
+def get_round_name(rnd, tour_format, max_round = 0):
     last_swiss = tour_format[0] + tour_format[1]
     if int(rnd) <= last_swiss:
         return rnd
 
-    if int(rnd) == last_swiss + 1:
-        return "Top Cut"
-    if int(rnd) == last_swiss + 2:
-        return "Top 8"
-    if int(rnd) == last_swiss + 3:
-        return "Top 4"
-    if int(rnd) == last_swiss + 4:
+    if int(rnd) == max_round:
         return "Finals"
+    if int(rnd) == max_round - 1:
+        return "Top 4"
+    if int(rnd) == max_round - 2:
+        return "Top 8"
+    if int(rnd) == max_round - 3:
+        if max_round - last_swiss > 4:
+            return "Top 16"
 
-    return rnd
+    return "Top Cut"
 
 
 """

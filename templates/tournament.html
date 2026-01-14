@@ -88,10 +88,10 @@ __TEMPLATE_HEAD__
             <div class="mon-big-img">
                 <img :src="`${monImgBase}/${mon.dex}.png`" width="150" height="150" />
             </div>
-            <div>{{ mon.name }} @ {{ mon.item }}  </div>
-            <div>Ability: {{ mon.ability }}  </div>
+            <div><span :class="`type-${mon.ptype}`">{{ mon.name }}</span> @ {{ mon.item }}  </div>
+            <div><span class="attr">Ability:</span> {{ mon.ability }}  </div>
             <div class="kinda-hide">Level: 50  </div>
-            <div>Tera Type: {{ mon.tera }}  </div>
+            <div><span class="attr">Tera Type:</span> <span :class="`type-${mon.tera.toLowerCase()}`">{{ mon.tera }}</span>  </div>
             <div v-for="move in mon.moves">- {{ move }}  </div>
             <br />
         </div>

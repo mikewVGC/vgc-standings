@@ -20,9 +20,9 @@ __TEMPLATE_HEAD__
 
     <h2>VGC Events For The {{ season }} Season</h2>
 
-    <h3>Completed Events</h3>
+    <h3 v-if="majors.length > 0">Completed Events</h3>
 
-    <table class="eventslist" id="eventslist-completed">
+    <table class="eventslist" id="eventslist-completed" v-if="majors.length > 0">
         <thead>
             <tr>
                 <th>Event</th>
@@ -46,9 +46,9 @@ __TEMPLATE_HEAD__
         </tbody>
     </table>
 
-    <h3>Upcoming Events</h3>
+    <h3 v-if="futureMajors.length > 0">Upcoming Events</h3>
 
-    <table class="eventslist" id="eventslist-future">
+    <table class="eventslist" id="eventslist-future" v-if="futureMajors.length > 0">
         <thead>
             <tr>
                 <th>Event</th>
