@@ -23,7 +23,7 @@ def main():
         with open(f"config.json") as file:
             config = json.loads(file.read())
     except FileNotFoundError:
-        ...
+        print("Couldn't load config, but that's okay")
 
     manifest = {}
     try:
