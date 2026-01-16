@@ -51,3 +51,37 @@ docker compose up -d
 ## Running Live
 
 If for some reason you want a live version... I wouldn't do it! But if you really want to, make sure you have the necessary data outlined in the Setup section.
+
+### Redis Cache
+
+The final-ish step for running in production is to use the Redis cache instead of serving static files. You can use static files if you want, but Redis will be much faster. If you add `"cacheJson": true` to your `config.json` file then Porygon will automatically cache items in Redis.
+
+Having this work requires both the Lua module as well as lua-resty-redis bundle. Using the included `nginx.conf` as a base, you can add a `content_by_lua_block`:
+
+```
+location ~ "^/api/v1/[0-9]{4}/[a-z-]+$" {
+    default_type application/json;
+    content_by_lua_block {
+        local redis = require "resty.redis"
+        local ngx_ctx = ngx.ctx
+
+        local red, _ = redis:new()
+        local ok, _ = red:connect("127.0.0.1", 6379)
+        if not ok then
+            return
+        end
+
+        local res, _ = red:get("vgc-standings::" + )
+
+        if res != ngx.null then
+            ngx.say(res)
+        end
+
+        return
+    }
+
+    rewrite "^/api/v1/([0-9]{4})/([a-z-]+)$" /data/$1/$2.json last;
+}
+```
+
+This functionality is not supported in the docker version out of the box.

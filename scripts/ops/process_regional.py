@@ -162,6 +162,8 @@ def process_regional(year, code, event_info):
         players[player]['place'] = pidx + 1
         players_ordered[player] = players[player]
 
+    event_info["dates"] = make_nice_date_str(event_info['start'], event_info['end'])
+
     with open(f"public/data/{year}/{code}.json", 'w') as file:
         file.write(json.dumps({
             "event": event_info,
@@ -184,3 +186,16 @@ def process_season(year, season_data):
     with open(f"public/data/{year}.json", 'w') as file:
         file.write(json.dumps(season_data))
 
+
+"""
+this is used with the build_only flag, only check
+for the presence of a processed standings file
+"""
+def was_event_processed(year, event_code):
+    try:
+        with open(f"public/data/{year}/{event_code}.json") as file:
+            ...
+    except FileNotFoundError:
+        return False
+
+    return True

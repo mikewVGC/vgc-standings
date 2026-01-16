@@ -18,13 +18,12 @@ header#header {
     background-image: url(/static/img/logo-black.png);
     background-repeat: no-repeat;
     background-size: auto 150px;
-    background-position-y: 10px;
-    margin-top: .5em;
+    background-position-y: 5px;
     position: relative;
 }
 
 header#header h1 {
-    height: 160px;
+    height: 150px;
     margin: 0;
     font-size: 0;
 }

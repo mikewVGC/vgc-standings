@@ -3,10 +3,12 @@ import argparse
 import json
 import subprocess
 
-from ops.process_regional import process_regional, process_season
+from ops.process_regional import process_regional, process_season, was_event_processed
 from ops.site_builder import SiteBuilder
+from ops.cache_data import CacheData
 from lib.util import get_season_bookends, make_nice_date_str
 
+# every day I try to make this a little less crazy
 
 def main():
     parser = argparse.ArgumentParser(
@@ -14,7 +16,7 @@ def main():
         description="Porygon is a simple script used for building regional/IC standings for Reportworm Standings. Please see README.md for more info.",
     )
     parser.add_argument('--prod', action="store_true", help="Build production version")
-    parser.add_argument('--seasons', help="Comma separated list of years to rebuild (otherwise all will be built)")
+    parser.add_argument('--build-only', action="store_true", help="Don't process any events, only rebuild pages")
 
     cl = parser.parse_args()
 
@@ -34,9 +36,12 @@ def main():
         print("Could not find manifest.json, exiting")
         return
 
-    builder = SiteBuilder(config, cl.prod)
+    cache = None
+    if 'cacheJson' in config and config['cacheJson']:
+        cache = CacheData()
+        print(cache.keys())
 
-    seasons_to_build = [] if not cl.seasons else cl.seasons.split(',')
+    builder = SiteBuilder(config, cl.prod)
 
     non_current_seasons = {}
     for season in list(filter(lambda s: s != manifest['current'], manifest['seasons'])):
@@ -61,20 +66,27 @@ def main():
             f, l, w = get_season_bookends(majors)
             non_current_seasons[year]['dates'] = make_nice_date_str(f['start'], w['start'], use_full_months=True)
 
-        if len(seasons_to_build) and str(year) not in seasons_to_build:
-            print(f"Skipping build for {year}")
-            continue
-
         print(f"Building {year}")
 
         for event_code, event_info in majors.items():
-            print(f"[{year}] Processing data for '{event_code}'... ", end="")
-            majors[event_code]['processed'] = process_regional(year, event_code, event_info)
+            if cl.build_only:
+                print(f"[{year}] Checking for processed data for '{event_code}'... ", end="")
+                majors[event_code]['processed'] = was_event_processed(year, event_code)
+            else:
+                print(f"[{year}] Processing data for '{event_code}'... ", end="")
+                majors[event_code]['processed'] = process_regional(year, event_code, event_info)
+
+            if cache and cache.cache_event(year, event_code):
+                print(f"[Wrote to cache] ", end="")
+
             print("Done!")
 
         print(f"[{year}] Processing season data... ", end="")
         process_season(year, majors)
         print("Done!")
+
+        if cache and cache.cache_season(year):
+            print(f"[{year}] Successfully cached {year}")
 
     if cl.prod:
         print(f"[ALL] Minifying js and css... ", end="")
@@ -89,7 +101,7 @@ def main():
     builder.build_tournament()
     print("Done!")
 
-    # the homepage does require a bunch of data, which I'll probably change
+    # the homepage does require a bunch of data, which I might change
     print(f"[ALL] Building home/index page...", end="")
     builder.build_home(manifest['current'], current_majors, list(non_current_seasons.values()))
     print("Done!")
