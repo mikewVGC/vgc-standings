@@ -39,7 +39,6 @@ def main():
     cache = None
     if 'cacheJson' in config and config['cacheJson']:
         cache = CacheData()
-        print(cache.keys())
 
     builder = SiteBuilder(config, cl.prod)
 
