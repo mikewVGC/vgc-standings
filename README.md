@@ -26,15 +26,15 @@ It's a little annoying to set this up because I'm not including any of the data 
 
 ## Processing / Build Scripts (Porygon)
 
-Porygon is a simple command line script used to process standings data and rebuild the relevant pages. Right now you have to build all regionals for a season in one go:
+Porygon is a simple command line script used to process standings data and rebuild the relevant pages. The easiest thing is to just do a full development run:
 
 ```
-python3 porygon.py 2026
+python3 scripts/porygon.py
 ```
 
-This will process and build all events from the 2026 season. Standings JSON (which serve as the API) will be put in `public/data/{season}` and static HTML pages (which display all the data) will be put in `public/static` as `index.html`, `season.html`, and `tournament.html`.
+This will process and build all events found via `manifest.json`. Standings JSON (which serve as the API) will be put in `public/data/{season}` and static HTML pages (which display all the data) will be put in `public/static` as `index.html`, `season.html`, and `tournament.html`.
 
-You can create a production build by using the `--prod` flag. This will minify the CSS and Javascript and a few other optimizations.
+You can create a production build by using the `--prod` flag. This will minify the CSS and Javascript and a few other optimizations. You can also skip event processing and only rebuild the templates with the `--build-only` flag.
 
 ### Why???
 
@@ -51,37 +51,3 @@ docker compose up -d
 ## Running Live
 
 If for some reason you want a live version... I wouldn't do it! But if you really want to, make sure you have the necessary data outlined in the Setup section.
-
-### Redis Cache
-
-The final-ish step for running in production is to use the Redis cache instead of serving static files. You can use static files if you want, but Redis will be much faster. If you add `"cacheJson": true` to your `config.json` file then Porygon will automatically cache items in Redis.
-
-Having this work requires both the Lua module as well as lua-resty-redis bundle. Using the included `nginx.conf` as a base, you can add a `content_by_lua_block`:
-
-```
-location ~ "^/api/v1/[0-9]{4}/[a-z-]+$" {
-    default_type application/json;
-    content_by_lua_block {
-        local redis = require "resty.redis"
-        local ngx_ctx = ngx.ctx
-
-        local red, _ = redis:new()
-        local ok, _ = red:connect("127.0.0.1", 6379)
-        if not ok then
-            return
-        end
-
-        local res, _ = red:get("vgc-standings::" + )
-
-        if res != ngx.null then
-            ngx.say(res)
-        end
-
-        return
-    }
-
-    rewrite "^/api/v1/([0-9]{4})/([a-z-]+)$" /data/$1/$2.json last;
-}
-```
-
-This functionality is not supported in the docker version out of the box.

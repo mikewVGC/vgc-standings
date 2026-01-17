@@ -5,7 +5,6 @@ import subprocess
 
 from ops.process_regional import process_regional, process_season, was_event_processed
 from ops.site_builder import SiteBuilder
-from ops.cache_data import CacheData
 from lib.util import get_season_bookends, make_nice_date_str
 
 # every day I try to make this a little less crazy
@@ -35,10 +34,6 @@ def main():
         # manifest is required
         print("Could not find manifest.json, exiting")
         return
-
-    cache = None
-    if 'cacheJson' in config and config['cacheJson']:
-        cache = CacheData()
 
     builder = SiteBuilder(config, cl.prod)
 
@@ -75,17 +70,11 @@ def main():
                 print(f"[{year}] Processing data for '{event_code}'... ", end="")
                 majors[event_code]['processed'] = process_regional(year, event_code, event_info)
 
-            if cache and cache.cache_event(year, event_code):
-                print(f"[Wrote to cache] ", end="")
-
             print("Done!")
 
         print(f"[{year}] Processing season data... ", end="")
         process_season(year, majors)
         print("Done!")
-
-        if cache and cache.cache_season(year):
-            print(f"[{year}] Successfully cached {year}")
 
     if cl.prod:
         print(f"[ALL] Minifying js and css... ", end="")
