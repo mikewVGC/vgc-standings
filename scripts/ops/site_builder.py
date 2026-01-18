@@ -2,6 +2,7 @@
 import json
 import os
 
+from lib.tournament import get_tournament_structure, tour_in_progress
 from lib.util import make_season_info_str, make_nice_date_str, get_season_bookends
 
 class SiteBuilder():
@@ -26,6 +27,10 @@ class SiteBuilder():
 
         recent.reverse()
 
+        in_progress = list(filter(lambda major: tour_in_progress(major) == True, recent))
+
+        recent = [ major for major in recent if major not in in_progress ]
+
         bootstrap = {
             "currentSeason": year,
             "seasonStatus": make_season_info_str(majors),
@@ -33,6 +38,7 @@ class SiteBuilder():
             "worldsDate": worlds['dates'],
             "recent": recent[0:3],
             "upcoming": upcoming[0:3],
+            "inProgress": in_progress,
             "pastSeasons": all_other_seasons,
         }
 

@@ -1,4 +1,6 @@
 
+from datetime import datetime
+
 # returns (day 1 rounds, day 2 rounds, top cut min)
 def get_tournament_structure(season, competitors):
     if season == 2025:
@@ -69,6 +71,14 @@ def get_round_name(rnd, tour_format, max_round = 0):
             return "Top 16"
 
     return "Top Cut"
+
+
+# returns if tour is considered "in progress" (ongoing)
+def tour_in_progress(event_info):
+    start = datetime.strptime(event_info['start'], "%Y-%m-%d")
+    end = datetime.strptime(f"{event_info['end']} 23:59:59", "%Y-%m-%d %H:%M:%S")
+
+    return start <= datetime.now() <= end
 
 
 """

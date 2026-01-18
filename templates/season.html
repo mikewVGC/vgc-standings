@@ -20,6 +20,32 @@ __TEMPLATE_HEAD__
 
     <h2>VGC Events For The {{ season }} Season</h2>
 
+    <h3 v-if="inProgressMajors.length > 0">In Progress Events</h3>
+
+    <table class="eventslist" id="eventslist-completed" v-if="inProgressMajors.length > 0">
+        <thead>
+            <tr>
+                <th>Event</th>
+                <th>Dates</th>
+                <th>Region</th>
+                <th>Game</th>
+                <th>Format</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="major in inProgressMajors">
+                <td>
+                    <a :href="`${season}/${major.code}`">{{ major.name }}</a>
+                    <div class="reg-location"><em>{{ major.country }}</em></div>
+                </td>
+                <td>{{ major.dates }}</td>
+                <td>{{ major.region }}</td>
+                <td>{{ major.game }}</td>
+                <td>{{ major.format }}</td>
+            </tr>
+        </tbody>
+    </table>
+
     <h3 v-if="majors.length > 0">Completed Events</h3>
 
     <table class="eventslist" id="eventslist-completed" v-if="majors.length > 0">

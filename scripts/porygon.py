@@ -6,6 +6,7 @@ import subprocess
 from ops.process_regional import process_regional, process_season, was_event_processed
 from ops.site_builder import SiteBuilder
 from lib.util import get_season_bookends, make_nice_date_str
+from lib.tournament import tour_in_progress
 
 # every day I try to make this a little less crazy
 
@@ -69,6 +70,10 @@ def main():
             else:
                 print(f"[{year}] Processing data for '{event_code}'... ", end="")
                 majors[event_code]['processed'] = process_regional(year, event_code, event_info)
+
+            majors[event_code]['in_progress'] = False
+            if tour_in_progress(event_info):
+                majors[event_code]['in_progress'] = True
 
             print("Done!")
 

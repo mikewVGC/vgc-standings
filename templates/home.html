@@ -18,13 +18,19 @@ __TEMPLATE_HEAD__
 
         <p v-cloak>{{ seasonStatus }} the <strong><a :href="`/${currentSeason}`">{{ currentSeason }} VGC Season</a></strong>. The season runs from {{ seasonDates }}. The {{ currentSeason }} World Championships will be played {{ worldsDate }}.</p>
 
-        <h3>Most Recent Events</h3>
+        <h3 v-if="inProgress.length > 0" v-cloak>In Progress Events</h3>
+
+        <ul v-cloak>
+            <li v-for="event in inProgress"><p><strong><a :href="`/${currentSeason}/${event.code}`">{{ event.name }}</a></strong> is currently in progress.</p></li>
+        </ul>
+
+        <h3 v-if="recent.length > 0" v-cloak>Most Recent Events</h3>
 
         <ul v-cloak>
             <li v-for="event in recent"><p><strong><a :href="`/${currentSeason}/${event.code}`">{{ event.name }}</a></strong> was played on {{ event.dates }}.</p></li>
         </ul>
 
-        <h3>Upcoming Events</h3>
+        <h3 v-if="upcoming.length > 0" v-cloak>Upcoming Events</h3>
 
         <ul v-cloak>
             <li v-for="event in upcoming"><p><strong>{{ event.name }}</strong> will be played on {{ event.dates }}.</p></li>
@@ -40,8 +46,8 @@ __TEMPLATE_HEAD__
 
     <h2 @click="toggleCredits()" id="creditsTitle">
         Credits 
-        <span v-if="!showCredits" v-cloak>&#9654;</span>
-        <span v-if="showCredits" v-cloak>&#9660;</span>
+        <span v-if="!showCredits" v-cloak>&#9656;</span>
+        <span v-if="showCredits" v-cloak>&#9662;</span>
     </h2>
 
     <ul v-if="showCredits" v-cloak>

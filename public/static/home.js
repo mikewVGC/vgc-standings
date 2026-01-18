@@ -7,6 +7,7 @@ export default {
             worldsDate: '',
             recent: [],
             upcoming: [],
+            inProgress: [],
 
             pastSeasons: [],
 
@@ -34,6 +35,7 @@ export default {
             this.worldsDate = data.worldsDate;
             this.recent = data.recent;
             this.upcoming = data.upcoming;
+            this.inProgress = data.inProgress;
             this.pastSeasons = data.pastSeasons;
         },
     }

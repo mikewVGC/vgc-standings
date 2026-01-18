@@ -5,6 +5,7 @@ export default {
 
             majors: [],
             futureMajors: [],
+            inProgressMajors: [],
 
             currentView: 'loading',
 
@@ -24,6 +25,7 @@ export default {
                         season: this.season,
                         majors: this.majors,
                         futureMajors: this.futureMajors,
+                        inProgressMajors: this.inProgressMajors,
                     }
             }
 
@@ -63,8 +65,9 @@ export default {
                 }
                 return r.json();
             }).then(d => {
-                this.majors = d.filter((m) => m.processed == true);
+                this.majors = d.filter((m) => m.processed == true && m.in_progress == false);
                 this.futureMajors = d.filter((m) => m.processed == false).reverse();
+                this.inProgressMajors = d.filter((m) => m.in_progress == true);
                 this.currentView = 'season-main';
 
                 document.title = `VGC Events for the ${this.season} Season -- Reportworm Standings`;
@@ -77,7 +80,7 @@ export default {
         },
         'season-main': {
             template: '#season-main-template',
-            props: [ 'season', 'majors', 'futureMajors' ],
+            props: [ 'season', 'majors', 'futureMajors', 'inProgressMajors' ],
             methods: {
             },
         },
