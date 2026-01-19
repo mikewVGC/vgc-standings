@@ -1,6 +1,6 @@
 config.json
 data/common/pokedex.json
-data/majors/2026/*
+data/majors
 public/data/*
 public/index.html
 public/static/*.html
