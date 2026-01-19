@@ -41,9 +41,9 @@ __TEMPLATE_HEAD__
                 <td>{{ player.record.w }}</td>
                 <td>-</td>
                 <td>{{ player.record.l }}</td>
-                <td>{{ player.drop != -1 ? player.drop : '' }}</td>
-                <td>{{ player.cut ? '' : getPct(player.res.opp, 5) }}</td>
-                <td>{{ player.cut ? '' : getPct(player.res.oppopp, 5) }}</td>
+                <td>{{ player.drop != -1 ? player.drop : '&nbsp;' }}</td>
+                <td>{{ player.cut ? '&nbsp;' : getPct(player.res.opp, 5) }}</td>
+                <td>{{ player.cut ? '&nbsp;' : getPct(player.res.oppopp, 5) }}</td>
                 <td class="team-container">
                     <template v-for="mon in player.team">
                         <div

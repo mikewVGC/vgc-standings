@@ -292,9 +292,17 @@ table#usage td:nth-child(1) {
         display: inline-block;
     }
 
+    table#standings td:nth-child(4),
+    table#standings td:nth-child(6),
+    table#standings td:nth-child(7)
+    {
+        text-align: left;
+    }
+
     table#standings td::before {
         display: block;
         font-size: .9em;
+        color: #505050;
     }
 
     table#standings td:nth-child(1)::before {
@@ -306,7 +314,15 @@ table#usage td:nth-child(1) {
     }
 
     table#standings td:nth-child(3)::before {
-        content: "Record";
+        content: "W";
+    }
+
+    table#standings td:nth-child(4) {
+        display: none;
+    }
+
+    table#standings td:nth-child(5)::before {
+        content: "L";
     }
 
     table#standings td:nth-child(6)::before {
@@ -430,5 +446,13 @@ table#usage td:nth-child(1) {
 
     .attr {
         color: #D0D0D0;
+    }
+
+    @media (max-width: 30.5em) {
+        table#standings td::before {
+            display: block;
+            font-size: .9em;
+            color: #D0D0D0;
+        }
     }
 }
