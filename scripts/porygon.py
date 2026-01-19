@@ -5,6 +5,7 @@ import subprocess
 
 from ops.process_regional import process_regional, process_season, was_event_processed
 from ops.site_builder import SiteBuilder
+from ops.usage import Usage
 from lib.util import get_season_bookends, make_nice_date_str
 from lib.tournament import tour_in_progress
 
@@ -17,8 +18,16 @@ def main():
     )
     parser.add_argument('--prod', action="store_true", help="Build production version")
     parser.add_argument('--build-only', action="store_true", help="Don't process any events, only rebuild pages")
+    parser.add_argument('--process', help="Only process specified regional(s). Format: year1:name1,year2:name2")
 
     cl = parser.parse_args()
+
+    allowlist = []
+    if cl.process:
+        chunks = cl.process.split(",")
+        for chunk in chunks:
+            year, code = chunk.split(':')
+            allowlist.append(f"{year}-{code}")
 
     config = {}
     try:
@@ -36,14 +45,14 @@ def main():
         print("Could not find manifest.json, exiting")
         return
 
-    builder = SiteBuilder(config, cl.prod)
-
     non_current_seasons = {}
     for season in list(filter(lambda s: s != manifest['current'], manifest['seasons'])):
         non_current_seasons[season] = {
             "year": season,
             "dates": "",
         }
+
+    usage = Usage(config)
 
     current_majors = {}
     for year in manifest['seasons']:
@@ -64,7 +73,9 @@ def main():
         print(f"Building {year}")
 
         for event_code, event_info in majors.items():
-            if cl.build_only:
+            event_should_be_processed = len(allowlist) == 0 or f"{year}-{event_code}" in allowlist
+
+            if cl.build_only or not event_should_be_processed:
                 print(f"[{year}] Checking for processed data for '{event_code}'... ", end="")
                 majors[event_code]['processed'] = was_event_processed(year, event_code)
             else:
@@ -74,6 +85,10 @@ def main():
             majors[event_code]['in_progress'] = False
             if tour_in_progress(event_info):
                 majors[event_code]['in_progress'] = True
+
+            if event_should_be_processed:
+                print("... building usage... ", end="")
+                usage.compile_usage(year, event_code)
 
             print("Done!")
 
@@ -85,6 +100,8 @@ def main():
         print(f"[ALL] Minifying js and css... ", end="")
         subprocess.run(["go", "run", "scripts/packer/main.go"], capture_output=True)
         print("Done!")
+
+    builder = SiteBuilder(config, cl.prod)
 
     print(f"[ALL] Rebuilding season page... ", end="")
     builder.build_season()

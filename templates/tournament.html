@@ -18,6 +18,10 @@ __TEMPLATE_HEAD__
 
     <h2>{{ eventInfo.name }} Standings</h2>
 
+    <p><strong>Total Players</strong>: {{ eventInfo.playerCount }} | <strong>Phase 2 Players</strong>: {{ eventInfo.phase2Count }}</p>
+
+    <p><strong>Sections:</strong> <a href="#/usage">Usage Stats</a></p>
+
     <table id="standings">
         <thead>
             <tr>
@@ -54,9 +58,48 @@ __TEMPLATE_HEAD__
     </table>
 </template>
 
+<template id="usage-template">
+
+    <h2>{{ eventInfo.name }} Usage Stats</h2>
+
+    <table id="usage">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Total</th>
+                <th>Pts.</th>
+                <th>Ph2</th>
+                <th>Ph2 Cnv</th>
+                <th>Cut</th>
+                <th>Cut Cnv</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="mon in usage">
+                <td>
+                    <div
+                        class="monicon"
+                        :style="{ backgroundPosition: getSpritePos(mon.code) }"
+                        :title="mon.name"
+                    ></div>
+                </td>
+                <td>{{ mon.name }}</td>
+                <td>{{ mon.counts.total }}</td>
+                <td>{{ mon.counts.points }}</td>
+                <td>{{ mon.counts.phase2 }}</td>
+                <td>{{ getPct(mon.counts.phase2 / mon.counts.total, 5) }}</td>
+                <td>{{ mon.counts.cut }}</td>
+                <td>{{ getPct(mon.counts.cut / mon.counts.phase2, 5) }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+</template>
+
 <template id="player-template">
 
-    <h1>Player &mdash; {{ player.name }}</h1>
+    <h2>Player &mdash; {{ player.name }}</h2>
 
     <table id="player-info">
         <thead>

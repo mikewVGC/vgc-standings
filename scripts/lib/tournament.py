@@ -1,55 +1,55 @@
 
 from datetime import datetime
 
-# returns (day 1 rounds, day 2 rounds, top cut min)
+# returns (day 1 rounds, day 2 rounds, top cut min, points min rank)
 def get_tournament_structure(season, competitors):
     if season == 2025:
         if competitors >= 4097:
-            return (9, 5, 8)
+            return (9, 5, 8, 1024)
         elif competitors >= 2049:
-            return (9, 4, 8)
+            return (9, 4, 8, 1024)
         elif competitors >= 1025:
-            return (8, 4, 8)
+            return (8, 4, 8, 512)
         elif competitors >= 513:
-            return (8, 3, 8)
+            return (8, 3, 8, 256)
         elif competitors >= 257:
-            return (8, 2, 8)
+            return (8, 2, 8, 128)
         elif competitors >= 129:
-            return (7, 2, 8)
+            return (7, 2, 8, 64)
         elif competitors >= 65:
-            return (6, 2, 8)
+            return (6, 2, 8, 32)
         elif competitors >= 33:
-            return (7, 0, 6)
+            return (7, 0, 6, 16)
         elif competitors >= 17:
-            return (6, 0, 4)
+            return (6, 0, 4, 8)
         elif competitors >= 9:
-            return (4, 0, 2)
+            return (4, 0, 2, 4)
         elif competitors >= 4:
-            return (3, 0, 0)
+            return (3, 0, 0, 2)
 
     if season == 2026:
         if competitors >= 4097:
-            return (9, 6, 8)
+            return (9, 6, 8, 1024)
         elif competitors >= 2049:
-            return (8, 6, 8)
+            return (8, 6, 8, 1024)
         elif competitors >= 1025:
-            return (8, 5, 8)
+            return (8, 5, 8, 512)
         elif competitors >= 513:
-            return (8, 4, 8)
+            return (8, 4, 8, 256)
         elif competitors >= 257:
-            return (8, 3, 8)
+            return (8, 3, 8, 128)
         elif competitors >= 129:
-            return (8, 2, 8)
+            return (8, 2, 8, 64)
         elif competitors >= 65:
-            return (7, 2, 8)
+            return (7, 2, 8, 32)
         elif competitors >= 33:
-            return (7, 0, 6)
+            return (7, 0, 6, 16)
         elif competitors >= 17:
-            return (6, 0, 4)
+            return (6, 0, 4, 8)
         elif competitors >= 9:
-            return (4, 0, 2)
+            return (4, 0, 2, 4) # technically the kicker is 8 but this won't come up for majors
         elif competitors >= 4:
-            return (3, 0, 0)
+            return (3, 0, 0, 2)
 
     return None
 
@@ -235,3 +235,22 @@ def calculate_oppopp(player, players, tour_format):
         match_count += 1
 
     return total_pct / match_count
+
+
+# some easy helper functions
+
+def player_earned_points(player, tour_format):
+    return player['place'] <= tour_format[3]
+
+
+def player_made_phase_two(player, tour_format):
+    if player['drop'] == -1 or player['drop'] > tour_format[0]:
+        return True
+    return False
+
+
+def player_made_cut(player, tour_format):
+    if player['drop'] == -1 and len(player['rounds']) > tour_format[0] + tour_format[1]:
+        return True
+    return False
+

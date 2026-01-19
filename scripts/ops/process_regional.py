@@ -52,6 +52,7 @@ def process_regional(year, code, event_info):
 
     players = {}
     max_round = 0
+    phase_two_count = 0
 
     for player in data:
         team = []
@@ -108,6 +109,9 @@ def process_regional(year, code, event_info):
                 'phase': phase,
             })
 
+        if len(rounds) > tour_format[0]:
+            phase_two_count += 1
+
         pdata = re.findall(nameReg, player['name'])
         if not len(pdata):
             print('uh oh', player, pdata)
@@ -163,6 +167,8 @@ def process_regional(year, code, event_info):
         players_ordered[player] = players[player]
 
     event_info["dates"] = make_nice_date_str(event_info['start'], event_info['end'])
+    event_info["playerCount"] = len(players_ordered)
+    event_info["phase2Count"] = phase_two_count
 
     with open(f"public/data/{year}/{code}.json", 'w') as file:
         file.write(json.dumps({

@@ -217,6 +217,16 @@ tr.phase-header th {
     color: #000;
 }
 
+table#usage thead tr {
+    position: sticky;
+    top: 0;
+}
+
+table#usage td:nth-child(1) {
+    width: 36px;
+}
+
+
 /* stolen from pokepast.es !!! */
 .type-normal   { color: #A8A878; }
 .type-fighting { color: #C03028; }

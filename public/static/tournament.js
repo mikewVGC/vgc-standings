@@ -8,6 +8,7 @@ export default {
             routes: {
                 '/': 'standings-main',
                 '/player': 'player',
+                '/usage': 'usage',
             },
 
             currentRoute: '/',
@@ -15,7 +16,8 @@ export default {
             currentView: 'loading',
 
             loaded: false,
-            standings: [],
+            standings: {},
+            usage: {},
 
             spriteCoords: {},
 
@@ -43,6 +45,9 @@ export default {
                 chunks = route.split('/');
                 if (chunks[1] == "player") {
                     this.currentView = 'player';
+                }
+                if (chunks[1] == "usage") {
+                    this.currentView = 'usage';
                 }
             }
 
@@ -99,6 +104,21 @@ export default {
                         opponents: opps,
                         monImgBase: this.monImgBase,
                     };
+
+                case 'usage':
+                    if (this.nav.length < 4) {
+                        this.nav[2].active = false;
+                        this.nav.push({
+                            text: "Usage Stats",
+                            link: `/${this.season}/${this.major}#/usage`,
+                            active: true,
+                        });
+                    }
+
+                    return {
+                        eventInfo: this.eventInfo,
+                        usage: this.usage,
+                    };
             }
 
             return {};
@@ -131,6 +151,8 @@ export default {
                     link: `/${this.season}/${this.major}#`,
                     active: true,
                 });
+
+                this.getUsage();
             });
 
             this.nav.push({
@@ -148,12 +170,27 @@ export default {
                 if (!r.ok) {
                     window.location = '/';
                 }
+
                 return r.json();
             }).then((d) => {
                 this.standings = d.standings;
                 this.eventInfo = d.event;
                 this.loaded = true;
                 cb();
+            });
+        },
+
+        getUsage() {
+            fetch(`/api/v1/${this.season}/${this.major}/usage`, {
+                method: "GET",
+                headers: { "Content-type": "application/json" },
+            }).then((r) => {
+                if (!r.ok) {
+                    window.location = `/${this.season}/${this.major}`;
+                }
+                return r.json();
+            }).then((d) => {
+                this.usage = d;
             });
         },
 
@@ -199,6 +236,18 @@ export default {
                     return this.$parent.getPct(dec, precision)
                 },
             },
+        },
+        'usage': {
+            template: '#usage-template',
+            props: [ 'usage', 'eventInfo' ],
+            methods: {
+                getSpritePos(name) {
+                    return this.$parent.getSpritePos(name);
+                },
+                getPct(dec, precision) {
+                    return this.$parent.getPct(dec, precision)
+                },
+            }
         },
         'player': {
             template: '#player-template',
