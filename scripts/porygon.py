@@ -86,7 +86,7 @@ def main():
             if tour_in_progress(event_info):
                 majors[event_code]['in_progress'] = True
 
-            if event_should_be_processed:
+            if event_should_be_processed and majors[event_code]['processed']:
                 print("... building usage... ", end="")
                 usage.compile_usage(year, event_code)
 

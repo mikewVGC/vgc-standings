@@ -18,7 +18,12 @@ __TEMPLATE_HEAD__
 
     <h2>{{ eventInfo.name }} Standings</h2>
 
-    <p><strong>Total Players</strong>: {{ eventInfo.playerCount }} | <strong>Phase 2 Players</strong>: {{ eventInfo.phase2Count }}</p>
+    <ul id="standings-info">
+        <li><em>{{ eventInfo.dates }}</em></li>
+        <li><strong>Format</strong>: {{ eventInfo.format }}</li>
+        <li><strong>Total Players</strong>: {{ eventInfo.playerCount }}</li>
+        <li><strong>Phase Two</strong>: {{ eventInfo.phase2Count }}</li>
+    </ul>
 
     <p><strong>Sections:</strong> <a href="#/usage">Usage Stats</a></p>
 

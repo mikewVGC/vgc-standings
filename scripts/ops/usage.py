@@ -21,7 +21,7 @@ class Usage:
             with open(f"public/data/{year}/{event_code}.json", 'r') as file:
                 data = json.loads(file.read())
         except FileNotFoundError:
-            print(f"[Usage] Could not find public/data/{year}/{event_code}.json, exiting")
+            print(f"usage could not read public/data/{year}/{event_code}.json", end="")
             return
 
         standings = data['standings']
