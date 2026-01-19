@@ -11,7 +11,8 @@ __TEMPLATE_HEAD__
 </div>
 
 <template id="loading-template">
-    <h2>Loading...</h2>
+    <h2>Loading Tournament Data</h2>
+    <p>It'll  be ready in just a moment...</p>
 </template>
 
 <template id="standings-main-template">
@@ -74,12 +75,36 @@ __TEMPLATE_HEAD__
             <tr>
                 <th></th>
                 <th>Name</th>
-                <th>Total</th>
-                <th>Pts.</th>
-                <th>Ph2</th>
-                <th>Ph2 Cnv</th>
-                <th>Cut</th>
-                <th>Cut Cnv</th>
+                <th class="sortable"
+                    title="Total Used"
+                    @click="sortUsage('total')"
+                    :class="getSortedClass('total')"
+                >Total</th>
+                <th class="sortable"
+                    title="Earned Points"
+                    @click="sortUsage('points')"
+                    :class="getSortedClass('points')"
+                >Points</th>
+                <th class="sortable"
+                    title="Made Phase 2"
+                    @click="sortUsage('phase2')"
+                    :class="getSortedClass('phase2')"
+                >Phase 2</th>
+                <th class="sortable"
+                    title="Phase 2 Conversion Rate"
+                    @click="sortUsage('phase2Conversion')"
+                    :class="getSortedClass('phase2Conversion')"
+                >Ph2 Cnv</th>
+                <th class="sortable"
+                    title="Made Top Cut"
+                    @click="sortUsage('cut')"
+                    :class="getSortedClass('cut')"
+                >Cut</th>
+                <th class="sortable"
+                    title="Top Cut Conversion Rate"
+                    @click="sortUsage('cutConversion')"
+                    :class="getSortedClass('cutConversion')"
+                >Cut Cnv</th>
             </tr>
         </thead>
         <tbody>
@@ -92,12 +117,12 @@ __TEMPLATE_HEAD__
                     ></div>
                 </td>
                 <td>{{ mon.name }}</td>
-                <td>{{ mon.counts.total }}</td>
-                <td>{{ mon.counts.points }}</td>
-                <td>{{ mon.counts.phase2 }}</td>
-                <td>{{ getPct(mon.counts.phase2 / mon.counts.total, 5) }}</td>
+                <td>{{ mon.counts.total }} <span class="pct">({{ getPct(mon.counts.total / eventInfo.playerCount, 4) }})</span></td>
+                <td>{{ mon.counts.points }} <span class="pct">({{ getPct(mon.counts.points / eventInfo.playerCount, 4) }})</span></td>
+                <td>{{ mon.counts.phase2 }} <span class="pct">({{ getPct(mon.counts.phase2 / eventInfo.phase2Count, 4) }})</span></td>
+                <td>{{ getPct(mon.counts.phase2Conversion, 5) }}</td>
                 <td>{{ mon.counts.cut }}</td>
-                <td>{{ getPct(mon.counts.cut / mon.counts.phase2, 5) }}</td>
+                <td>{{ getPct(mon.counts.cutConversion, 5) }}</td>
             </tr>
         </tbody>
     </table>

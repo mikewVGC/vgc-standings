@@ -19,6 +19,10 @@ export default {
             standings: {},
             usage: {},
 
+            sorts: {
+                usage: { column: 'total', dir: 1 },
+            },
+
             spriteCoords: {},
 
             monImgBase: '',
@@ -197,7 +201,44 @@ export default {
                 return r.json();
             }).then((d) => {
                 this.usage = d;
+
+                this.usage.forEach(usage => {
+                    usage.counts['phase2Conversion'] = usage.counts.phase2 / usage.counts.total;
+                    usage.counts['cutConversion'] = usage.counts.cut / usage.counts.phase2;
+                });
             });
+        },
+
+        sortUsage(column) {
+            let sortInfo = this.sorts.usage;
+            if (column == sortInfo.column) {
+                sortInfo.dir *= -1;
+            } else {
+                sortInfo.column = column;
+                sortInfo.dir = 1;
+            }
+
+            this.usage.sort((a, b) => {
+                if (a.counts[column] < b.counts[column]) {
+                    return sortInfo.dir;
+                } else if (a.counts[column] > b.counts[column]) {
+                    return -sortInfo.dir;
+                }
+                return 0;
+            });
+        },
+
+        getSortedClass(column) {
+            const sortInfo = this.sorts.usage;
+            if (sortInfo.column == column) {
+                if (sortInfo.dir == -1) {
+                    return "up";
+                }
+                if (sortInfo.dir == 1) {
+                    return "down";
+                }
+            }
+            return "";
         },
 
         setMonImgBase(base) {
@@ -251,7 +292,13 @@ export default {
                     return this.$parent.getSpritePos(name);
                 },
                 getPct(dec, precision) {
-                    return this.$parent.getPct(dec, precision)
+                    return this.$parent.getPct(dec, precision);
+                },
+                sortUsage(column) {
+                    return this.$parent.sortUsage(column);
+                },
+                getSortedClass(column) {
+                    return this.$parent.getSortedClass(column);
                 },
             }
         },

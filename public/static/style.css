@@ -120,6 +120,22 @@ td {
     vertical-align: middle;
 }
 
+th.sortable {
+    background-image: url(/static/img/sort-unsorted.png);
+    background-repeat: no-repeat;
+    background-position: 90% 50%;
+    background-size: .75em;
+    padding-right: 1.5em;
+    cursor: pointer;
+}
+
+th.sortable.up {
+    background-image: url(/static/img/sort-up.png);
+}
+th.sortable.down {
+    background-image: url(/static/img/sort-down.png);
+}
+
 td.W {
     background: #D1FFD1;
 }
@@ -229,6 +245,11 @@ table#usage thead tr {
 
 table#usage td:nth-child(1) {
     width: 36px;
+}
+
+table#usage .pct {
+    color: #505050;
+    font-size: .8em;
 }
 
 ul#standings-info {
@@ -456,6 +477,10 @@ ul#standings-info li:last-child {
 
     #current-season h2 {
         border-bottom: 1px double #DDD;
+    }
+
+    table#usage .pct {
+        color: #D8D8D8;
     }
 
     .light-mode-only {
