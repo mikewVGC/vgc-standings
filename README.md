@@ -22,7 +22,7 @@ It's a little annoying to set this up because I'm not including any of the data 
     * Place it in `data/common`
 * Retrieve teamsheet art from https://github.com/PokeAPI/sprites
     * This is a huge pain, but they go in `static/img/art`
-    * Notably there's a lot of mapping (which can be seen in `formes.py`) due to different formes having different filenames. This part will be a big pain! I'm not including these files in the repo just to avoid any number of issues.
+    * Notably there's a lot of mapping (which can be seen in `formes.py`) due to different formes having different filenames. This part will be a big pain! I'm not including these files in this repo for my own sanity.
 
 ## Processing / Build Scripts (Porygon)
 
@@ -32,9 +32,9 @@ Porygon is a simple command line script used to process standings data and rebui
 python3 scripts/porygon.py
 ```
 
-This will process and build all events found via `manifest.json`. Standings JSON (which serve as the API) will be put in `public/data/{season}` and static HTML pages (which display all the data) will be put in `public/static` as `index.html`, `season.html`, and `tournament.html`.
+This will process and build all events found via `manifest.json`. Standings and usage JSON (which serve as the API) will be put in `public/data/{season}` and static HTML pages (which display all the data) will be put in `public/static` as `index.html`, `season.html`, and `tournament.html`.
 
-You can create a production build by using the `--prod` flag. This will minify the CSS and Javascript and a few other optimizations. You can also skip event processing and only rebuild the templates with the `--build-only` flag.
+You can create a production build by using the `--prod` flag. This will minify the CSS and Javascript and a few other optimizations. You can also skip event processing and only rebuild the templates with the `--build-only` flag. You can also build a set of events with the `--process` argument. The format is a list of years and codes formatted as such: `2025:baltimore,2026:toronto`
 
 ### Why???
 
@@ -48,6 +48,8 @@ There's a simple `docker-compose` file that will just download the latest nginx 
 docker compose up -d
 ```
 
+Edit the templates/stylesheets/scripts and rebuild using Porygon to see your changes.
+
 ## Running Live
 
-If for some reason you want a live version... I wouldn't do it! But if you really want to, make sure you have the necessary data outlined in the Setup section.
+I wouldn't do it if I were you, but if you have all the things you need from the Setup/Development steps above then it should work as is. This builds static files, so there's no need to run or compile anything. Just stick the files behind nginx with the same rewrite rules that are in the includes `nginx.conf` and you should be okay.

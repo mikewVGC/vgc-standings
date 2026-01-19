@@ -274,6 +274,79 @@ table#usage td:nth-child(1) {
     display: none;
 }
 
+/* mobile */
+@media (max-width: 30.5em) {
+    table {
+        font-size: .9em;
+    }
+
+    table#standings thead {
+        display: none;
+    }
+
+    table#standings tr {
+        display: block;
+    }
+
+    table#standings td {
+        display: inline-block;
+    }
+
+    table#standings td::before {
+        display: block;
+        font-size: .9em;
+    }
+
+    table#standings td:nth-child(1)::before {
+        content: "Place";
+    }
+
+    table#standings td:nth-child(2)::before {
+        content: "Name";
+    }
+
+    table#standings td:nth-child(3)::before {
+        content: "Record";
+    }
+
+    table#standings td:nth-child(6)::before {
+        content: "Drop";
+    }
+
+    table#standings td:nth-child(7)::before {
+        content: "Res";
+    }
+
+    table#standings td:nth-child(8)::before {
+        content: "OpRes";
+    }
+
+    table#standings td:nth-child(9)::before {
+        content: "Team";
+    }
+
+    #team .paste-mon {
+        width: auto;
+        padding-left: 1em;
+        padding-top: 0;
+    }
+
+    #team .mon-big-img {
+        width: 120px;
+        height: 120px;
+    }
+
+    #team .mon-big-img img {
+        width: 120px;
+        height: 120px;
+    }
+
+    #team div {
+        padding-left: 120px;
+    }
+}
+
+/* dark mode */
 @media (prefers-color-scheme: dark) {
     body {
         background: #222222;
