@@ -50,12 +50,14 @@ __TEMPLATE_HEAD__
                 <td>{{ player.cut ? '&nbsp;' : getPct(player.res.opp, 5) }}</td>
                 <td>{{ player.cut ? '&nbsp;' : getPct(player.res.oppopp, 5) }}</td>
                 <td class="team-container">
+                    <a :href="`#/player/${player.code}`">
                     <template v-for="mon in player.team">
                         <div
                             class="monicon"
                             :style="{ backgroundPosition: getSpritePos(mon.code) }"
                             :title="mon.name"
                         ></div>
+                    </a>
                     </template>
                 </td>
             </tr>
@@ -152,7 +154,8 @@ __TEMPLATE_HEAD__
     <template v-for="phase in player.groupedRounds">
         <thead>
             <tr class="phase-header">
-                <th colspan="6">{{ getPhaseString(phase.phase) }}</th>
+                <th colspan="5">{{ getPhaseString(phase.phase) }}</th>
+                <th></th>
             </tr>
             <tr>
                 <th>Rnd</th>
@@ -183,11 +186,13 @@ __TEMPLATE_HEAD__
                 </td>
                 <td>
                     <template v-for="mon in opponents[opp.opp].team">
+                        <a :href="`#/player/${opp.opp}`" class="team-holder">
                         <div
                             class="monicon"
                             :style="{ backgroundPosition: getSpritePos(mon.code) }"
                             :title="mon.name"
                         ></div>
+                        </a>
                     </template>
                 </td>
             </tr>

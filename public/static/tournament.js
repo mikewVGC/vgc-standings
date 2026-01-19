@@ -97,6 +97,12 @@ export default {
                             link: `/${this.season}/${this.major}#/player/${player.code}`,
                             active: true,
                         });
+                    } else if (this.nav.length == 4) {
+                        this.nav[3] = {
+                            text: `${player.name}`,
+                            link: `/${this.season}/${this.major}#/player/${player.code}`,
+                            active: true,
+                        };
                     }
 
                     return {

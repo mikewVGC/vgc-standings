@@ -29,35 +29,40 @@ header#header h1 {
 }
 
 .tabgroup {
-    border-bottom: 1px solid #000000;
+    background: #F8F8F8;
+    border: 1px solid #000;
+    border-radius: .45em;
+    padding: .2em 0;
 }
 
 .tabgroup div {
-    border: 1px solid #000000;
-    border-bottom: 0;
-    border-radius: .45em .45em 0 0;
-    background: #E0E0E0;
     display: inline-block;
     cursor: pointer;
 }
 
 .tabgroup div a {
     text-decoration: none;
-    color: #000;
     display: inline-block;
-    padding: .5em 1em;
+    padding: .5em 1em .5em 1em;
+}
+
+.tabgroup div::before {
+    padding: .5em 0;
+    display: inline-block;
+    font-size: 1.1em;
+    content: "/";
+}
+
+.tabgroup div:first-child a, .tabgroup div.active a {
+    color: #000;
+}
+
+.tabgroup div:first-child::before {
+    content: "";
 }
 
 .tabgroup div:nth-child(1) {
-    margin-left: .75em;
-    font-size: .9em;
-}
-
-.tabgroup div.active {
-    background: #FFFFFF;
-    position: relative;
-    top: 2px;
-    margin-top: -2px;
+    font-size: 1.1em;
 }
 
 footer {
@@ -298,6 +303,15 @@ ul#standings-info li:last-child {
         font-size: .9em;
     }
 
+    .tabgroup {
+        font-size: .8em;
+        overflow: hidden;
+    }
+
+    .tabgroup div {
+        float: left;
+    }
+
     table#standings thead {
         display: none;
     }
@@ -396,21 +410,11 @@ ul#standings-info li:last-child {
     }
 
     .tabgroup {
-        border-bottom: 1px solid #FFFFFF;
+        background: #404040;
     }
 
-    .tabgroup div {
-        border: 1px solid #FFFFFF;
-        border-bottom: 0;
-        background: #444444;
-    }
-
-    .tabgroup div a {
+    .tabgroup div:first-child a, .tabgroup div.active a {
         color: #FFFFFF;
-    }
-
-    .tabgroup div.active {
-        background: #222222;
     }
 
     th {
