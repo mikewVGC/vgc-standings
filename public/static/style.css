@@ -640,5 +640,11 @@ ul#standings-info li:last-child {
             font-size: .9em;
             color: #D0D0D0;
         }
+
+        table#opponents td::before {
+            font-size: .9em;
+            color: #D0D0D0;
+            display: block;
+        }
     }
 }
