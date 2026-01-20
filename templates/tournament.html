@@ -188,7 +188,7 @@ __TEMPLATE_HEAD__
                 <th colspan="5">{{ getPhaseString(phase.phase) }}</th>
                 <th></th>
             </tr>
-            <tr>
+            <tr class="info-header">
                 <th>Rnd</th>
                 <th>Opponent</th>
                 <th>Result</th>
@@ -198,7 +198,7 @@ __TEMPLATE_HEAD__
             </tr>
         </thead>
         <tbody>
-            <tr v-for="opp in phase.rounds" :class="opp.res">
+            <tr v-for="opp in phase.rounds" :class="[ opp.bye ? 'bye' : '' ]">
                 <td>{{ opp.rname }}</td>
                 <td>
                     <template v-if="opp.bye">Bye</template>

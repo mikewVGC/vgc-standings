@@ -6,6 +6,7 @@ from lib.tournament import (
     player_earned_points,
     player_made_phase_two,
     player_made_cut,
+    get_points_threshold,
 )
 
 # I don't think this needs to be a class
@@ -26,7 +27,9 @@ class Usage:
 
         standings = data['standings']
 
-        tour_format = get_tournament_structure(year, len(standings.keys()))
+        num_players = len(standings.keys())
+
+        tour_format = get_tournament_structure(year, num_players)
 
         mon_stats = {}
         item_stats = {}
@@ -57,7 +60,7 @@ class Usage:
                 mon_stats[code]['w'] += pdata['record']['w']
                 mon_stats[code]['l'] += pdata['record']['l']
 
-                if player_earned_points(pdata, tour_format):
+                if player_earned_points(pdata, get_points_threshold(year, num_players)):
                     mon_stats[code]['counts']['points'] += 1
 
                 if player_made_phase_two(pdata, tour_format):

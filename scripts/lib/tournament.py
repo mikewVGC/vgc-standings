@@ -1,55 +1,118 @@
 
 from datetime import datetime
 
-# returns (day 1 rounds, day 2 rounds, top cut min, points min rank)
+# returns (day 1 rounds, day 2 rounds, top cut min)
 def get_tournament_structure(season, competitors):
+    # 2024 did not have asym top cut
+    if season == 2024:
+        if competitors >= 800:
+            return (9, 6, 3)
+        elif competitors >= 227:
+            return (9, 5, 3)
+        elif competitors >= 129:
+            return (8, 0, 3)
+        elif competitors >= 65:
+            return (7, 0, 3)
+        elif competitors >= 33:
+            return (6, 0, 3)
+        elif competitors >= 21:
+            return (5, 0, 3)
+        elif competitors >= 13:
+            return (5, 0, 2)
+        elif competitors >= 9:
+            return (4, 0, 2)
+        elif competitors >= 4:
+            return (3, 0, 0)
+
     if season == 2025:
         if competitors >= 4097:
-            return (9, 5, 8, 1024)
+            return (9, 5, 8)
         elif competitors >= 2049:
-            return (9, 4, 8, 1024)
+            return (9, 4, 8)
         elif competitors >= 1025:
-            return (8, 4, 8, 512)
+            return (8, 4, 8)
         elif competitors >= 513:
-            return (8, 3, 8, 256)
+            return (8, 3, 8)
         elif competitors >= 257:
-            return (8, 2, 8, 128)
+            return (8, 2, 8)
         elif competitors >= 129:
-            return (7, 2, 8, 64)
+            return (7, 2, 8)
         elif competitors >= 65:
-            return (6, 2, 8, 32)
+            return (6, 2, 8)
         elif competitors >= 33:
-            return (7, 0, 6, 16)
+            return (7, 0, 6)
         elif competitors >= 17:
-            return (6, 0, 4, 8)
+            return (6, 0, 4)
         elif competitors >= 9:
-            return (4, 0, 2, 4)
+            return (4, 0, 2)
         elif competitors >= 4:
-            return (3, 0, 0, 2)
+            return (3, 0, 0)
 
     if season == 2026:
         if competitors >= 4097:
-            return (9, 6, 8, 1024)
+            return (9, 6, 8)
         elif competitors >= 2049:
-            return (8, 6, 8, 1024)
+            return (8, 6, 8)
         elif competitors >= 1025:
-            return (8, 5, 8, 512)
+            return (8, 5, 8)
         elif competitors >= 513:
-            return (8, 4, 8, 256)
+            return (8, 4, 8)
         elif competitors >= 257:
-            return (8, 3, 8, 128)
+            return (8, 3, 8)
         elif competitors >= 129:
-            return (8, 2, 8, 64)
+            return (8, 2, 8)
         elif competitors >= 65:
-            return (7, 2, 8, 32)
+            return (7, 2, 8)
         elif competitors >= 33:
-            return (7, 0, 6, 16)
+            return (7, 0, 6)
         elif competitors >= 17:
-            return (6, 0, 4, 8)
+            return (6, 0, 4)
         elif competitors >= 9:
-            return (4, 0, 2, 4) # technically the kicker is 8 but this won't come up for majors
+            return (4, 0, 2)
         elif competitors >= 4:
-            return (3, 0, 0, 2)
+            return (3, 0, 0)
+
+    return None
+
+
+def get_points_threshold(season, competitors):
+    if season == 2024:
+        if competitors >= 1024:
+            return 512
+        if competitors >= 512:
+            return 256
+        if competitors >= 256:
+            return 128
+        if competitors >= 128:
+            return 64
+        if competitors >= 80:
+            return 32
+        if competitors >= 48:
+            return 16
+        if competitors >= 8:
+            return 8
+
+    if season == 2025 or season == 2026:
+        if competitors >= 2049:
+            return 1024
+        if competitors >= 1025:
+            return 512
+        if competitors >= 513:
+            return 256
+        if competitors >= 257:
+            return 128
+        if competitors >= 129:
+            return 64
+        if competitors >= 65:
+            return 32
+        if competitors >= 33:
+            return 16
+        if competitors >= 17:
+            return 8
+        if competitors >= 8:
+            return 4
+        if competitors >= 4:
+            return 2
 
     return None
 
@@ -239,8 +302,10 @@ def calculate_oppopp(player, players, tour_format):
 
 # some easy helper functions
 
-def player_earned_points(player, tour_format):
-    return player['place'] <= tour_format[3]
+def player_earned_points(player, points_threshold):
+    if not points_threshold:
+        return False
+    return player['place'] <= points_threshold
 
 
 def player_made_phase_two(player, tour_format):

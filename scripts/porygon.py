@@ -113,7 +113,9 @@ def main():
 
     # the homepage does require a bunch of data, which I might change
     print(f"[ALL] Building home/index page...", end="")
-    builder.build_home(manifest['current'], current_majors, list(non_current_seasons.values()))
+    non_current_seasons = list(non_current_seasons.values())
+    non_current_seasons.reverse()
+    builder.build_home(manifest['current'], current_majors, non_current_seasons)
     print("Done!")
 
     print("All done!")

@@ -363,6 +363,27 @@ ul#standings-info li:last-child {
         float: left;
     }
 
+    .tabgroup div a {
+        text-decoration: none;
+        padding: 0;
+    }
+
+    .tabgroup div a {
+        padding: .25em;
+        display: inline-block;
+    }
+
+    .tabgroup div a:first-child {
+        padding: 0;
+    }
+
+    .tabgroup div::before {
+        padding: .2em;
+        display: inline-block;
+        font-size: 1.1em;
+        content: "/";
+    }
+
     table#standings thead {
         display: none;
     }
@@ -442,6 +463,86 @@ ul#standings-info li:last-child {
 
     #team div {
         padding-left: 120px;
+    }
+
+    table#opponents tr {
+        display: block;
+    }
+
+    table#opponents td {
+        display: inline-block;
+    }
+
+    table#opponents thead .phase-header th:first-child {
+        width: 100%;
+    }
+
+    table#opponents thead .info-header {
+        display: none;
+    }
+
+    table#opponents tbody tr {
+        position: relative;
+    }
+
+    table#opponents tbody td {
+        text-align: left;
+    }
+
+    table#opponents td::before {
+        font-size: .9em;
+        color: #505050;
+        display: block;
+    }
+
+    table#opponents tbody td:nth-child(1) {
+        width: 14%;
+        text-align: center;
+    }
+
+    table#opponents tbody td:nth-child(1)::before {
+        content: "Rnd.";
+    }
+
+    table#opponents tbody td:nth-child(2) {
+        padding-left: 14%;
+    }
+
+    table#opponents tbody td:nth-child(2):before {
+        content: "Opponent";
+    }
+
+    table#opponents tbody td:nth-child(3) {
+        text-align: center;
+        position: absolute;
+        left: 16%;
+    }
+
+    table#opponents tbody td:nth-child(3)::before {
+        content: "Result";
+    }
+
+    table#opponents tbody td:nth-child(4)::before {
+        content: "Record";
+    }
+
+    table#opponents tbody td:nth-child(5)::before {
+        content: "Res.";
+    }
+
+    table#opponents tbody td:nth-child(6) {
+        width: 100%;
+    }
+
+    table#opponents tbody td:nth-child(6)::before {
+        content: "Team";
+    }
+
+    table#opponents tbody tr.bye td:nth-child(3),
+    table#opponents tbody tr.bye td:nth-child(4),
+    table#opponents tbody tr.bye td:nth-child(5),
+    table#opponents tbody tr.bye td:nth-child(6) {
+        display: none;
     }
 }
 
