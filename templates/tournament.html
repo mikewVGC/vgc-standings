@@ -76,17 +76,17 @@ __TEMPLATE_HEAD__
                 <th></th>
                 <th>Name</th>
                 <th class="sortable"
-                    title="Total Used"
+                    title="Total used"
                     @click="sortUsage('total')"
                     :class="getSortedClass('total')"
                 >Total</th>
                 <th class="sortable"
-                    title="Earned Points"
+                    title="Number that earned points"
                     @click="sortUsage('points')"
                     :class="getSortedClass('points')"
                 >Points</th>
                 <th class="sortable"
-                    title="Made Phase 2"
+                    title="Number that made Phase 2"
                     @click="sortUsage('phase2')"
                     :class="getSortedClass('phase2')"
                 >Phase 2</th>
@@ -96,7 +96,7 @@ __TEMPLATE_HEAD__
                     :class="getSortedClass('phase2Conversion')"
                 >Ph2 Cnv</th>
                 <th class="sortable"
-                    title="Made Top Cut"
+                    title="Number that made Top Cut"
                     @click="sortUsage('cut')"
                     :class="getSortedClass('cut')"
                 >Cut</th>
@@ -108,6 +108,12 @@ __TEMPLATE_HEAD__
             </tr>
         </thead>
         <tbody>
+            <!-- <tr id="filters-row">
+                <td></td>
+                <td></td>
+                <td><input id="usageFilter" type="number" value="0" min="0" /></td>
+                <td colspan="5"></td>
+            </tr> -->
             <tr v-for="mon in usage">
                 <td>
                     <div
@@ -210,15 +216,17 @@ __TEMPLATE_HEAD__
                     </template>
                 </td>
                 <td>
-                    <template v-for="mon in opponents[opp.opp].team">
-                        <a :href="`#/player/${opp.opp}`" class="team-holder">
-                        <div
-                            class="monicon"
-                            :style="{ backgroundPosition: getSpritePos(mon.code) }"
-                            :title="mon.name"
-                        ></div>
+                    <div v-if="opponents[opp.opp].team" class="team-holder">
+                        <a :href="`#/player/${opp.opp}`">
+                            <div
+                                v-for="mon in opponents[opp.opp].team"
+                                class="monicon"
+                                :style="{ backgroundPosition: getSpritePos(mon.code) }"
+                                :title="mon.name"
+                            ></div>
                         </a>
-                    </template>
+                    </div>
+                    <div v-else class="monicon monicon-ph"></div>
                 </td>
             </tr>
         </tbody>

@@ -96,6 +96,15 @@ footer p {
     margin: 0;
 }
 
+input {
+    border: 1px solid #000000;
+    border-radius: .4em;
+    height: 1.75em;
+    font-size: 1em;
+    padding: .25em;
+    box-sizing: border-box;
+}
+
 table {
     border-collapse: collapse;
     width: 100%;
@@ -132,24 +141,37 @@ th.sortable {
 th.sortable.up {
     background-image: url(/static/img/sort-up.png);
 }
+
 th.sortable.down {
     background-image: url(/static/img/sort-down.png);
 }
 
-td.W {
+table#opponents td:nth-child(3) {
+    background: #F0F0F0;
+}
+
+table#opponents tr:nth-child(odd) td:nth-child(3) {
+    background: #F8F8F8;
+}
+
+table#opponents td.W {
     background: #D1FFD1;
 }
 
-tr:nth-child(odd) td.W {
+table#opponents tr:nth-child(odd) td.W {
     background: #BEE8BE;
 }
 
-td.L {
+table#opponents td.L {
     background: #FFD1D1;
 }
 
-tr:nth-child(odd) td.L {
+table#opponents tr:nth-child(odd) td.L {
     background: #E8BEBE;
+}
+
+table#opponents a, table#standings a {
+    display: block;
 }
 
 table#standings thead tr {
@@ -181,6 +203,10 @@ tr:nth-child(odd) {
     height: 30px;
     display: inline-block;
     background: url(/static/img/pokemonicons-sheet.png) no-repeat;
+}
+
+.monicon-ph {
+    background: transparent;
 }
 
 tr.phase-header th {
@@ -269,6 +295,10 @@ ul#standings-info li:first-child {
 
 ul#standings-info li:last-child {
     border-right: 0;
+}
+
+#usage tr#filters-row input {
+    width: 4em;
 }
 
 /* stolen from pokepast.es !!! */
@@ -442,20 +472,28 @@ ul#standings-info li:last-child {
         background: #404048;
         color: #FFFFFF;
     }
+
+    table#opponents td:nth-child(3) {
+        background: #313131;
+    }
+
+    table#opponents tr:nth-child(odd) td:nth-child(3) {
+        background: #414141;
+    }
     
-    td.W {
+    table#opponents td.W {
         background: #318531;
     }
 
-    tr:nth-child(odd) td.W {
+    table#opponents tr:nth-child(odd) td.W {
         background: #3CA63C;
     }
 
-    td.L {
+    table#opponents td.L {
         background: #a13333;
     }
 
-    tr:nth-child(odd) td.L {
+    table#opponents tr:nth-child(odd) td.L {
         background: #d94343;
     }
 
