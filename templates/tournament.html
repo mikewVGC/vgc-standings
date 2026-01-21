@@ -57,7 +57,7 @@ __TEMPLATE_HEAD__
                         <div
                             v-for="mon in player.team"
                             class="monicon"
-                            :style="{ backgroundPosition: getSpritePos(mon.code) }"
+                            :style="{ backgroundPosition: getSpritePos(mon.altcode || mon.code) }"
                             :title="mon.name"
                         >{{ mon.name }}</div>
                     </a>
@@ -119,7 +119,7 @@ __TEMPLATE_HEAD__
                 <td>
                     <div
                         class="monicon"
-                        :style="{ backgroundPosition: getSpritePos(mon.code) }"
+                        :style="{ backgroundPosition: getSpritePos(mon.altcode || mon.code) }"
                         :title="mon.name"
                     >{{ mon.name }}</div>
                 </td>
@@ -193,7 +193,7 @@ __TEMPLATE_HEAD__
                             <div
                                 v-for="tmon in standings[pcode].team"
                                 class="monicon"
-                                :style="{ backgroundPosition: getSpritePos(tmon.code) }"
+                                :style="{ backgroundPosition: getSpritePos(tmon.altcode || tmon.code) }"
                                 :title="tmon.name"
                             >{{ tmon.name }}</div>
                         </a>

@@ -17,7 +17,11 @@ from lib.tournament import (
     calculate_res,
     calculate_oppopp,
 )
-from lib.formes import get_mon_data_from_code, get_mon_alt_from_code
+from lib.formes import (
+    get_mon_data_from_code,
+    get_mon_alt_from_code,
+    get_icon_alt,
+)
 
 """
 build the standings/matches json
@@ -46,7 +50,7 @@ def process_regional(year, code, event_info):
     except FileNotFoundError:
         print(f"Official standings file not found, skipping. ", end="")
 
-    nameReg = r"^([^\[]+)( {0,1}\[[A-Z]{0,2}\]){0,1}$"
+    name_reg = r"^([^\[]+)( {0,1}\[[A-Z]{0,2}\]){0,1}$"
 
     tour_format = get_tournament_structure(year, len(data))
 
@@ -57,18 +61,19 @@ def process_regional(year, code, event_info):
     for player in data:
         team = []
         for mon in player['decklist']:
-            monName = fix_mon_name(mon['name'])
-            monCode = make_mon_code(monName)
-            dexNum, ptype = get_mon_data_from_code(monCode)
+            mon_name = fix_mon_name(mon['name'])
+            mon_code = make_mon_code(mon_name)
+            dex_num, ptype = get_mon_data_from_code(mon_code)
 
-            alt = get_mon_alt_from_code(monCode)
+            alt = get_mon_alt_from_code(mon_code)
             if alt:
-                dexNum = alt
+                dex_num = alt
 
             team.append({
-                'name': monName,
-                'code': monCode,
-                'dex': dexNum,
+                'name': mon_name,
+                'code': mon_code,
+                'altcode': get_icon_alt(mon_code, mon),
+                'dex': dex_num,
                 'ptype': ptype.lower(),
                 'tera': mon['teratype'],
                 'ability': mon['ability'],
@@ -78,16 +83,16 @@ def process_regional(year, code, event_info):
 
         rounds = []
         for rnd, opp in player['rounds'].items():
-            oppData = re.findall(nameReg, opp['name'])
-            oppName = ""
-            if len(oppData) > 0:
-                oppData = oppData[0]
-                oppName = oppData[0].strip()
+            opp_data = re.findall(name_reg, opp['name'])
+            opp_name = ""
+            if len(opp_data) > 0:
+                opp_data = opp_data[0]
+                opp_name = opp_data[0].strip()
 
-            if oppName == "R1 BYE":
-                oppName = "BYE"
+            if opp_name == "R1 BYE":
+                opp_name = "BYE"
 
-            oppCode = make_code(oppName)
+            opp_code = make_code(opp_name)
 
             phase = 1
             if int(rnd) > tour_format[0] + tour_format[1]:
@@ -102,25 +107,25 @@ def process_regional(year, code, event_info):
             rounds.append({
                 'round': int(rnd),
                 'rname': rnd,
-                'opp': oppCode if oppCode not in [ 'bye', 'late', 'none' ] else '',
+                'opp': opp_code if opp_code not in [ 'bye', 'late', 'none' ] else '',
                 'res': opp['result'],
-                'bye': 1 if oppCode == "bye" else 0,
-                'late': 1 if oppCode == "late" else 0,
+                'bye': 1 if opp_code == "bye" else 0,
+                'late': 1 if opp_code == "late" else 0,
                 'phase': phase,
             })
 
         if len(rounds) > tour_format[0]:
             phase_two_count += 1
 
-        pdata = re.findall(nameReg, player['name'])
+        pdata = re.findall(name_reg, player['name'])
         if not len(pdata):
             print('uh oh', player, pdata)
 
-        playerCode = make_code(pdata[0][0].strip())
+        player_code = make_code(pdata[0][0].strip())
 
-        players[playerCode] = {
+        players[player_code] = {
             'name': pdata[0][0].strip(),
-            'code': playerCode,
+            'code': player_code,
             'country': pdata[2] if len(pdata) > 2 else "",
             'place': int(player['placing']),
             'record': { 'w': player['record']['wins'], 'l': player['record']['losses'] },
@@ -138,8 +143,8 @@ def process_regional(year, code, event_info):
         # add missing players to official order. this is likely due
         # to a DQ or some other issue, but it also allows this
         # to function if the official standings file is missing
-        if playerCode not in official_order:
-            official_order.append(playerCode)
+        if player_code not in official_order:
+            official_order.append(player_code)
 
     # more loops for calculating various resistances
     for player in players:

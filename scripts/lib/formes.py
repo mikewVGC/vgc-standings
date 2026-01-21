@@ -7,7 +7,12 @@ with open("data/common/pokedex.json") as file:
     pokedex = json.loads(file.read())
 
 
-# return dex #, primary typing
+cosmetic_forms = {
+    "tatsugiridroopy": "tatsugiri",
+    "tatsugiristretchy": "tatsugiri",
+}
+
+# returns dex #, primary typing
 def get_mon_data_from_code(mon_code):
     if mon_code in pokedex:
         return pokedex[mon_code]['num'], pokedex[mon_code]['types'][0]
@@ -159,13 +164,36 @@ image_alts = {
     "decidueyehisui": 10244,
 }
 
-cosmetic_forms = {
-    "tatsugiridroopy": "tatsugiri",
-    "tatsugiristretchy": "tatsugiri",
-}
-
-
 def get_mon_alt_from_code(mon_code):
     if mon_code in image_alts:
         return image_alts[mon_code]
     return None
+
+
+"""
+For when we want to display the fancy form icon!
+
+These are forms that change in battle -- such as zacian... mons like palkia-orgin
+or ogerpon change when the item is given to them, not during battle, so they get
+put on the teamsheets as palkia-origin or ogerpon-wellspring whereas zacian is
+on teamsheets as just base zacian holding the rusted sword.
+"""
+item_change_forms = {
+    "zacian": { "item": "Rusted Sword", "form": "zaciancrowned" },
+    "zamazenta": { "item": "Rusted Shield", "form": "zamazentacrowned" },
+    # mega stones and primals will likely be added here later
+}
+
+# similar, these change just upon entering the field with no special requirements
+battle_change_forms = {
+    "terapagos": "terapagosterastal",
+}
+
+def get_icon_alt(mon_code, mon_data):
+    if mon_code in item_change_forms and mon_data['item'] == item_change_forms[mon_code]['item']:
+        return item_change_forms[mon_code]['form']
+
+    if mon_code in battle_change_forms:
+        return battle_change_forms[mon_code]
+
+    return ""
