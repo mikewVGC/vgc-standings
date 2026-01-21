@@ -28,7 +28,7 @@ __TEMPLATE_HEAD__
         <li><strong>Phase Two</strong>: {{ eventInfo.phase2Count }}</li>
     </ul>
 
-    <p><strong>Sections:</strong> <a href="#/usage">Usage Stats</a></p>
+    <h3><strong>Sections:</strong> <a href="#/usage">Usage Stats</a></h3>
 
     <table id="standings">
         <thead>
@@ -75,7 +75,10 @@ __TEMPLATE_HEAD__
         <thead>
             <tr>
                 <th></th>
-                <th>Name</th>
+                <th class="sortable"
+                    title="Pokemon"
+                    @click="sortUsage('name')"
+                    :class="getSortedClass('name')">Name</th>
                 <th class="sortable"
                     title="Total used"
                     @click="sortUsage('total')"
@@ -109,12 +112,6 @@ __TEMPLATE_HEAD__
             </tr>
         </thead>
         <tbody>
-            <!-- <tr id="filters-row">
-                <td></td>
-                <td></td>
-                <td><input id="usageFilter" type="number" value="0" min="0" /></td>
-                <td colspan="5"></td>
-            </tr> -->
             <tr v-for="mon in usage">
                 <td>
                     <div
@@ -140,7 +137,7 @@ __TEMPLATE_HEAD__
 
     <h2>{{ mon.name }} Usage &mdash; {{ eventInfo.name }}</h2>
 
-    <table id="usage">
+    <table id="usage-info">
         <thead>
             <tr>
                 <th></th>
@@ -172,6 +169,7 @@ __TEMPLATE_HEAD__
     <table id="mon-users">
         <thead>
             <tr class="info-header">
+                <th title="Placement">Pl.</th>
                 <th>Player</th>
                 <th>Record</th>
                 <th>Res</th>
@@ -181,6 +179,7 @@ __TEMPLATE_HEAD__
         </thead>
         <tbody>
             <tr v-for="pcode in mon.players">
+                <td>{{ standings[pcode].place }}</td>
                 <td>
                     <a :href="`#/player/${pcode}`">{{ standings[pcode].name }}</a>
                 </td>

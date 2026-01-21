@@ -257,9 +257,13 @@ export default {
             }
 
             this.usage.sort((a, b) => {
-                if (a.counts[column] < b.counts[column]) {
+                if (column in a.counts) {
+                    a = a.counts;
+                    b = b.counts;
+                }
+                if (a[column] < b[column]) {
                     return sortInfo.dir;
-                } else if (a.counts[column] > b.counts[column]) {
+                } else if (a[column] > b[column]) {
                     return -sortInfo.dir;
                 }
                 return 0;
