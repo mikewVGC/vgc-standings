@@ -31,7 +31,7 @@ class Usage:
 
         num_players = len(standings.keys())
 
-        tour_format = get_tournament_structure(year, num_players)
+        tour_format = get_tournament_structure(year, num_players, data['event'])
 
         mon_stats = {}
         item_stats = {}

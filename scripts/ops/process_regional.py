@@ -52,7 +52,7 @@ def process_regional(year, code, event_info):
 
     name_reg = r"^([^\[]+)( {0,1}\[[A-Z]{0,2}\]){0,1}$"
 
-    tour_format = get_tournament_structure(year, len(data))
+    tour_format = get_tournament_structure(year, len(data), event_info)
 
     players = {}
     max_round = 0

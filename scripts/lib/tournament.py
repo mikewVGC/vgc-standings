@@ -2,9 +2,10 @@
 from datetime import datetime
 
 # returns (day 1 rounds, day 2 rounds, top cut min)
-def get_tournament_structure(season, competitors):
+# I don't think actually uses the third value yet?
+def get_tournament_structure(season, competitors, event_info):
     # 2024 did not have asym top cut, the last element is # cut rounds (3 = top 8)
-    if season == 2024:
+    if season == 2024 and event_info['code'] != "worlds":
         if competitors >= 800:
             return (9, 6, 3)
         elif competitors >= 227:
@@ -24,7 +25,8 @@ def get_tournament_structure(season, competitors):
         elif competitors >= 4:
             return (3, 0, 0)
 
-    if season == 2025:
+    # notably 2024 worlds uses the 2025 structure
+    if season == 2025 or (season == 2024 and event_info['code'] == "worlds"):
         if competitors >= 4097:
             return (9, 5, 8)
         elif competitors >= 2049:
