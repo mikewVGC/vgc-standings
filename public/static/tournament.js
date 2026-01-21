@@ -5,19 +5,12 @@ export default {
             major: '',
             eventInfo: {},
 
-            routes: {
-                '/': 'standings-main',
-                '/player': 'player',
-                '/usage': 'usage',
-            },
-
             currentRoute: '/',
-
             currentView: 'loading',
 
             loaded: false,
             standings: {},
-            usage: {},
+            usage: [],
 
             sorts: {
                 usage: { column: 'total', dir: 1 },
@@ -27,11 +20,7 @@ export default {
 
             monImgBase: '',
 
-            nav: [{
-                text: "𑁔",
-                link: '/',
-                active: false,
-            }],
+            nav: [],
         }
     },
     computed: {
@@ -47,22 +36,35 @@ export default {
 
             if (route != '/') {
                 chunks = route.split('/');
-                if (chunks[1] == "player") {
-                    this.currentView = 'player';
-                }
-                if (chunks[1] == "usage") {
-                    this.currentView = 'usage';
+                switch (chunks[1]) {
+                    case 'player':
+                        this.currentView = 'player';
+                        break;
+                    case 'usage':
+                        this.currentView = 'usage';
+                        break;
+                    case 'mon':
+                        this.currentView = 'mon';
+                        break;
                 }
             }
 
             switch (this.currentView) {
-                case 'standings-main':
-                    document.title = `${this.eventInfo['name']} Standings -- Reportworm Standings`;
+                case 'loading':
+                    return {};
 
-                    if (this.nav.length == 4) {
-                        this.nav.pop();
-                        this.nav[2].active = true;
-                    }
+                case 'standings-main':
+                    document.title = `${this.eventInfo.name} Standings -- Reportworm Standings`;
+
+                    this.nav = [{
+                        text: `${this.season} Season`,
+                        link: `/${this.season}`,
+                        active: false,
+                    }, {
+                        text: `${this.eventInfo.name}`,
+                        link: `/${this.season}/${this.eventInfo.code}`,
+                        active: true,
+                    }];
 
                     return {
                         standings: this.standings,
@@ -70,9 +72,14 @@ export default {
                         eventInfo: this.eventInfo,
                     };
                 case 'player':
-                    let player = this.standings[chunks[2]] || {};
+                    let player = this.standings[chunks[2]] || undefined;
+                    if (!player) {
+                        document.location = `/${this.season}/${this.major}`;
+                        return {};
+                    }
+
                     let opps = {};
-                    document.title = `${player['name']} -- ${this.eventInfo['name']} Standings -- Reportworm Standings`;
+                    document.title = `${player.name} -- ${this.eventInfo.name} Standings -- Reportworm Standings`;
                     if (player?.rounds) {
                         for (let i = 0; i < player.rounds.length; i++) {
                             let oppCode = player.rounds[i].opp;
@@ -94,40 +101,82 @@ export default {
                         }
                     }
 
-                    if (this.nav.length < 4) {
-                        this.nav[2].active = false;
-                        this.nav.push({
-                            text: `${player.name}`,
-                            link: `/${this.season}/${this.major}#/player/${player.code}`,
-                            active: true,
-                        });
-                    } else if (this.nav.length == 4) {
-                        this.nav[3] = {
-                            text: `${player.name}`,
-                            link: `/${this.season}/${this.major}#/player/${player.code}`,
-                            active: true,
-                        };
-                    }
+                    this.nav = [{
+                        text: `${this.season} Season`,
+                        link: `/${this.season}`,
+                        active: false,
+                    }, {
+                        text: `${this.eventInfo.name}`,
+                        link: `/${this.season}/${this.eventInfo.code}`,
+                        active: false,
+                    }, {
+                        text: `${player.name}`,
+                        link: `/${this.season}/${this.major}#/player/${player.code}`,
+                        active: true,
+                    }];
 
                     return {
                         player: player,
                         opponents: opps,
                         monImgBase: this.monImgBase,
+                        eventInfo: this.eventInfo,
                     };
 
                 case 'usage':
-                    if (this.nav.length < 4) {
-                        this.nav[2].active = false;
-                        this.nav.push({
-                            text: "Usage Stats",
-                            link: `/${this.season}/${this.major}#/usage`,
-                            active: true,
-                        });
-                    }
+                    document.title = `Usage Stats -- ${this.eventInfo.name} Standings -- Reportworm Standings`;
+
+                    this.nav = [{
+                        text: `${this.season} Season`,
+                        link: `/${this.season}`,
+                        active: false,
+                    }, {
+                        text: `${this.eventInfo.name}`,
+                        link: `/${this.season}/${this.eventInfo.code}`,
+                        active: false,
+                    }, {
+                        text: "Usage Stats",
+                        link: `/${this.season}/${this.major}#/usage`,
+                        active: true,
+                    }];
 
                     return {
                         eventInfo: this.eventInfo,
                         usage: this.usage,
+                    };
+
+                case 'mon':
+                    let mon = this.usage.find((m) => m.code == chunks[2]);
+
+                    if (!mon) {
+                        document.location = `/${this.season}/${this.major}#/usage`;
+                        return {};
+                    }
+
+                    document.title = `${mon.name} -- ${this.eventInfo.name} Standings -- Reportworm Standings`;
+
+                    this.nav = [{
+                        text: `${this.season} Season`,
+                        link: `/${this.season}`,
+                        active: false,
+                    }, {
+                        text: `${this.eventInfo.name}`,
+                        link: `/${this.season}/${this.eventInfo.code}`,
+                        active: false,
+                    }, {
+                        text: "Usage Stats",
+                        link: `/${this.season}/${this.major}#/usage`,
+                        active: false,
+                    }, {
+                        text: `${mon.name}`,
+                        link: `/${this.season}/${this.major}#/mon/${mon.code}`,
+                        active: true,
+                    }];
+
+                    return {
+                        eventInfo: this.eventInfo,
+                        mon: mon,
+                        monImgBase: this.monImgBase,
+                        standings: this.standings,
                     };
             }
 
@@ -156,19 +205,7 @@ export default {
             this.major = name;
 
             this.getRegional(() => {
-                this.nav.push({
-                    text: `${this.eventInfo['name']}`,
-                    link: `/${this.season}/${this.major}#`,
-                    active: true,
-                });
-
                 this.getUsage();
-            });
-
-            this.nav.push({
-                text: `${this.season} Season`,
-                link: `/${this.season}`,
-                active: false,
             });
         },
 
@@ -185,7 +222,6 @@ export default {
             }).then((d) => {
                 this.standings = d.standings;
                 this.eventInfo = d.event;
-                this.loaded = true;
                 cb();
             });
         },
@@ -206,6 +242,8 @@ export default {
                     usage.counts['phase2Conversion'] = usage.counts.phase2 / usage.counts.total;
                     usage.counts['cutConversion'] = usage.counts.cut / usage.counts.phase2;
                 });
+
+                this.loaded = true;
             });
         },
 
@@ -304,7 +342,7 @@ export default {
         },
         'player': {
             template: '#player-template',
-            props: [ 'opponents', 'player', 'monImgBase' ],
+            props: [ 'opponents', 'player', 'monImgBase', 'eventInfo' ],
             methods: {
                 getSpritePos(name) {
                     return this.$parent.getSpritePos(name);
@@ -327,6 +365,18 @@ export default {
                     setTimeout(() => {
                         document.getElementById('team-copy').innerText = "Copy";
                     }, 2000);
+                },
+            },
+        },
+        'mon': {
+            template: '#mon-template',
+            props: [ 'monImgBase', 'eventInfo', 'mon', 'standings' ],
+            methods: {
+                getPct(dec, precision) {
+                    return this.$parent.getPct(dec, precision)
+                },
+                getSpritePos(name) {
+                    return this.$parent.getSpritePos(name);
                 },
             },
         },

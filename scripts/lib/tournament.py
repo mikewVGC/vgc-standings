@@ -3,7 +3,7 @@ from datetime import datetime
 
 # returns (day 1 rounds, day 2 rounds, top cut min)
 def get_tournament_structure(season, competitors):
-    # 2024 did not have asym top cut
+    # 2024 did not have asym top cut, the last element is # cut rounds (3 = top 8)
     if season == 2024:
         if competitors >= 800:
             return (9, 6, 3)
@@ -75,6 +75,7 @@ def get_tournament_structure(season, competitors):
     return None
 
 
+# given a number of competitors, return how many will earn points
 def get_points_threshold(season, competitors):
     if season == 2024:
         if competitors >= 1024:

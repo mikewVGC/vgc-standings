@@ -9,6 +9,8 @@ from lib.tournament import (
     get_points_threshold,
 )
 
+from lib.formes import get_mon_data_from_code, get_mon_alt_from_code
+
 # I don't think this needs to be a class
 
 class Usage:
@@ -38,9 +40,15 @@ class Usage:
             for mon in pdata['team']:
                 code = mon['code']
                 if code not in mon_stats:
+                    dexNum, ptype = get_mon_data_from_code(code)
+                    alt = get_mon_alt_from_code(code)
+                    if alt:
+                        dexNum = alt
+
                     mon_stats[code] = {
                         "name": mon['name'],
                         "code": code,
+                        "dex": dexNum,
                         "counts": {
                             "total": 0,
                             "points": 0,
@@ -49,11 +57,14 @@ class Usage:
                         },
                         "w": 0,
                         "l": 0,
-                        #"moves": {},
+                        "players": [],
+                        "moves": {},
                         #"items": {},
                         #"abilities": {},
                         #"teammates": {},
                     }
+
+                mon_stats[code]['players'].append(player)
 
                 mon_stats[code]['counts']['total'] += 1
 

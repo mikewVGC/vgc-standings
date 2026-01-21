@@ -13,11 +13,7 @@ export default {
 
             showCredits: false,
 
-            nav: [{
-                text: "𑁔",
-                link: '/',
-                active: true,
-            }],
+            nav: [],
         }
     },
     methods: {

@@ -9,11 +9,7 @@ export default {
 
             currentView: 'loading',
 
-            nav: [{
-                text: "𑁔",
-                link: '/',
-                active: false,
-            }],
+            nav: [],
         }
     },
     computed: {
