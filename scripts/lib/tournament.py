@@ -310,7 +310,7 @@ def player_earned_points(player, points_threshold):
 
 
 def player_made_phase_two(player, tour_format):
-    if player['drop'] == -1 or player['drop'] > tour_format[0]:
+    if len(player['rounds']) > tour_format[0]:
         return True
     return False
 
