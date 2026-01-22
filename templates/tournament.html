@@ -186,24 +186,34 @@ __TEMPLATE_HEAD__
                 <th>Phase 2</th>
                 <th>Cut</th>
                 <th>Top Player</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             <tr v-for="countryData in countryStats">
-                <td width="34"><img
-                    :src="`/static/img/flags/${countryData.country}.svg`"
-                    :title="`${countryData.country}`"
-                    width="32"
-                /></td>
-                <td><a
-                    :href="`#/country/${countryData.country}`"
-                >{{ getCountryName(countryData.country) }}</a></td>
+                <td width="34">
+                    <a
+                        :href="`#/country/${countryData.country}`"
+                    ><img
+                        :src="`/static/img/flags/${countryData.country}.svg`"
+                        :title="`${countryData.country}`"
+                        width="32"
+                    /></a>
+                </td>
+                <td>
+                    <a
+                        :href="`#/country/${countryData.country}`"
+                    >{{ getCountryName(countryData.country) }}</a>
+                </td>
                 <td>{{ countryData.players.length }}</td>
                 <td>{{ countryData.phase2 }}</td>
                 <td>{{ countryData.cut }}</td>
-                <td><a
-                    :href="`#/player/${countryData.topPlayer.code}`"
-                >{{ standings[countryData.topPlayer.code].name }}</a></td>
+                <td>
+                    <a
+                        :href="`#/player/${countryData.topPlayer.code}`"
+                    >{{ standings[countryData.topPlayer.code].name }}</a>
+                </td>
+                <td>({{ standings[countryData.topPlayer.code].place }})</td>
             </tr>
         </tbody>
     </table>

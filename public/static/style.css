@@ -180,7 +180,7 @@ table#opponents tr:nth-child(odd) td.L {
     background: #E8BEBE;
 }
 
-table#opponents a, table#standings a, table#usage a {
+table#opponents a, table#standings a, table#usage a, table#country-stats a, table.usage-table a {
     display: block;
 }
 
@@ -655,7 +655,7 @@ ul#standings-sections li:first-child {
         border-bottom: 1px solid #777777;
     }
 
-    ul#standings-info li {
+    ul#standings-info li, ul#standings-sections li {
         border-right: 1px solid #EEE;
     }
 
@@ -732,7 +732,7 @@ ul#standings-sections li:first-child {
             color: #D0D0D0;
         }
 
-        ul#standings-info li {
+        ul#standings-info li, ul#standings-sections li {
             border-right: 0px;
         }
     }

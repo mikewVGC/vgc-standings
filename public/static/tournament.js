@@ -73,7 +73,7 @@ export default {
                         active: false,
                     }, {
                         text: `${this.eventInfo.name}`,
-                        link: `/${this.season}/${this.eventInfo.code}`,
+                        link: `/${this.season}/${this.eventInfo.code}#`,
                         active: true,
                     }];
 
@@ -119,7 +119,7 @@ export default {
                         active: false,
                     }, {
                         text: `${this.eventInfo.name}`,
-                        link: `/${this.season}/${this.eventInfo.code}`,
+                        link: `/${this.season}/${this.eventInfo.code}#`,
                         active: false,
                     }, {
                         text: `${player.name}`,
@@ -141,7 +141,7 @@ export default {
                         active: false,
                     }, {
                         text: `${this.eventInfo.name}`,
-                        link: `/${this.season}/${this.eventInfo.code}`,
+                        link: `/${this.season}/${this.eventInfo.code}#`,
                         active: false,
                     }, {
                         text: "Country Stats",
@@ -169,7 +169,7 @@ export default {
                         active: false,
                     }, {
                         text: `${this.eventInfo.name}`,
-                        link: `/${this.season}/${this.eventInfo.code}`,
+                        link: `/${this.season}/${this.eventInfo.code}#`,
                         active: false,
                     }, {
                         text: "Country Stats",
@@ -198,7 +198,7 @@ export default {
                         active: false,
                     }, {
                         text: `${this.eventInfo.name}`,
-                        link: `/${this.season}/${this.eventInfo.code}`,
+                        link: `/${this.season}/${this.eventInfo.code}#`,
                         active: false,
                     }, {
                         text: "Usage Stats",
@@ -227,7 +227,7 @@ export default {
                         active: false,
                     }, {
                         text: `${this.eventInfo.name}`,
-                        link: `/${this.season}/${this.eventInfo.code}`,
+                        link: `/${this.season}/${this.eventInfo.code}#`,
                         active: false,
                     }, {
                         text: "Usage Stats",
