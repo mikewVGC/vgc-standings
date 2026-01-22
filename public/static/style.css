@@ -697,6 +697,7 @@ ul#standings-sections li:first-child {
 
     #current-season {
         background: #404040;
+        border: 1px solid #888888;
     }
 
     #current-season h2 {
