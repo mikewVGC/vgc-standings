@@ -20,6 +20,8 @@ It's a little annoying to set this up because I'm not including any of the data 
     * Paste the final standings into `data/majors/{season}/{event-code}-official.txt`
 * Grab `pokedex.json` from Showdown: https://play.pokemonshowdown.com/data/
     * Place it in `data/common`
+* Grab flags from https://flagicons.lipis.dev
+    * Copy the 1x1 icons into `public/static/img/flags` (you'll have to create it).
 * Retrieve teamsheet art from https://github.com/PokeAPI/sprites
     * This is a huge pain, but they go in `static/img/art`
     * Notably there's a lot of mapping (which can be seen in `formes.py`) due to different formes having different filenames. This part will be a big pain! I'm not including these files in this repo for my own sanity.
@@ -33,6 +35,8 @@ python3 scripts/porygon.py
 ```
 
 This will process and build all events found via `manifest.json`. Standings and usage JSON (which serve as the API) will be put in `public/data/{season}` and static HTML pages (which display all the data) will be put in `public/static` as `index.html`, `season.html`, and `tournament.html`.
+
+Notably when processing regionals you will need to create the corresponding `season` directory in `public/data` as Porygon will not create them.
 
 You can create a production build by using the `--prod` flag. This will minify the CSS and Javascript and a few other optimizations. You can also skip event processing and only rebuild the templates with the `--build-only` flag. You can also build a set of events with the `--process` argument. The format is a list of years and codes formatted as such: `2025:baltimore,2026:toronto`
 

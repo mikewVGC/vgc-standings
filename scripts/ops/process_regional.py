@@ -114,7 +114,9 @@ def process_regional(year, code, event_info):
                 'phase': phase,
             })
 
+        made_phase_two = False
         if len(rounds) > tour_format[0]:
+            made_phase_two = True
             phase_two_count += 1
 
         pdata = re.findall(name_reg, player['name'])
@@ -122,11 +124,18 @@ def process_regional(year, code, event_info):
             print('uh oh', player, pdata)
 
         player_code = make_code(pdata[0][0].strip())
+        player_country = pdata[0][1] if len(pdata[0]) > 1 else ""
+        if len(player_country) > 1:
+            player_country = player_country[1:-1]
+
+        # flag-icons comes with gb but not uk
+        if player_country == "UK":
+            player_country = "GB"
 
         players[player_code] = {
             'name': pdata[0][0].strip(),
             'code': player_code,
-            'country': pdata[2] if len(pdata) > 2 else "",
+            'country': player_country.lower(),
             'place': int(player['placing']),
             'record': { 'w': player['record']['wins'], 'l': player['record']['losses'] },
             'res': {
@@ -135,6 +144,7 @@ def process_regional(year, code, event_info):
                 'oppopp': 0,
             },
             'cut': True if len(rounds) > tour_format[0] + tour_format[1] else False,
+            'p2': made_phase_two,
             'drop': player['drop'],
             'team': team,
             'rounds': rounds,

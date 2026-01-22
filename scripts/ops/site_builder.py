@@ -73,6 +73,10 @@ class SiteBuilder():
                 spritedata = spritefile.read()
                 tour = tour.replace('__SPRITE_COORDS_DATA__', spritedata)
 
+            with open("data/common/country-codes.json", 'r') as countryfile:
+                countrydata = countryfile.read()
+                tour = tour.replace('__COUNTRY_CODE_DATA__', countrydata)
+
             tour = tour.replace('__MON_IMG_BASE__', img_base)
 
             tour = self._add_header_footer(tour)
