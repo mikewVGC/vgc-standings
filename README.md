@@ -10,13 +10,29 @@ This was basically built because I'm sad that Stalruth standings are gone. Is th
 
 It's a little annoying to set this up because I'm not including any of the data or images in this repo, so fair warning.
 
-* You need Python! So install that if you don't have it already.
+* You need Python! So install that if you don't have it already. You also need Go and optionally PHP. Sorry!
 * If you plan on making production builds (I don't know why you'd want to), you also need Go.
 * Clone this repo to anywhere you like.
 * Grab relevant standings JSON from https://pokedata.ovh:
     * Place in `data/majors/{season}/{event-code}-standings.json`
     * The relevant `event-code` should be in the `{season}.json` file in `data/majors`.
-* Optionally grab the final standings from RK9 (go to the event standings):
+* Create `{season}.json` in `data/majors` with this structure:
+```json
+[
+    {
+        "name": "Frankfurt Regional",
+        "code": "frankfurt",
+        "region": "Europe",
+        "country": "Germany",
+        "flag": "de",
+        "start": "2025-09-13",
+        "end": "2025-09-14",
+        "game": "Scarlet & Violet",
+        "format": "Regulation H"
+    }
+]
+```
+* Optionally grab the final standings order from RK9 (go to the event standings):
     * Paste the final standings into `data/majors/{season}/{event-code}-official.txt`
 * Grab `pokedex.json` from Showdown: https://play.pokemonshowdown.com/data/
     * Place it in `data/common`
@@ -26,7 +42,7 @@ It's a little annoying to set this up because I'm not including any of the data 
     * This is a huge pain, but they go in `static/img/art`
     * Notably there's a lot of mapping (which can be seen in `formes.py`) due to different formes having different filenames. This part will be a big pain! I'm not including these files in this repo for my own sanity.
 
-## Processing / Build Scripts (Porygon)
+## Porygon -- Processing / Build Scripts
 
 Porygon is a simple command line script used to process standings data and rebuild the relevant pages. The easiest thing is to just do a full development run:
 
@@ -58,6 +74,46 @@ docker compose up -d
 
 Edit the templates/stylesheets/scripts and rebuild using Porygon to see your changes.
 
-## Running Live
+## Running In Production
 
 I wouldn't do it if I were you, but if you have all the things you need from the Setup/Development steps above then it should work as is. This builds static files, so there's no need to run or compile anything. Just stick the files behind nginx with the same rewrite rules that are in the includes `nginx.conf` and you should be okay.
+
+### config.json
+
+In the root you need to create a simple `config.json` file with the following items:
+
+```
+{
+    "monImgBase": "",
+    "googleTag": ""
+}
+```
+
+`googleTag` is optional (leave it blank if you don't want to use it) and contains your Google Analytics tag, but only the part *after* the `G-`. `monImgBase` is if you want to load the large Pokemon images from a CDN or object storage and should contain the full root URL of where you keep them. You can leave this blank and it will assume the images are in `public/static/img/art`.
+
+Beyond that, make sure to use the `--prod` flag when you run Porygon as it will minify CSS and Javascript and make a few other things more optimal.
+
+## Regieleki -- Live Updates
+
+During a regional you might want to do live updates... why would you want to do this? I don't know. Create a file named `regieleki.ini` in the root with the following structure:
+
+```
+; ini file for Regieleki
+
+current_season = 2026
+
+tournaments_to_check['<regional_code>'] = "<pokedata json url>"
+
+; refresh rate determines how often tournament standings will be downloaded
+refresh_rate = 300
+
+; run length is how long the script will run for before exiting
+run_length = 360000
+
+; production build
+build_prod = 1
+```
+
+Get the regional's code from the JSON (`toronto`, `las-vegas`, `lille`, etc.) and URL of JSON data from Pokedata and put them into the correct places. You can leave the rest unchanged, and I honestly don't recommend lowering the refresh rate as it will do a fetch from Pokedata every 5 minutes. Once it fetches the data it will run Porygon to process the data and it should be updated when people reload.
+
+This script is super simple and really non-robust.
