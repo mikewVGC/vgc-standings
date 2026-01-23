@@ -26,6 +26,7 @@ __TEMPLATE_HEAD__
     <table class="eventslist" id="eventslist-completed" v-if="inProgressMajors.length > 0">
         <thead>
             <tr>
+                <th width="32"></th>
                 <th>Event</th>
                 <th>Dates</th>
                 <th>Region</th>
@@ -34,6 +35,13 @@ __TEMPLATE_HEAD__
         </thead>
         <tbody>
             <tr v-for="major in inProgressMajors">
+                <td>
+                    <img
+                        :src="`/static/img/flags/${major.flag}.svg`"
+                        :title="`${major.flag}`"
+                        width="32"
+                    />
+                </td>
                 <td>
                     <a :href="`${season}/${major.code}`">{{ major.name }}</a>
                     <div class="reg-location"><em>{{ major.country }}</em></div>
@@ -53,6 +61,7 @@ __TEMPLATE_HEAD__
     <table class="eventslist" id="eventslist-completed" v-if="majors.length > 0">
         <thead>
             <tr>
+                <th width="32"></th>
                 <th>Event</th>
                 <th>Dates</th>
                 <th>Region</th>
@@ -61,6 +70,13 @@ __TEMPLATE_HEAD__
         </thead>
         <tbody>
             <tr v-for="major in majors">
+                <td>
+                    <img
+                        :src="`/static/img/flags/${major.flag}.svg`"
+                        :title="`${major.flag}`"
+                        width="32"
+                    />
+                </td>
                 <td>
                     <a :href="`${season}/${major.code}`">{{ major.name }}</a>
                     <div class="reg-location"><em>{{ major.country }}</em></div>
@@ -80,6 +96,7 @@ __TEMPLATE_HEAD__
     <table class="eventslist" id="eventslist-future" v-if="futureMajors.length > 0">
         <thead>
             <tr>
+                <th width="32"></th>
                 <th>Event</th>
                 <th>Dates</th>
                 <th>Region</th>
@@ -88,6 +105,13 @@ __TEMPLATE_HEAD__
         </thead>
         <tbody>
             <tr v-for="major in futureMajors">
+                <td>
+                    <img
+                        :src="`/static/img/flags/${major.flag}.svg`"
+                        :title="`${major.flag}`"
+                        width="32"
+                    />
+                </td>
                 <td>
                     {{ major.name }}
                     <div class="reg-location"><em>{{ major.country }}</em></div>

@@ -192,9 +192,7 @@ __TEMPLATE_HEAD__
         <tbody>
             <tr v-for="countryData in countryStats">
                 <td width="34">
-                    <a
-                        :href="`#/country/${countryData.country}`"
-                    ><img
+                    <a :href="`#/country/${countryData.country}`"><img
                         :src="`/static/img/flags/${countryData.country}.svg`"
                         :title="`${countryData.country}`"
                         width="32"
