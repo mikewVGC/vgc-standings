@@ -43,6 +43,9 @@ export default {
                     case 'player':
                         this.currentView = 'player';
                         break;
+                    case 'pairings':
+                        this.currentView = 'pairings';
+                        break;
                     case 'countries':
                         this.currentView = 'country-stats';
                         break;
@@ -119,7 +122,7 @@ export default {
                         active: false,
                     }, {
                         text: `${this.eventInfo.name}`,
-                        link: `/${this.season}/${this.eventInfo.code}#`,
+                        link: `/${this.season}/${this.major}#`,
                         active: false,
                     }, {
                         text: `${player.name}`,
@@ -132,6 +135,44 @@ export default {
                         opponents: opps,
                         monImgBase: this.monImgBase,
                         eventInfo: this.eventInfo,
+                    };
+
+                case 'pairings':
+                    if (!secondary) {
+                        secondary = "1";
+                    }
+
+                    let pairings = this.getPairings(secondary);
+                    let roundName = secondary;
+                    let roundNum = secondary;
+                    if (pairings.length) {
+                        roundName = pairings[0].rname;
+                        roundNum = pairings[0].round;
+                    }
+
+                    if (roundName == roundNum) {
+                        roundName = `Round ${roundNum}`;
+                    }
+
+                    this.nav = [{
+                        text: `${this.season} Season`,
+                        link: `/${this.season}`,
+                        active: false,
+                    }, {
+                        text: `${this.eventInfo.name}`,
+                        link: `/${this.season}/${this.major}#`,
+                        active: false,
+                    }, {
+                        text: `${roundName} Pairings`,
+                        link: `/${this.season}/${this.major}#/pairings/${secondary}`,
+                        active: true,
+                    }];
+
+                    return {
+                        eventInfo: this.eventInfo,
+                        pairings: pairings,
+                        round: { name: roundName, num: roundNum },
+                        allRounds: this.getAllRounds(),
                     };
 
                 case 'country-stats':
@@ -349,6 +390,71 @@ export default {
             });
         },
 
+        getPairings(round) {
+            let pairings = [];
+            let checked = {};
+
+            for (const [playerCode, player ] of Object.entries(this.standings)) {
+                if (checked[playerCode] || !playerCode) {
+                    continue;
+                }
+
+                let match = player.rounds.find(m => m.round == round);
+                if (!match) {
+                    continue;
+                }
+
+                let opp = match?.opp || "";
+                if (opp) {
+                    checked[opp] = true;
+                }
+                checked[playerCode] = true;
+
+                let winner = "";
+                if (match.res == 'W') {
+                    winner = playerCode;
+                } else if (match.res == 'L') {
+                    winner = opp;
+                }
+
+                if (!winner && !opp && !match.late && !match.bye) {
+                    continue;
+                }
+
+                pairings.push({
+                    'round': match.round,
+                    'rname': match.rname,
+                    'player': this.standings[playerCode],
+                    'opp': (!match.bye && !match.late && opp) ? this.standings[opp] : false,
+                    'winner': winner,
+                    'table': match.tbl,
+                    'other': match.late ? 'Late' : (match.bye ? 'Bye' : ''),
+                });
+            }
+
+            pairings.sort((a, b) => a.table > b.table);
+
+            return pairings;
+        },
+
+        getAllRounds() {
+            let rounds = [];
+            // the first place player should have played in all possible rounds
+            for (const [playerCode, player ] of Object.entries(this.standings)) {
+                for (let i = 0; i < player.rounds.length; i++) {
+                    rounds.push({
+                        name: player.rounds[i].rname,
+                        num: player.rounds[i].round,
+                    });
+                }
+                break;
+            }
+
+            rounds.reverse();
+
+            return rounds;
+        },
+
         sortUsage(column) {
             let sortInfo = this.sorts.usage;
             if (column == sortInfo.column) {
@@ -420,10 +526,6 @@ export default {
         'loading': {
             template: '#loading-template',
         },
-        'in-progress-note': {
-            template: '#in-progress-note-template',
-            props: [ 'eventInfo' ],
-        },
         'standings-main': {
             template: '#standings-main-template',
             props: [ 'standings', 'eventInfo', 'season' ],
@@ -462,6 +564,30 @@ export default {
                         document.getElementById('team-copy').innerText = "Copy";
                     }, 2000);
                 },
+            },
+        },
+        'pairings': {
+            template: '#pairings-template',
+            props: [ 'eventInfo', 'pairings', 'allRounds', 'round' ],
+            methods: {
+                pairingWinClass(pairing, player) {
+                    if (!player) {
+                        return '';
+                    }
+                    if (!pairing.winner) {
+                        if (pairing.other == 'Late') {
+                            return 'L';
+                        }
+                        if (pairing.other == 'Bye') {
+                            return 'W';
+                        }
+                        return '';
+                    }
+                    if (pairing.winner == player) {
+                        return 'W';
+                    }
+                    return 'L';
+                }
             },
         },
         'country-stats': {

@@ -110,6 +110,7 @@ def process_regional(year, code, event_info):
                 'rname': rnd,
                 'opp': opp_code if opp_code not in [ 'bye', 'late', 'none' ] else '',
                 'res': opp['result'],
+                'tbl': opp['table'],
                 'bye': 1 if opp_code == "bye" else 0,
                 'late': 1 if opp_code == "late" else 0,
                 'phase': phase,

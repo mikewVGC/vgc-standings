@@ -38,6 +38,7 @@ __TEMPLATE_HEAD__
         <li><strong>Sections:</strong></li>
         <li><a href="#/usage">Usage Stats</a></li>
         <li><a href="#/countries">Country Stats</a></li>
+        <li><a href="#/pairings/1">Pairings</a></li>
     </ul>
 
     <table id="standings">
@@ -175,6 +176,51 @@ __TEMPLATE_HEAD__
 
     </template>
 
+    </table>
+
+</template>
+
+<template id="pairings-template">
+
+    <h2>{{ eventInfo.name }} Pairings &mdash; {{ round.name }}</h2>
+
+    <h4>Select Round:</h4>
+
+    <ul id="pairing-round-select">
+        <li v-for="round in allRounds">
+            <a :href="`#/pairings/${round.num}`">{{ round.name }}</a>
+        </li>
+    </ul>
+
+    <table id="pairings">
+        <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="pairing in pairings">
+                <td :class="pairingWinClass(pairing, pairing.player.code)">
+                    <a :href="`#/player/${pairing.player.code}`">{{ pairing.player.name }}</a>
+                </td>
+                <td>
+                    <div v-if="pairing.table > 0">Table <span>{{ pairing.table }}</span></div>
+                    <div v-else class="table-place"></div>
+                </td>
+                <td :class="pairingWinClass(pairing, pairing.opp?.code)">
+                    <a
+                        v-if="pairing.opp"
+                        :href="`#/player/${pairing.opp.code}`"
+                    >{{ pairing.opp.name }}</a>
+                    <span v-if="pairing.other">{{ pairing.other }}</span>
+                </td>
+            </tr>
+            <tr v-if="pairings.length == 0" v-cloak>
+                <td colspan="3">No pairings for this round yet!</td>
+            </tr>
+        </tbody>
     </table>
 
 </template>

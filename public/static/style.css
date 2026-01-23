@@ -178,24 +178,24 @@ table#opponents tr:nth-child(odd) td:nth-child(3) {
     background: #F8F8F8;
 }
 
-table#opponents td.W {
+table#opponents a, table#standings a, table#usage a, table#country-stats a, table.usage-table a {
+    display: block;
+}
+
+table#opponents td.W, td.W {
     background: #D1FFD1;
 }
 
-table#opponents tr:nth-child(odd) td.W {
+table#opponents tr:nth-child(odd) td.W, tr:nth-child(odd) td.W {
     background: #BEE8BE;
 }
 
-table#opponents td.L {
+table#opponents td.L, td.L {
     background: #FFD1D1;
 }
 
-table#opponents tr:nth-child(odd) td.L {
+table#opponents tr:nth-child(odd) td.L, tr:nth-child(odd) td.L {
     background: #E8BEBE;
-}
-
-table#opponents a, table#standings a, table#usage a, table#country-stats a, table.usage-table a {
-    display: block;
 }
 
 table#standings thead tr {
@@ -330,6 +330,50 @@ ul#standings-sections li:first-child {
 
 #usage tr#filters-row input {
     width: 4em;
+}
+
+#pairings td {
+    text-align: center;
+}
+
+#pairings td:first-child, #pairings td:last-child {
+    width: 45%;
+}
+
+#pairings td:nth-child(2) div {
+    font-size: .8em;
+}
+
+#pairings td:nth-child(2) span {
+    font-size: 2.5em;
+    display: block;
+}
+
+#pairings .table-place {
+    height: 60px;
+}
+
+ul#pairing-round-select {
+    margin: 0 0 .5em 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+ul#pairing-round-select li {
+    display: inline-block;
+    border-right: 1px solid #000;
+    font-size: 1.1em;
+    font-weight: bold;
+    text-align: center;
+}
+
+ul#pairing-round-select li:last-child {
+    border: 0;
+}
+
+ul#pairing-round-select li a {
+    display: block;
+    padding: .1em .5em;
 }
 
 /* stolen from pokepast.es !!! */
@@ -687,25 +731,25 @@ ul#standings-sections li:first-child {
     table#opponents tr:nth-child(odd) td:nth-child(3) {
         background: #414141;
     }
-    
-    table#opponents td.W {
-        background: #318531;
-    }
-
-    table#opponents tr:nth-child(odd) td.W {
-        background: #3CA63C;
-    }
-
-    table#opponents td.L {
-        background: #a13333;
-    }
-
-    table#opponents tr:nth-child(odd) td.L {
-        background: #d94343;
-    }
 
     tr:nth-child(odd) {
         background: #505050;
+    }
+
+    table#opponents td.W, td.W {
+        background: #318531;
+    }
+
+    table#opponents tr:nth-child(odd) td.W, tr:nth-child(odd) td.W {
+        background: #3CA63C;
+    }
+
+    table#opponents td.L, td.L {
+        background: #a13333;
+    }
+
+    table#opponents tr:nth-child(odd) td.L, tr:nth-child(odd) td.L {
+        background: #d94343;
     }
 
     #player-info td {
@@ -739,6 +783,10 @@ ul#standings-sections li:first-child {
 
     .attr {
         color: #D0D0D0;
+    }
+
+    ul#pairing-round-select li {
+        border-right: 1px solid #EEE;
     }
 
     @media (max-width: 30.5em) {
