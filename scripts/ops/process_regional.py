@@ -16,6 +16,7 @@ from lib.tournament import (
     calculate_win_pct,
     calculate_res,
     calculate_oppopp,
+    tour_in_progress,
 )
 from lib.formes import (
     get_mon_data_from_code,
@@ -185,6 +186,10 @@ def process_regional(year, code, event_info):
     event_info["playerCount"] = len(players_ordered)
     event_info["phase2Count"] = phase_two_count
 
+    event_info['in_progress'] = False
+    if tour_in_progress(event_info):
+        event_info['in_progress'] = True
+
     with open(f"public/data/{year}/{code}.json", 'w') as file:
         file.write(json.dumps({
             "event": event_info,
@@ -209,14 +214,17 @@ def process_season(year, season_data):
 
 
 """
-this is used with the build_only flag, only check
-for the presence of a processed standings file
+this is used with the build_only flag, we check the file exists and
+return True/False with the event info data that process_regional added
 """
 def was_event_processed(year, event_code):
+    event_info = {}
+
     try:
         with open(f"public/data/{year}/{event_code}.json") as file:
-            ...
+            data = json.loads(file.read())
+            event_info = data['event']
     except FileNotFoundError:
-        return False
+        return False, {}
 
-    return True
+    return True, event_info

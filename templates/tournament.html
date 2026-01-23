@@ -4,6 +4,10 @@ __TEMPLATE_HEAD__
 
     __TEMPLATE_HEADER__
 
+    <h3 v-if="eventInfo.in_progress" class="event-in-progress" v-cloak>
+        This event is currently in progress! <span>So some things might look weird.</span>
+    </h3>
+
     <component :is="currentView" v-bind="currentProps"></component>
 
     __TEMPLATE_FOOTER__
@@ -12,8 +16,10 @@ __TEMPLATE_HEAD__
 
 <template id="loading-template">
 
-    <h2>Loading Tournament Data</h2>
-    <p>It'll  be ready in just a moment...</p>
+    <div id="loading">
+        <h2>Loading Tournament Data</h2>
+        <p>It'll  be ready in just a moment...</p>
+    </div>
 
 </template>
 
@@ -319,6 +325,9 @@ __TEMPLATE_HEAD__
                 <td>{{ getPct(mon.counts.phase2Conversion, 5) }}</td>
                 <td>{{ mon.counts.cut }}</td>
                 <td>{{ getPct(mon.counts.cutConversion, 5) }}</td>
+            </tr>
+            <tr v-if="usage.length == 0" v-cloak>
+                <td colspan="8">No usage stats for this event yet.</td>
             </tr>
         </tbody>
     </table>

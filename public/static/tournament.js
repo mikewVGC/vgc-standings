@@ -135,6 +135,8 @@ export default {
                     };
 
                 case 'country-stats':
+                    document.title = `Country Stats -- ${this.eventInfo.name} Standings -- Reportworm Standings`;
+
                     this.nav = [{
                         text: `${this.season} Season`,
                         link: `/${this.season}`,
@@ -162,6 +164,8 @@ export default {
                         document.location = `/${this.season}/${this.major}/#countries`;
                         return {};
                     }
+
+                    document.title = `${country} Players -- Country Stats -- ${this.eventInfo.name} Standings -- Reportworm Standings`;
 
                     this.nav = [{
                         text: `${this.season} Season`,
@@ -219,7 +223,7 @@ export default {
                         return {};
                     }
 
-                    document.title = `${mon.name} -- ${this.eventInfo.name} Standings -- Reportworm Standings`;
+                    document.title = `${mon.name} -- Usage Stats -- ${this.eventInfo.name} Standings -- Reportworm Standings`;
 
                     this.nav = [{
                         text: `${this.season} Season`,
@@ -415,6 +419,10 @@ export default {
     components: {
         'loading': {
             template: '#loading-template',
+        },
+        'in-progress-note': {
+            template: '#in-progress-note-template',
+            props: [ 'eventInfo' ],
         },
         'standings-main': {
             template: '#standings-main-template',

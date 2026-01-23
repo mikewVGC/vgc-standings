@@ -23,6 +23,8 @@ __TEMPLATE_HEAD__
 
     <h3 v-if="inProgressMajors.length > 0">In Progress Events</h3>
 
+    <p v-if="inProgressMajors.length > 0">In progress event data will periodically refresh, but may not always be up to date.</p>
+
     <table class="eventslist" id="eventslist-completed" v-if="inProgressMajors.length > 0">
         <thead>
             <tr>

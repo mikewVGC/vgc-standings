@@ -144,7 +144,7 @@ def tour_in_progress(event_info):
     start = datetime.strptime(event_info['start'], "%Y-%m-%d")
     end = datetime.strptime(f"{event_info['end']} 23:59:59", "%Y-%m-%d %H:%M:%S")
 
-    return start <= datetime.now() <= end
+    return start >= datetime.now() and end >= datetime.now()
 
 
 """
@@ -299,6 +299,9 @@ def calculate_oppopp(player, players, tour_format):
 
         total_pct += oppopp_total_pct / oppopp_match_count
         match_count += 1
+
+    if match_count == 0:
+        return 0
 
     return total_pct / match_count
 

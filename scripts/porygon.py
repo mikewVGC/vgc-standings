@@ -7,7 +7,6 @@ from ops.process_regional import process_regional, process_season, was_event_pro
 from ops.site_builder import SiteBuilder
 from ops.usage import Usage
 from lib.util import get_season_bookends, make_nice_date_str
-from lib.tournament import tour_in_progress
 
 # every day I try to make this a little less crazy
 
@@ -27,6 +26,7 @@ def main():
         chunks = cl.process.split(",")
         for chunk in chunks:
             year, code = chunk.split(':')
+            # TODO: support wildcard for processing a single year
             allowlist.append(f"{year}-{code}")
 
     config = {}
@@ -77,14 +77,11 @@ def main():
 
             if cl.build_only or not event_should_be_processed:
                 print(f"[{year}] Checking for processed data for '{event_code}'... ", end="")
-                majors[event_code]['processed'] = was_event_processed(year, event_code)
+                majors[event_code]['processed'], proc_event_info = was_event_processed(year, event_code)
+                majors[event_code].update(proc_event_info)
             else:
                 print(f"[{year}] Processing data for '{event_code}'... ", end="")
                 majors[event_code]['processed'] = process_regional(year, event_code, event_info)
-
-            majors[event_code]['in_progress'] = False
-            if tour_in_progress(event_info):
-                majors[event_code]['in_progress'] = True
 
             if event_should_be_processed and majors[event_code]['processed']:
                 print("building usage... ", end="")

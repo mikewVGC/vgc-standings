@@ -42,7 +42,11 @@ You can create a production build by using the `--prod` flag. This will minify t
 
 ### Why???
 
-I know that there are tools that already do all of this stuff, and I would totally use them for a professional project. However, this is entirely done for fun in my free time, so I'm going to write some weird Python scripts and whatever else. Plus I don't really want to install node.
+I know that there are tools that already do all of this stuff, and I would totally use them for a professional project. However, this is entirely done for fun in my free time, so I'm totally going to write some weird Python scripts or make a bizarre looking Vue app or whatever else. Also I'm really trying to avoid using the node ecosystem.
+
+### Is This The Best Way To Do
+
+The answer is probably no! The only thing I can recommend is not using this repo to learn anything.
 
 ## Running Locally
 

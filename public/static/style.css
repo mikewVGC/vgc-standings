@@ -101,6 +101,20 @@ footer p {
     margin: 0;
 }
 
+.event-in-progress {
+    background: #B8EEFC;
+    color: #254852;
+    border: 1px solid #254852;
+    border-radius: .2em;
+    padding: .5em;
+    margin-top: .5em;
+}
+
+.event-in-progress span {
+    font-weight: normal;
+    font-size: .85em;
+}
+
 input {
     border: 1px solid #000000;
     border-radius: .4em;
@@ -350,6 +364,13 @@ ul#standings-sections li:first-child {
     font-size: .9em;
     color: #404040;
     padding-top: .2em;
+}
+
+#loading {
+    background: transparent url(/static/img/loading.gif) no-repeat;
+    background-size: auto 100%;
+    background-position: left center;
+    padding-left: 5em;
 }
 
 .kinda-hide {
