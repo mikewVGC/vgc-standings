@@ -166,9 +166,6 @@ def tour_in_progress(event_info):
     now = datetime.now()
     now = now.astimezone(tz)
 
-    if not event_info['processed']:
-        return False
-
     return start >= now or now <= end
 
 
