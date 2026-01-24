@@ -13,13 +13,15 @@ if (!file_exists("regieleki.ini")) {
     exit;
 }
 
-// parse regieleki.ini
+// parse regieleki.ini (see README)
 [
     'current_season'       => $current_season,
     'tournaments_to_check' => $tournaments_to_check,
     'refresh_rate'         => $refresh_rate,
     'run_length'           => $run_length,
     'build_prod'           => $build_prod,
+    'refresh_fuzz_min'     => $fuzz_refresh_min,
+    'refresh_fuzz_max'     => $fuzz_refresh_max,
 
 ] = parse_ini_file("regieleki.ini");
 
@@ -32,7 +34,7 @@ $finish_time = time() + $run_length;
 echo "[ELEKI] Scheduled to finish at " . date("Y-m-d H:i:s", $finish_time) . "\n";
 
 if ($build_prod) {
-    echo "[ELEKI] Will make production build";
+    echo "[ELEKI] Will build as production (--prod)\n";
     $build_prod = '--prod';
 } else {
     $build_prod = '';
@@ -48,9 +50,10 @@ while (1) {
 
         echo "[ELEKI] [{$tour}] Downloading {$remote_json}... ";
 
-        $remote_data = file_get_contents($remote_json);
-        if ($remote_data === false) {
-            echo "Unable to download! Skipping\n";
+        try {
+            $remote_data = make_request($remote_json);
+        } catch (Exception $e) {
+            echo $e->getMessage() . "\n";
             continue;
         }
 
@@ -62,6 +65,9 @@ while (1) {
         }
 
         $to_process[] = "{$current_season}:{$tour}";
+
+        // small sleep between downloads
+        sleep(mt_rand(1, 3));
     }
 
     if (!empty($to_process)) {
@@ -78,8 +84,43 @@ while (1) {
     }
 
     echo "[ELEKI] Sleeping...\n";
-    sleep($refresh_rate);
+    sleep($refresh_rate + mt_rand($fuzz_refresh_min, $fuzz_refresh_max));
 }
 
 echo "[ELEKI] All done! Thanks for running!\n";
 exit;
+
+// Pokedata's hosting is liberal with blocking, so this attempts to fake the request as
+// much as possible to look more legit / random. Will it work? No idea! Make sure the
+// refresh interval isn't too short. 5 minutes got me banned after a few hours.
+function make_request($url) {
+    $ch = curl_init($url);
+    curl_setopt_array($ch, [
+        CURLOPT_HTTPHEADER => [
+            'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+            'Accept-Language: en-US,en;q=0.5',
+            'Accept-Encoding: gzip, deflate, br',
+            'Cache-Control: max-age=0',
+            'Connection: keep-alive',
+            'Keep-Alive: 300',
+            'Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7',
+            'Accept-Language: en-us,en;q=0.5',
+            'Pragma: ',
+        ],
+        CURLOPT_USERAGENT => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36',
+        CURLOPT_ENCODING => 'gzip,deflate',
+        CURLOPT_AUTOREFERER => true,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 30,
+    ]);
+
+    $result = curl_exec($ch);
+
+    if ($result === false) {
+        throw new Exception('Curl Error: ' . curl_error($ch));
+    }
+
+    curl_close($ch);
+
+    return $result;
+}
