@@ -1,5 +1,6 @@
 
-from datetime import datetime
+from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 
 # returns (day 1 rounds, day 2 rounds, top cut min)
 # I don't think actually uses the third value yet?
@@ -141,10 +142,34 @@ def get_round_name(rnd, tour_format, max_round = 0):
 
 # returns if tour is considered "in progress" (ongoing)
 def tour_in_progress(event_info):
-    start = datetime.strptime(event_info['start'], "%Y-%m-%d")
-    end = datetime.strptime(f"{event_info['end']} 23:59:59", "%Y-%m-%d %H:%M:%S")
+    tz = None
+    if event_info['region'] == 'North America':
+        tz = ZoneInfo("America/Chicago")
+    elif event_info['region'] == 'Europe':
+        tz = ZoneInfo("Europe/Berlin")
+    elif event_info['region'] == 'Latin America':
+        if event_info['country'] == 'Mexico':
+            tz = ZoneInfo("America/Mexico_City")
+        else:
+            tz = ZoneInfo("America/Sao_Paulo")
 
-    return start >= datetime.now() and end >= datetime.now()
+    delta = timedelta(hours=3)
+
+    start = datetime.strptime(event_info['start'], "%Y-%m-%d")
+    start = start.astimezone(tz)
+    start -= delta
+
+    end = datetime.strptime(f"{event_info['end']} 23:59:59", "%Y-%m-%d %H:%M:%S")
+    end = end.astimezone(tz)
+    end += delta
+
+    now = datetime.now()
+    now = now.astimezone(tz)
+
+    if not event_info['processed']:
+        return False
+
+    return start >= now or now <= end
 
 
 """
