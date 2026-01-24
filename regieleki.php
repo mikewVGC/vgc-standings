@@ -64,9 +64,13 @@ while (1) {
         $to_process[] = "{$current_season}:{$tour}";
     }
 
-    echo "[ELEKI] Building Reportworm... ";
-    exec("python3 scripts/porygon.py {$build_prod} --process " . implode(',', $to_process));
-    echo "Done!\n";
+    if (!empty($to_process)) {
+        echo "[ELEKI] Building Reportworm... ";
+        exec("python3 scripts/porygon.py {$build_prod} --process " . implode(',', $to_process));
+        echo "Done!\n";
+    } else {
+        echo "[ELEKI] Nothing to process right now...\n";
+    }
 
     if (time() >= $finish_time) {
         echo "[ELEKI] Scheduled finish time reached! Exiting.\n";
