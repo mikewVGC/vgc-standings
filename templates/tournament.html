@@ -204,7 +204,7 @@ __TEMPLATE_HEAD__
             <tr v-for="pairing in pairings">
                 <td :class="pairingWinClass(pairing, pairing.player.code)">
                     <a :href="`#/player/${pairing.player.code}`">{{ pairing.player.name }}</a><br />
-                    ({{ pairing.player.record.w }} - {{ pairing.player.record.l }})
+                    ({{ getRecordThroughRound(pairing.player, round.num) }})
                 </td>
                 <td>
                     <div v-if="pairing.table > 0">Table <span>{{ pairing.table }}</span></div>
@@ -213,7 +213,7 @@ __TEMPLATE_HEAD__
                 <td :class="pairingWinClass(pairing, pairing.opp?.code)">
                     <span v-if="pairing.opp">
                         <a :href="`#/player/${pairing.opp.code}`">{{ pairing.opp.name }}</a><br />
-                        ({{ pairing.opp.record.w }} - {{ pairing.opp.record.l }})
+                        ({{ getRecordThroughRound(pairing.opp, round.num) }})
                     </span>
                     <span v-if="pairing.other">{{ pairing.other }}</span>
                 </td>

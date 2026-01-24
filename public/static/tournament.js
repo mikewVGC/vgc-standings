@@ -588,7 +588,25 @@ export default {
                         return 'W';
                     }
                     return 'L';
-                }
+                },
+                getRecordThroughRound(player, round) {
+                    let wins = 0;
+                    let loss = 0;
+
+                    for (let x = 0; x <= round; x++) {
+                        if (!player.rounds[x]) {
+                            continue;
+                        }
+                        if (player.rounds[x].res == 'W') {
+                            wins++;
+                        }
+                        if (player.rounds[x].res == 'L') {
+                            loss++;
+                        }
+                    }
+
+                    return `${wins} - ${loss}`;
+                },
             },
         },
         'country-stats': {
