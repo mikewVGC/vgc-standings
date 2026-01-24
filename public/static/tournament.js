@@ -593,7 +593,7 @@ export default {
                     let wins = 0;
                     let loss = 0;
 
-                    for (let x = 0; x <= round; x++) {
+                    for (let x = 0; x < round; x++) {
                         if (!player.rounds[x]) {
                             continue;
                         }
