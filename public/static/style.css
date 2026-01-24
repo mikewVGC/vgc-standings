@@ -410,11 +410,14 @@ ul#pairing-round-select li a {
     padding-top: .2em;
 }
 
-#loading {
-    background: transparent url(/static/img/loading.gif) no-repeat;
-    background-size: auto 100%;
-    background-position: left center;
-    padding-left: 5em;
+#loading div {
+    float: left;
+    width: 75px;
+    padding-right: 1em;
+}
+
+#loading div img {
+    width: 75px;
 }
 
 .kinda-hide {
