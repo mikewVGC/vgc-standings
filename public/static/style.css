@@ -410,16 +410,6 @@ ul#pairing-round-select li a {
     padding-top: .2em;
 }
 
-#loading div {
-    float: left;
-    width: 75px;
-    padding-right: 1em;
-}
-
-#loading div img {
-    width: 75px;
-}
-
 .kinda-hide {
     height: 1px;
     overflow: hidden;
