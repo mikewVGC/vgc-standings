@@ -138,8 +138,9 @@ export default {
                     };
 
                 case 'pairings':
+                    let allRounds = this.getAllRounds();
                     if (!secondary) {
-                        secondary = "1";
+                        secondary = allRounds[allRounds.length - 1].num;
                     }
 
                     let pairings = this.getPairings(secondary);
@@ -172,7 +173,7 @@ export default {
                         eventInfo: this.eventInfo,
                         pairings: pairings,
                         round: { name: roundName, num: roundNum },
-                        allRounds: this.getAllRounds(),
+                        allRounds: allRounds,
                     };
 
                 case 'country-stats':

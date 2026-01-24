@@ -38,7 +38,7 @@ __TEMPLATE_HEAD__
         <li><strong>Sections:</strong></li>
         <li><a href="#/usage">Usage Stats</a></li>
         <li><a href="#/countries">Country Stats</a></li>
-        <li><a href="#/pairings/1">Pairings</a></li>
+        <li><a href="#/pairings">Pairings</a></li>
     </ul>
 
     <table id="standings">
@@ -203,17 +203,18 @@ __TEMPLATE_HEAD__
         <tbody>
             <tr v-for="pairing in pairings">
                 <td :class="pairingWinClass(pairing, pairing.player.code)">
-                    <a :href="`#/player/${pairing.player.code}`">{{ pairing.player.name }}</a>
+                    <a :href="`#/player/${pairing.player.code}`">{{ pairing.player.name }}</a><br />
+                    ({{ pairing.player.record.w }} - {{ pairing.player.record.l }})
                 </td>
                 <td>
                     <div v-if="pairing.table > 0">Table <span>{{ pairing.table }}</span></div>
                     <div v-else class="table-place"></div>
                 </td>
                 <td :class="pairingWinClass(pairing, pairing.opp?.code)">
-                    <a
-                        v-if="pairing.opp"
-                        :href="`#/player/${pairing.opp.code}`"
-                    >{{ pairing.opp.name }}</a>
+                    <span v-if="pairing.opp">
+                        <a :href="`#/player/${pairing.opp.code}`">{{ pairing.opp.name }}</a><br />
+                        ({{ pairing.opp.record.w }} - {{ pairing.opp.record.l }})
+                    </span>
                     <span v-if="pairing.other">{{ pairing.other }}</span>
                 </td>
             </tr>
