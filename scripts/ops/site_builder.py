@@ -31,6 +31,8 @@ class SiteBuilder():
 
         recent = [ major for major in recent if major not in in_progress ]
 
+        in_progress.reverse()
+
         bootstrap = {
             "currentSeason": year,
             "seasonStatus": make_season_info_str(majors),

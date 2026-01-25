@@ -8,7 +8,7 @@
 
 // And yes, I did write PHP on purpose!
 
-if (!file_exists("regieleki.ini")) {
+if (!file_exists(__DIR__ . "/../regieleki.ini")) {
     echo "regieleki.ini not found, exiting\n";
     exit;
 }
@@ -17,6 +17,7 @@ if (!file_exists("regieleki.ini")) {
 [
     'current_season'       => $current_season,
     'tournaments_to_check' => $tournaments_to_check,
+    'start_time'           => $start_time,
     'refresh_rate'         => $refresh_rate,
     'run_length'           => $run_length,
     'build_prod'           => $build_prod,
@@ -25,9 +26,19 @@ if (!file_exists("regieleki.ini")) {
 
 ] = parse_ini_file("regieleki.ini");
 
-$data_dir = __DIR__ . "/data/majors/{$current_season}";
+$data_dir = __DIR__ . "/../data/majors/{$current_season}";
 
 echo "[ELEKI] Regieleki starting! Got " . count($tournaments_to_check) . " tours to check\n";
+
+if (!empty($start_time)) {
+    $start = new DateTime($start_time);
+    $now = new DateTime('now');
+    $initial_sleep = $start->getTimestamp() - $now->getTimestamp();
+
+    echo "[ELEKI] Initial delay set, sleeping for {$initial_sleep} seconds...\n";
+    sleep($initial_sleep);
+    echo "[ELEKI] I'm awake!\n";
+}
 
 $finish_time = time() + $run_length;
 
@@ -83,8 +94,9 @@ while (1) {
         break;
     }
 
-    echo "[ELEKI] Sleeping...\n";
-    sleep($refresh_rate + mt_rand($fuzz_refresh_min, $fuzz_refresh_max));
+    $sleep_time = $refresh_rate + mt_rand($fuzz_refresh_min, $fuzz_refresh_max);
+    echo "[ELEKI] Sleeping for {$sleep_time} seconds...\n";
+    sleep($sleep_time);
 }
 
 echo "[ELEKI] All done! Thanks for running!\n";
