@@ -140,7 +140,19 @@ def get_round_name(rnd, tour_format, players = 0):
 
 
 # returns if tour is considered "in progress" (ongoing)
-def tour_in_progress(event_info):
+def tour_in_progress(event_info, players = False):
+    if players != False:
+        # check if the tour is actually over (a finalist won)
+        for player in players.values():
+            for match in player['rounds']:
+                rnd = match['round']
+                if match['res'] != 'W' and match['res'] != 'L':
+                    break
+                if match['rname'] != 'Finals':
+                    break
+                return False
+            break
+
     tz = None
     if event_info['region'] == 'North America':
         tz = ZoneInfo("America/Chicago")
@@ -158,9 +170,8 @@ def tour_in_progress(event_info):
     start = start.astimezone(tz)
     start -= delta
 
-    end = datetime.strptime(f"{event_info['end']} 23:59:59", "%Y-%m-%d %H:%M:%S")
+    end = datetime.strptime(f"{event_info['end']} 18:00:00", "%Y-%m-%d %H:%M:%S")
     end = end.astimezone(tz)
-    end += delta
 
     now = datetime.now()
     now = now.astimezone(tz)

@@ -204,7 +204,7 @@ def process_regional(year, code, event_info):
     event_info["phase2Count"] = phase_two_count
 
     event_info['in_progress'] = False
-    if tour_in_progress(event_info):
+    if tour_in_progress(event_info, players_ordered):
         event_info['in_progress'] = True
 
     with open(f"public/data/{year}/{code}.json", 'w') as file:
