@@ -96,7 +96,8 @@ __TEMPLATE_HEAD__
         <tbody>
             <tr>
                 <td>
-                    <a :href="`#/country/${player.country}`"><img
+                    <a v-if="player.country"
+                        :href="`#/country/${player.country}`"><img
                         :src="`/static/img/flags/${player.country}.svg`"
                         :title="`${player.country}`"
                         width="32"

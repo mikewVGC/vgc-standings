@@ -140,7 +140,11 @@ export default {
                 case 'pairings':
                     let allRounds = this.getAllRounds();
                     if (!secondary) {
-                        secondary = allRounds[allRounds.length - 1].num;
+                        if (allRounds.length) {
+                            secondary = allRounds[allRounds.length - 1].num;
+                        } else {
+                            secondary = 1;
+                        }
                     }
 
                     let pairings = this.getPairings(secondary);
