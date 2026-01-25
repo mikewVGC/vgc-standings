@@ -1,5 +1,5 @@
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from zoneinfo import ZoneInfo
 
 # returns (day 1 rounds, day 2 rounds, top cut min)
@@ -153,28 +153,23 @@ def tour_in_progress(event_info, players = False):
                 return False
             break
 
+    # otherwise we'll get rough start times based on best guess timezone
     tz = None
     if event_info['region'] == 'North America':
         tz = ZoneInfo("America/Chicago")
     elif event_info['region'] == 'Europe':
         tz = ZoneInfo("Europe/Berlin")
+    elif event_info['region'] == 'Oceania':
+        tz = ZoneInfo("Australia/Sydney")
     elif event_info['region'] == 'Latin America':
         if event_info['country'] == 'Mexico':
             tz = ZoneInfo("America/Mexico_City")
         else:
             tz = ZoneInfo("America/Sao_Paulo")
 
-    delta = timedelta(hours=3)
-
-    start = datetime.strptime(event_info['start'], "%Y-%m-%d")
-    start = start.astimezone(tz)
-    start -= delta
-
-    end = datetime.strptime(f"{event_info['end']} 18:00:00", "%Y-%m-%d %H:%M:%S")
-    end = end.astimezone(tz)
-
-    now = datetime.now()
-    now = now.astimezone(tz)
+    start = datetime.strptime(f"{event_info['start']} 07:00:00", "%Y-%m-%d %H:%M:%S").replace(tzinfo=tz)
+    end = datetime.strptime(f"{event_info['end']} 19:00:00", "%Y-%m-%d %H:%M:%S").replace(tzinfo=tz)
+    now = datetime.now(tz)
 
     return start >= now or now <= end
 

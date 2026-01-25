@@ -104,6 +104,9 @@ current_season = 2026
 
 tournaments_to_check['<regional_code>'] = "<pokedata json url>"
 
+; add a start time to delay the initial start
+start_time = ""
+
 ; refresh rate determines how often tournament standings will be downloaded
 refresh_rate = 420
 
@@ -128,4 +131,6 @@ This script is super simple and really non-robust. You can only run it one way:
 php scripts/regieleki.php
 ```
 
-I recommend using the values above as they seem pretty stable when I tried them. Note that this script will download files from Pokedata, so be considerate!
+I recommend using the values above as they seem pretty stable when I tried them. Note that this script will download files from Pokedata, so be considerate! I also recommend using the `start_time` setting as a way to reduce calls if you want to set this to run for a regional that might start at an inconvienant time for you due to time zones.
+
+But, again, nobody should run this thing in production.
