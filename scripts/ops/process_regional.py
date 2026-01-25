@@ -61,6 +61,18 @@ def process_regional(year, code, event_info):
 
     for player in data:
         team = []
+
+        if 'decklist' not in player:
+            player['decklist'] = []
+        if 'rounds' not in player:
+            player['rounds'] = {}
+        if 'placing' not in player:
+            player['placing'] = 0
+        if 'record' not in player:
+            player['record'] = { 'wins': 0, 'losses': 0 }
+        if 'drop' not in player:
+            player['drop'] = -1
+
         for mon in player['decklist']:
             mon_name = fix_mon_name(mon['name'])
             mon_code = make_mon_code(mon_name)

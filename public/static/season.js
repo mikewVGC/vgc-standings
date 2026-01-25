@@ -66,6 +66,8 @@ export default {
                 this.inProgressMajors = d.filter((m) => m.in_progress == true);
                 this.currentView = 'season-main';
 
+                this.inProgressMajors.reverse();
+
                 document.title = `VGC Events for the ${this.season} Season -- Reportworm Standings`;
             });
         },

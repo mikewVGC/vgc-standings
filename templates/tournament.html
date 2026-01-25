@@ -37,7 +37,7 @@ __TEMPLATE_HEAD__
     <ul id="standings-sections">
         <li><strong>Sections:</strong></li>
         <li><a href="#/usage">Usage Stats</a></li>
-        <li><a href="#/countries">Country Stats</a></li>
+        <li><a href="#/countries">Players by Country</a></li>
         <li><a href="#/pairings">Pairings</a></li>
     </ul>
 
@@ -85,6 +85,7 @@ __TEMPLATE_HEAD__
     <table id="player-info">
         <thead>
             <tr>
+                <th></th>
                 <th>Placement</th>
                 <th>Record</th>
                 <th>Drop</th>
@@ -94,6 +95,13 @@ __TEMPLATE_HEAD__
         </thead>
         <tbody>
             <tr>
+                <td>
+                    <a :href="`#/country/${player.country}`"><img
+                        :src="`/static/img/flags/${player.country}.svg`"
+                        :title="`${player.country}`"
+                        width="32"
+                    /></a>
+                </td>
                 <td>{{ player.place }}</td>
                 <td>{{ player.record.w }} - {{ player.record.l }}</td>
                 <td>{{ player.drop != -1 ? player.drop : '-' }}</td>
@@ -228,7 +236,7 @@ __TEMPLATE_HEAD__
 
 <template id="country-stats-template">
 
-    <h2>{{ eventInfo.name }} Country Stats</h2>
+    <h2>{{ eventInfo.name }} Players by Country</h2>
 
     <table id="country-stats">
         <thead>

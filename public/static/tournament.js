@@ -593,14 +593,17 @@ export default {
                     let wins = 0;
                     let loss = 0;
 
-                    for (let x = 0; x < round; x++) {
+                    for (let x = 0; x <= player.rounds.length; x++) {
                         if (!player.rounds[x]) {
                             continue;
                         }
-                        if (player.rounds[x].res == 'W') {
+                        if (player.rounds[x].round > round) {
+                            continue;
+                        }
+                        if (player.rounds[x].res == 'W' || player.rounds[x].bye) {
                             wins++;
                         }
-                        if (player.rounds[x].res == 'L') {
+                        if (player.rounds[x].res == 'L' || player.rounds[x].late) {
                             loss++;
                         }
                     }
