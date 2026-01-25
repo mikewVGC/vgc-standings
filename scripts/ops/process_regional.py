@@ -56,8 +56,8 @@ def process_regional(year, code, event_info):
     tour_format = get_tournament_structure(year, len(data), event_info)
 
     players = {}
-    max_round = 0
     phase_two_count = 0
+    players_in_cut_round = {}
 
     for player in data:
         team = []
@@ -113,9 +113,10 @@ def process_regional(year, code, event_info):
             elif int(rnd) > tour_format[0]:
                 phase = 2
 
-            # find what round is finals
-            if int(rnd) > max_round:
-                max_round = int(rnd)
+            if phase == 3:
+                if int(rnd) not in players_in_cut_round:
+                    players_in_cut_round[int(rnd)] = 0
+                players_in_cut_round[int(rnd)] += 1
 
             rounds.append({
                 'round': int(rnd),
@@ -176,7 +177,10 @@ def process_regional(year, code, event_info):
 
         # also repurposing this loop to set round names
         for ri, game in enumerate(players[player]['rounds']):
-            players[player]['rounds'][ri]['rname'] = get_round_name(game['round'], tour_format, max_round)
+            player_count = 0
+            if game['round'] in players_in_cut_round:
+                player_count = players_in_cut_round[game['round']]
+            players[player]['rounds'][ri]['rname'] = get_round_name(game['round'], tour_format, player_count)
 
     for player in players:
         players[player]['res']['opp'] = calculate_res(player, players, tour_format)

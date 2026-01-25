@@ -122,20 +122,19 @@ def get_points_threshold(season, competitors):
 
 
 # get "fancy" round name: Cut, T8 etc
-def get_round_name(rnd, tour_format, max_round = 0):
+def get_round_name(rnd, tour_format, players = 0):
     last_swiss = tour_format[0] + tour_format[1]
     if int(rnd) <= last_swiss:
         return rnd
 
-    if int(rnd) == max_round:
+    if players == 2:
         return "Finals"
-    if int(rnd) == max_round - 1:
+    if players == 4:
         return "Top 4"
-    if int(rnd) == max_round - 2:
+    if players == 8:
         return "Top 8"
-    if int(rnd) == max_round - 3:
-        if max_round - last_swiss > 4:
-            return "Top 16"
+    if players == 16:
+        return "Top 16"
 
     return "Top Cut"
 
