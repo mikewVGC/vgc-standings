@@ -1,21 +1,33 @@
 # Reportworm VGC Standings
 
-Yet another VGC standings site!
+A site for viewing standings, pairings, teamsheets, and some stats for major VGC events like regionals and international championships.
 
 ## Info
 
-This was basically built because I'm sad that Stalruth standings are gone. Is this better? No. But it's meant to be fast and have as much useful info as possible, which is what counts, I suppose.
+This was basically built because I was (and still am) sad that Stalruth standings are gone. Is this better? No, probably not. But, it's meant to be fairly fast and have as much useful info as possible, which is what counts.
+
+## Now What?
+
+There's not too much you can get from this repo unless you want to know how everything works. So the rest of this readme will detail how to set everything up, which you will likely find to be a terrible pain. Also if you came here to learn how to program or build a website, I'm really sorry. I wouldn't really recommend using this to learn much of anything! Okay...
 
 ## Setup / Development
 
-It's a little annoying to set this up because I'm not including any of the data or images in this repo, so fair warning.
+This is a little annoying to set this up because I'm not including any of the data, and some of the images are misisng from this repo, so fair warning.
 
-* You need Python! So install that if you don't have it already. You also need Go and optionally PHP. Sorry!
-* If you plan on making production builds (I don't know why you'd want to), you also need Go.
-* Clone this repo to anywhere you like.
-* Grab relevant standings JSON from https://pokedata.ovh:
-    * Place in `data/majors/{season}/{event-code}-standings.json`
-    * The relevant `event-code` should be in the `{season}.json` file in `data/majors`.
+* You need Python! So install that if you don't have it already. You also need Go (for production builds) and optionally PHP (for live standings updates). Sorry!
+* Clone this repo to wherever tou like.
+* Create `mainfest.json` in `data/majors` with the following structure:
+```json
+{
+    "seasons": [
+        2024,
+        2025,
+        2026
+    ],
+    "current": 2026
+}
+```
+    * This is just so the processing scripts know which seasons to look for, and which is considered to be the currently active season.
 * Create `{season}.json` in `data/majors` with this structure:
 ```json
 [
@@ -32,13 +44,16 @@ It's a little annoying to set this up because I'm not including any of the data 
     }
 ]
 ```
-* Optionally grab the final standings order from RK9 (go to the event standings):
+* Grab relevant standings JSON from https://pokedata.ovh:
+    * Place each one in `data/majors/{season}/{event-code}-standings.json`
+    * The relevant `event-code` should be in the `{season}.json` file in `data/majors`.
+* Optionally grab the final standings order RK9 (go to the pairings and click the "Standings" tab):
     * Paste the final standings into `data/majors/{season}/{event-code}-official.txt`
 * Grab `pokedex.json` from Showdown: https://play.pokemonshowdown.com/data/
     * Place it in `data/common`
 * Grab flags from https://flagicons.lipis.dev
     * Copy the 1x1 icons into `public/static/img/flags` (you'll have to create it).
-* Retrieve teamsheet art from https://github.com/PokeAPI/sprites
+* Retrieve teamsheet/pokepaste art from https://github.com/PokeAPI/sprites
     * This is a huge pain, but they go in `static/img/art`
     * Notably there's a lot of mapping (which can be seen in `formes.py`) due to different formes having different filenames. This part will be a big pain! I'm not including these files in this repo for my own sanity.
 
@@ -52,17 +67,17 @@ python3 scripts/porygon.py
 
 This will process and build all events found via `manifest.json`. Standings and usage JSON (which serve as the API) will be put in `public/data/{season}` and static HTML pages (which display all the data) will be put in `public/static` as `index.html`, `season.html`, and `tournament.html`.
 
-Notably when processing regionals you will need to create the corresponding `season` directory in `public/data` as Porygon will not create them.
+Notably when first processing regionals you will need to create the corresponding `season` directory in `public/data` as Porygon will not create them.
 
-You can create a production build by using the `--prod` flag. This will minify the CSS and Javascript and a few other optimizations. You can also skip event processing and only rebuild the templates with the `--build-only` flag. You can also build a set of events with the `--process` argument. The format is a list of years and codes formatted as such: `2025:baltimore,2026:toronto`
+You can create a production build by using the `--prod` flag. This will minify the CSS and Javascript and a few other optimizations. You can skip event processing and only rebuild the templates with the `--build-only` flag. If you only want to build a smaller set of events you can use the `--process` argument. The format is a list of years and codes formatted as such: `2025:baltimore,2026:toronto`
 
 ### Why???
 
 I know that there are tools that already do all of this stuff, and I would totally use them for a professional project. However, this is entirely done for fun in my free time, so I'm totally going to write some weird Python scripts or make a bizarre looking Vue app or whatever else. Also I'm really trying to avoid using the node ecosystem.
 
-### Is This The Best Way To Do
+### Is This The Best Way To Do... Any Of This?
 
-The answer is probably no! The only thing I can recommend is not using this repo to learn anything.
+The answer is probably no. But it's fun!
 
 ## Running Locally
 
