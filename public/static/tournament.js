@@ -510,7 +510,7 @@ export default {
 
         getSpritePos(name) {
             let pos = this.spriteCoords[name] || [ 0, 0 ];
-            return `-${pos[0]}px -${pos[1]}px`;
+            return `-${pos[0] + 2}px -${pos[1]}px`;
         },
 
         getPct(dec, precision) {

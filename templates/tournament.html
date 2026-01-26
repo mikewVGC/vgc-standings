@@ -421,6 +421,77 @@ __TEMPLATE_HEAD__
         </tbody>
     </table>
 
+    <h3>{{ mon.name }} Configurations</h3>
+
+    <div class="config-container">
+
+        <table id="item-info">
+            <thead>
+                <tr>
+                    <th colspan="2">Item Name</th>
+                    <th colspan="2">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="itemInfo in mon.items">
+                    <td>
+                        <div
+                            v-if="itemInfo.code != 'noitem'"
+                            class="itemicon"
+                            :style="{ backgroundPosition: getSpritePos(itemInfo.code) }"
+                            :title="itemInfo.name"
+                        >{{ itemInfo.name }}</div>
+                    </td>
+                    <td>{{ itemInfo.name }}</td>
+                    <td>{{ itemInfo.count }}</td>
+                    <td><span class="pct">({{ getPct(itemInfo.count / mon.counts.total) }})</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <div class="config-container">
+
+        <table id="move-info">
+            <thead>
+                <tr>
+                    <th>Move Name</th>
+                    <th colspan="2">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="moveInfo in mon.moves">
+                    <td>{{ moveInfo.name }}</td>
+                    <td>{{ moveInfo.count }}</td>
+                    <td><span class="pct">({{ getPct(moveInfo.count / mon.counts.total) }})</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <div class="config-container">
+
+        <table id="tera-info">
+            <thead>
+                <tr>
+                    <th colspan="2">Tera Type</th>
+                    <th colspan="2">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="teraInfo in mon.teras">
+                    <td>
+                        <div :class="`tera-icon tera-${teraInfo.name.toLowerCase()}`">Tera {{ teraInfo.name }}</div>
+                    </td>
+                    <td>{{ teraInfo.name }}</td>
+                    <td>{{ teraInfo.count }}</td>
+                    <td><span class="pct">({{ getPct(teraInfo.count / mon.counts.total) }})</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
     <h3>All {{ mon.name }} Teams</h3>
 
     <table id="mon-users" class="usage-table">

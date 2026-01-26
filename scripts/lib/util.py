@@ -26,6 +26,11 @@ def make_mon_code(name):
     return re.sub(r"[^\w]+", '', name.lower())
 
 
+# convert to showdown item code: Covert Cloak -> covertcloak
+def make_item_code(name):
+    return re.sub(r"[^\w]+", '', name.lower().replace(' ', ''))
+
+
 # convert mon name from rk9 to showdown
 # this is missing anything not present in SV
 def fix_mon_name(name):

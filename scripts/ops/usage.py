@@ -8,8 +8,8 @@ from lib.tournament import (
     player_made_cut,
     get_points_threshold,
 )
-
 from lib.formes import get_mon_data_from_code, get_mon_alt_from_code
+from lib.util import make_item_code
 
 # I don't think this needs to be a class
 
@@ -59,10 +59,45 @@ class Usage:
                         "l": 0,
                         "players": [],
                         "moves": {},
-                        #"items": {},
-                        #"abilities": {},
-                        #"teammates": {},
+                        "items": {},
+                        "abilities": {},
+                        "teras": {},
+                        "moves": {},
                     }
+
+                item_name = mon['item'] if mon['item'] else "No Item"
+                item_code = make_item_code(item_name)
+                if item_code not in mon_stats[code]['items']:
+                    mon_stats[code]['items'][item_code] = {
+                        'name': item_name,
+                        'code': item_code,
+                        'count': 0,
+                    }
+                mon_stats[code]['items'][item_code]['count'] += 1
+
+                ability = mon['ability'] if mon['ability'] else "Unknown"
+                if ability not in mon_stats[code]['abilities']:
+                    mon_stats[code]['abilities'][ability] = {
+                        'name': ability,
+                        'count': 0,
+                    }
+                mon_stats[code]['abilities'][ability]['count'] += 1
+
+                tera = mon['tera'] if mon['tera'] else "Unknown"
+                if tera not in mon_stats[code]['teras']:
+                    mon_stats[code]['teras'][tera] = {
+                        'name': tera,
+                        'count': 0,
+                    }
+                mon_stats[code]['teras'][tera]['count'] += 1
+
+                for move_name in mon['moves']:
+                    if move_name not in mon_stats[code]['moves']:
+                        mon_stats[code]['moves'][move_name] = {
+                            'name': move_name,
+                            'count': 0,
+                        }
+                    mon_stats[code]['moves'][move_name]['count'] += 1
 
                 mon_stats[code]['players'].append(player)
 
@@ -83,6 +118,19 @@ class Usage:
         mon_stats = list(mon_stats.values())
 
         mon_stats.sort(key=lambda mon: mon['counts']['total'], reverse=True)
+
+        for mon_stat in mon_stats:
+            mon_stat['items'] = list(mon_stat['items'].values())
+            mon_stat['items'].sort(key=lambda item: item['count'], reverse=True)
+
+            mon_stat['abilities'] = list(mon_stat['abilities'].values())
+            mon_stat['abilities'].sort(key=lambda ability: ability['count'], reverse=True)
+
+            mon_stat['teras'] = list(mon_stat['teras'].values())
+            mon_stat['teras'].sort(key=lambda tera: tera['count'], reverse=True)
+
+            mon_stat['moves'] = list(mon_stat['moves'].values())
+            mon_stat['moves'].sort(key=lambda move: move['count'], reverse=True)
 
         with open(f"public/data/{year}/{event_code}-usage.json", 'w') as file:
             file.write(json.dumps(mon_stats))

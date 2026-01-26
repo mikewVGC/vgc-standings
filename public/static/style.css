@@ -218,14 +218,52 @@ table#standings .team-container {
     width: 220px;
 }
 
-.monicon {
+.monicon, .itemicon {
     width: 36px;
     height: 30px;
     display: inline-block;
     background: url(/static/img/pokemonicons-sheet.png) no-repeat;
     overflow: hidden;
     text-indent: -9999em;
+    image-rendering: pixelated;
 }
+
+.itemicon {
+    background: url(/static/img/itemicons-sheet.png) no-repeat;
+    width: 24px;
+    height: 24px;
+}
+
+.tera-icon {
+    width: 30px;
+    height: 30px;
+    background-position: center center;
+    background-size: 28px 28px;
+    display: inline-block;
+    overflow: hidden;
+    text-indent: -9999em;
+    image-rendering: pixelated;
+}
+
+.tera-normal   { background-image: url(/static/img/types/tera-normal.png); }
+.tera-fighting { background-image: url(/static/img/types/tera-fighting.png); }
+.tera-flying   { background-image: url(/static/img/types/tera-flying.png); }
+.tera-poison   { background-image: url(/static/img/types/tera-poison.png); }
+.tera-ground   { background-image: url(/static/img/types/tera-ground.png); }
+.tera-rock     { background-image: url(/static/img/types/tera-rock.png); }
+.tera-bug      { background-image: url(/static/img/types/tera-bug.png); }
+.tera-ghost    { background-image: url(/static/img/types/tera-ghost.png); }
+.tera-steel    { background-image: url(/static/img/types/tera-steel.png); }
+.tera-fire     { background-image: url(/static/img/types/tera-fire.png); }
+.tera-water    { background-image: url(/static/img/types/tera-water.png); }
+.tera-grass    { background-image: url(/static/img/types/tera-grass.png); }
+.tera-electric { background-image: url(/static/img/types/tera-electric.png); }
+.tera-psychic  { background-image: url(/static/img/types/tera-psychic.png); }
+.tera-ice      { background-image: url(/static/img/types/tera-ice.png); }
+.tera-dragon   { background-image: url(/static/img/types/tera-dragon.png); }
+.tera-dark     { background-image: url(/static/img/types/tera-dark.png); }
+.tera-fairy    { background-image: url(/static/img/types/tera-fairy.png); }
+.tera-stellar  { background-image: url(/static/img/types/tera-stellar.png); }
 
 .monicon-ph {
     background: transparent;
@@ -295,7 +333,7 @@ table#usage td:nth-child(1) {
     width: 36px;
 }
 
-table#usage .pct {
+.pct {
     color: #505050;
     font-size: .8em;
 }
@@ -330,6 +368,45 @@ ul#standings-sections li:first-child {
 
 #usage tr#filters-row input {
     width: 4em;
+}
+
+.config-container {
+    display: inline-block;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    width: 32%;
+    height: 12em;
+    margin-right: 1.25%;
+    vertical-align: top;
+}
+
+.config-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.config-container::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.config-container::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.config-container table td {
+    height: 30px;
+}
+
+#item-info, #tera-info, #move-info {
+    font-size: .9em;
+    width: 100%;
+}
+
+#item-info td:first-child, #tera-info td:first-child {
+    width: 28px;
+}
+
+#item-info td:nth-child(3), #tera-info td:nth-child(3), #move-info td:nth-child(2) {
+    text-align: right;
 }
 
 #pairings td {
@@ -387,7 +464,7 @@ ul#pairing-round-select li a {
 .type-ghost    { color: #705898; }
 .type-steel    { color: #B8B8D0; }
 .type-fire     { color: #F08030; }
-.type-water    { color: #6890F0 }
+.type-water    { color: #6890F0; }
 .type-grass    { color: #78C850; }
 .type-electric { color: #F8D030; }
 .type-psychic  { color: #F85888; }
@@ -678,6 +755,12 @@ ul#pairing-round-select li a {
     table.usage-table td {
         display: inline-block;
     }
+
+    .config-container {
+        display: block;
+        width: 100%;
+        margin-bottom: 1em;
+    }
 }
 
 /* dark mode */
@@ -762,7 +845,7 @@ ul#pairing-round-select li a {
         border-bottom: 1px double #DDD;
     }
 
-    table#usage .pct {
+    .pct {
         color: #D8D8D8;
     }
 
@@ -780,6 +863,14 @@ ul#pairing-round-select li a {
 
     ul#pairing-round-select li {
         border-right: 1px solid #EEE;
+    }
+
+    .config-container::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    .config-container::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.4);
     }
 
     @media (max-width: 30.5em) {
