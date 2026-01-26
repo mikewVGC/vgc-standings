@@ -214,7 +214,7 @@ table#standings td:nth-child(7)
     text-align: center;
 }
 
-table#standings .team-container {
+.team-container {
     width: 220px;
 }
 

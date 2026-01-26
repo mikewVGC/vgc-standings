@@ -16,7 +16,7 @@ This is a little annoying to set this up because I'm not including any of the da
 
 * You need Python! So install that if you don't have it already. You also need Go (for production builds) and optionally PHP (for live standings updates). Sorry!
 * Clone this repo to wherever tou like.
-* Create `mainfest.json` in `data/majors` with the following structure:
+* In order for the processing scripts know which seasons to look for, and which is considered to be the currently active season, create `mainfest.json` in `data/majors` with the following structure:
 ```json
 {
     "seasons": [
@@ -27,7 +27,6 @@ This is a little annoying to set this up because I'm not including any of the da
     "current": 2026
 }
 ```
-    * This is just so the processing scripts know which seasons to look for, and which is considered to be the currently active season.
 * Create `{season}.json` in `data/majors` with this structure:
 ```json
 [

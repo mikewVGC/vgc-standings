@@ -167,8 +167,8 @@ __TEMPLATE_HEAD__
                     {{ !opp.cut ? getPct(opponents[opp.opp].res.opp) : "" }}
                     </template>
                 </td>
-                <td>
-                    <div v-if="opponents[opp.opp].team" class="team-holder">
+                <td class="team-container">
+                    <div v-if="opponents[opp.opp].team">
                         <a :href="`#/player/${opp.opp}`">
                             <div
                                 v-for="mon in opponents[opp.opp].team"
@@ -302,8 +302,8 @@ __TEMPLATE_HEAD__
                 <td>({{ standings[pcode].record.w }} - {{ standings[pcode].record.l }})</td>
                 <td>{{ getPct(standings[pcode].res.opp) }}</td>
                 <td>{{ getPct(standings[pcode].res.oppopp) }}</td>
-                <td>
-                    <div v-if="standings[pcode].team" class="team-holder">
+                <td class="team-container">
+                    <div v-if="standings[pcode].team">
                         <a :href="`#/player/${pcode}`">
                             <div
                                 v-for="tmon in standings[pcode].team"
@@ -514,8 +514,8 @@ __TEMPLATE_HEAD__
                 <td>({{ standings[pcode].record.w }} - {{ standings[pcode].record.l }})</td>
                 <td>{{ getPct(standings[pcode].res.opp) }}</td>
                 <td>{{ getPct(standings[pcode].res.oppopp) }}</td>
-                <td>
-                    <div v-if="standings[pcode].team" class="team-holder">
+                <td class="team-container">
+                    <div v-if="standings[pcode].team">
                         <a :href="`#/player/${pcode}`">
                             <div
                                 v-for="tmon in standings[pcode].team"
