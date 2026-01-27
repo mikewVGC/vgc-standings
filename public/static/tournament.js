@@ -338,7 +338,8 @@ export default {
 
             window.addEventListener('popstate', (e) => {
                 if (e.state) {
-                    this.currentRoute = e.state.page;
+                    const chips = e.state.page.split('/');
+                    this.currentRoute = chips.slice(3).join('/');
                 }
             });
 
