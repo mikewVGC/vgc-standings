@@ -92,6 +92,17 @@ class SiteBuilder():
         return True
 
 
+    def build_meta_ssi(self, file, title, description):
+        with open("templates/head-ssi.html", 'r') as headssifile:
+            headssi = headssifile.read()
+
+            headssi = headssi.replace('__TITLE__', title)
+            headssi = headssi.replace('__DESCRIPTION__', description)
+
+        with open(f"public/static/ssi/{file}.html", 'w') as file:
+            file.write(headssi)
+
+
     def _add_stylesheet(self, dest_data):
         style_name = 'style' if not self.prod else 'style.min';
 
