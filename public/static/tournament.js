@@ -27,7 +27,7 @@ export default {
     },
     computed: {
         currentProps() {
-            let route = (this.currentRoute.slice(1) || '/');
+            let route = (this.currentRoute || '/');
             let chunks = [];
             let secondary = "";
 
@@ -39,7 +39,7 @@ export default {
 
             if (route != '/') {
                 chunks = route.split('/');
-                switch (chunks[1]) {
+                switch (chunks[0]) {
                     case 'player':
                         this.currentView = 'player';
                         break;
@@ -60,7 +60,7 @@ export default {
                         break;
                 }
 
-                secondary = chunks[2] || "";
+                secondary = chunks[1] || "";
             }
 
             switch (this.currentView) {
@@ -74,9 +74,10 @@ export default {
                         text: `${this.season} Season`,
                         link: `/${this.season}`,
                         active: false,
+                        pass: 1,
                     }, {
                         text: `${this.eventInfo.name}`,
-                        link: `/${this.season}/${this.eventInfo.code}#`,
+                        link: `/${this.season}/${this.eventInfo.code}`,
                         active: true,
                     }];
 
@@ -120,17 +121,19 @@ export default {
                         text: `${this.season} Season`,
                         link: `/${this.season}`,
                         active: false,
+                        pass: 1,
                     }, {
                         text: `${this.eventInfo.name}`,
-                        link: `/${this.season}/${this.major}#`,
+                        link: `/${this.season}/${this.major}`,
                         active: false,
                     }, {
                         text: `${player.name}`,
-                        link: `/${this.season}/${this.major}#/player/${player.code}`,
+                        link: `/${this.season}/${this.major}/player/${player.code}`,
                         active: true,
                     }];
 
                     return {
+                        season: this.season,
                         player: player,
                         opponents: opps,
                         monImgBase: this.monImgBase,
@@ -163,17 +166,19 @@ export default {
                         text: `${this.season} Season`,
                         link: `/${this.season}`,
                         active: false,
+                        pass: 1,
                     }, {
                         text: `${this.eventInfo.name}`,
-                        link: `/${this.season}/${this.major}#`,
+                        link: `/${this.season}/${this.major}`,
                         active: false,
                     }, {
                         text: `${roundName} Pairings`,
-                        link: `/${this.season}/${this.major}#/pairings/${secondary}`,
+                        link: `/${this.season}/${this.major}/pairings/${secondary}`,
                         active: true,
                     }];
 
                     return {
+                        season: this.season,
                         eventInfo: this.eventInfo,
                         pairings: pairings,
                         round: { name: roundName, num: roundNum },
@@ -187,17 +192,19 @@ export default {
                         text: `${this.season} Season`,
                         link: `/${this.season}`,
                         active: false,
+                        pass: 1,
                     }, {
                         text: `${this.eventInfo.name}`,
-                        link: `/${this.season}/${this.eventInfo.code}#`,
+                        link: `/${this.season}/${this.eventInfo.code}`,
                         active: false,
                     }, {
                         text: "Country Stats",
-                        link: `/${this.season}/${this.major}#/countries`,
+                        link: `/${this.season}/${this.major}/countries`,
                         active: true,
                     }];
 
                     return {
+                        season: this.season,
                         eventInfo: this.eventInfo,
                         countryStats: this.countryStats,
                         standings: this.standings,
@@ -207,7 +214,7 @@ export default {
                 case 'country':
                     let country = this.countryCodes[secondary.toUpperCase()] || "";
                     if (!country) {
-                        document.location = `/${this.season}/${this.major}/#countries`;
+                        document.location = `/${this.season}/${this.major}/countries`;
                         return {};
                     }
 
@@ -217,21 +224,23 @@ export default {
                         text: `${this.season} Season`,
                         link: `/${this.season}`,
                         active: false,
+                        pass: 1,
                     }, {
                         text: `${this.eventInfo.name}`,
-                        link: `/${this.season}/${this.eventInfo.code}#`,
+                        link: `/${this.season}/${this.eventInfo.code}`,
                         active: false,
                     }, {
                         text: "Country Stats",
-                        link: `/${this.season}/${this.major}#/countries`,
+                        link: `/${this.season}/${this.major}/countries`,
                         active: false,
                     }, {
                         text: `${country}`,
-                        link: `/${this.season}/${this.major}#/country/${secondary}`,
+                        link: `/${this.season}/${this.major}/country/${secondary}`,
                         active: true,
                     }];
 
                     return {
+                        season: this.season,
                         eventInfo: this.eventInfo,
                         countryStats: this.countryStats.find(c => c.country == secondary),
                         standings: this.standings,
@@ -246,17 +255,19 @@ export default {
                         text: `${this.season} Season`,
                         link: `/${this.season}`,
                         active: false,
+                        pass: 1,
                     }, {
                         text: `${this.eventInfo.name}`,
-                        link: `/${this.season}/${this.eventInfo.code}#`,
+                        link: `/${this.season}/${this.eventInfo.code}`,
                         active: false,
                     }, {
                         text: "Usage Stats",
-                        link: `/${this.season}/${this.major}#/usage`,
+                        link: `/${this.season}/${this.major}/usage`,
                         active: true,
                     }];
 
                     return {
+                        season: this.season,
                         eventInfo: this.eventInfo,
                         usage: this.usage,
                     };
@@ -265,7 +276,7 @@ export default {
                     let mon = this.usage.find((m) => m.code == secondary);
 
                     if (!mon) {
-                        document.location = `/${this.season}/${this.major}#/usage`;
+                        document.location = `/${this.season}/${this.major}/usage`;
                         return {};
                     }
 
@@ -275,21 +286,23 @@ export default {
                         text: `${this.season} Season`,
                         link: `/${this.season}`,
                         active: false,
+                        pass: 1,
                     }, {
                         text: `${this.eventInfo.name}`,
-                        link: `/${this.season}/${this.eventInfo.code}#`,
+                        link: `/${this.season}/${this.eventInfo.code}`,
                         active: false,
                     }, {
                         text: "Usage Stats",
-                        link: `/${this.season}/${this.major}#/usage`,
+                        link: `/${this.season}/${this.major}/usage`,
                         active: false,
                     }, {
                         text: `${mon.name}`,
-                        link: `/${this.season}/${this.major}#/mon/${mon.code}`,
+                        link: `/${this.season}/${this.major}/mon/${mon.code}`,
                         active: true,
                     }];
 
                     return {
+                        season: this.season,
                         eventInfo: this.eventInfo,
                         mon: mon,
                         monImgBase: this.monImgBase,
@@ -302,19 +315,37 @@ export default {
     },
     methods: {
         init() {
-            window.addEventListener('hashchange', () => {
-                this.currentRoute = window.location.hash;
+            if (window.location.hash.length > 1) {
+                window.location = `${window.location.pathname}${window.location.hash.slice(1)}`;
+                return;
+            }
+
+            window.addEventListener('click', (e) => {
+                let targetEl = e.target;
+                if (targetEl && e.target.tagName === 'A') {
+                    if ('pass' in targetEl.dataset && targetEl.dataset.pass == 1) {
+                        return;
+                    }
+
+                    e.preventDefault();
+                    const url = e.target.getAttribute('href');
+                    history.pushState({ page: url }, null, url);
+
+                    const chips = window.location.pathname.split('/');
+                    this.currentRoute = chips.slice(3).join('/');
+                }
+            });
+
+            window.addEventListener('popstate', (e) => {
+                if (e.state) {
+                    this.currentRoute = e.state.page;
+                }
             });
 
             const chips = window.location.pathname.split('/');
-
-            if (chips.length != 3) {
-                window.location = '/';
-            }
+            this.currentRoute = chips.slice(3).join('/');
 
             this.setMajor(chips[1], chips[2]);
-
-            this.currentRoute = window.location.hash;
         },
 
         setMajor(season, name) {
@@ -533,7 +564,7 @@ export default {
         },
         'standings-main': {
             template: '#standings-main-template',
-            props: [ 'standings', 'eventInfo', 'season' ],
+            props: [ 'season', 'standings', 'eventInfo' ],
             methods: {
                 getSpritePos(name) {
                     return this.$parent.getSpritePos(name);
@@ -545,7 +576,7 @@ export default {
         },
         'player': {
             template: '#player-template',
-            props: [ 'opponents', 'player', 'monImgBase', 'eventInfo' ],
+            props: [ 'season', 'opponents', 'player', 'monImgBase', 'eventInfo' ],
             methods: {
                 getSpritePos(name) {
                     return this.$parent.getSpritePos(name);
@@ -573,7 +604,7 @@ export default {
         },
         'pairings': {
             template: '#pairings-template',
-            props: [ 'eventInfo', 'pairings', 'allRounds', 'round' ],
+            props: [ 'season', 'eventInfo', 'pairings', 'allRounds', 'round' ],
             methods: {
                 pairingWinClass(pairing, player) {
                     if (!player) {
@@ -618,7 +649,7 @@ export default {
         },
         'country-stats': {
             template: '#country-stats-template',
-            props: [ 'countryStats', 'standings', 'eventInfo', 'countryCodes' ],
+            props: [ 'season', 'countryStats', 'standings', 'eventInfo', 'countryCodes' ],
             methods: {
                 getCountryName(code) {
                     if (!code) {
@@ -630,7 +661,7 @@ export default {
         },
         'country': {
             template: '#country-template',
-            props: [ 'countryStats', 'standings', 'eventInfo', 'countryCodes', 'country' ],
+            props: [ 'season', 'countryStats', 'standings', 'eventInfo', 'countryCodes', 'country' ],
             methods: {
                 getCountryName(code) {
                     if (!code) {
@@ -648,7 +679,7 @@ export default {
         },
         'usage': {
             template: '#usage-template',
-            props: [ 'usage', 'eventInfo' ],
+            props: [ 'season', 'usage', 'eventInfo' ],
             methods: {
                 getSpritePos(name) {
                     return this.$parent.getSpritePos(name);
@@ -666,7 +697,7 @@ export default {
         },
         'mon': {
             template: '#mon-template',
-            props: [ 'monImgBase', 'eventInfo', 'mon', 'standings' ],
+            props: [ 'season', 'monImgBase', 'eventInfo', 'mon', 'standings' ],
             methods: {
                 getPct(dec, precision) {
                     return this.$parent.getPct(dec, precision)

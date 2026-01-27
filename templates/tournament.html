@@ -36,9 +36,9 @@ __TEMPLATE_HEAD__
 
     <ul id="standings-sections">
         <li><strong>Sections:</strong></li>
-        <li><a href="#/usage">Usage Stats</a></li>
-        <li><a href="#/countries">Players by Country</a></li>
-        <li><a href="#/pairings">Pairings</a></li>
+        <li><a :href="`/${season}/${eventInfo.code}/usage`">Usage Stats</a></li>
+        <li><a :href="`/${season}/${eventInfo.code}/countries`">Players by Country</a></li>
+        <li><a :href="`/${season}/${eventInfo.code}/pairings`">Pairings</a></li>
     </ul>
 
     <table id="standings">
@@ -56,7 +56,7 @@ __TEMPLATE_HEAD__
         <tbody>
             <tr v-for="player in standings">
                 <td>{{ player.place }}</td>
-                <td><a :href="`#/player/${player.code}`">{{ player.name }}</a></td>
+                <td><a :href="`/${season}/${eventInfo.code}/player/${player.code}`">{{ player.name }}</a></td>
                 <td>{{ player.record.w }}</td>
                 <td>-</td>
                 <td>{{ player.record.l }}</td>
@@ -64,7 +64,7 @@ __TEMPLATE_HEAD__
                 <td>{{ player.cut ? '&nbsp;' : getPct(player.res.opp, 5) }}</td>
                 <td>{{ player.cut ? '&nbsp;' : getPct(player.res.oppopp, 5) }}</td>
                 <td class="team-container">
-                    <a :href="`#/player/${player.code}`">
+                    <a :href="`/${season}/${eventInfo.code}/player/${player.code}`">
                         <div
                             v-for="mon in player.team"
                             class="monicon"
@@ -97,7 +97,7 @@ __TEMPLATE_HEAD__
             <tr>
                 <td>
                     <a v-if="player.country"
-                        :href="`#/country/${player.country}`"><img
+                        :href="`/${season}/${eventInfo.code}/country/${player.country}`"><img
                         :src="`/static/img/flags/${player.country}.svg`"
                         :title="`${player.country}`"
                         width="32"
@@ -154,7 +154,7 @@ __TEMPLATE_HEAD__
                 <td>{{ opp.rname }}</td>
                 <td>
                     <template v-if="opp.bye">Bye</template>
-                    <a v-else :href="`#/player/${opp.opp}`">{{ opponents[opp.opp].name }}</a>
+                    <a v-else :href="`/${season}/${eventInfo.code}/player/${opp.opp}`">{{ opponents[opp.opp].name }}</a>
                 </td>
                 <td :class="[ opp.bye ? '' : opp.res ]">{{ opp.bye ? "" : opp.res }}</td>
                 <td>
@@ -169,7 +169,7 @@ __TEMPLATE_HEAD__
                 </td>
                 <td class="team-container">
                     <div v-if="opponents[opp.opp].team">
-                        <a :href="`#/player/${opp.opp}`">
+                        <a :href="`/${season}/${eventInfo.code}/player/${opp.opp}`">
                             <div
                                 v-for="mon in opponents[opp.opp].team"
                                 class="monicon"
@@ -197,7 +197,7 @@ __TEMPLATE_HEAD__
 
     <ul id="pairing-round-select">
         <li v-for="round in allRounds">
-            <a :href="`#/pairings/${round.num}`">{{ round.name }}</a>
+            <a :href="`/${season}/${eventInfo.code}/pairings/${round.num}`">{{ round.name }}</a>
         </li>
     </ul>
 
@@ -212,7 +212,7 @@ __TEMPLATE_HEAD__
         <tbody>
             <tr v-for="pairing in pairings">
                 <td :class="pairingWinClass(pairing, pairing.player.code)">
-                    <a :href="`#/player/${pairing.player.code}`">{{ pairing.player.name }}</a><br />
+                    <a :href="`/${season}/${eventInfo.code}/player/${pairing.player.code}`">{{ pairing.player.name }}</a><br />
                     ({{ getRecordThroughRound(pairing.player, round.num) }})
                 </td>
                 <td>
@@ -221,7 +221,7 @@ __TEMPLATE_HEAD__
                 </td>
                 <td :class="pairingWinClass(pairing, pairing.opp?.code)">
                     <span v-if="pairing.opp">
-                        <a :href="`#/player/${pairing.opp.code}`">{{ pairing.opp.name }}</a><br />
+                        <a :href="`/${season}/${eventInfo.code}/player/${pairing.opp.code}`">{{ pairing.opp.name }}</a><br />
                         ({{ getRecordThroughRound(pairing.opp, round.num) }})
                     </span>
                     <span v-if="pairing.other">{{ pairing.other }}</span>
@@ -254,7 +254,7 @@ __TEMPLATE_HEAD__
         <tbody>
             <tr v-for="countryData in countryStats">
                 <td width="34">
-                    <a :href="`#/country/${countryData.country}`"><img
+                    <a :href="`/${season}/${eventInfo.code}/country/${countryData.country}`"><img
                         :src="`/static/img/flags/${countryData.country}.svg`"
                         :title="`${countryData.country}`"
                         width="32"
@@ -262,7 +262,7 @@ __TEMPLATE_HEAD__
                 </td>
                 <td>
                     <a
-                        :href="`#/country/${countryData.country}`"
+                        :href="`/${season}/${eventInfo.code}/country/${countryData.country}`"
                     >{{ getCountryName(countryData.country) }}</a>
                 </td>
                 <td>{{ countryData.players.length }}</td>
@@ -270,7 +270,7 @@ __TEMPLATE_HEAD__
                 <td>{{ countryData.cut }}</td>
                 <td>
                     <a
-                        :href="`#/player/${countryData.topPlayer.code}`"
+                        :href="`/${season}/${eventInfo.code}/player/${countryData.topPlayer.code}`"
                     >{{ standings[countryData.topPlayer.code].name }}</a>
                 </td>
                 <td>({{ standings[countryData.topPlayer.code].place }})</td>
@@ -298,13 +298,13 @@ __TEMPLATE_HEAD__
         <tbody>
             <tr v-for="pcode in countryStats.players">
                 <td>{{ standings[pcode].place }}</td>
-                <td><a :href="`#/player/${pcode}`">{{ standings[pcode].name }}</a></td>
+                <td><a :href="`/${season}/${eventInfo.code}/player/${pcode}`">{{ standings[pcode].name }}</a></td>
                 <td>({{ standings[pcode].record.w }} - {{ standings[pcode].record.l }})</td>
                 <td>{{ getPct(standings[pcode].res.opp) }}</td>
                 <td>{{ getPct(standings[pcode].res.oppopp) }}</td>
                 <td class="team-container">
                     <div v-if="standings[pcode].team">
-                        <a :href="`#/player/${pcode}`">
+                        <a :href="`/${season}/${eventInfo.code}/player/${pcode}`">
                             <div
                                 v-for="tmon in standings[pcode].team"
                                 class="monicon"
@@ -374,7 +374,7 @@ __TEMPLATE_HEAD__
                         :title="mon.name"
                     >{{ mon.name }}</div>
                 </td>
-                <td><a :href="`#/mon/${mon.code}`">{{ mon.name }}</a></td>
+                <td><a :href="`/${season}/${eventInfo.code}/mon/${mon.code}`">{{ mon.name }}</a></td>
                 <td>{{ mon.counts.total }} <span class="pct">({{ getPct(mon.counts.total / eventInfo.playerCount, 4) }})</span></td>
                 <td>{{ mon.counts.points }} <span class="pct">({{ getPct(mon.counts.points / eventInfo.playerCount, 4) }})</span></td>
                 <td>{{ mon.counts.phase2 }} <span class="pct">({{ getPct(mon.counts.phase2 / eventInfo.phase2Count, 4) }})</span></td>
@@ -509,14 +509,14 @@ __TEMPLATE_HEAD__
             <tr v-for="pcode in mon.players">
                 <td>{{ standings[pcode].place }}</td>
                 <td>
-                    <a :href="`#/player/${pcode}`">{{ standings[pcode].name }}</a>
+                    <a :href="`/${season}/${eventInfo.code}/player/${pcode}`">{{ standings[pcode].name }}</a>
                 </td>
                 <td>({{ standings[pcode].record.w }} - {{ standings[pcode].record.l }})</td>
                 <td>{{ getPct(standings[pcode].res.opp) }}</td>
                 <td>{{ getPct(standings[pcode].res.oppopp) }}</td>
                 <td class="team-container">
                     <div v-if="standings[pcode].team">
-                        <a :href="`#/player/${pcode}`">
+                        <a :href="`/${season}/${eventInfo.code}/player/${pcode}`">
                             <div
                                 v-for="tmon in standings[pcode].team"
                                 class="monicon"

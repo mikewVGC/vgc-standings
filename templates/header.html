@@ -3,10 +3,10 @@
 
         <div class="tabgroup" v-cloak>
             <div>
-                <a href="/">𑁔</a>
+                <a href="/" data-pass="1">𑁔</a>
             </div>
             <div v-for="item in nav" :class="[ item.active ? 'active' : '' ]" v-cloak>
-                <a :href="item.link">{{ item.text }}</a>
+                <a :href="item.link" :data-pass="'pass' in item ? item.pass : '0'">{{ item.text }}</a>
             </div>
         </div>
     </header>
