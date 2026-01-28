@@ -9,5 +9,6 @@ public/static/*.min.js
 public/static/*.min.css
 public/static/img/art/*
 public/static/img/flags/*
+public/static/ssi/*
 venv
 __pycache__

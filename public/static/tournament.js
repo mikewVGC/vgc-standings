@@ -95,7 +95,7 @@ export default {
                     }
 
                     let opps = {};
-                    document.title = `${player.name} -- ${this.eventInfo.name} Standings -- Reportworm Standings`;
+                    document.title = `${player.name} -- ${this.eventInfo.name} -- Reportworm Standings`;
                     if (player?.rounds) {
                         for (let i = 0; i < player.rounds.length; i++) {
                             let oppCode = player.rounds[i].opp;
@@ -153,6 +153,7 @@ export default {
                     let pairings = this.getPairings(secondary);
                     let roundName = secondary;
                     let roundNum = secondary;
+
                     if (pairings.length) {
                         roundName = pairings[0].rname;
                         roundNum = pairings[0].round;
@@ -161,6 +162,8 @@ export default {
                     if (roundName == roundNum) {
                         roundName = `Round ${roundNum}`;
                     }
+
+                    document.title = `${roundName} Pairings -- ${this.eventInfo.name} -- Reportworm Standings`;
 
                     this.nav = [{
                         text: `${this.season} Season`,
@@ -186,7 +189,7 @@ export default {
                     };
 
                 case 'country-stats':
-                    document.title = `Country Stats -- ${this.eventInfo.name} Standings -- Reportworm Standings`;
+                    document.title = `Country Stats -- ${this.eventInfo.name} -- Reportworm Standings`;
 
                     this.nav = [{
                         text: `${this.season} Season`,
@@ -218,7 +221,7 @@ export default {
                         return {};
                     }
 
-                    document.title = `${country} Players -- Country Stats -- ${this.eventInfo.name} Standings -- Reportworm Standings`;
+                    document.title = `${country} Players -- Country Stats -- ${this.eventInfo.name} -- Reportworm Standings`;
 
                     this.nav = [{
                         text: `${this.season} Season`,
@@ -249,7 +252,7 @@ export default {
                     };
 
                 case 'usage':
-                    document.title = `Usage Stats -- ${this.eventInfo.name} Standings -- Reportworm Standings`;
+                    document.title = `Usage Stats -- ${this.eventInfo.name} -- Reportworm Standings`;
 
                     this.nav = [{
                         text: `${this.season} Season`,
@@ -280,7 +283,7 @@ export default {
                         return {};
                     }
 
-                    document.title = `${mon.name} -- Usage Stats -- ${this.eventInfo.name} Standings -- Reportworm Standings`;
+                    document.title = `${mon.name} -- Usage Stats -- ${this.eventInfo.name} -- Reportworm Standings`;
 
                     this.nav = [{
                         text: `${this.season} Season`,

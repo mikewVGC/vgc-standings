@@ -54,6 +54,8 @@ def main():
 
     usage = Usage(config)
 
+    builder = SiteBuilder(config, cl.prod)
+
     current_majors = {}
     for year in manifest['seasons']:
         majors = {}
@@ -87,18 +89,28 @@ def main():
                 print("building usage... ", end="")
                 usage.compile_usage(year, event_code)
 
+            builder.build_meta_ssi(
+                f"{year}/{event_code}",
+                f"{event_info['name']} Standings -- {year} Season -- Reportworm Standings",
+                f"Reportworm Standings showcases standings and teamsheets for the {year} {event_info['name']}.",
+            )
+
             print("Done!")
 
         print(f"[{year}] Processing season data... ", end="")
         process_season(year, majors)
         print("Done!")
 
+        builder.build_meta_ssi(
+            f"{year}",
+            f"{year} Season -- Reportworm Standings",
+            f"Reportworm Standings showcases standings and teamsheets for the {year} VGC Season.",
+        )
+
     if cl.prod:
         print(f"[ALL] Minifying js and css... ", end="")
         subprocess.run(["go", "run", "scripts/packer/main.go"], capture_output=True)
         print("Done!")
-
-    builder = SiteBuilder(config, cl.prod)
 
     print(f"[ALL] Rebuilding season page... ", end="")
     builder.build_season()
