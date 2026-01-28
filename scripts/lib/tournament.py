@@ -5,8 +5,8 @@ from zoneinfo import ZoneInfo
 # returns (day 1 rounds, day 2 rounds, top cut min)
 # I don't think actually uses the third value yet?
 def get_tournament_structure(season, competitors, event_info):
-    # 2024 did not have asym top cut, the last element is # cut rounds (3 = top 8)
-    if season == 2024 and event_info['code'] != "worlds":
+    # 2023 - 2024 did not have asym top cut, the last element is # cut rounds (3 = top 8)
+    if season == 2023 or (season == 2024 and event_info['code'] != "worlds"):
         if competitors >= 800:
             return (9, 6, 3)
         elif competitors >= 227:
@@ -80,7 +80,7 @@ def get_tournament_structure(season, competitors, event_info):
 
 # given a number of competitors, return how many will earn points
 def get_points_threshold(season, competitors):
-    if season == 2024:
+    if season <= 2024:
         if competitors >= 1024:
             return 512
         if competitors >= 512:

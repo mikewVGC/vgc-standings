@@ -344,6 +344,7 @@ export default {
             });
 
             const chips = window.location.pathname.split('/');
+            history.pushState({ page: window.location.pathname }, null, window.location.pathname);
             this.currentRoute = chips.slice(3).join('/');
 
             this.setMajor(chips[1], chips[2]);
