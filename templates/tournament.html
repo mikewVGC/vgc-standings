@@ -325,6 +325,12 @@ __TEMPLATE_HEAD__
 
     <h2>{{ eventInfo.name }} Usage Stats</h2>
 
+    <ul id="standings-info">
+        <li><strong>Total Players</strong>: {{ eventInfo.playerCount }}</li>
+        <li><strong>Phase Two Players</strong>: {{ eventInfo.phase2Count }}</li>
+        <li><strong>Pct. In Phase Two</strong>: {{ getPct(eventInfo.phase2Count / eventInfo.playerCount) }}</li>
+    </ul>
+
     <table id="usage">
         <thead>
             <tr>
