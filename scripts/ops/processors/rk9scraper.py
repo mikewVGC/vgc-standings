@@ -37,18 +37,19 @@ def process_rk9scraper_event(data, tour_format, official_order, year, code):
 
         for mon in player['team']:
             mon_name = fix_mon_name(mon['species'])
-            mon_code = make_mon_code(mon_name)
-            dex_num, ptype = get_mon_data_from_code(mon_code)
-
-            alt = get_mon_alt_from_code(mon_code)
-            if alt:
-                dex_num = alt
 
             # Note: some of the older 2023 regionals have Bramblin in place of Maushold for some
             # reason moves / items / etc all appear correct, so check the ability just in case 
             # there's a real bramblin somehow
             if mon_name == "Bramblin" and mon['ability'] in ['Friend Guard', 'Cheek Pouch', 'Technician']:
                 mon_name = "Maushold"
+
+            mon_code = make_mon_code(mon_name)
+            dex_num, ptype = get_mon_data_from_code(mon_code)
+
+            alt = get_mon_alt_from_code(mon_code)
+            if alt:
+                dex_num = alt
 
             team.append(TeamMember(
                 name=mon_name,
