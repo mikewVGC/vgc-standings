@@ -1,13 +1,15 @@
 
 import json
 import re
+import dataclasses
+
+from ops.processors.pokedata import process_pokedata_event
+from ops.processors.rk9scraper import process_rk9scraper_event
 
 from collections import OrderedDict
 
 from lib.util import (
     make_code,
-    fix_mon_name,
-    make_mon_code,
     make_nice_date_str,
 )
 from lib.tournament import (
@@ -19,24 +21,35 @@ from lib.tournament import (
     tour_in_progress,
 )
 from lib.formes import (
-    get_mon_data_from_code,
-    get_mon_alt_from_code,
     get_icon_alt,
 )
+
+class EnhancedJSONEncoder(json.JSONEncoder):
+    def default(self, o):
+        if dataclasses.is_dataclass(o):
+            return dataclasses.asdict(o)
+        return super().default(o)
 
 """
 build the standings/matches json
 """
 def process_regional(year, code, event_info):
     data = []
+    data_type = '';
 
     try :
         # thanks to pokedata.ovh for the standings json!
         with open(f"data/majors/{year}/{code}-standings.json", encoding='utf8') as file:
             data = json.loads(file.read())
+            data_type = 'pokedata'
     except FileNotFoundError:
-        print(f"Main standings file not found, maybe this hasn't happened yet? ", end="")
-        return False
+        try:
+            with open(f"data/majors/{year}/{code}-roster.json", encoding='utf8') as file:
+                data = json.loads(file.read())
+                data_type = 'rk9scraper'
+        except FileNotFoundError:
+            print(f"Main standings file not found, maybe this hasn't happened yet? ", end="")
+            return False
 
     official_order = []
     # thanks to rk9 (would be nice if they published official res etc)
@@ -47,11 +60,14 @@ def process_regional(year, code, event_info):
             for i, line in enumerate(lines):
                 matches = re.findall(r"^[0-9]+\. {1}([^\[]+)( {0,1}\[[A-Z]{0,2}\]){0,1}$", line)
                 name = matches[0][0].strip()
-                official_order.append(make_code(name))
+                name_code = make_code(name)
+                num = 1
+                while name_code in official_order:
+                    name_code = f"{name_code}-{num}"
+                    num += 1
+                official_order.append(name_code)
     except FileNotFoundError:
-        print(f"Official standings file not found, skipping. ", end="")
-
-    name_reg = r"^([^\[]+)( {0,1}\[[A-Z]{0,2}\]){0,1}$"
+        print(f"Official standings not found, skipping. ", end="")
 
     tour_format = get_tournament_structure(year, len(data), event_info)
 
@@ -59,144 +75,40 @@ def process_regional(year, code, event_info):
     phase_two_count = 0
     players_in_cut_round = {}
 
-    for player in data:
-        team = []
-
-        if 'decklist' not in player:
-            player['decklist'] = []
-        if 'rounds' not in player:
-            player['rounds'] = {}
-        if 'placing' not in player:
-            player['placing'] = 0
-        if 'record' not in player:
-            player['record'] = { 'wins': 0, 'losses': 0 }
-        if 'drop' not in player:
-            player['drop'] = -1
-
-        for mon in player['decklist']:
-            mon_name = fix_mon_name(mon['name'])
-            mon_code = make_mon_code(mon_name)
-            dex_num, ptype = get_mon_data_from_code(mon_code)
-
-            alt = get_mon_alt_from_code(mon_code)
-            if alt:
-                dex_num = alt
-
-            team.append({
-                'name': mon_name,
-                'code': mon_code,
-                'altcode': get_icon_alt(mon_code, mon),
-                'dex': dex_num,
-                'ptype': ptype.lower(),
-                'tera': mon['teratype'],
-                'ability': mon['ability'],
-                'item': mon['item'],
-                'moves': mon['badges'],
-            })
-
-        rounds = []
-        for rnd, opp in player['rounds'].items():
-            opp_data = re.findall(name_reg, opp['name'])
-            opp_name = ""
-            if len(opp_data) > 0:
-                opp_data = opp_data[0]
-                opp_name = opp_data[0].strip()
-
-            if opp_name == "R1 BYE":
-                opp_name = "BYE"
-
-            opp_code = make_code(opp_name)
-
-            phase = 1
-            if int(rnd) > tour_format[0] + tour_format[1]:
-                phase = 3 # top cut
-            elif int(rnd) > tour_format[0]:
-                phase = 2
-
-            if phase == 3:
-                if int(rnd) not in players_in_cut_round:
-                    players_in_cut_round[int(rnd)] = 0
-                players_in_cut_round[int(rnd)] += 1
-
-            rounds.append({
-                'round': int(rnd),
-                'rname': rnd,
-                'opp': opp_code if opp_code not in [ 'bye', 'late', 'none' ] else '',
-                'res': opp['result'],
-                'tbl': opp['table'],
-                'bye': 1 if opp_code == "bye" else 0,
-                'late': 1 if opp_code == "late" else 0,
-                'phase': phase,
-            })
-
-        made_phase_two = False
-        if len(rounds) > tour_format[0]:
-            made_phase_two = True
-            phase_two_count += 1
-
-        pdata = re.findall(name_reg, player['name'])
-        if not len(pdata):
-            print('uh oh', player, pdata)
-
-        player_code = make_code(pdata[0][0].strip())
-        player_country = pdata[0][1] if len(pdata[0]) > 1 else ""
-        if len(player_country) > 1:
-            player_country = player_country[1:-1]
-
-        # flag-icons comes with gb but not uk
-        if player_country == "UK":
-            player_country = "GB"
-
-        players[player_code] = {
-            'name': pdata[0][0].strip(),
-            'code': player_code,
-            'country': player_country.lower(),
-            'place': int(player['placing']),
-            'record': { 'w': player['record']['wins'], 'l': player['record']['losses'] },
-            'res': {
-                'self': [],
-                'opp': 0,
-                'oppopp': 0,
-            },
-            'cut': True if len(rounds) > tour_format[0] + tour_format[1] else False,
-            'p2': made_phase_two,
-            'drop': player['drop'],
-            'team': team,
-            'rounds': rounds,
-        }
-
-        # add missing players to official order. this is likely due
-        # to a DQ or some other issue, but it also allows this
-        # to function if the official standings file is missing
-        if player_code not in official_order:
-            official_order.append(player_code)
+    if data_type == 'pokedata':
+        players, phase_two_count, players_in_cut_round = process_pokedata_event(data, tour_format, official_order)
+    elif data_type == 'rk9scraper':
+        players, phase_two_count, players_in_cut_round = process_rk9scraper_event(data, tour_format, official_order, year, code)
 
     # more loops for calculating various resistances
     for player in players:
-        players[player]['res']['self'] = calculate_win_pct(player, players, tour_format, players[player]['drop'])
+        players[player].res['self'] = calculate_win_pct(player, players, tour_format, players[player].drop)
+
+        if players[player].rounds is None:
+            continue
 
         # also repurposing this loop to set round names
-        for ri, game in enumerate(players[player]['rounds']):
+        for ri, game in enumerate(players[player].rounds):
             player_count = 0
-            if game['round'] in players_in_cut_round:
-                player_count = players_in_cut_round[game['round']]
-            players[player]['rounds'][ri]['rname'] = get_round_name(game['round'], tour_format, player_count)
+            if game.round in players_in_cut_round:
+                player_count = players_in_cut_round[game.round]
+            players[player].rounds[ri].rname = get_round_name(game.round, tour_format, player_count)
 
     for player in players:
-        players[player]['res']['opp'] = calculate_res(player, players, tour_format)
+        players[player].res['opp'] = calculate_res(player, players, tour_format)
 
     for player in players:
-        players[player]['res']['oppopp'] = calculate_oppopp(player, players, tour_format)
+        players[player].res['oppopp'] = calculate_oppopp(player, players, tour_format)
 
     for player in players:
-        players[player]['rounds'].reverse()
+        players[player].rounds.reverse()
 
     players_ordered = OrderedDict()
 
     # adjust the order based on rk9 standings
     for pidx, player in enumerate(official_order):
         # set the placement
-        players[player]['place'] = pidx + 1
+        players[player].place = pidx + 1
         players_ordered[player] = players[player]
 
     event_info["dates"] = make_nice_date_str(event_info['start'], event_info['end'])
@@ -211,7 +123,7 @@ def process_regional(year, code, event_info):
         file.write(json.dumps({
             "event": event_info,
             "standings": players_ordered,
-        }))
+        }, cls=EnhancedJSONEncoder, indent=2))
 
     return True
 

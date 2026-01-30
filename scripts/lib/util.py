@@ -10,7 +10,11 @@ from urllib.parse import quote
 #  Chuppa Cross IV -> chuppa-cross-iv
 #  Jérémy Côté     -> jeremy-cote
 def make_code(name):
-    coded = re.sub(r"[^\w-]+", '', name.lower().replace(' ', '-'))
+    if len(name.strip()) == 0:
+        return ""
+
+    coded = name.encode('utf-8').decode('unicode_escape')
+    coded = re.sub(r"[^\w-]+", '', coded.lower().replace(' ', '-'))
     coded = unicodedata.normalize('NFKD', coded)
     coded = coded.encode('ascii', 'ignore').decode('utf-8')
 

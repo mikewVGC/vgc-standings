@@ -5,6 +5,13 @@ from zoneinfo import ZoneInfo
 # returns (day 1 rounds, day 2 rounds, top cut min)
 # I don't think actually uses the third value yet?
 def get_tournament_structure(season, competitors, event_info):
+    # the first three 2023 regionals had no day 2, instead day 1 rolled into top cut
+    if season == 2023 and event_info['code'] in ['san-diego', 'liverpool', 'orlando']:
+        if competitors >= 513:
+            return (10, 0, 5)
+        elif competitors >= 410: # liverpool had 487, the other two > 513
+            return (9, 0, 5)
+
     # 2023 - 2024 did not have asym top cut, the last element is # cut rounds (3 = top 8)
     if season == 2023 or (season == 2024 and event_info['code'] != "worlds"):
         if competitors >= 800:
@@ -80,7 +87,21 @@ def get_tournament_structure(season, competitors, event_info):
 
 # given a number of competitors, return how many will earn points
 def get_points_threshold(season, competitors):
-    if season <= 2024:
+    if season == 2023:
+        if competitors >= 800:
+            return 256
+        if competitors >= 400:
+            return 128
+        if competitors >= 200:
+            return 64
+        if competitors >= 100:
+            return 32
+        if competitors >= 48:
+            return 16
+        if competitors >= 8:
+            return 8
+
+    if season == 2024:
         if competitors >= 1024:
             return 512
         if competitors >= 512:
@@ -135,6 +156,8 @@ def get_round_name(rnd, tour_format, players = 0):
         return "Top 8"
     if players == 16:
         return "Top 16"
+    if players == 32:
+        return "Top 32"
 
     return "Top Cut"
 
@@ -144,11 +167,11 @@ def tour_in_progress(event_info, players = False):
     if players != False:
         # check if the tour is actually over (a finalist won)
         for player in players.values():
-            for match in player['rounds']:
-                rnd = match['round']
-                if match['res'] != 'W' and match['res'] != 'L':
+            for match in player.rounds:
+                rnd = match.round
+                if match.res != 'W' and match.res != 'L':
                     break
-                if match['rname'] != 'Finals':
+                if match.rname != 'Finals':
                     break
                 return False
             break
@@ -183,25 +206,27 @@ def calculate_win_pct(player, players, tour_format, drop_round = None):
     ]
 
     # if they made day 2, add that
-    if players[player]['drop'] == -1 or players[player]['drop'] > tour_format[0]:
+    if players[player].drop == -1 or players[player].drop > tour_format[0]:
         phases.append([ 0, tour_format[0] + tour_format[1] ])
 
     results = []
 
     for phase in phases:
-        matches = players[player]['rounds']
+        matches = players[player].rounds
         wins = 0
         total = 0
-        for match in matches[phase[0]:phase[1]]:
-            if match['bye']:
-                continue
 
-            total += 1
-            if match['res'] == "W":
-                wins += 1
+        if len(matches):
+            for match in matches[phase[0]:phase[1]]:
+                if match.bye:
+                    continue
 
-            if drop_round != None and match['round'] == drop_round:
-                break
+                total += 1
+                if match.res == "W":
+                    wins += 1
+
+                if drop_round != None and match.round == drop_round:
+                    break
 
         pct = .25
         if total > 0:
@@ -209,9 +234,9 @@ def calculate_win_pct(player, players, tour_format, drop_round = None):
 
         # players who drop can't have a win pct > 75%
         if (
-            players[player]['drop'] != -1 and
-            players[player]['drop'] != tour_format[0] and
-            players[player]['drop'] != tour_format[0] + tour_format[1]
+            players[player].drop != -1 and
+            players[player].drop != tour_format[0] and
+            players[player].drop != tour_format[0] + tour_format[1]
         ):
             pct = min(pct, .75)
 
@@ -239,37 +264,37 @@ After a lot of trial and error, here is how res works:
     * Notably when a player drops you need to get their 
 """
 def calculate_res(player, players, tour_format):
-    matches = players[player]['rounds']
+    matches = players[player].rounds
     total = 0
     match_count = 0
 
     made_phase_two = False
-    if players[player]['drop'] == -1 or players[player]['drop'] > tour_format[0]:
+    if players[player].drop == -1 or players[player].drop > tour_format[0]:
         made_phase_two = True
 
     for match in matches:
-        if match['bye'] or match['opp'] == '':
+        if match.bye or match.opp == '':
             continue
 
-        opp = match['opp']
+        opp = match.opp
         if not opp or opp not in players:
-            print(f"[res] Missing opponent '{opp}' for {player} (round {match['round']})")
+            print(f"[res] Missing opponent '{opp}' for {player} (round {match.round})")
             continue
 
         opp_phase = 0
-        opp_made_phase_two = players[opp]['drop'] == -1 or players[opp]['drop'] > tour_format[0]
+        opp_made_phase_two = players[opp].drop == -1 or players[opp].drop > tour_format[0]
         if made_phase_two and opp_made_phase_two:
             opp_phase = 1
 
-        pct = players[opp]['res']['self'][opp_phase]
+        pct = players[opp].res['self'][opp_phase]
         match_count += 1
 
-        if players[player]['drop'] != -1 and players[player]['drop'] < tour_format[0]:
+        if players[player].drop != -1 and players[player].drop < tour_format[0]:
             # recalculate opponents for players who dropped during day 1
-            pct = calculate_win_pct(opp, players, tour_format, players[player]['drop'])[0]
-        elif opp_made_phase_two and players[player]['drop'] != -1 and players[player]['drop'] < tour_format[0] + tour_format[1]:
+            pct = calculate_win_pct(opp, players, tour_format, players[player].drop)[0]
+        elif opp_made_phase_two and players[player].drop != -1 and players[player].drop < tour_format[0] + tour_format[1]:
             # players who dropped during day 2
-            pct = calculate_win_pct(opp, players, tour_format, players[player]['drop'])[1]
+            pct = calculate_win_pct(opp, players, tour_format, players[player].drop)[1]
 
         total += pct
 
@@ -285,44 +310,47 @@ the official standings / order on rk9 ... I also need to validate the rk9 order 
 the one on pokemon.com
 """
 def calculate_oppopp(player, players, tour_format):
-    matches = players[player]['rounds']
-    made_phase_two = players[player]['drop'] == -1 or players[player]['drop'] > tour_format[0]
+    matches = players[player].rounds
+    made_phase_two = players[player].drop == -1 or players[player].drop > tour_format[0]
 
     total_pct = 0
     match_count = 0
 
     for match in matches:
-        if match['bye'] or match['opp'] == '':
+        if match.bye or match.opp == '':
             continue
 
-        opp = match['opp']
-        opp_matches = players[opp]['rounds']
+        opp = match.opp
+        opp_matches = players[opp].rounds
 
         oppopp_total_pct = 0
         oppopp_match_count = 0
 
         for opp_match in opp_matches:
-            if opp_match['bye'] or opp_match['opp'] == '':
+            if opp_match.bye or opp_match.opp == '':
                 continue
 
-            oppopp = opp_match['opp']
+            oppopp = opp_match.opp
             if not oppopp or oppopp not in players:
-                print(f"[oppopp] Missing opponent '{oppopp}' for {opp} (round {opp_match['round']})")
+                print(f"[oppopp] Missing opponent '{oppopp}' for {opp} (round {opp_match.round})")
                 continue
 
-            oppopp_phase_two = players[oppopp]['drop'] == -1 or players[oppopp]['drop'] > tour_format[0]
+            oppopp_phase_two = players[oppopp].drop == -1 or players[oppopp].drop > tour_format[0]
 
-            pct = players[oppopp]['res']['self'][1 if oppopp_phase_two else 0]
+            pct = players[oppopp].res['self'][1 if oppopp_phase_two else 0]
 
-            if players[opp]['drop'] != -1 and players[opp]['drop'] < tour_format[0]:
+            if players[opp].drop != -1 and players[opp].drop < tour_format[0]:
                 # recalculate opponents for players who dropped during day 1
-                pct = calculate_win_pct(oppopp, players, tour_format, players[player]['drop'])[0]
-            elif oppopp_phase_two and players[opp]['drop'] != -1 and players[opp]['drop'] < tour_format[0] + tour_format[1]:
+                pct = calculate_win_pct(oppopp, players, tour_format, players[player].drop)[0]
+            elif oppopp_phase_two and players[opp].drop != -1 and players[opp].drop < tour_format[0] + tour_format[1]:
                 # players who dropped during day 2
-                pct = calculate_win_pct(oppopp, players, tour_format, players[player]['drop'])[1]
+                pct = calculate_win_pct(oppopp, players, tour_format, players[player].drop)[1]
 
             oppopp_total_pct += pct
             oppopp_match_count += 1
+
+        if oppopp_match_count == 0:
+            oppopp_match_count = 1
 
         total_pct += oppopp_total_pct / oppopp_match_count
         match_count += 1
@@ -333,7 +361,9 @@ def calculate_oppopp(player, players, tour_format):
     return total_pct / match_count
 
 
-# some easy helper functions
+# some easy helper functions ... notably these are called
+# by the usage functions, which parse the data, so they don't
+# use the data models, which is why everything is a dict
 
 def player_earned_points(player, points_threshold):
     if not points_threshold:

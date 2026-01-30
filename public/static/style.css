@@ -9,7 +9,7 @@ a {
 }
 
 div#app {
-    max-width: 48em;
+    max-width: 50em;
     margin: auto;
     position: relative;
 }
@@ -131,7 +131,7 @@ table {
 }
 
 th, td {
-    padding: .4em;
+    padding: .3em .4em;
 }
 
 th {
@@ -299,6 +299,15 @@ tr.phase-header th {
 
 #team .paste-mon div {
     padding-bottom: .1em;
+}
+
+#team .paste-mon div.itemicon {
+    padding-left: 0;
+    padding-bottom: 0;
+    overflow: hidden;
+    position: absolute;
+    right: 0px;
+    top: 126px;
 }
 
 #team .mon-big-img {
