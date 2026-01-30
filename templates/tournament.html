@@ -275,6 +275,9 @@ __TEMPLATE_HEAD__
                 </td>
                 <td>({{ standings[countryData.topPlayer.code].place }})</td>
             </tr>
+            <tr v-if="countryStats.length == 0" v-cloak>
+                <td colspan="7">There's no country data for this event.</td>
+            </tr>
         </tbody>
     </table>
 

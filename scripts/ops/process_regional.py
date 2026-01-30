@@ -5,6 +5,7 @@ import dataclasses
 
 from ops.processors.pokedata import process_pokedata_event
 from ops.processors.rk9scraper import process_rk9scraper_event
+from ops.processors.vgcpastes import process_vgcpastes_teamlist
 
 from collections import OrderedDict
 
@@ -35,7 +36,8 @@ build the standings/matches json
 """
 def process_regional(year, code, event_info):
     data = []
-    data_type = '';
+    data_type = ''
+    parse_teams = False
 
     try :
         # thanks to pokedata.ovh for the standings json!
@@ -50,6 +52,13 @@ def process_regional(year, code, event_info):
         except FileNotFoundError:
             print(f"Main standings file not found, maybe this hasn't happened yet? ", end="")
             return False
+
+    try:
+        # check for a vgcpastes teamlist (currently only milwaukee 2023)
+        with open(f"data/majors/{year}/{code}-teams.txt", encoding='utf8') as file:
+            parse_teams = True
+    except FileNotFoundError:
+        ...
 
     official_order = []
     # thanks to rk9 (would be nice if they published official res etc)
@@ -80,6 +89,10 @@ def process_regional(year, code, event_info):
     elif data_type == 'rk9scraper':
         players, phase_two_count, players_in_cut_round = process_rk9scraper_event(data, tour_format, official_order, year, code)
 
+    if parse_teams:
+        # this will just add teams to the players
+        process_vgcpastes_teamlist(players, year, code)
+
     # more loops for calculating various resistances
     for player in players:
         players[player].res['self'] = calculate_win_pct(player, players, tour_format, players[player].drop)
@@ -104,6 +117,21 @@ def process_regional(year, code, event_info):
         players[player].rounds.reverse()
 
     players_ordered = OrderedDict()
+
+    # just do the sorting ourselves for worlds 2023 day 1
+    if year == 2023 and code == 'worlds-day-1':
+        sorted_worlds = sorted(list(players.values()), key=lambda player: (
+            player.record['w'],
+            player.res['self'],
+            player.res['opp'],
+            player.res['oppopp']
+        ), reverse=True)
+
+        players = {}
+        official_order = []
+        for p in sorted_worlds:
+            players[p.code] = p
+            official_order.append(p.code)
 
     # adjust the order based on rk9 standings
     for pidx, player in enumerate(official_order):

@@ -30,6 +30,7 @@ def process_rk9scraper_event(data, tour_format, official_order, year, code):
     pairings_by_player = get_grouped_pairings(year, code, tour_format)
 
     dupe_names = {}
+    dupes = []
 
     for player in data:
         team = []
@@ -75,6 +76,7 @@ def process_rk9scraper_event(data, tour_format, official_order, year, code):
                 num += 1
             
             dupe_names[op_code].append(player_code)
+            dupes.append(player_code)
 
         if player_code not in official_order:
             official_order.append(player_code)
@@ -118,7 +120,7 @@ def process_rk9scraper_event(data, tour_format, official_order, year, code):
                 'opp': 0,
                 'oppopp': 0,
             },
-            cut=False,
+            cut=True if len(player_pairings) > tour_format[0] + tour_format[1] else False,
             p2=made_phase_two,
             drop=-1,
             team=team,
@@ -159,6 +161,14 @@ def process_rk9scraper_event(data, tour_format, official_order, year, code):
             team=[],
             rounds=[],
         )
+
+    # fix the opponents of the dupes (they need to point to the right player)
+    for dupe in dupes:
+        for rnd in players[dupe].rounds:
+            round_num = rnd.round
+            opp = rnd.opp
+            if len(opp):
+                players[opp].rounds[round_num - 1].opp = dupe
 
     return players, phase_two_count, players_in_cut_round
 

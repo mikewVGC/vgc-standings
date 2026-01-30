@@ -2,6 +2,7 @@ config.json
 regieleki.ini
 data/common/pokedex.json
 data/majors
+data/pastes
 public/data/*
 public/index.html
 public/static/*.html
