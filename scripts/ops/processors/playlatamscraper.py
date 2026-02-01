@@ -109,7 +109,7 @@ def process_playlatamscraper_event(data, tour_format, official_order, year, code
         players[player_code] = Player(
             name=player['name'],
             code=player_code,
-            country=country,
+            country=country.lower(),
             place='',
             record={ 'w': wins, 'l': losses },
             res={
