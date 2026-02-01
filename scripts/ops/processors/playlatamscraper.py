@@ -100,10 +100,16 @@ def process_playlatamscraper_event(data, tour_format, official_order, year, code
             elif game.res == 'L':
                 losses += 1
 
+        country = ''
+        if 'country' in player:
+            country = player['country']
+            if country == 'UK':
+                country = 'GB'
+
         players[player_code] = Player(
             name=player['name'],
             code=player_code,
-            country=player['country'],
+            country=country,
             place='',
             record={ 'w': wins, 'l': losses },
             res={
