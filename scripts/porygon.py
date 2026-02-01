@@ -26,7 +26,6 @@ def main():
         chunks = cl.process.split(",")
         for chunk in chunks:
             year, code = chunk.split(':')
-            # TODO: support wildcard for processing a single year
             allowlist.append(f"{year}-{code}")
 
     config = {}
@@ -75,7 +74,7 @@ def main():
         print(f"Building {year}")
 
         for event_code, event_info in majors.items():
-            event_should_be_processed = len(allowlist) == 0 or f"{year}-{event_code}" in allowlist
+            event_should_be_processed = len(allowlist) == 0 or f"{year}-{event_code}" in allowlist or f"{year}-*" in allowlist
 
             if cl.build_only or not event_should_be_processed:
                 print(f"[{year}] Checking for processed data for '{event_code}'... ", end="")
