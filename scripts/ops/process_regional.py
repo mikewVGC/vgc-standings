@@ -6,6 +6,7 @@ import dataclasses
 from ops.processors.pokedata import process_pokedata_event
 from ops.processors.rk9scraper import process_rk9scraper_event
 from ops.processors.vgcpastes import process_vgcpastes_teamlist
+from ops.processors.playlatamscraper import process_playlatamscraper_event
 
 from collections import OrderedDict
 
@@ -50,8 +51,13 @@ def process_regional(year, code, event_info):
                 data = json.loads(file.read())
                 data_type = 'rk9scraper'
         except FileNotFoundError:
-            print(f"Main standings file not found, maybe this hasn't happened yet? ", end="")
-            return False
+            try:
+                with open(f"data/majors/{year}/{code}-roster.pl.json", encoding='utf8') as file:
+                    data = json.loads(file.read())
+                    data_type = 'playlatamscraper'
+            except FileNotFoundError:
+                print(f"Main standings file not found, maybe this hasn't happened yet? ", end="")
+                return False
 
     try:
         # check for a vgcpastes teamlist (currently only milwaukee 2023)
@@ -88,6 +94,8 @@ def process_regional(year, code, event_info):
         players, phase_two_count, players_in_cut_round = process_pokedata_event(data, tour_format, official_order)
     elif data_type == 'rk9scraper':
         players, phase_two_count, players_in_cut_round = process_rk9scraper_event(data, tour_format, official_order, year, code)
+    elif data_type == 'playlatamscraper':
+        players, phase_two_count, players_in_cut_round = process_playlatamscraper_event(data, tour_format, official_order, year, code)
 
     if parse_teams:
         # this will just add teams to the players
