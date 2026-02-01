@@ -12,9 +12,16 @@ There's not too much you can get from this repo unless you want to know how ever
 
 ## Setup / Development
 
-This is a little annoying to set this up because I'm not including any of the data, and some of the images are misisng from this repo, so fair warning.
+This is honestly not worth your time because there's a lot of bespoke data that goes into making this run. In addition to data from Pokedata, I've written scrapers for both RK9 and playlatam which I use for edge cases or missing data. I won't be releasing any of those things for a variety of reasons, so you're going to have to be a self starter.
 
-* You need Python! So install that if you don't have it already. You also need Go (for production builds) and optionally PHP (for live standings updates). Sorry!
+In the meantime you can poke around this repo, if you want. 
+
+### Requirements
+
+Python mostly, but also Go and PHP in the event you plan to run a live version (but don't).
+
+### Basic Setup
+
 * Clone this repo to wherever tou like.
 * In order for the processing scripts know which seasons to look for, and which is considered to be the currently active season, create `mainfest.json` in `data/majors` with the following structure:
 ```json
@@ -68,7 +75,7 @@ This will process and build all events found via `manifest.json`. Standings and 
 
 Notably when first processing regionals you will need to create the corresponding `season` directory in `public/data` as Porygon will not create them.
 
-You can create a production build by using the `--prod` flag. This will minify the CSS and Javascript and a few other optimizations. You can skip event processing and only rebuild the templates with the `--build-only` flag. If you only want to build a smaller set of events you can use the `--process` argument. The format is a list of years and codes formatted as such: `2025:baltimore,2026:toronto`
+You can create a production build by using the `--prod` flag. This will minify the CSS and Javascript and a few other optimizations. You can skip event processing and only rebuild the templates with the `--build-only` flag. If you only want to build a smaller set of events you can use the `--process` argument. The format is a list of years and codes formatted as such: `2025:baltimore,2026:toronto`. You can also process just one full season with: `2025:*` (process the entire 2025 season).
 
 ### Why???
 
@@ -148,3 +155,7 @@ php scripts/regieleki.php
 I recommend using the values above as they seem pretty stable when I tried them. Note that this script will download files from Pokedata, so be considerate! I also recommend using the `start_time` setting as a way to reduce calls if you want to set this to run for a regional that might start at an inconvienant time for you due to time zones.
 
 But, again, nobody should run this thing in production.
+
+## License
+
+Reportworm Standings is licensed with the BSD license.
