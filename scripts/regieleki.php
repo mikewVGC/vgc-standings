@@ -28,24 +28,24 @@ if (!file_exists(__DIR__ . "/../regieleki.ini")) {
 
 $data_dir = __DIR__ . "/../data/majors/{$current_season}";
 
-echo "[ELEKI] Regieleki starting! Got " . count($tournaments_to_check) . " tours to check\n";
+elog("Regieleki starting! Got " . count($tournaments_to_check) . " tours to check");
 
 if (!empty($start_time)) {
     $start = new DateTime($start_time);
     $now = new DateTime('now');
     $initial_sleep = $start->getTimestamp() - $now->getTimestamp();
 
-    echo "[ELEKI] Initial delay set, sleeping for {$initial_sleep} seconds...\n";
+    elog("Initial delay set, sleeping for {$initial_sleep} seconds...");
     sleep($initial_sleep);
-    echo "[ELEKI] I'm awake!\n";
+    elog("I'm awake!");
 }
 
 $finish_time = time() + $run_length;
 
-echo "[ELEKI] Scheduled to finish at " . date("Y-m-d H:i:s", $finish_time) . "\n";
+elog("Scheduled to finish at " . date("Y-m-d H:i:s", $finish_time));
 
 if ($build_prod) {
-    echo "[ELEKI] Will build as production (--prod)\n";
+    elog("Will build as production (--prod)");
     $build_prod = '--prod';
 } else {
     $build_prod = '';
@@ -53,25 +53,25 @@ if ($build_prod) {
 
 while (1) {
 
-    echo "[ELEKI] Running...\n";
+    elog("Running...");
 
     $to_process = [];
     foreach ($tournaments_to_check as $tour => $remote_json) {
         $local_file = "{$data_dir}/{$tour}-standings.json";
 
-        echo "[ELEKI] [{$tour}] Downloading {$remote_json}... ";
+        elog("[{$tour}] Downloading {$remote_json}... ", '');
 
         try {
             $remote_data = make_request($remote_json);
         } catch (Exception $e) {
-            echo $e->getMessage() . "\n";
+            elog_cont($e->getMessage());
             continue;
         }
 
-        echo "Done!\n";
+        elog_cont("Done!");
 
         if (file_put_contents($local_file, $remote_data) === false){
-            echo "[{$tour}] Unable to write to '{$local_file}', skipping\n";
+            elog_cont("[{$tour}] Unable to write to '{$local_file}', skipping");
             continue;
         }
 
@@ -82,25 +82,33 @@ while (1) {
     }
 
     if (!empty($to_process)) {
-        echo "[ELEKI] Building Reportworm... ";
+        elog("Building Reportworm... ", '');
         exec("python3 scripts/porygon.py {$build_prod} --process " . implode(',', $to_process));
-        echo "Done!\n";
+        elog_cont("Done!");
     } else {
-        echo "[ELEKI] Nothing to process right now...\n";
+        elog("Nothing to process right now...");
     }
 
     if (time() >= $finish_time) {
-        echo "[ELEKI] Scheduled finish time reached! Exiting.\n";
+        elog("Scheduled finish time reached! Exiting.");
         break;
     }
 
     $sleep_time = $refresh_rate + mt_rand($fuzz_refresh_min, $fuzz_refresh_max);
-    echo "[ELEKI] Sleeping for {$sleep_time} seconds...\n";
+    elog("Sleeping for {$sleep_time} seconds...");
     sleep($sleep_time);
 }
 
-echo "[ELEKI] All done! Thanks for running!\n";
+elog("All done! Thanks for running!");
 exit;
+
+function elog($text, $end = "\n") {
+    echo "[ELEKI] {$text}{$end}";
+}
+
+function elog_cont($text, $end = "\n") {
+    echo "{$text}{$end}";
+}
 
 // Pokedata's hosting is liberal with blocking, so this attempts to fake the request as
 // much as possible to look more legit / random. Will it work? No idea! Make sure the

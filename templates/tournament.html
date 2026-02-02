@@ -116,18 +116,22 @@ __TEMPLATE_HEAD__
 
     <p v-if="player.team.length == 0">No teamsheet currently available.</p>
 
-    <div id="team">
-        <div v-for="mon in player.team" class="paste-mon">
-            <div class="mon-big-img">
-                <img :src="`${monImgBase}/${mon.dex}.png`" width="150" height="150" />
+    <div class="table-holder">
+
+        <div id="team">
+            <div v-for="mon in player.team" class="paste-mon">
+                <div class="mon-big-img">
+                    <img :src="`${monImgBase}/${mon.dex}.png`" width="150" height="150" />
+                </div>
+                <div><span :class="`type-${mon.ptype}`">{{ mon.name }}</span> @ {{ mon.item }}  </div>
+                <div><span class="attr">Ability:</span> {{ mon.ability }}  </div>
+                <div class="kinda-hide">Level: 50  </div>
+                <div><span class="attr">Tera Type:</span> <span :class="`type-${mon.tera.toLowerCase()}`">{{ mon.tera }}</span>  </div>
+                <div v-for="move in mon.moves">- {{ move }}  </div>
+                <br />
             </div>
-            <div><span :class="`type-${mon.ptype}`">{{ mon.name }}</span> @ {{ mon.item }}  </div>
-            <div><span class="attr">Ability:</span> {{ mon.ability }}  </div>
-            <div class="kinda-hide">Level: 50  </div>
-            <div><span class="attr">Tera Type:</span> <span :class="`type-${mon.tera.toLowerCase()}`">{{ mon.tera }}</span>  </div>
-            <div v-for="move in mon.moves">- {{ move }}  </div>
-            <br />
         </div>
+
     </div>
 
     <h2>Opponents</h2>
@@ -334,68 +338,70 @@ __TEMPLATE_HEAD__
         <li><strong>Pct. In Phase Two</strong>: {{ getPct(eventInfo.phase2Count / eventInfo.playerCount) }}</li>
     </ul>
 
-    <table id="usage">
-        <thead>
-            <tr>
-                <th></th>
-                <th class="sortable"
-                    title="Pokemon"
-                    @click="sortUsage('name')"
-                    :class="getSortedClass('name')">Name</th>
-                <th class="sortable"
-                    title="Total used"
-                    @click="sortUsage('total')"
-                    :class="getSortedClass('total')"
-                >Total</th>
-                <th class="sortable"
-                    title="Number that earned points"
-                    @click="sortUsage('points')"
-                    :class="getSortedClass('points')"
-                >Points</th>
-                <th class="sortable"
-                    title="Number that made Phase 2"
-                    @click="sortUsage('phase2')"
-                    :class="getSortedClass('phase2')"
-                >Phase 2</th>
-                <th class="sortable"
-                    title="Phase 2 Conversion Rate"
-                    @click="sortUsage('phase2Conversion')"
-                    :class="getSortedClass('phase2Conversion')"
-                >Ph2 Cnv</th>
-                <th class="sortable"
-                    title="Number that made Top Cut"
-                    @click="sortUsage('cut')"
-                    :class="getSortedClass('cut')"
-                >Cut</th>
-                <th class="sortable"
-                    title="Top Cut Conversion Rate"
-                    @click="sortUsage('cutConversion')"
-                    :class="getSortedClass('cutConversion')"
-                >Cut Cnv</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="mon in usage">
-                <td>
-                    <div
-                        class="monicon"
-                        :style="{ backgroundPosition: getSpritePos(mon.altcode || mon.code) }"
-                        :title="mon.name"
-                    >{{ mon.name }}</div>
-                </td>
-                <td><a :href="`/${season}/${eventInfo.code}/mon/${mon.code}`">{{ mon.name }}</a></td>
-                <td>{{ mon.counts.total }} <span class="pct">({{ getPct(mon.counts.total / eventInfo.playerCount, 4) }})</span></td>
-                <td>{{ mon.counts.points }} <span class="pct">({{ getPct(mon.counts.points / eventInfo.playerCount, 4) }})</span></td>
-                <td>{{ mon.counts.phase2 }} <span class="pct">({{ getPct(mon.counts.phase2 / eventInfo.phase2Count, 4) }})</span></td>
-                <td>{{ getPct(mon.counts.phase2Conversion, 5) }}</td>
-                <td>{{ mon.counts.cut }}</td>
-                <td>{{ getPct(mon.counts.cutConversion, 5) }}</td>
-            </tr>
-            <tr v-if="usage.length == 0" v-cloak>
-                <td colspan="8">No usage stats for this event yet.</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="table-holder">
+        <table id="usage">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th class="sortable"
+                        title="Pokemon"
+                        @click="sortUsage('name')"
+                        :class="getSortedClass('name')">Name</th>
+                    <th class="sortable"
+                        title="Total used"
+                        @click="sortUsage('total')"
+                        :class="getSortedClass('total')"
+                    >Total</th>
+                    <th class="sortable"
+                        title="Number that earned points"
+                        @click="sortUsage('points')"
+                        :class="getSortedClass('points')"
+                    >Points</th>
+                    <th class="sortable"
+                        title="Number that made Phase 2"
+                        @click="sortUsage('phase2')"
+                        :class="getSortedClass('phase2')"
+                    >Phase 2</th>
+                    <th class="sortable"
+                        title="Phase 2 Conversion Rate"
+                        @click="sortUsage('phase2Conversion')"
+                        :class="getSortedClass('phase2Conversion')"
+                    >Ph2 Cnv</th>
+                    <th class="sortable"
+                        title="Number that made Top Cut"
+                        @click="sortUsage('cut')"
+                        :class="getSortedClass('cut')"
+                    >Cut</th>
+                    <th class="sortable"
+                        title="Top Cut Conversion Rate"
+                        @click="sortUsage('cutConversion')"
+                        :class="getSortedClass('cutConversion')"
+                    >Cut Cnv</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="mon in usage">
+                    <td>
+                        <div
+                            class="monicon"
+                            :style="{ backgroundPosition: getSpritePos(mon.altcode || mon.code) }"
+                            :title="mon.name"
+                        >{{ mon.name }}</div>
+                    </td>
+                    <td><a :href="`/${season}/${eventInfo.code}/mon/${mon.code}`">{{ mon.name }}</a></td>
+                    <td>{{ mon.counts.total }} <span class="pct">({{ getPct(mon.counts.total / eventInfo.playerCount, 4) }})</span></td>
+                    <td>{{ mon.counts.points }} <span class="pct">({{ getPct(mon.counts.points / eventInfo.playerCount, 4) }})</span></td>
+                    <td>{{ mon.counts.phase2 }} <span class="pct">({{ getPct(mon.counts.phase2 / eventInfo.phase2Count, 4) }})</span></td>
+                    <td>{{ getPct(mon.counts.phase2Conversion, 5) }}</td>
+                    <td>{{ mon.counts.cut }}</td>
+                    <td>{{ getPct(mon.counts.cutConversion, 5) }}</td>
+                </tr>
+                <tr v-if="usage.length == 0" v-cloak>
+                    <td colspan="8">No usage stats for this event yet.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
 </template>
 
@@ -403,32 +409,34 @@ __TEMPLATE_HEAD__
 
     <h2>{{ mon.name }} Usage &mdash; {{ eventInfo.name }}</h2>
 
-    <table id="usage-info">
-        <thead>
-            <tr>
-                <th></th>
-                <th title="Total used">Total</th>
-                <th title="Number that earned points">Points</th>
-                <th title="Number that made Phase 2">Phase 2</th>
-                <th title="Phase 2 Conversion Rate">Ph2 Cnv</th>
-                <th title="Number that made Top Cut">Cut</th>
-                <th title="Top Cut Conversion Rate">Cut Cnv</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    <img :src="`${monImgBase}/${mon.dex}.png`" width="150" height="150" />
-                </td>
-                <td>{{ mon.counts.total }} <span class="pct">({{ getPct(mon.counts.total / eventInfo.playerCount, 4) }})</span></td>
-                <td>{{ mon.counts.points }} <span class="pct">({{ getPct(mon.counts.points / eventInfo.playerCount, 4) }})</span></td>
-                <td>{{ mon.counts.phase2 }} <span class="pct">({{ getPct(mon.counts.phase2 / eventInfo.phase2Count, 4) }})</span></td>
-                <td>{{ getPct(mon.counts.phase2Conversion, 5) }}</td>
-                <td>{{ mon.counts.cut }}</td>
-                <td>{{ getPct(mon.counts.cutConversion, 5) }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="table-holder">
+        <table id="usage-info">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th title="Total used">Total</th>
+                    <th title="Number that earned points">Points</th>
+                    <th title="Number that made Phase 2">Phase 2</th>
+                    <th title="Phase 2 Conversion Rate">Ph2 Cnv</th>
+                    <th title="Number that made Top Cut">Cut</th>
+                    <th title="Top Cut Conversion Rate">Cut Cnv</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <img :src="`${monImgBase}/${mon.dex}.png`" width="150" height="150" />
+                    </td>
+                    <td>{{ mon.counts.total }} <span class="pct">({{ getPct(mon.counts.total / eventInfo.playerCount, 4) }})</span></td>
+                    <td>{{ mon.counts.points }} <span class="pct">({{ getPct(mon.counts.points / eventInfo.playerCount, 4) }})</span></td>
+                    <td>{{ mon.counts.phase2 }} <span class="pct">({{ getPct(mon.counts.phase2 / eventInfo.phase2Count, 4) }})</span></td>
+                    <td>{{ getPct(mon.counts.phase2Conversion, 5) }}</td>
+                    <td>{{ mon.counts.cut }}</td>
+                    <td>{{ getPct(mon.counts.cutConversion, 5) }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
     <h3>{{ mon.name }} Configurations</h3>
 

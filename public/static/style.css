@@ -531,6 +531,10 @@ ul#pairing-round-select li a {
         border-radius: .5em;
     }
 
+    .tabgroup div:nth-child(1) {
+        line-height: 1.05em;
+    }
+
     .tabgroup div a {
         text-decoration: none;
         padding: 0;
@@ -550,10 +554,6 @@ ul#pairing-round-select li a {
         content: "";
     }
 
-    .team-container {
-        width: 100%;
-    }
-
     ul#standings-info li {
         border-right: 0px;
         padding: .1em .75em .1em 0;
@@ -566,6 +566,11 @@ ul#pairing-round-select li a {
 
     table#standings thead {
         display: none;
+    }
+
+    .table-holder {
+        width: 100%;
+        overflow-x: scroll;
     }
 
     table#standings tr {
@@ -585,16 +590,28 @@ ul#pairing-round-select li a {
 
     table#standings td::before {
         display: block;
-        font-size: .9em;
+        font-size: .8em;
         color: #505050;
+    }
+
+    table#standings td:nth-child(1) {
+        text-align: center;
+        width: 10%;
     }
 
     table#standings td:nth-child(1)::before {
         content: "Place";
     }
 
+    table#standings td:nth-child(2) {
+        width: 70%;
+    }
+
     table#standings td:nth-child(2)::before {
         content: "Name";
+    }
+
+    table#standings td:nth-child(3) {
     }
 
     table#standings td:nth-child(3)::before {
@@ -607,6 +624,17 @@ ul#pairing-round-select li a {
 
     table#standings td:nth-child(5)::before {
         content: "L";
+    }
+
+    table#standings td:nth-child(6) {
+        display: none;
+    }
+
+    table#standings td:nth-child(7),
+    table#standings td:nth-child(8)
+    {
+        width: 15%;
+        height: 52px;
     }
 
     table#standings td:nth-child(6)::before {
@@ -670,7 +698,7 @@ ul#pairing-round-select li a {
     }
 
     table#opponents td::before {
-        font-size: .9em;
+        font-size: .8em;
         color: #505050;
         display: block;
     }
@@ -685,7 +713,8 @@ ul#pairing-round-select li a {
     }
 
     table#opponents tbody td:nth-child(2) {
-        padding-left: 14%;
+        width: 60%;
+        padding-left: 20%;
     }
 
     table#opponents tbody td:nth-child(2):before {
@@ -694,12 +723,21 @@ ul#pairing-round-select li a {
 
     table#opponents tbody td:nth-child(3) {
         text-align: center;
+        width: 14%;
         position: absolute;
-        left: 16%;
+        top: 0px;
+        left: 18%;
     }
 
     table#opponents tbody td:nth-child(3)::before {
         content: "Result";
+    }
+
+    table#opponents tbody td:nth-child(4),
+    table#opponents tbody td:nth-child(5) {
+        height: 52px;
+        text-align: center;
+        width: 14%;
     }
 
     table#opponents tbody td:nth-child(4)::before {
@@ -708,10 +746,6 @@ ul#pairing-round-select li a {
 
     table#opponents tbody td:nth-child(5)::before {
         content: "Res.";
-    }
-
-    table#opponents tbody td:nth-child(6) {
-        width: 100%;
     }
 
     table#opponents tbody td:nth-child(6)::before {
@@ -727,7 +761,7 @@ ul#pairing-round-select li a {
 
     table.usage-table td::before {
         display: block;
-        font-size: .9em;
+        font-size: .8em;
         color: #505050;
     }
 
@@ -739,8 +773,16 @@ ul#pairing-round-select li a {
         text-align: center;
     }
 
+    table.usage-table td:nth-child(1) {
+        width: 10%;
+    }
+
     table.usage-table td:nth-child(1)::before {
         content: "Place";
+    }
+
+    table.usage-table td:nth-child(2) {
+        width: 66%;
     }
 
     table.usage-table td:nth-child(2)::before {
@@ -751,16 +793,19 @@ ul#pairing-round-select li a {
         content: "Record";
     }
 
+    table.usage-table td:nth-child(4),
+    table.usage-table td:nth-child(5)
+    {
+        width: 15%;
+        height: 52px;
+    }
+
     table.usage-table td:nth-child(4)::before {
         content: "Res";
     }
 
     table.usage-table td:nth-child(5)::before {
         content: "OpRes";
-    }
-
-    table.usage-table td:nth-child(6) {
-        width: 100%;
     }
 
     table.usage-table td:nth-child(6)::before {
