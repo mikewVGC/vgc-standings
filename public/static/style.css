@@ -831,6 +831,7 @@ ul#pairing-round-select li a {
     table#opponents tbody td:nth-child(1) {
         width: 14%;
         text-align: center;
+        white-space: nowrap;
     }
 
     table#opponents tbody td:nth-child(1)::before {
