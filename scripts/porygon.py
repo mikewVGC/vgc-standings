@@ -30,14 +30,14 @@ def main():
 
     config = {}
     try:
-        with open(f"config.json") as file:
+        with open("config.json") as file:
             config = json.loads(file.read())
     except FileNotFoundError:
         print("Couldn't load config, but that's okay")
 
     manifest = {}
     try:
-        with open(f"data/majors/manifest.json") as file:
+        with open("data/majors/manifest.json") as file:
             manifest = json.loads(file.read())
     except FileNotFoundError:
         # manifest is required
@@ -68,8 +68,8 @@ def main():
             del data
 
         if year in non_current_seasons:
-            f, l, w = get_season_bookends(majors)
-            non_current_seasons[year]['dates'] = make_nice_date_str(f['start'], w['start'], use_full_months=True)
+            first, _, worlds = get_season_bookends(majors)
+            non_current_seasons[year]['dates'] = make_nice_date_str(first['start'], worlds['start'], use_full_months=True)
 
         print(f"Building {year}")
 
@@ -107,20 +107,20 @@ def main():
         )
 
     if cl.prod:
-        print(f"[ALL] Minifying js and css... ", end="")
+        print("[ALL] Minifying js and css... ", end="")
         subprocess.run(["go", "run", "scripts/packer/main.go"], capture_output=True)
         print("Done!")
 
-    print(f"[ALL] Rebuilding season page... ", end="")
+    print("[ALL] Rebuilding season page... ", end="")
     builder.build_season()
     print("Done!")
 
-    print(f"[ALL] Rebuilding tournament page... ", end="")
+    print("[ALL] Rebuilding tournament page... ", end="")
     builder.build_tournament()
     print("Done!")
 
     # the homepage does require a bunch of data, which I might change
-    print(f"[ALL] Building home/index page...", end="")
+    print("[ALL] Building home/index page...", end="")
     non_current_seasons = list(non_current_seasons.values())
     non_current_seasons.reverse()
     builder.build_home(manifest['current'], current_majors, non_current_seasons)

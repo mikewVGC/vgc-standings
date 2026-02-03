@@ -2,7 +2,7 @@
 import json
 import os
 
-from lib.tournament import get_tournament_structure, tour_in_progress
+from lib.tournament import tour_in_progress
 from lib.util import make_season_info_str, make_nice_date_str, get_season_bookends
 
 class SiteBuilder():
@@ -22,12 +22,12 @@ class SiteBuilder():
 
         first_major, last_major, worlds = get_season_bookends(majors)
 
-        recent = list(filter(lambda major: major['processed'] == True, list(majors.values())))
-        upcoming = list(filter(lambda major: major['processed'] == False, list(majors.values())))
+        recent = list(filter(lambda major: major['processed'], list(majors.values())))
+        upcoming = list(filter(lambda major: not major['processed'], list(majors.values())))
 
         recent.reverse()
 
-        in_progress = list(filter(lambda major: tour_in_progress(major) == True, recent))
+        in_progress = list(filter(lambda major: tour_in_progress(major), recent))
 
         recent = [ major for major in recent if major not in in_progress ]
 
@@ -46,7 +46,7 @@ class SiteBuilder():
 
         home = home.replace('__BOOTSTRAP_DATA__', json.dumps(bootstrap))
 
-        with open(f"public/index.html", 'w') as file:
+        with open("public/index.html", 'w') as file:
             file.write(home)
 
 
@@ -59,7 +59,7 @@ class SiteBuilder():
         season = self._add_google_analytics(season)
         season = self._add_script('season', season)
 
-        with open(f"public/static/season.html", 'w') as file:
+        with open("public/static/season.html", 'w') as file:
             file.write(season)
 
 
@@ -86,7 +86,7 @@ class SiteBuilder():
             tour = self._add_google_analytics(tour)
             tour = self._add_script('tournament', tour)
 
-        with open(f"public/static/tournament.html", 'w') as file:
+        with open("public/static/tournament.html", 'w') as file:
             file.write(tour)
 
         return True
@@ -104,7 +104,7 @@ class SiteBuilder():
 
 
     def _add_stylesheet(self, dest_data):
-        style_name = 'style' if not self.prod else 'style.min';
+        style_name = 'style' if not self.prod else 'style.min'
 
         style_time = os.path.getmtime(f"public/static/{style_name}.css")
         dest_data = dest_data.replace('__STYLESHEET_FILE__', f"/static/{style_name}.css?{style_time}")

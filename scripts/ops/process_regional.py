@@ -22,9 +22,6 @@ from lib.tournament import (
     calculate_oppopp,
     tour_in_progress,
 )
-from lib.formes import (
-    get_icon_alt,
-)
 
 class EnhancedJSONEncoder(json.JSONEncoder):
     def default(self, o):
@@ -56,7 +53,7 @@ def process_regional(year, code, event_info):
                     data = json.loads(file.read())
                     data_type = 'playlatamscraper'
             except FileNotFoundError:
-                print(f"Main standings file not found, maybe this hasn't happened yet? ", end="")
+                print("Main standings file not found, maybe this hasn't happened yet? ", end="")
                 return False
 
     try:
@@ -82,7 +79,7 @@ def process_regional(year, code, event_info):
                     num += 1
                 official_order.append(name_code)
     except FileNotFoundError:
-        print(f"Official standings not found, skipping. ", end="")
+        print("Official standings not found, skipping. ", end="")
 
     tour_format = get_tournament_structure(year, len(data), event_info)
 

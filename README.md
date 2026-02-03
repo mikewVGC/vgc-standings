@@ -8,22 +8,22 @@ This was basically built because I was (and still am) sad that Stalruth standing
 
 ## Now What?
 
-There's not too much you can get from this repo unless you want to know how everything works. So the rest of this readme will detail how to set everything up, which you will likely find to be a terrible pain. Also if you came here to learn how to program or build a website, I'm really sorry. I wouldn't really recommend using this to learn much of anything! Okay...
+There's not too much you can get from this repo unless you want to know how everything works. The rest of this readme will detail how to set everything up, which you will likely find to be a terrible pain, if not borderline impossible. Also if you came here to learn how to program or build a website, I'm really sorry. I wouldn't really recommend using this to learn much of anything!
 
 ## Setup / Development
 
-This is honestly not worth your time because there's a lot of bespoke data that goes into making this run. In addition to data from Pokedata, I've written scrapers for both RK9 and playlatam which I use for edge cases or missing data. I won't be releasing any of those things for a variety of reasons, so you're going to have to be a self starter.
+This is honestly not worth your time because there's a lot of bespoke data that goes into making this run. In addition to data from Pokedata, I've written scrapers for both RK9 and playlatam which I use for edge cases or missing data. I won't be releasing any of those things for a variety of reasons, so you're going to have to be a self starter. I've also hand edited some of the data for a number of reasons.
 
 In the meantime you can poke around this repo, if you want. 
 
 ### Requirements
 
-Python mostly, but also Go and PHP in the event you plan to run a live version (but don't).
+Python mostly, but also Go and PHP in the event you plan to run a live version (but, again, don't).
 
 ### Basic Setup
 
-* Clone this repo to wherever tou like.
-* In order for the processing scripts know which seasons to look for, and which is considered to be the currently active season, create `mainfest.json` in `data/majors` with the following structure:
+* Clone this repo to wherever you like.
+* In order for the processing scripts know which seasons to look for, and to set the currently active season, create a file named `mainfest.json` in `data/majors` with the following structure:
 ```json
 {
     "seasons": [
@@ -34,7 +34,7 @@ Python mostly, but also Go and PHP in the event you plan to run a live version (
     "current": 2026
 }
 ```
-* Create `{season}.json` in `data/majors` with this structure:
+* Create `{season}.json` in `data/majors` with this structure (you can add as many events as you like):
 ```json
 [
     {
@@ -52,7 +52,7 @@ Python mostly, but also Go and PHP in the event you plan to run a live version (
 ```
 * Grab relevant standings JSON from https://pokedata.ovh:
     * Place each one in `data/majors/{season}/{event-code}-standings.json`
-    * The relevant `event-code` should be in the `{season}.json` file in `data/majors`.
+    * The relevant `event-code` should match the one in the corresponding `{season}.json` file in `data/majors`.
 * Optionally grab the final standings order RK9 (go to the pairings and click the "Standings" tab):
     * Paste the final standings into `data/majors/{season}/{event-code}-official.txt`
 * Grab `pokedex.json` from Showdown: https://play.pokemonshowdown.com/data/
@@ -73,13 +73,21 @@ python3 scripts/porygon.py
 
 This will process and build all events found via `manifest.json`. Standings and usage JSON (which serve as the API) will be put in `public/data/{season}` and static HTML pages (which display all the data) will be put in `public/static` as `index.html`, `season.html`, and `tournament.html`.
 
-Notably when first processing regionals you will need to create the corresponding `season` directory in `public/data` as Porygon will not create them.
+Notably when first processing regionals you will need to create the corresponding `{season}` directory in `public/data` as Porygon will not create them (I might fix this some day).
 
-You can create a production build by using the `--prod` flag. This will minify the CSS and Javascript and a few other optimizations. You can skip event processing and only rebuild the templates with the `--build-only` flag. If you only want to build a smaller set of events you can use the `--process` argument. The format is a list of years and codes formatted as such: `2025:baltimore,2026:toronto`. You can also process just one full season with: `2025:*` (process the entire 2025 season).
+You can create a production build by using the `--prod` flag. This will minify the CSS and Javascript and a few other optimizations. You can skip event processing and only rebuild the templates with the `--build-only` flag. If you only want to build a smaller set of events you can use the `--process` argument. The format is a list of one or more years and codes separated by a comma formatted as such: `2025:baltimore,2026:toronto`. You can also process a full season with: `2025:*`.
+
+### Ruff Formatting
+
+I've added ruff to the repo to keep myself honest, at least on the Python side. You should run it on the `scripts/` directory and fix whatever it says to fix:
+
+```
+uv run ruff check scripts/
+```
 
 ### Why???
 
-I know that there are tools that already do all of this stuff, and I would totally use them for a professional project. However, this is entirely done for fun in my free time, so I'm totally going to write some weird Python scripts or make a bizarre looking Vue app or whatever else. Also I'm really trying to avoid using the node ecosystem.
+I know that there are tools that already do all of this stuff, and I would totally use them for a professional project. However, this is entirely done for fun in my free time, so I'm absolutely going to write some weird Python scripts or make a bizarre looking Vue app or whatever else. Also, I'm really trying to avoid using the node ecosystem for this project. Or just in general, I suppose.
 
 ### Is This The Best Way To Do... Any Of This?
 
@@ -93,11 +101,11 @@ There's a simple `docker-compose` file that will just download the latest nginx 
 docker compose up -d
 ```
 
-Edit the templates/stylesheets/scripts and rebuild using Porygon to see your changes.
+Once you edit the templates/stylesheets/scripts you have to rebuild using Porygon to see your changes.
 
 ## Running In Production
 
-I wouldn't do it if I were you, but if you have all the things you need from the Setup/Development steps above then it should work as is. This builds static files, so there's no need to run or compile anything. Just stick the files behind nginx with the same rewrite rules that are in the includes `nginx.conf` and you should be okay.
+I wouldn't do it if I were you, but if you have all the things you need from the Setup/Development steps above then it should work? The site is static files, so there's no need to run or compile anything. Just stick the files behind nginx with the same rewrite rules that are in the includes `nginx.conf` and you should be okay.
 
 ### config.json
 
@@ -110,13 +118,13 @@ In the root you need to create a simple `config.json` file with the following it
 }
 ```
 
-`googleTag` is optional (leave it blank if you don't want to use it) and contains your Google Analytics tag, but only the part *after* the `G-`. `monImgBase` is if you want to load the large Pokemon images from a CDN or object storage and should contain the full root URL of where you keep them. You can leave this blank and it will assume the images are in `public/static/img/art`.
+`googleTag` is optional (leave it blank if you don't want to use it) and contains your Google Analytics tag, but only the part *after* the `G-`. `monImgBase` is if you want to load the large Pokemon images from a CDN or object storage and should contain the full root URL of their location. You can leave this blank and it will assume the images are in `public/static/img/art`.
 
-Beyond that, make sure to use the `--prod` flag when you run Porygon as it will minify CSS and Javascript and make a few other things more optimal.
+Beyond that, make sure to use the `--prod` flag when you run Porygon.
 
 ## Regieleki -- Live Updates
 
-During a regional you might want to do live updates... why would you want to do this? I don't know. Create a file named `regieleki.ini` in the root with the following structure:
+During a regional you might want to do live updates... why would you want to do this? I don't know! Create a file named `regieleki.ini` in the root with the following structure:
 
 ```
 ; ini file for Regieleki
@@ -144,7 +152,7 @@ run_length = 360000
 build_prod = 1
 ```
 
-Get the regional's code from the JSON (`toronto`, `las-vegas`, `lille`, etc.) and URL of JSON data from Pokedata and put them into the correct places. You can leave the rest unchanged, and I honestly don't recommend lowering the refresh rate as it will do a fetch from Pokedata every 5 minutes. Once it fetches the data it will run Porygon to process the data and it should be updated when people reload.
+Get the regional's code from the JSON (`toronto`, `las-vegas`, `lille`, etc.) and URL of JSON data from Pokedata and put them into the correct places. You can leave the rest unchanged, and I honestly don't recommend lowering the refresh rate as it will do a fetch from Pokedata every 7 minutes. Once it fetches the data it will run Porygon to process the data and it should be updated when people reload.
 
 This script is super simple and really non-robust. You can only run it one way:
 

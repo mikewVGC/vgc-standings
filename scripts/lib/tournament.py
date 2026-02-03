@@ -164,11 +164,10 @@ def get_round_name(rnd, tour_format, players = 0):
 
 # returns if tour is considered "in progress" (ongoing)
 def tour_in_progress(event_info, players = False):
-    if players != False:
+    if players:
         # check if the tour is actually over (a finalist won)
         for player in players.values():
             for match in player.rounds:
-                rnd = match.round
                 if match.res != 'W' and match.res != 'L':
                     break
                 if match.rname != 'Finals':
@@ -225,7 +224,7 @@ def calculate_win_pct(player, players, tour_format, drop_round = None):
                 if match.res == "W":
                     wins += 1
 
-                if drop_round != None and match.round == drop_round:
+                if drop_round is not None and match.round == drop_round:
                     break
 
         pct = .25
@@ -311,7 +310,7 @@ the one on pokemon.com
 """
 def calculate_oppopp(player, players, tour_format):
     matches = players[player].rounds
-    made_phase_two = players[player].drop == -1 or players[player].drop > tour_format[0]
+    # made_phase_two = players[player].drop == -1 or players[player].drop > tour_format[0]
 
     total_pct = 0
     match_count = 0

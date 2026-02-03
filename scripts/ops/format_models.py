@@ -39,4 +39,4 @@ class Player():
     p2: bool
     drop: int
     team: list[TeamMember] | None = None
-    rounds: list[self.Round] | None = None
+    rounds: list[Round] | None = None

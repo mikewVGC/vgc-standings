@@ -2,7 +2,7 @@ __TEMPLATE_HEAD__
 
 <div id="app">
 
-    __TEMPLATE_HEADER__
+__TEMPLATE_HEADER__
 
     <h3 v-if="eventInfo.in_progress" class="event-in-progress" v-cloak>
         This event is currently in progress! <span>So some things might look weird.</span>
@@ -10,7 +10,7 @@ __TEMPLATE_HEAD__
 
     <component :is="currentView" v-bind="currentProps"></component>
 
-    __TEMPLATE_FOOTER__
+__TEMPLATE_FOOTER__
 
 </div>
 

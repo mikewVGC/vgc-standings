@@ -114,7 +114,7 @@ image_alts = {
     # raticate
     "raichualola": 10100,
     "sandshrewalola": 10101,
-    "sandshrewalola": 10102,
+    "sandslashalola": 10102,
     "vulpixalola": 10103,
     "ninetalesalola": 10104,
     "diglettalola": 10105,

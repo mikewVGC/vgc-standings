@@ -109,9 +109,8 @@ def fix_mon_name(name):
 
 # makes the "________ the XXXX season!" string on the homa page
 def make_season_info_str(majors):
-    total = len(majors)
-    complete = len(list(filter(lambda major: major['processed'] == True, list(majors.values()))))
-    upcoming = len(list(filter(lambda major: major['processed'] == False, list(majors.values()))))
+    complete = len(list(filter(lambda major: major['processed'], list(majors.values()))))
+    upcoming = len(list(filter(lambda major: not major['processed'], list(majors.values()))))
 
     if complete == 0:
         return "We're getting ready for the first events of"
@@ -150,7 +149,7 @@ def make_nice_date_str(start, end, separator = '-', use_full_months = False):
     end_dt = datetime.datetime.strptime(end, "%Y-%m-%d")
 
     month_code = '%b'
-    if use_full_months == True:
+    if use_full_months:
         month_code = '%B'
 
     start_year = start_dt.strftime('%Y')
@@ -160,7 +159,7 @@ def make_nice_date_str(start, end, separator = '-', use_full_months = False):
     end_month = end_dt.strftime(month_code)
     end_day = int(end_dt.strftime('%d'))
 
-    if use_full_months == False:
+    if not use_full_months:
         if start_month != 'May':
             start_month = f"{start_month}."
         if end_month != 'May':

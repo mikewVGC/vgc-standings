@@ -34,7 +34,7 @@ class Usage:
         tour_format = get_tournament_structure(year, num_players, data['event'])
 
         mon_stats = {}
-        item_stats = {}
+        # item_stats = {}
 
         for player, pdata in standings.items():
             for mon in pdata['team']:
@@ -58,7 +58,6 @@ class Usage:
                         "w": 0,
                         "l": 0,
                         "players": [],
-                        "moves": {},
                         "items": {},
                         "abilities": {},
                         "teras": {},
