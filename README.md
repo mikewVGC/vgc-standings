@@ -131,12 +131,16 @@ During a regional you might want to do live updates... why would you want to do 
 
 current_season = 2026
 
-tournaments_to_check['<regional_code>'] = "<pokedata json url>"
+; list of tournament data URLs to check (should be pokedata)
+tournaments_to_check['<regional_code>'] = "<pokedata json URL>"
 
-; add a start time to delay the initial start
-start_time = ""
+; add a start time for when we should start collecting data
+tournament_start_time['<regional_code>'] = "2026-02-07 8:00am Australia/Sydney"
 
-; refresh rate determines how often tournament standings will be downloaded
+; add an end time to stop collecting data
+tournament_end_time['<regional_code>'] = "2026-02-07 6:00pm Australia/Sydney"
+
+; refresh rate determines how often tournament standings will be downloaded (in seconds)
 refresh_rate = 420
 
 ; minimum amount of fuzz to add to the refresh rate (in seconds)
@@ -145,11 +149,8 @@ refresh_fuzz_min = 10
 ; maximum amount of fuzz to add to the refresh rate (in seconds)
 refresh_fuzz_max = 45
 
-; run length is how long the script will run for before exiting
-run_length = 360000
-
-; production build
-build_prod = 1
+; if we should do a production build or not
+build_prod = 0
 ```
 
 Get the regional's code from the JSON (`toronto`, `las-vegas`, `lille`, etc.) and URL of JSON data from Pokedata and put them into the correct places. You can leave the rest unchanged, and I honestly don't recommend lowering the refresh rate as it will do a fetch from Pokedata every 7 minutes. Once it fetches the data it will run Porygon to process the data and it should be updated when people reload.
@@ -160,7 +161,7 @@ This script is super simple and really non-robust. You can only run it one way:
 php scripts/regieleki.php
 ```
 
-I recommend using the values above as they seem pretty stable when I tried them. Note that this script will download files from Pokedata, so be considerate! I also recommend using the `start_time` setting as a way to reduce calls if you want to set this to run for a regional that might start at an inconvienant time for you due to time zones.
+I recommend using the values above as they seem pretty stable when I tried them. Note that this script will download files from Pokedata, so be considerate! Using `tournament_start_time` is not required but I really recommend if a regional is starting during off hours for you so you're not trying to download data while nothing is happening.
 
 But, again, nobody should run this thing in production.
 

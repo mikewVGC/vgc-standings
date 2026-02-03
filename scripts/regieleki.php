@@ -15,14 +15,14 @@ if (!file_exists(__DIR__ . "/../regieleki.ini")) {
 
 // parse regieleki.ini (see README)
 [
-    'current_season'       => $current_season,
-    'tournaments_to_check' => $tournaments_to_check,
-    'start_time'           => $start_time,
-    'refresh_rate'         => $refresh_rate,
-    'run_length'           => $run_length,
-    'build_prod'           => $build_prod,
-    'refresh_fuzz_min'     => $fuzz_refresh_min,
-    'refresh_fuzz_max'     => $fuzz_refresh_max,
+    'current_season'        => $current_season,
+    'tournaments_to_check'  => $tournaments_to_check,
+    'tournament_start_time' => $tournament_start_time,
+    'tournament_end_time'   => $tournament_end_time,
+    'refresh_rate'          => $refresh_rate,
+    'build_prod'            => $build_prod,
+    'refresh_fuzz_min'      => $fuzz_refresh_min,
+    'refresh_fuzz_max'      => $fuzz_refresh_max,
 
 ] = parse_ini_file("regieleki.ini");
 
@@ -30,19 +30,47 @@ $data_dir = __DIR__ . "/../data/majors/{$current_season}";
 
 elog("Regieleki starting! Got " . count($tournaments_to_check) . " tours to check");
 
-if (!empty($start_time)) {
-    $start = new DateTime($start_time);
-    $now = new DateTime('now');
-    $initial_sleep = $start->getTimestamp() - $now->getTimestamp();
+$tournament_settings = [];
+$tour_tracker = [];
 
-    elog("Initial delay set, sleeping for {$initial_sleep} seconds...");
-    sleep($initial_sleep);
-    elog("I'm awake!");
+foreach ($tournaments_to_check as $tour => $remote_json) {
+    $tournament_settings[$tour] = [
+        'start' => time(),
+        'end' => time() + 28800, // 8 hours
+        'remote' => $remote_json,
+        'local' => "{$data_dir}/{$tour}-standings.json",
+        'process' => "{$current_season}:{$tour}",
+    ];
+
+    $tour_tracker[$tour] = true;
 }
 
-$finish_time = time() + $run_length;
+if (!empty($tournament_start_time)) {
+    foreach ($tournament_start_time as $tour => $start_time) {
+        if (!isset($tournament_settings[$tour])) {
+            elog("Tour code '{$tour}' is missing from URL list. Typo? Exiting.");
+            exit;
+        }
 
-elog("Scheduled to finish at " . date("Y-m-d H:i:s", $finish_time));
+        $start = (new DateTime($start_time))->getTimestamp();
+        $tournament_settings[$tour]['start'] = $start;
+        $tournament_settings[$tour]['end'] = $start + 28800;
+        elog("[{$tour}] Initial delay set, will start collecting at " . date("Y-m-d H:i:s", $start));
+    }
+}
+
+if (!empty($tournament_end_time)) {
+    foreach ($tournament_end_time as $tour => $end_time) {
+        if (!isset($tournament_settings[$tour])) {
+            elog("Tour code '{$tour}' is missing from URL list. Typo? Exiting.");
+            exit;
+        }
+
+        $end = (new DateTime($end_time))->getTimestamp();
+        $tournament_settings[$tour]['end'] = $end;
+        elog("[{$tour}] Scheduled to finish at " . date("Y-m-d H:i:s", $end));
+    }
+}
 
 if ($build_prod) {
     elog("Will build as production (--prod)");
@@ -51,18 +79,42 @@ if ($build_prod) {
     $build_prod = '';
 }
 
+elog("Setup done. Running...");
+
 while (1) {
-
-    elog("Running...");
-
     $to_process = [];
-    foreach ($tournaments_to_check as $tour => $remote_json) {
-        $local_file = "{$data_dir}/{$tour}-standings.json";
 
-        elog("[{$tour}] Downloading {$remote_json}... ", '');
+    if (empty(array_filter($tour_tracker))) {
+        elog("Scheduled finish time reached for all tours! Exiting.");
+        break;
+    }
+
+    foreach ($tournament_settings as $tour => $tour_info) {
+        if (!$tour_tracker[$tour]) {
+            // tour has completed
+            continue;
+        }
+
+        if (time() < $tour_info['start']) {
+            // tour hasn't started yet
+            continue;
+        }
+
+        if (time() > $tour_info['end']) {
+            elog("[{$tour}] Scheduled finish time reached!");
+            $tour_tracker[$tour] = false;
+            continue;
+        }
+
+        $to_process[$tour] = $tour_info;
+    }
+
+    $process_cmd = [];
+    foreach ($to_process as $tour => $process) {
+        elog("[{$tour}] Downloading {$process['remote']}... ", '');
 
         try {
-            $remote_data = make_request($remote_json);
+            $remote_data = make_request($process['remote']);
         } catch (Exception $e) {
             elog_cont($e->getMessage());
             continue;
@@ -70,28 +122,23 @@ while (1) {
 
         elog_cont("Done!");
 
-        if (file_put_contents($local_file, $remote_data) === false){
+        if (file_put_contents($process['local'], $remote_data) === false){
             elog_cont("[{$tour}] Unable to write to '{$local_file}', skipping");
             continue;
         }
 
-        $to_process[] = "{$current_season}:{$tour}";
+        $process_cmd[] = $process['process'];
 
         // small sleep between downloads
         sleep(mt_rand(1, 3));
     }
 
-    if (!empty($to_process)) {
+    if (!empty($process_cmd)) {
         elog("Building Reportworm... ", '');
-        exec("python3 scripts/porygon.py {$build_prod} --process " . implode(',', $to_process));
+        exec("python3 scripts/porygon.py {$build_prod} --process " . implode(',', $process_cmd));
         elog_cont("Done!");
     } else {
         elog("Nothing to process right now...");
-    }
-
-    if (time() >= $finish_time) {
-        elog("Scheduled finish time reached! Exiting.");
-        break;
     }
 
     $sleep_time = $refresh_rate + mt_rand($fuzz_refresh_min, $fuzz_refresh_max);
@@ -99,7 +146,7 @@ while (1) {
     sleep($sleep_time);
 }
 
-elog("All done! Thanks for running!");
+elog("All done! Thanks for running Regieleki!");
 exit;
 
 function elog($text, $end = "\n") {
