@@ -17,6 +17,8 @@ export default {
                 usage: { column: 'total', dir: 1 },
             },
 
+            opponentsCompact: false,
+
             spriteCoords: {},
             countryCodes: {},
 
@@ -562,6 +564,11 @@ export default {
         setCountryCodes(data) {
             this.countryCodes = data;
         },
+
+        toggleOpponentsCompact() {
+            this.opponentsCompact = !this.opponentsCompact;
+            console.log(this.opponentsCompact);
+        },
     },
     components: {
         'loading': {
@@ -581,7 +588,14 @@ export default {
         },
         'player': {
             template: '#player-template',
-            props: [ 'season', 'opponents', 'player', 'monImgBase', 'eventInfo' ],
+            props: [
+                'season',
+                'opponents',
+                'player',
+                'monImgBase',
+                'eventInfo',
+                'opponentsCompact',
+            ],
             methods: {
                 getSpritePos(name) {
                     return this.$parent.getSpritePos(name);
@@ -605,6 +619,12 @@ export default {
                         document.getElementById('team-copy').innerText = "Copy";
                     }, 2000);
                 },
+                toggleOpponentsCompact() {
+                    this.$parent.toggleOpponentsCompact();
+                },
+                isOpponentsCompact() {
+                    return this.$parent.opponentsCompact;
+                }
             },
         },
         'pairings': {

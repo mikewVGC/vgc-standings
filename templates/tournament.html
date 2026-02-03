@@ -134,9 +134,14 @@ __TEMPLATE_HEAD__
 
     </div>
 
-    <h2>Opponents</h2>
+    <h2 id="opp-header">Opponents</h2>
 
-    <table id="opponents">
+    <label id="mobile-opp-compact">
+        <input type="checkbox" @change="toggleOpponentsCompact" />
+        <span>Compact View</span>
+    </label>
+
+    <table id="opponents" :class="isOpponentsCompact() ? 'compact' : ''">
 
     <template v-for="phase in player.groupedRounds">
         <thead>
@@ -243,47 +248,51 @@ __TEMPLATE_HEAD__
 
     <h2>{{ eventInfo.name }} Players by Country</h2>
 
-    <table id="country-stats">
-        <thead>
-            <tr>
-                <th></th>
-                <th>Country</th>
-                <th>Players</th>
-                <th>Phase 2</th>
-                <th>Cut</th>
-                <th>Top Player</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="countryData in countryStats">
-                <td width="34">
-                    <a :href="`/${season}/${eventInfo.code}/country/${countryData.country}`"><img
-                        :src="`/static/img/flags/${countryData.country}.svg`"
-                        :title="`${countryData.country}`"
-                        width="32"
-                    /></a>
-                </td>
-                <td>
-                    <a
-                        :href="`/${season}/${eventInfo.code}/country/${countryData.country}`"
-                    >{{ getCountryName(countryData.country) }}</a>
-                </td>
-                <td>{{ countryData.players.length }}</td>
-                <td>{{ countryData.phase2 }}</td>
-                <td>{{ countryData.cut }}</td>
-                <td>
-                    <a
-                        :href="`/${season}/${eventInfo.code}/player/${countryData.topPlayer.code}`"
-                    >{{ standings[countryData.topPlayer.code].name }}</a>
-                </td>
-                <td>({{ standings[countryData.topPlayer.code].place }})</td>
-            </tr>
-            <tr v-if="countryStats.length == 0" v-cloak>
-                <td colspan="7">There's no country data for this event.</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="table-holder">
+
+        <table id="country-stats">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Country</th>
+                    <th>Players</th>
+                    <th>Phase 2</th>
+                    <th>Cut</th>
+                    <th>Top Player</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="countryData in countryStats">
+                    <td width="34">
+                        <a :href="`/${season}/${eventInfo.code}/country/${countryData.country}`"><img
+                            :src="`/static/img/flags/${countryData.country}.svg`"
+                            :title="`${countryData.country}`"
+                            width="32"
+                        /></a>
+                    </td>
+                    <td>
+                        <a
+                            :href="`/${season}/${eventInfo.code}/country/${countryData.country}`"
+                        >{{ getCountryName(countryData.country) }}</a>
+                    </td>
+                    <td>{{ countryData.players.length }}</td>
+                    <td>{{ countryData.phase2 }}</td>
+                    <td>{{ countryData.cut }}</td>
+                    <td>
+                        <a
+                            :href="`/${season}/${eventInfo.code}/player/${countryData.topPlayer.code}`"
+                        >{{ standings[countryData.topPlayer.code].name }}</a>
+                    </td>
+                    <td>({{ standings[countryData.topPlayer.code].place }})</td>
+                </tr>
+                <tr v-if="countryStats.length == 0" v-cloak>
+                    <td colspan="7">There's no country data for this event.</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
 
 </template>
 

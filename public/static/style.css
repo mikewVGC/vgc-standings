@@ -16,7 +16,6 @@ div#app {
 
 header#header {
     position: relative;
-    height: 210px;
 }
 
 header#header h1 {
@@ -168,6 +167,10 @@ th.sortable.up {
 
 th.sortable.down {
     background-image: url(/static/img/sort-down.png);
+}
+
+#mobile-opp-compact {
+    display: none;
 }
 
 table#opponents td:nth-child(3) {
@@ -403,6 +406,12 @@ ul#standings-sections li:first-child {
 
 .config-container table td {
     height: 30px;
+
+}
+
+.config-container table thead tr {
+    position: sticky;
+    top: 0;
 }
 
 #item-info, #tera-info, #move-info {
@@ -512,6 +521,10 @@ ul#pairing-round-select li a {
 
 /* mobile */
 @media (max-width: 30.5em) {
+    h1, h2 {
+        margin-top: .1em;
+    }
+
     table {
         font-size: .9em;
     }
@@ -520,6 +533,9 @@ ul#pairing-round-select li a {
         overflow: hidden;
         background: transparent;
         border: 0;
+        padding-bottom: .5em;
+        font-size: .9em;
+        top: 0;
     }
 
     .tabgroup div {
@@ -552,6 +568,48 @@ ul#pairing-round-select li a {
     .tabgroup div::before {
         padding: 0;
         content: "";
+    }
+
+    .eventslist thead {
+        display: none;
+    }
+
+    .eventslist tr {
+        display: block;
+        position: relative;
+        padding: .25em 0;
+    }
+
+    .eventslist tr td {
+        display: inline-block;
+    }
+
+    .eventslist tr td a {
+        display: block;
+    }
+
+    .eventslist tr td::before {
+        display: block;
+        color: #505050;
+        font-size: .8em;
+    }
+
+    .eventslist tr td:nth-child(2) {
+        width: 80%;
+    }
+
+    .eventslist tr td:nth-child(4) {
+        display: none;
+    }
+
+    .eventslist tr td:nth-child(5) {
+        position: absolute;
+        right: 2%;
+        top: 25%;
+    }
+
+    .eventslist tr td:nth-child(5)::before {
+        content: "Game/Format";
     }
 
     ul#standings-info li {
@@ -604,7 +662,7 @@ ul#pairing-round-select li a {
     }
 
     table#standings td:nth-child(2) {
-        width: 70%;
+        width: 68%;
     }
 
     table#standings td:nth-child(2)::before {
@@ -671,6 +729,73 @@ ul#pairing-round-select li a {
 
     #team div {
         padding-left: 120px;
+    }
+
+    table#player-info {
+        margin-bottom: 1em;
+    }
+
+    table#player-info thead {
+        display: none;
+    }
+
+    table#player-info tr {
+        display: block;
+    }
+
+    table#player-info tr td {
+        display: inline-block;
+        text-align: center;
+        padding: .5em .85em;
+    }
+
+    table#player-info tr td::before {
+        font-size: .8em;
+        color: #505050;
+        display: block;
+    }
+
+    table#player-info tr td:nth-child(2)::before {
+        content: "Place";
+    }
+
+    table#player-info tr td:nth-child(3)::before {
+        content: "Record";
+    }
+
+    table#player-info tr td:nth-child(4) {
+        display: none;
+    }
+
+    table#player-info tr td:nth-child(5)::before {
+        content: "Res.";
+    }
+
+    table#player-info tr td:nth-child(6)::before {
+        content: "Op Res.";
+    }
+
+    #opp-header {
+        float: left;
+        display: inline-block;
+        margin: .5em 0 .75em 0;
+    }
+
+    #mobile-opp-compact {
+        display: inline-block;
+        float: right;
+        font-size: .9em;
+        padding-top: 1em;
+    }
+
+    #mobile-opp-compact input {
+        position: relative;
+        top: .35em;
+    }
+
+    #mobile-opp-compact span {
+        display: inline-block;
+        padding: 0 0 .5em .5em;
     }
 
     table#opponents tr {
@@ -756,6 +881,12 @@ ul#pairing-round-select li a {
     table#opponents tbody tr.bye td:nth-child(4),
     table#opponents tbody tr.bye td:nth-child(5),
     table#opponents tbody tr.bye td:nth-child(6) {
+        display: none;
+    }
+
+    table.compact#opponents tbody td:nth-child(4),
+    table.compact#opponents tbody td:nth-child(5),
+    table.compact#opponents tbody td:nth-child(6) {
         display: none;
     }
 
@@ -947,11 +1078,19 @@ ul#pairing-round-select li a {
             color: #D0D0D0;
         }
 
+        table#player-info tr td::before {
+            color: #D0D0D0;
+        }
+
         table#opponents td::before {
             color: #D0D0D0;
         }
 
         table.usage-table td::before {
+            color: #D0D0D0;
+        }
+
+        .eventslist tr td::before {
             color: #D0D0D0;
         }
 
