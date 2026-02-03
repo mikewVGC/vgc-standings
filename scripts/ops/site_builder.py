@@ -1,5 +1,6 @@
 
 import json
+import shutil
 import os
 
 from lib.tournament import tour_in_progress
@@ -12,7 +13,7 @@ class SiteBuilder():
         self.prod = prod
 
     def build_home(self, year, majors, all_other_seasons):
-        with open("templates/home.html", 'r') as homefile:
+        with open("site/templates/home.html", 'r') as homefile:
             home = homefile.read()
 
         home = self._add_header_footer(home)
@@ -51,7 +52,7 @@ class SiteBuilder():
 
 
     def build_season(self):
-        with open("templates/season.html", 'r') as seasonfile:
+        with open("site/templates/season.html", 'r') as seasonfile:
             season = seasonfile.read()
 
         season = self._add_header_footer(season)
@@ -68,7 +69,7 @@ class SiteBuilder():
         if self.prod and 'monImgBase' in self.config:
             img_base = self.config['monImgBase']
 
-        with open("templates/tournament.html", 'r') as tourfile:
+        with open("site/templates/tournament.html", 'r') as tourfile:
             tour = tourfile.read()
 
             with open("data/common/map-coords.json", 'r') as spritefile:
@@ -93,7 +94,7 @@ class SiteBuilder():
 
 
     def build_meta_ssi(self, file, title, description):
-        with open("templates/head-ssi.html", 'r') as headssifile:
+        with open("site/templates/head-ssi.html", 'r') as headssifile:
             headssi = headssifile.read()
 
             headssi = headssi.replace('__TITLE__', title)
@@ -101,15 +102,6 @@ class SiteBuilder():
 
         with open(f"public/static/ssi/{file}.html", 'w') as file:
             file.write(headssi)
-
-
-    def _add_stylesheet(self, dest_data):
-        style_name = 'style' if not self.prod else 'style.min'
-
-        style_time = os.path.getmtime(f"public/static/{style_name}.css")
-        dest_data = dest_data.replace('__STYLESHEET_FILE__', f"/static/{style_name}.css?{style_time}")
-
-        return dest_data
 
 
     def _add_google_analytics(self, dest_data):
@@ -120,7 +112,7 @@ class SiteBuilder():
         ga = ''
 
         if tag:
-            with open("templates/analytics.html", 'r') as gafile:
+            with open("site/templates/analytics.html", 'r') as gafile:
                 ga = gafile.read()
                 ga = ga.replace('__GOOGLE_TAG__', tag)
 
@@ -129,32 +121,45 @@ class SiteBuilder():
         return dest_data
 
 
+    def _add_header_footer(self, dest_data):
+        with open("site/templates/header.html", 'r') as headerfile:
+            header = headerfile.read()
+            dest_data = dest_data.replace('__TEMPLATE_HEADER__', header)
+
+        with open("site/templates/head.html", 'r') as headfile:
+            head = headfile.read()
+            dest_data = dest_data.replace('__TEMPLATE_HEAD__', head)
+
+        with open("site/templates/footer.html", 'r') as footerfile:
+            footer = footerfile.read()
+            dest_data = dest_data.replace('__TEMPLATE_FOOTER__', footer)
+
+        vue_tpl = "vue" if not self.prod else "vue-prod"
+        with open(f"site/templates/{vue_tpl}.html", 'r') as vuefile:
+            vue = vuefile.read()
+            dest_data = dest_data.replace('__VUE__', vue)
+
+        return dest_data
+
+
     def _add_script(self, script_name, dest_data):
         if self.prod:
             script_name = f"{script_name}.min"
 
-        script_time = os.path.getmtime(f"public/static/{script_name}.js")
+        shutil.copy(f"site/js/{script_name}.js", f"public/static/{script_name}.js")
+
+        script_time = os.path.getmtime(f"site/js/{script_name}.js")
         dest_data = dest_data.replace('__SCRIPT_FILE__', f"/static/{script_name}.js?{script_time}")
 
         return dest_data
 
 
-    def _add_header_footer(self, dest_data):
-        with open("templates/header.html", 'r') as headerfile:
-            header = headerfile.read()
-            dest_data = dest_data.replace('__TEMPLATE_HEADER__', header)
+    def _add_stylesheet(self, dest_data):
+        style_name = 'style' if not self.prod else 'style.min'
 
-        with open("templates/head.html", 'r') as headfile:
-            head = headfile.read()
-            dest_data = dest_data.replace('__TEMPLATE_HEAD__', head)
+        shutil.copy(f"site/css/{style_name}.css", f"public/static/{style_name}.css")
 
-        with open("templates/footer.html", 'r') as footerfile:
-            footer = footerfile.read()
-            dest_data = dest_data.replace('__TEMPLATE_FOOTER__', footer)
-
-        vue_tpl = "vue" if not self.prod else "vue-prod"
-        with open(f"templates/{vue_tpl}.html", 'r') as vuefile:
-            vue = vuefile.read()
-            dest_data = dest_data.replace('__VUE__', vue)
+        style_time = os.path.getmtime(f"site/css/{style_name}.css")
+        dest_data = dest_data.replace('__STYLESHEET_FILE__', f"/static/{style_name}.css?{style_time}")
 
         return dest_data

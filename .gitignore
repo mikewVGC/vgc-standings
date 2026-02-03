@@ -6,10 +6,12 @@ data/pastes
 public/data/*
 public/index.html
 public/static/*.html
-public/static/*.min.js
-public/static/*.min.css
+public/static/*.js
+public/static/*.css
 public/static/img/art/*
 public/static/img/flags/*
 public/static/ssi/*
 venv
+.venv
+.ruff_cache
 __pycache__
