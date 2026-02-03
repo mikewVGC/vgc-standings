@@ -885,7 +885,24 @@ ul#pairing-round-select li a {
         display: none;
     }
 
-    table.compact#opponents tbody td:nth-child(4),
+
+    table.compact#opponents tbody td:nth-child(2) {
+        max-width: 45%;
+    }
+
+    table.compact#opponents tbody td:nth-child(4) {
+        display: inline-block;
+        height: auto;
+        position: absolute;
+        right: 0;
+        top: .8em;
+    }
+
+    table.compact#opponents tbody td:nth-child(4)::before {
+        display: none;
+        content: '';
+    }
+
     table.compact#opponents tbody td:nth-child(5),
     table.compact#opponents tbody td:nth-child(6) {
         display: none;
