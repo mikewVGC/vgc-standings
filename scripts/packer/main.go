@@ -24,18 +24,18 @@ func main() {
 	m.AddFuncRegexp(regexp.MustCompile("^(application|text)/(x-)?(java|ecma)script$"), js.Minify)
 
 	log.Printf("Minifying CSS")
-	loadAndMinify("style.css", "style.min.css", "text/css")
+	loadAndMinify("css/style.css", "style.min.css", "text/css")
 
 	log.Printf("Minifying JS")
-	loadAndMinify("home.js", "home.min.js", "application/javascript")
-	loadAndMinify("season.js", "season.min.js", "application/javascript")
-	loadAndMinify("tournament.js", "tournament.min.js", "application/javascript")
+	loadAndMinify("js/home.js", "home.min.js", "application/javascript")
+	loadAndMinify("js/season.js", "season.min.js", "application/javascript")
+	loadAndMinify("js/tournament.js", "tournament.min.js", "application/javascript")
 
 	log.Printf("Done")
 }
 
 func loadAndMinify(filename string, minFilename string, mediaType string) error {
-	dat, err := os.ReadFile("public/static/" + filename)
+	dat, err := os.ReadFile("site/" + filename)
 	if err != nil {
 		log.Printf("Unable to open %s: %v", filename, err)
 		return err

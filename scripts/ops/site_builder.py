@@ -143,23 +143,24 @@ class SiteBuilder():
 
 
     def _add_script(self, script_name, dest_data):
-        if self.prod:
-            script_name = f"{script_name}.min"
+        min_script = '' if not self.prod else '.min'
 
-        shutil.copy(f"site/js/{script_name}.js", f"public/static/{script_name}.js")
+        if not self.prod:
+            shutil.copy(f"site/js/{script_name}.js", f"public/static/{script_name}.js")
 
         script_time = os.path.getmtime(f"site/js/{script_name}.js")
-        dest_data = dest_data.replace('__SCRIPT_FILE__', f"/static/{script_name}.js?{script_time}")
+        dest_data = dest_data.replace('__SCRIPT_FILE__', f"/static/{script_name}{min_script}.js?{script_time}")
 
         return dest_data
 
 
     def _add_stylesheet(self, dest_data):
-        style_name = 'style' if not self.prod else 'style.min'
+        min_style = '' if not self.prod else '.min'
 
-        shutil.copy(f"site/css/{style_name}.css", f"public/static/{style_name}.css")
+        if not self.prod:
+            shutil.copy("site/css/style.css", "public/static/style.css")
 
-        style_time = os.path.getmtime(f"site/css/{style_name}.css")
-        dest_data = dest_data.replace('__STYLESHEET_FILE__', f"/static/{style_name}.css?{style_time}")
+        style_time = os.path.getmtime("site/css/style.css")
+        dest_data = dest_data.replace('__STYLESHEET_FILE__', f"/static/style{min_style}.css?{style_time}")
 
         return dest_data
