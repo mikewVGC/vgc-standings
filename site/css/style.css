@@ -107,13 +107,20 @@ footer p {
     margin: 0;
 }
 
-.event-in-progress {
+.event-in-progress, .event-incomplete-data {
     background: #B8EEFC;
     color: #254852;
     border: 1px solid #254852;
     border-radius: .2em;
     padding: .5em;
     margin-top: .5em;
+}
+
+.event-incomplete-data {
+    background: #FCFAB8;
+    color: #524B25;
+    border: 1px solid #524B25;
+    font-weight: normal;
 }
 
 .event-in-progress span {

@@ -83,6 +83,11 @@ def parse_paste(paste):
     moves = []
     for line in paste:
         line = line.strip()
+
+        # As One is messing with the nickname part of the regex and I dont' feel like fixing it
+        if line.startswith("Ability: As One"):
+            line = "Ability: As One  "
+
         if len(line) == 0:
             if 'species' not in mon:
                 continue

@@ -8,6 +8,10 @@ __TEMPLATE_HEADER__
         This event is currently in progress! <span>So some things might look weird.</span>
     </h3>
 
+    <h3 v-if="'note' in eventInfo" class="event-incomplete-data" v-cloak>
+        {{ eventInfo.note }}
+    </h3>
+
     <component :is="currentView" v-bind="currentProps"></component>
 
 __TEMPLATE_FOOTER__
