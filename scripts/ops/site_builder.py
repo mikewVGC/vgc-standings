@@ -76,6 +76,10 @@ class SiteBuilder():
                 spritedata = spritefile.read()
                 tour = tour.replace('__SPRITE_COORDS_DATA__', spritedata)
 
+            with open("data/common/hd-item-coords.json", 'r') as hditemfile:
+                hditemdata = hditemfile.read()
+                tour = tour.replace('__HD_ITEM_COORDS_DATA__', hditemdata)
+
             with open("data/common/country-codes.json", 'r') as countryfile:
                 countrydata = countryfile.read()
                 tour = tour.replace('__COUNTRY_CODE_DATA__', countrydata)

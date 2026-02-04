@@ -20,6 +20,7 @@ export default {
             opponentsCompact: false,
 
             spriteCoords: {},
+            hdItemCoords: {},
             countryCodes: {},
 
             monImgBase: '',
@@ -551,6 +552,15 @@ export default {
             return `-${pos[0] + 2}px -${pos[1]}px`;
         },
 
+        setHDItemCoords(data) {
+            this.hdItemCoords = data;
+        },
+
+        getHDItemSpritePos(name) {
+            let pos = this.hdItemCoords[name] || [ 0, 0 ];
+            return `-${pos[0] * 40}px -${pos[1] * 40}px`;
+        },
+
         getPct(dec, precision) {
             if (isNaN(dec)) {
                 return "-";
@@ -599,6 +609,9 @@ export default {
             methods: {
                 getSpritePos(name) {
                     return this.$parent.getSpritePos(name);
+                },
+                getHDItemSpritePos(name) {
+                    return this.$parent.getHDItemSpritePos(name);
                 },
                 getPct(dec, precision) {
                     return this.$parent.getPct(dec, precision)

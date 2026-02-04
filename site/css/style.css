@@ -18,6 +18,13 @@ header#header {
     position: relative;
 }
 
+header#header a {
+    display: block;
+    height: 100%;
+    width: 100%;
+    max-width: 375px;
+}
+
 header#header h1 {
     height: 160px;
     margin: 0;
@@ -221,7 +228,7 @@ table#standings td:nth-child(7)
     width: 220px;
 }
 
-.monicon, .itemicon {
+.monicon, .itemicon, .hditemicon {
     width: 36px;
     height: 30px;
     display: inline-block;
@@ -235,6 +242,14 @@ table#standings td:nth-child(7)
     background: url(/static/img/itemicons-sheet.png) no-repeat;
     width: 24px;
     height: 24px;
+}
+
+.hditemicon {
+    background: url(/static/img/item-sprite-hd.webp) no-repeat;
+    background-size: 1040px 1000px;
+    width: 40px;
+    height: 40px;
+    image-rendering: unset;
 }
 
 .tera-icon {
@@ -310,7 +325,7 @@ tr.phase-header th {
     overflow: hidden;
     position: absolute;
     right: 0px;
-    top: 126px;
+    top: 112px;
 }
 
 #team .mon-big-img {
@@ -725,6 +740,11 @@ ul#pairing-round-select li a {
     #team .mon-big-img img {
         width: 120px;
         height: 120px;
+    }
+
+    #team .paste-mon div.itemicon {
+        top: 90px;
+        right: 8px;
     }
 
     #team div {

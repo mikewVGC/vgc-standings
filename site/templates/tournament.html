@@ -122,6 +122,10 @@ __TEMPLATE_FOOTER__
             <div v-for="mon in player.team" class="paste-mon">
                 <div class="mon-big-img">
                     <img :src="`${monImgBase}/${mon.dex}.png`" width="150" height="150" />
+                    <div
+                        class="itemicon hditemicon"
+                        :style="{ backgroundPosition: getHDItemSpritePos(mon.itemcode) }"
+                    ></div>
                 </div>
                 <div><span :class="`type-${mon.ptype}`">{{ mon.name }}</span> @ {{ mon.item }}  </div>
                 <div><span class="attr">Ability:</span> {{ mon.ability }}  </div>
@@ -568,6 +572,7 @@ export default App;
 const app = createApp(App).mount('#app');
 
 app.setSpriteCoords(JSON.parse('__SPRITE_COORDS_DATA__'));
+app.setHDItemCoords(JSON.parse('__HD_ITEM_COORDS_DATA__'));
 app.setCountryCodes(JSON.parse('__COUNTRY_CODE_DATA__'));
 app.setMonImgBase('__MON_IMG_BASE__');
 
