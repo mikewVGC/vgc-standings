@@ -51,6 +51,13 @@ header#header h1 {
     cursor: pointer;
 }
 
+.tabgroup div#home-button {
+    background-image: url(/static/img/home-white.png);
+    background-size: 55%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
 .tabgroup div a {
     text-decoration: none;
     display: inline-block;
@@ -72,8 +79,8 @@ header#header h1 {
     content: "";
 }
 
-.tabgroup div:nth-child(1) {
-    font-size: 1.1em;
+.tabgroup div:nth-child(1) a {
+    text-indent: -9999px;
 }
 
 footer {
@@ -311,6 +318,12 @@ tr.phase-header th {
     padding-left: 160px;
     white-space: nowrap;
     overflow: display;
+}
+
+h2 em {
+    font-size: .5em;
+    color: #666666;
+    font-weight: normal;
 }
 
 #team .paste-mon {
@@ -583,7 +596,11 @@ ul#pairing-round-select li a {
         display: inline-block;
     }
 
-    .tabgroup div a:first-child {
+    .tabgroup div:first-child a {
+        padding: .1em .2em;
+    }
+
+    .tabgroup div a {
         padding: 0;
     }
 
@@ -1031,6 +1048,10 @@ ul#pairing-round-select li a {
         color: #FFFFFF;
     }
 
+    .tabgroup div#home-button {
+        background-image: url(/static/img/home-black.png);
+    }
+
     th {
         background: #404048;
         color: #FFFFFF;
@@ -1150,7 +1171,7 @@ ul#pairing-round-select li a {
 
         .tabgroup div {
             border: 1px solid #888;
-            background: #606060;
+            background: #404040;
         }
     }
 }

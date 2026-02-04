@@ -12,6 +12,7 @@ export default {
             standings: {},
             countryStats: {},
             usage: [],
+            allRounds: [],
 
             sorts: {
                 usage: { column: 'total', dir: 1 },
@@ -144,10 +145,9 @@ export default {
                     };
 
                 case 'pairings':
-                    let allRounds = this.getAllRounds();
                     if (!secondary) {
-                        if (allRounds.length) {
-                            secondary = allRounds[allRounds.length - 1].num;
+                        if (this.allRounds.length) {
+                            secondary = this.allRounds[this.allRounds.length - 1].num;
                         } else {
                             secondary = 1;
                         }
@@ -187,8 +187,9 @@ export default {
                         season: this.season,
                         eventInfo: this.eventInfo,
                         pairings: pairings,
+                        standings: this.standings,
                         round: { name: roundName, num: roundNum },
-                        allRounds: allRounds,
+                        allRounds: this.allRounds,
                     };
 
                 case 'country-stats':
@@ -379,6 +380,8 @@ export default {
                 this.standings = d.standings;
                 this.eventInfo = d.event;
 
+                this.getAllRounds();
+
                 // compile country stats
                 for (const [playerCode, player ] of Object.entries(this.standings)) {
                     let country = player.country;
@@ -468,8 +471,8 @@ export default {
                 pairings.push({
                     'round': match.round,
                     'rname': match.rname,
-                    'player': this.standings[playerCode],
-                    'opp': (!match.bye && !match.late && opp) ? this.standings[opp] : false,
+                    'player': playerCode,
+                    'opp': (!match.bye && !match.late && opp) ? opp : false,
                     'winner': winner,
                     'table': match.tbl,
                     'other': match.late ? 'Late' : (match.bye ? 'Bye' : ''),
@@ -482,11 +485,10 @@ export default {
         },
 
         getAllRounds() {
-            let rounds = [];
             // the first place player should have played in all possible rounds
             for (const [playerCode, player ] of Object.entries(this.standings)) {
                 for (let i = 0; i < player.rounds.length; i++) {
-                    rounds.push({
+                    this.allRounds.push({
                         name: player.rounds[i].rname,
                         num: player.rounds[i].round,
                     });
@@ -494,9 +496,7 @@ export default {
                 break;
             }
 
-            rounds.reverse();
-
-            return rounds;
+            this.allRounds.reverse();
         },
 
         sortUsage(column) {
@@ -642,7 +642,7 @@ export default {
         },
         'pairings': {
             template: '#pairings-template',
-            props: [ 'season', 'eventInfo', 'pairings', 'allRounds', 'round' ],
+            props: [ 'season', 'eventInfo', 'pairings', 'allRounds', 'round', 'standings' ],
             methods: {
                 pairingWinClass(pairing, player) {
                     if (!player) {
@@ -662,9 +662,10 @@ export default {
                     }
                     return 'L';
                 },
-                getRecordThroughRound(player, round) {
+                getRecordThroughRound(playerCode, round) {
                     let wins = 0;
                     let loss = 0;
+                    const player = this.standings[playerCode];
 
                     for (let x = 0; x <= player.rounds.length; x++) {
                         if (!player.rounds[x]) {

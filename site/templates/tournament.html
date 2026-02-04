@@ -116,7 +116,7 @@ __TEMPLATE_FOOTER__
         </tbody>
     </table>
 
-    <h2>Teamsheet <div id="team-copy" @click="teamCopy()" v-if="player.team.length > 0">Copy</div></h2>
+    <h2>Teamsheet Paste<div id="team-copy" @click="teamCopy()" v-if="player.team.length > 0">Copy</div></h2>
 
     <p v-if="player.team.length == 0">No teamsheet currently available.</p>
 
@@ -228,17 +228,21 @@ __TEMPLATE_FOOTER__
         </thead>
         <tbody>
             <tr v-for="pairing in pairings">
-                <td :class="pairingWinClass(pairing, pairing.player.code)">
-                    <a :href="`/${season}/${eventInfo.code}/player/${pairing.player.code}`">{{ pairing.player.name }}</a><br />
+                <td :class="pairingWinClass(pairing, pairing.player)">
+                    <a
+                        :href="`/${season}/${eventInfo.code}/player/${pairing.player}`"
+                    >{{ standings[pairing.player].name }}</a><br />
                     ({{ getRecordThroughRound(pairing.player, round.num) }})
                 </td>
                 <td>
                     <div v-if="pairing.table > 0">Table <span>{{ pairing.table }}</span></div>
                     <div v-else class="table-place"></div>
                 </td>
-                <td :class="pairingWinClass(pairing, pairing.opp?.code)">
+                <td :class="pairingWinClass(pairing, pairing.opp)">
                     <span v-if="pairing.opp">
-                        <a :href="`/${season}/${eventInfo.code}/player/${pairing.opp.code}`">{{ pairing.opp.name }}</a><br />
+                        <a
+                            :href="`/${season}/${eventInfo.code}/player/${pairing.opp}`"
+                        >{{ standings[pairing.opp].name }}</a><br />
                         ({{ getRecordThroughRound(pairing.opp, round.num) }})
                     </span>
                     <span v-if="pairing.other">{{ pairing.other }}</span>
