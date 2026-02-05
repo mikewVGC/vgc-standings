@@ -466,12 +466,20 @@ __TEMPLATE_FOOTER__
         <table id="item-info">
             <thead>
                 <tr>
+                    <th></th>
                     <th colspan="2">Item Name</th>
                     <th colspan="2">Total</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="itemInfo in mon.items">
+                    <td>
+                        <input
+                            type="checkbox"
+                            :value="itemInfo.code"
+                            @change="toggleItemFilter"
+                        />
+                    </td>
                     <td>
                         <div
                             v-if="itemInfo.code != 'noitem'"
@@ -512,12 +520,20 @@ __TEMPLATE_FOOTER__
         <table id="tera-info">
             <thead>
                 <tr>
+                    <th></th>
                     <th colspan="2">Tera Type</th>
                     <th colspan="2">Total</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="teraInfo in mon.teras">
+                    <td>
+                        <input
+                            type="checkbox"
+                            :value="teraInfo.name"
+                            @change="toggleTeraFilter"
+                        />
+                    </td>
                     <td>
                         <div :class="`tera-icon tera-${teraInfo.name.toLowerCase()}`">Tera {{ teraInfo.name }}</div>
                     </td>
@@ -530,7 +546,7 @@ __TEMPLATE_FOOTER__
 
     </div>
 
-    <h3>All {{ mon.name }} Teams</h3>
+    <h3>All {{ mon.name }} Teams <em v-if="isFiltered()" v-cloak>(Results are being filtered)</em></h3>
 
     <table id="mon-users" class="usage-table">
         <thead>
@@ -544,7 +560,7 @@ __TEMPLATE_FOOTER__
             </tr>
         </thead>
         <tbody>
-            <tr v-for="pcode in mon.players">
+            <tr v-for="pcode in filteredPlayers">
                 <td>{{ standings[pcode].place }}</td>
                 <td>
                     <a :href="`/${season}/${eventInfo.code}/player/${pcode}`">{{ standings[pcode].name }}</a>

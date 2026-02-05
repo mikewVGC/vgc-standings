@@ -320,8 +320,8 @@ tr.phase-header th {
     overflow: display;
 }
 
-h2 em {
-    font-size: .5em;
+h2 em, h3 em {
+    font-size: .8em;
     color: #666666;
     font-weight: normal;
 }
@@ -455,10 +455,14 @@ ul#standings-sections li:first-child {
 }
 
 #item-info td:first-child, #tera-info td:first-child {
+    padding: .3em .1em;
+}
+
+#item-info td:nth-child(2), #tera-info td:nth-child(2) {
     width: 28px;
 }
 
-#item-info td:nth-child(3), #tera-info td:nth-child(3), #move-info td:nth-child(2) {
+#item-info td:nth-child(4), #tera-info td:nth-child(4), #move-info td:nth-child(2) {
     text-align: right;
 }
 
@@ -1033,6 +1037,10 @@ ul#pairing-round-select li a {
 
     a {
         color: #2EE7FF;
+    }
+
+    h2 em, h3 em {
+        color: #A0A0A0;
     }
 
     header#header h1 {

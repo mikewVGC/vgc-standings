@@ -14,6 +14,13 @@ export default {
             usage: [],
             allRounds: [],
 
+            filters: {
+                items: [],
+                teras: [],
+            },
+
+            filteredPlayers: [],
+
             sorts: {
                 usage: { column: 'total', dir: 1 },
             },
@@ -72,19 +79,6 @@ export default {
                     return {};
 
                 case 'standings-main':
-                    document.title = `${this.eventInfo.name} Standings -- Reportworm Standings`;
-
-                    this.nav = [{
-                        text: `${this.season} Season`,
-                        link: `/${this.season}`,
-                        active: false,
-                        pass: 1,
-                    }, {
-                        text: `${this.eventInfo.name}`,
-                        link: `/${this.season}/${this.eventInfo.code}`,
-                        active: true,
-                    }];
-
                     return {
                         standings: this.standings,
                         season: this.season,
@@ -99,7 +93,7 @@ export default {
                     }
 
                     let opps = {};
-                    document.title = `${player.name} -- ${this.eventInfo.name} -- Reportworm Standings`;
+
                     if (player?.rounds) {
                         for (let i = 0; i < player.rounds.length; i++) {
                             let oppCode = player.rounds[i].opp;
@@ -120,21 +114,6 @@ export default {
                             player.groupedRounds = phases.filter(p => p.rounds.length > 0);
                         }
                     }
-
-                    this.nav = [{
-                        text: `${this.season} Season`,
-                        link: `/${this.season}`,
-                        active: false,
-                        pass: 1,
-                    }, {
-                        text: `${this.eventInfo.name}`,
-                        link: `/${this.season}/${this.major}`,
-                        active: false,
-                    }, {
-                        text: `${player.name}`,
-                        link: `/${this.season}/${this.major}/player/${player.code}`,
-                        active: true,
-                    }];
 
                     return {
                         season: this.season,
@@ -166,23 +145,6 @@ export default {
                         roundName = `Round ${roundNum}`;
                     }
 
-                    document.title = `${roundName} Pairings -- ${this.eventInfo.name} -- Reportworm Standings`;
-
-                    this.nav = [{
-                        text: `${this.season} Season`,
-                        link: `/${this.season}`,
-                        active: false,
-                        pass: 1,
-                    }, {
-                        text: `${this.eventInfo.name}`,
-                        link: `/${this.season}/${this.major}`,
-                        active: false,
-                    }, {
-                        text: `${roundName} Pairings`,
-                        link: `/${this.season}/${this.major}/pairings/${secondary}`,
-                        active: true,
-                    }];
-
                     return {
                         season: this.season,
                         eventInfo: this.eventInfo,
@@ -193,23 +155,6 @@ export default {
                     };
 
                 case 'country-stats':
-                    document.title = `Country Stats -- ${this.eventInfo.name} -- Reportworm Standings`;
-
-                    this.nav = [{
-                        text: `${this.season} Season`,
-                        link: `/${this.season}`,
-                        active: false,
-                        pass: 1,
-                    }, {
-                        text: `${this.eventInfo.name}`,
-                        link: `/${this.season}/${this.eventInfo.code}`,
-                        active: false,
-                    }, {
-                        text: "Country Stats",
-                        link: `/${this.season}/${this.major}/countries`,
-                        active: true,
-                    }];
-
                     return {
                         season: this.season,
                         eventInfo: this.eventInfo,
@@ -225,54 +170,17 @@ export default {
                         return {};
                     }
 
-                    document.title = `${country} Players -- Country Stats -- ${this.eventInfo.name} -- Reportworm Standings`;
-
-                    this.nav = [{
-                        text: `${this.season} Season`,
-                        link: `/${this.season}`,
-                        active: false,
-                        pass: 1,
-                    }, {
-                        text: `${this.eventInfo.name}`,
-                        link: `/${this.season}/${this.eventInfo.code}`,
-                        active: false,
-                    }, {
-                        text: "Country Stats",
-                        link: `/${this.season}/${this.major}/countries`,
-                        active: false,
-                    }, {
-                        text: `${country}`,
-                        link: `/${this.season}/${this.major}/country/${secondary}`,
-                        active: true,
-                    }];
-
                     return {
                         season: this.season,
                         eventInfo: this.eventInfo,
                         countryStats: this.countryStats.find(c => c.country == secondary),
                         standings: this.standings,
                         countryCodes: this.countryCodes,
-                        country: secondary,
+                        country: country,
+                        countryCode: secondary,
                     };
 
                 case 'usage':
-                    document.title = `Usage Stats -- ${this.eventInfo.name} -- Reportworm Standings`;
-
-                    this.nav = [{
-                        text: `${this.season} Season`,
-                        link: `/${this.season}`,
-                        active: false,
-                        pass: 1,
-                    }, {
-                        text: `${this.eventInfo.name}`,
-                        link: `/${this.season}/${this.eventInfo.code}`,
-                        active: false,
-                    }, {
-                        text: "Usage Stats",
-                        link: `/${this.season}/${this.major}/usage`,
-                        active: true,
-                    }];
-
                     return {
                         season: this.season,
                         eventInfo: this.eventInfo,
@@ -287,33 +195,13 @@ export default {
                         return {};
                     }
 
-                    document.title = `${mon.name} -- Usage Stats -- ${this.eventInfo.name} -- Reportworm Standings`;
-
-                    this.nav = [{
-                        text: `${this.season} Season`,
-                        link: `/${this.season}`,
-                        active: false,
-                        pass: 1,
-                    }, {
-                        text: `${this.eventInfo.name}`,
-                        link: `/${this.season}/${this.eventInfo.code}`,
-                        active: false,
-                    }, {
-                        text: "Usage Stats",
-                        link: `/${this.season}/${this.major}/usage`,
-                        active: false,
-                    }, {
-                        text: `${mon.name}`,
-                        link: `/${this.season}/${this.major}/mon/${mon.code}`,
-                        active: true,
-                    }];
-
                     return {
                         season: this.season,
                         eventInfo: this.eventInfo,
                         mon: mon,
                         monImgBase: this.monImgBase,
                         standings: this.standings,
+                        filteredPlayers: this.filteredPlayers,
                     };
             }
 
@@ -355,6 +243,10 @@ export default {
             this.currentRoute = chips.slice(3).join('/');
 
             this.setMajor(chips[1], chips[2]);
+        },
+
+        setNav(navData) {
+            this.nav = navData;
         },
 
         setMajor(season, name) {
@@ -522,6 +414,49 @@ export default {
             });
         },
 
+        setFilteredPlayers(players) {
+            this.filteredPlayers = players.slice();
+        },
+
+        toggleFilter(filterType, filterCode, monData) {
+            if (this.filters[filterType].filter(item => item == filterCode).length == 0) {
+                this.filters[filterType].push(filterCode);
+            } else {
+                this.filters[filterType] = this.filters[filterType].filter(v => v != filterCode);
+            }
+
+            this.applyFilters(monData);
+        },
+
+        applyFilters(monData) {
+            const filterCheck = {
+                items: 'itemcode',
+                teras: 'tera',
+            };
+
+            this.filteredPlayers = [];
+
+            for (let i = 0; i < monData.players.length; i++) {
+                let pcode = monData.players[i];
+                let [ pmon ] = this.standings[pcode].team.filter(m => m.code == monData.code);
+
+                if ((!this.filters.items.length || this.filters.items.includes(pmon.itemcode)) &&
+                    (!this.filters.teras.length || this.filters.teras.includes(pmon.tera))
+                ) {
+                    this.filteredPlayers.push(pcode);
+                }
+            }
+        },
+
+        resetFilters() {
+            this.filters.items = [];
+            this.filters.teras = [];
+        },
+
+        isFiltered() {
+            return this.filters.items.length || this.filters.teras.length;
+        },
+
         getSortedClass(column) {
             const sortInfo = this.sorts.usage;
             if (sortInfo.column == column) {
@@ -577,7 +512,6 @@ export default {
 
         toggleOpponentsCompact() {
             this.opponentsCompact = !this.opponentsCompact;
-            console.log(this.opponentsCompact);
         },
     },
     components: {
@@ -587,12 +521,29 @@ export default {
         'standings-main': {
             template: '#standings-main-template',
             props: [ 'season', 'standings', 'eventInfo' ],
+            created: function() {
+                document.title = `${this.eventInfo.name} Standings -- Reportworm Standings`;
+
+                this.setNav([{
+                    text: `${this.season} Season`,
+                    link: `/${this.season}`,
+                    active: false,
+                    pass: 1,
+                }, {
+                    text: `${this.eventInfo.name}`,
+                    link: `/${this.season}/${this.eventInfo.code}`,
+                    active: true,
+                }]);
+            },
             methods: {
                 getSpritePos(name) {
                     return this.$parent.getSpritePos(name);
                 },
                 getPct(dec, precision) {
                     return this.$parent.getPct(dec, precision)
+                },
+                setNav(navData) {
+                    return this.$parent.setNav(navData);
                 },
             },
         },
@@ -606,6 +557,24 @@ export default {
                 'eventInfo',
                 'opponentsCompact',
             ],
+            created: function() {
+                document.title = `${this.player.name} -- ${this.eventInfo.name} -- Reportworm Standings`;
+
+                this.setNav([{
+                    text: `${this.season} Season`,
+                    link: `/${this.season}`,
+                    active: false,
+                    pass: 1,
+                }, {
+                    text: `${this.eventInfo.name}`,
+                    link: `/${this.season}/${this.major}`,
+                    active: false,
+                }, {
+                    text: `${this.player.name}`,
+                    link: `/${this.season}/${this.major}/player/${this.player.code}`,
+                    active: true,
+                }]);
+            },
             methods: {
                 getSpritePos(name) {
                     return this.$parent.getSpritePos(name);
@@ -637,12 +606,33 @@ export default {
                 },
                 isOpponentsCompact() {
                     return this.$parent.opponentsCompact;
-                }
+                },
+                setNav(navData) {
+                    return this.$parent.setNav(navData);
+                },
             },
         },
         'pairings': {
             template: '#pairings-template',
             props: [ 'season', 'eventInfo', 'pairings', 'allRounds', 'round', 'standings' ],
+            created: function() {
+                document.title = `${this.round.name} Pairings -- ${this.eventInfo.name} -- Reportworm Standings`;
+
+                this.setNav([{
+                    text: `${this.season} Season`,
+                    link: `/${this.season}`,
+                    active: false,
+                    pass: 1,
+                }, {
+                    text: `${this.eventInfo.name}`,
+                    link: `/${this.season}/${this.major}`,
+                    active: false,
+                }, {
+                    text: `${this.round.name} Pairings`,
+                    link: `/${this.season}/${this.major}/pairings/${this.round.num}`,
+                    active: true,
+                }]);
+            },
             methods: {
                 pairingWinClass(pairing, player) {
                     if (!player) {
@@ -684,11 +674,32 @@ export default {
 
                     return `${wins} - ${loss}`;
                 },
+                setNav(navData) {
+                    return this.$parent.setNav(navData);
+                },
             },
         },
         'country-stats': {
             template: '#country-stats-template',
             props: [ 'season', 'countryStats', 'standings', 'eventInfo', 'countryCodes' ],
+            created: function() {
+                document.title = `Country Stats -- ${this.eventInfo.name} -- Reportworm Standings`;
+
+                this.setNav([{
+                    text: `${this.season} Season`,
+                    link: `/${this.season}`,
+                    active: false,
+                    pass: 1,
+                }, {
+                    text: `${this.eventInfo.name}`,
+                    link: `/${this.season}/${this.eventInfo.code}`,
+                    active: false,
+                }, {
+                    text: "Country Stats",
+                    link: `/${this.season}/${this.major}/countries`,
+                    active: true,
+                }]);
+            },
             methods: {
                 getCountryName(code) {
                     if (!code) {
@@ -696,11 +707,36 @@ export default {
                     }
                     return this.countryCodes[code.toUpperCase()] || "";
                 },
+                setNav(navData) {
+                    return this.$parent.setNav(navData);
+                },
             },
         },
         'country': {
             template: '#country-template',
-            props: [ 'season', 'countryStats', 'standings', 'eventInfo', 'countryCodes', 'country' ],
+            props: [ 'season', 'countryStats', 'standings', 'eventInfo', 'countryCodes', 'countryCode', 'country' ],
+            created: function() {
+                document.title = `${this.country} Players -- Country Stats -- ${this.eventInfo.name} -- Reportworm Standings`;
+
+                this.setNav([{
+                    text: `${this.season} Season`,
+                    link: `/${this.season}`,
+                    active: false,
+                    pass: 1,
+                }, {
+                    text: `${this.eventInfo.name}`,
+                    link: `/${this.season}/${this.eventInfo.code}`,
+                    active: false,
+                }, {
+                    text: "Country Stats",
+                    link: `/${this.season}/${this.major}/countries`,
+                    active: false,
+                }, {
+                    text: `${this.country}`,
+                    link: `/${this.season}/${this.major}/country/${this.countryCode}`,
+                    active: true,
+                }]);
+            },
             methods: {
                 getCountryName(code) {
                     if (!code) {
@@ -714,11 +750,33 @@ export default {
                 getPct(dec, precision) {
                     return this.$parent.getPct(dec, precision);
                 },
+                setNav(navData) {
+                    return this.$parent.setNav(navData);
+                },
             },
         },
         'usage': {
             template: '#usage-template',
             props: [ 'season', 'usage', 'eventInfo' ],
+            created: function() {
+                document.title = `Usage Stats -- ${this.eventInfo.name} -- Reportworm Standings`;
+
+                this.nav = [{
+                    text: `${this.season} Season`,
+                    link: `/${this.season}`,
+                    active: false,
+                    pass: 1,
+                }, {
+                    text: `${this.eventInfo.name}`,
+                    link: `/${this.season}/${this.eventInfo.code}`,
+                    active: false,
+                }, {
+                    text: "Usage Stats",
+                    link: `/${this.season}/${this.major}/usage`,
+                    active: true,
+                }];
+
+            },
             methods: {
                 getSpritePos(name) {
                     return this.$parent.getSpritePos(name);
@@ -732,17 +790,58 @@ export default {
                 getSortedClass(column) {
                     return this.$parent.getSortedClass(column);
                 },
+                setNav(navData) {
+                    return this.$parent.setNav(navData);
+                },
             }
         },
         'mon': {
             template: '#mon-template',
-            props: [ 'season', 'monImgBase', 'eventInfo', 'mon', 'standings' ],
+            props: [ 'season', 'monImgBase', 'eventInfo', 'mon', 'standings', 'filteredPlayers' ],
+            created: function(self) {
+                document.title = `${this.mon.name} -- Usage Stats -- ${this.eventInfo.name} -- Reportworm Standings`;
+
+                this.setNav([{
+                    text: `${this.season} Season`,
+                    link: `/${this.season}`,
+                    active: false,
+                    pass: 1,
+                }, {
+                    text: `${this.eventInfo.name}`,
+                    link: `/${this.season}/${this.eventInfo.code}`,
+                    active: false,
+                }, {
+                    text: "Usage Stats",
+                    link: `/${this.season}/${this.major}/usage`,
+                    active: false,
+                }, {
+                    text: `${this.mon.name}`,
+                    link: `/${this.season}/${this.major}/mon/${this.mon.code}`,
+                    active: true,
+                }]);
+
+                this.$parent.setFilteredPlayers(this.mon.players);
+
+                this.$parent.resetFilters();
+            },
             methods: {
                 getPct(dec, precision) {
                     return this.$parent.getPct(dec, precision)
                 },
                 getSpritePos(name) {
                     return this.$parent.getSpritePos(name);
+                },
+                toggleItemFilter(e) {
+                    return this.$parent.toggleFilter('items', e.target.value, this.mon);
+                },
+                toggleTeraFilter(e) {
+                    return this.$parent.toggleFilter('teras', e.target.value, this.mon);
+                },
+                isFiltered() {
+                    return this.$parent.isFiltered();
+                },
+                setNav(navData) {
+                    return this.$parent.setNav(navData);
                 },
             },
         },
