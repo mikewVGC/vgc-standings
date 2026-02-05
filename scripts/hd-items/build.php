@@ -223,7 +223,7 @@ $json_data = '[
     "spelltag",
     "twistedspoon",
     "charcoal",
-    "dragonsfang",
+    "dragonfang",
 
     "silkscarf",
     "shellbell",

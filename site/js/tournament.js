@@ -557,7 +557,7 @@ export default {
         },
 
         getHDItemSpritePos(name) {
-            let pos = this.hdItemCoords[name] || [ 0, 0 ];
+            let pos = this.hdItemCoords[name] || [ 4000, 4000 ];
             return `-${pos[0] * 40}px -${pos[1] * 40}px`;
         },
 
