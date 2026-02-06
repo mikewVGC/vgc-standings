@@ -167,7 +167,7 @@ def process_playlatamscraper_event(data, tour_format, official_order, year, code
 
     for i, player in enumerate(sorted_players):
         # uncomment this for a list (doesn't take cut into account)
-        print(f"{i + 1}. {player.name}")
+        # print(f"{i + 1}. {player.name}")
         pass
 
     return players, phase_two_count, players_in_cut_round
