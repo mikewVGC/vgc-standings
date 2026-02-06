@@ -567,11 +567,11 @@ export default {
                     pass: 1,
                 }, {
                     text: `${this.eventInfo.name}`,
-                    link: `/${this.season}/${this.major}`,
+                    link: `/${this.season}/${this.eventInfo.code}`,
                     active: false,
                 }, {
                     text: `${this.player.name}`,
-                    link: `/${this.season}/${this.major}/player/${this.player.code}`,
+                    link: `/${this.season}/${this.eventInfo.code}/player/${this.player.code}`,
                     active: true,
                 }]);
             },
@@ -625,11 +625,11 @@ export default {
                     pass: 1,
                 }, {
                     text: `${this.eventInfo.name}`,
-                    link: `/${this.season}/${this.major}`,
+                    link: `/${this.season}/${this.eventInfo.code}`,
                     active: false,
                 }, {
                     text: `${this.round.name} Pairings`,
-                    link: `/${this.season}/${this.major}/pairings/${this.round.num}`,
+                    link: `/${this.season}/${this.eventInfo.code}/pairings/${this.round.num}`,
                     active: true,
                 }]);
             },
@@ -696,7 +696,7 @@ export default {
                     active: false,
                 }, {
                     text: "Country Stats",
-                    link: `/${this.season}/${this.major}/countries`,
+                    link: `/${this.season}/${this.eventInfo.code}/countries`,
                     active: true,
                 }]);
             },
@@ -729,11 +729,11 @@ export default {
                     active: false,
                 }, {
                     text: "Country Stats",
-                    link: `/${this.season}/${this.major}/countries`,
+                    link: `/${this.season}/${this.eventInfo.code}/countries`,
                     active: false,
                 }, {
                     text: `${this.country}`,
-                    link: `/${this.season}/${this.major}/country/${this.countryCode}`,
+                    link: `/${this.season}/${this.eventInfo.code}/country/${this.countryCode}`,
                     active: true,
                 }]);
             },
@@ -772,7 +772,7 @@ export default {
                     active: false,
                 }, {
                     text: "Usage Stats",
-                    link: `/${this.season}/${this.major}/usage`,
+                    link: `/${this.season}/${this.eventInfo.code}/usage`,
                     active: true,
                 }];
 
@@ -812,11 +812,11 @@ export default {
                     active: false,
                 }, {
                     text: "Usage Stats",
-                    link: `/${this.season}/${this.major}/usage`,
+                    link: `/${this.season}/${this.eventInfo.code}/usage`,
                     active: false,
                 }, {
                     text: `${this.mon.name}`,
-                    link: `/${this.season}/${this.major}/mon/${this.mon.code}`,
+                    link: `/${this.season}/${this.eventInfo.code}/mon/${this.mon.code}`,
                     active: true,
                 }]);
 

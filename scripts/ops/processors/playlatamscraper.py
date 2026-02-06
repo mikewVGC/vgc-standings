@@ -36,6 +36,20 @@ def process_playlatamscraper_event(data, tour_format, official_order, year, code
         for mon in player['team']:
             if mon['species'] == 'Ursaluna [Bloodmoon Ursaluna]':
                 mon['species'] = 'Ursaluna [Bloodmoon Form]'
+            if mon['species'] == 'Terapagos [Normal Form]':
+                mon['species'] = 'Terapagos'
+            if mon['species'] == 'Kyogre [Kyogre]':
+                mon['species'] = 'Kyogre'
+            if mon['species'] == 'Groudon [Groudon]':
+                mon['species'] = 'Groudon'
+            if mon['species'] == 'Zamazenta [Hero of Many Battles]':
+                mon['species'] = 'Zamazenta-Crowned'
+            if mon['species'] == 'Zacian [Hero of Many Battles]':
+                mon['species'] = 'Zacian-Crowned'
+            if mon['species'] == 'Koraidon [Apex Build]':
+                mon['species'] = 'Koraidon'
+            if mon['species'] == 'Miraidon [Ultimate Mode]':
+                mon['species'] = 'Miraidon'
 
             mon_name = fix_mon_name(mon['species'])
             mon_code = make_mon_code(mon_name)
@@ -151,7 +165,7 @@ def process_playlatamscraper_event(data, tour_format, official_order, year, code
 
     for i, player in enumerate(sorted_players):
         # uncomment this for a list (doesn't take cut into account)
-        # print(f"{i + 1}. {player.name}")
+        print(f"{i + 1}. {player.name}")
         pass
 
     return players, phase_two_count, players_in_cut_round
