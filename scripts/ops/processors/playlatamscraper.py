@@ -50,6 +50,8 @@ def process_playlatamscraper_event(data, tour_format, official_order, year, code
                 mon['species'] = 'Koraidon'
             if mon['species'] == 'Miraidon [Ultimate Mode]':
                 mon['species'] = 'Miraidon'
+            if mon['species'].startswith('Alcremie'):
+                mon['species'] = 'Alcremie'
 
             mon_name = fix_mon_name(mon['species'])
             mon_code = make_mon_code(mon_name)
