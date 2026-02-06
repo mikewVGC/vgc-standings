@@ -308,6 +308,9 @@ export default {
                 this.countryStats = Object.values(this.countryStats);
                 this.countryStats.sort((a, b) => a.players.length < b.players.length);
 
+                // this should probably be done via websockets, but
+                // this site is all static files, so it's just
+                // going to be the old dumb polling strategy
                 if (this.eventInfo.in_progress) {
                     setTimeout(this.checkForUpdates, 120 * 1000);
                 }
@@ -363,11 +366,6 @@ export default {
                         this.liveUpdates = d[this.major];
                     }
                 }
-
-                // this should probably be done via websockets, but
-                // this site is all static files, so it's just
-                // going to be the old dumb polling strategy
-                setTimeout(this.checkForUpdates, 120 * 1000);
             });
         },
 
@@ -419,6 +417,8 @@ export default {
         },
 
         getAllRounds() {
+            this.allRounds = [];
+
             // the first place player should have played in all possible rounds
             for (const [playerCode, player ] of Object.entries(this.standings)) {
                 for (let i = 0; i < player.rounds.length; i++) {
