@@ -34,6 +34,8 @@ export default {
             monImgBase: '',
 
             nav: [],
+
+            liveUpdates: '',
         }
     },
     computed: {
@@ -304,6 +306,10 @@ export default {
                 this.countryStats = Object.values(this.countryStats);
                 this.countryStats.sort((a, b) => a.players.length < b.players.length);
 
+                if (this.eventInfo.in_progress) {
+                    setTimeout(this.checkForUpdates, 120 * 1000);
+                }
+
                 cb();
             });
         },
@@ -326,6 +332,38 @@ export default {
                 });
 
                 this.loaded = true;
+            });
+        },
+
+        checkForUpdates() {
+            if (!this.eventInfo.in_progress) {
+                return;
+            }
+
+            fetch(`/api/v1/updates`, {
+            }).then((r) => {
+                if (!r.ok) {
+                    return false;
+                }
+                return r.json();
+            }).then((d) => {
+                if (!d) {
+                    return;
+                }
+
+                if (d[this.major]) {
+                    if (this.liveUpdates != d[this.major]) {
+                        this.getRegional(() => {
+                            this.getUsage();
+                        });
+                        this.liveUpdates = d[this.major];
+                    }
+                }
+
+                // this should probably be done via websockets, but
+                // this site is all static files, so it's just
+                // going to be the old dumb polling strategy
+                setTimeout(this.checkForUpdates, 120 * 1000);
             });
         },
 
