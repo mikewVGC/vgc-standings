@@ -276,6 +276,8 @@ export default {
 
                 this.getAllRounds();
 
+                this.countryStats = {};
+
                 // compile country stats
                 for (const [playerCode, player ] of Object.entries(this.standings)) {
                     let country = player.country;
@@ -341,6 +343,8 @@ export default {
             }
 
             fetch(`/api/v1/updates`, {
+                method: "GET",
+                headers: { "Content-type": "application/json" },
             }).then((r) => {
                 if (!r.ok) {
                     return false;
