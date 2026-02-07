@@ -165,6 +165,7 @@ def fix_duplicates(players, dupes):
             if len(opp):
                 if len(players[opp].rounds) < round_num:
                     # this happens if the dupes play each other
+                    # but only during the round
                     for i, rnd in enumerate(players[dupe].rounds):
                         if rnd.opp == opp:
                             break
@@ -173,4 +174,25 @@ def fix_duplicates(players, dupes):
                     players[opp].rounds.append(swap)
 
                 players[opp].rounds[round_num - 1].opp = dupe
+
+
+    # go through and see if any players played "themselves"
+    # this is hideous, I'm sorry
+    for pcode, player in players.items():
+        for i, rnd in enumerate(player.rounds):
+            found_ctr = 0
+            if rnd.opp == pcode:
+                # in theory this should always work
+                player_dupe = list(filter(lambda d: d.startswith(pcode), dupes))[0]
+
+                # first one we find we'll give to the dupe (which is not necessarily correct)
+                if found_ctr == 0:
+                    swap = players[pcode].rounds.pop(i)
+                    players[player_dupe].rounds.append(swap)
+                    found_ctr += 1
+
+                # second one we find we'll assume is the opponent
+                if found_ctr == 1:
+                    players[pcode].rounds[i].round -= 1
+                    players[pcode].rounds[i].opp = player_dupe
 
