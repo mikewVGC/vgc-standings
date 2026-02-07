@@ -113,10 +113,12 @@ def process_pokedata_event(data, tour_format, official_order):
         player_code = make_code(pdata[0][0].strip())
         if player_code in players:
             num = 1
-            while player_code in players:
-                player_code = f"{player_code}-{num}"
+            adjusted_pcode = player_code
+            while adjusted_pcode in players:
+                adjusted_pcode = f"{player_code}-{num}"
                 num += 1
-                dupes.append(player_code)
+            dupes.append(adjusted_pcode)
+            player_code = adjusted_pcode
 
         player_country = pdata[0][1] if len(pdata[0]) > 1 else ""
         if len(player_country) > 1:
