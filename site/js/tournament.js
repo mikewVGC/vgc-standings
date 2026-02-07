@@ -312,7 +312,7 @@ export default {
                 // this site is all static files, so it's just
                 // going to be the old dumb polling strategy
                 if (this.eventInfo.in_progress) {
-                    setTimeout(this.checkForUpdates, 120 * 1000);
+                    //setTimeout(this.checkForUpdates, 120 * 1000);
                 }
 
                 cb();
@@ -341,6 +341,7 @@ export default {
         },
 
         checkForUpdates() {
+            /*
             if (!this.eventInfo.in_progress) {
                 return;
             }
@@ -361,12 +362,12 @@ export default {
                 if (d[this.major]) {
                     if (this.liveUpdates != d[this.major]) {
                         this.getRegional(() => {
-                            this.getUsage();
                         });
                         this.liveUpdates = d[this.major];
                     }
                 }
             });
+            */
         },
 
         getPairings(round) {
