@@ -155,7 +155,7 @@ def process_pokedata_event(data, tour_format, official_order):
         for rnd in players[dupe].rounds:
             round_num = rnd.round
             opp = rnd.opp
-            if len(opp):
+            if len(opp) and len(players[opp].rounds) >= round_num:
                 players[opp].rounds[round_num - 1].opp = dupe
 
     return players, phase_two_count, players_in_cut_round
