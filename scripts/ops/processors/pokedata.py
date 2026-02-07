@@ -150,12 +150,27 @@ def process_pokedata_event(data, tour_format, official_order):
         if player_code not in official_order:
             official_order.append(player_code)
 
-    # fix the opponents of the dupes (they need to point to the right player)
+    fix_duplicates(players, dupes)
+
+    return players, phase_two_count, players_in_cut_round
+
+
+# this is largely guesswork / doing the first thing that makes sense
+def fix_duplicates(players, dupes):
+    # fix the opponents of the dupes so they point to the correct player
     for dupe in dupes:
         for rnd in players[dupe].rounds:
             round_num = rnd.round
             opp = rnd.opp
-            if len(opp) and len(players[opp].rounds) >= round_num:
+            if len(opp):
+                if len(players[opp].rounds) < round_num:
+                    # this happens if the dupes play each other
+                    for i, rnd in enumerate(players[dupe].rounds):
+                        if rnd.opp == opp:
+                            break
+
+                    swap = players[dupe].rounds.pop(i)
+                    players[opp].rounds.append(swap)
+
                 players[opp].rounds[round_num - 1].opp = dupe
 
-    return players, phase_two_count, players_in_cut_round
