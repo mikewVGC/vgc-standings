@@ -523,12 +523,20 @@ __TEMPLATE_FOOTER__
         <table id="move-info">
             <thead>
                 <tr>
+                    <th></th>
                     <th>Move Name</th>
                     <th colspan="2">Total</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="moveInfo in mon.moves">
+                    <td>
+                        <input
+                            type="checkbox"
+                            :value="moveInfo.name"
+                            @change="toggleMoveFilter"
+                        />
+                    </td>
                     <td>{{ moveInfo.name }}</td>
                     <td>{{ moveInfo.count }}</td>
                     <td><span class="pct">({{ getPct(moveInfo.count / mon.counts.total) }})</span></td>

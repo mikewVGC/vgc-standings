@@ -21,6 +21,7 @@ export default {
             filters: {
                 items: [],
                 teras: [],
+                moves: [],
             },
 
             filteredPlayers: [],
@@ -513,11 +514,6 @@ export default {
         },
 
         applyFilters(monData) {
-            const filterCheck = {
-                items: 'itemcode',
-                teras: 'tera',
-            };
-
             this.filteredPlayers = [];
 
             for (let i = 0; i < monData.players.length; i++) {
@@ -525,7 +521,8 @@ export default {
                 let [ pmon ] = this.standings[pcode].team.filter(m => m.code == monData.code);
 
                 if ((!this.filters.items.length || this.filters.items.includes(pmon.itemcode)) &&
-                    (!this.filters.teras.length || this.filters.teras.includes(pmon.tera))
+                    (!this.filters.teras.length || this.filters.teras.includes(pmon.tera)) &&
+                    (!this.filters.moves.length || this.filters.moves.every(m => pmon.moves.includes(m)))
                 ) {
                     this.filteredPlayers.push(pcode);
                 }
@@ -535,6 +532,7 @@ export default {
         resetFilters() {
             this.filters.items = [];
             this.filters.teras = [];
+            this.filters.moves = [];
         },
 
         isFiltered() {
@@ -934,6 +932,9 @@ export default {
                 },
                 toggleTeraFilter(e) {
                     return this.$parent.toggleFilter('teras', e.target.value, this.mon);
+                },
+                toggleMoveFilter(e) {
+                    return this.$parent.toggleFilter('moves', e.target.value, this.mon);
                 },
                 isFiltered() {
                     return this.$parent.isFiltered();

@@ -465,7 +465,7 @@ ul#standings-sections li:first-child {
     width: 100%;
 }
 
-#item-info td:first-child, #tera-info td:first-child {
+#item-info td:first-child, #tera-info td:first-child, #move-info td:first-child {
     padding: .3em .1em;
 }
 
@@ -473,7 +473,7 @@ ul#standings-sections li:first-child {
     width: 28px;
 }
 
-#item-info td:nth-child(4), #tera-info td:nth-child(4), #move-info td:nth-child(2) {
+#item-info td:nth-child(4), #tera-info td:nth-child(4), #move-info td:nth-child(3) {
     text-align: right;
 }
 
