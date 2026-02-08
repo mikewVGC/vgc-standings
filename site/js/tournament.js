@@ -14,6 +14,8 @@ export default {
             usage: [],
             allRounds: [],
 
+            monUsageSearch: '',
+
             filters: {
                 items: [],
                 teras: [],
@@ -187,6 +189,8 @@ export default {
                         season: this.season,
                         eventInfo: this.eventInfo,
                         usage: this.usage,
+                        filteredUsage: this.filteredUsage,
+                        monUsageSearch: this.monUsageSearch,
                     };
 
                 case 'mon':
@@ -208,6 +212,18 @@ export default {
             }
 
             return {};
+        },
+
+        filteredUsage() {
+            if (!this.monUsageSearch.length) {
+                return this.usage;
+            }
+
+            return this.usage.filter(
+                (usage) => {
+                    return usage.code.startsWith(this.monUsageSearch.toLowerCase());
+                }
+            );
         },
     },
     methods: {
@@ -308,11 +324,12 @@ export default {
                 this.countryStats = Object.values(this.countryStats);
                 this.countryStats.sort((a, b) => a.players.length < b.players.length);
 
-                // this should probably be done via websockets, but
-                // this site is all static files, so it's just
-                // going to be the old dumb polling strategy
                 if (this.eventInfo.in_progress) {
-                    //setTimeout(this.checkForUpdates, 120 * 1000);
+                    // in-progress events go into live update mode... in theory
+                    // this should probably be done via websockets, but
+                    // this site is all static files, so it's just
+                    // going to be the old dumb polling strategy
+                    setTimeout(this.checkForUpdates, 120 * 1000);
                 }
 
                 cb();
@@ -341,11 +358,11 @@ export default {
         },
 
         checkForUpdates() {
-            /*
             if (!this.eventInfo.in_progress) {
                 return;
             }
 
+            /*
             fetch(`/api/v1/updates`, {
                 method: "GET",
                 headers: { "Content-type": "application/json" },
@@ -800,11 +817,11 @@ export default {
         },
         'usage': {
             template: '#usage-template',
-            props: [ 'season', 'usage', 'eventInfo' ],
+            props: [ 'model', 'season', 'usage', 'eventInfo', 'filteredUsage', 'monUsageSearch' ],
             created: function() {
                 document.title = `Usage Stats -- ${this.eventInfo.name} -- Reportworm Standings`;
 
-                this.nav = [{
+                this.setNav([{
                     text: `${this.season} Season`,
                     link: `/${this.season}`,
                     active: false,
@@ -817,7 +834,7 @@ export default {
                     text: "Usage Stats",
                     link: `/${this.season}/${this.eventInfo.code}/usage`,
                     active: true,
-                }];
+                }]);
 
             },
             methods: {
@@ -835,6 +852,13 @@ export default {
                 },
                 setNav(navData) {
                     return this.$parent.setNav(navData);
+                },
+                searchMonUsage(e) {
+                    this.$parent.monUsageSearch = e.target.value;
+                },
+                clearMonSearch() {
+                    document.getElementById('monUsageNameSearch').value = '';
+                    this.$parent.monUsageSearch = '';
                 },
             }
         },

@@ -359,6 +359,15 @@ __TEMPLATE_FOOTER__
         <li><strong>Pct. In Phase Two</strong>: {{ getPct(eventInfo.phase2Count / eventInfo.playerCount) }}</li>
     </ul>
 
+    <div class="filter-area">
+        <input type="text" placeholder="Search by name" id="monUsageNameSearch" @input="searchMonUsage" />
+        <div
+            class="searchFunc clearSearch"
+            v-if="monUsageSearch.length"
+            @click="clearMonSearch"
+        >&times;</div>
+    </div>
+
     <div class="table-holder">
         <table id="usage">
             <thead>
@@ -401,7 +410,7 @@ __TEMPLATE_FOOTER__
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="mon in usage">
+                <tr v-for="mon in filteredUsage">
                     <td>
                         <div
                             class="monicon"
@@ -419,6 +428,10 @@ __TEMPLATE_FOOTER__
                 </tr>
                 <tr v-if="usage.length == 0" v-cloak>
                     <td colspan="8">No usage stats for this event yet.</td>
+                </tr>
+
+                <tr v-if="!filteredUsage.length">
+                    <td colspan="8">No results</td>
                 </tr>
             </tbody>
         </table>

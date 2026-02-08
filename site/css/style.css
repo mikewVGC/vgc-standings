@@ -417,6 +417,17 @@ ul#standings-sections li:first-child {
     width: 4em;
 }
 
+.filter-area {
+    padding-bottom: .5em;
+}
+
+.searchFunc {
+    display: inline-block;
+    font-size: 1.25em;
+    cursor: pointer;
+    padding-left: .25em;
+}
+
 .config-container {
     display: inline-block;
     overflow-y: scroll;
