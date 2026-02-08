@@ -10,11 +10,13 @@ export default {
 
             loaded: false,
             standings: {},
+            playerCodes: [],
             countryStats: {},
             usage: [],
             allRounds: [],
 
             monUsageSearch: '',
+            playerStandingsSearch: '',
 
             filters: {
                 items: [],
@@ -87,6 +89,8 @@ export default {
                         standings: this.standings,
                         season: this.season,
                         eventInfo: this.eventInfo,
+                        playerStandingsSearch: this.playerStandingsSearch,
+                        filteredStandings: this.filteredStandings,
                     };
 
                 case 'player':
@@ -214,6 +218,23 @@ export default {
             return {};
         },
 
+        filteredStandings() {
+            if (!this.playerStandingsSearch.length) {
+                return this.playerCodes;
+            }
+
+            return this.playerCodes.filter(
+                (pcode) => {
+                    // this is hideous
+                    return this.standings[pcode].name
+                        .toLowerCase()
+                        .includes(
+                            this.playerStandingsSearch.toLowerCase()
+                        );
+                }
+            );
+        },
+
         filteredUsage() {
             if (!this.monUsageSearch.length) {
                 return this.usage;
@@ -293,9 +314,12 @@ export default {
                 this.getAllRounds();
 
                 this.countryStats = {};
+                this.playerCodes = [];
 
                 // compile country stats
                 for (const [playerCode, player ] of Object.entries(this.standings)) {
+                    this.playerCodes.push(playerCode);
+
                     let country = player.country;
                     if (!country) {
                         continue;
@@ -580,7 +604,7 @@ export default {
         },
         'standings-main': {
             template: '#standings-main-template',
-            props: [ 'season', 'standings', 'eventInfo' ],
+            props: [ 'season', 'standings', 'eventInfo', 'playerStandingsSearch', 'filteredStandings' ],
             created: function() {
                 document.title = `${this.eventInfo.name} Standings -- Reportworm Standings`;
 
@@ -604,6 +628,13 @@ export default {
                 },
                 setNav(navData) {
                     return this.$parent.setNav(navData);
+                },
+                searchPlayerStandings(e) {
+                    this.$parent.playerStandingsSearch = e.target.value;
+                },
+                clearStandingsSearch() {
+                    document.getElementById('playerStandingsSearch').value = '';
+                    this.$parent.playerStandingsSearch = '';
                 },
             },
         },

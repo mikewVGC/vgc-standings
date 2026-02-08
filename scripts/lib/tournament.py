@@ -189,8 +189,8 @@ def tour_in_progress(event_info, players = False):
         else:
             tz = ZoneInfo("America/Sao_Paulo")
 
-    start = datetime.strptime(f"{event_info['start']} 07:00:00", "%Y-%m-%d %H:%M:%S").replace(tzinfo=tz)
-    end = datetime.strptime(f"{event_info['end']} 19:00:00", "%Y-%m-%d %H:%M:%S").replace(tzinfo=tz)
+    start = datetime.strptime(f"{event_info['start']} 08:00:00", "%Y-%m-%d %H:%M:%S").replace(tzinfo=tz)
+    end = datetime.strptime(f"{event_info['end']} 18:00:00", "%Y-%m-%d %H:%M:%S").replace(tzinfo=tz)
     now = datetime.now(tz)
 
     return start >= now or now <= end
