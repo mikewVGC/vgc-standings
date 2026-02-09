@@ -134,17 +134,21 @@ def process_rk9scraper_event(data, tour_format, official_order, year, code):
 
     for p_code, rounds in pairings_by_player.items():
         # this part is just used to set the players_in_cut_round var
+        drop_round = -1
         for r_data in rounds:
+            if r_data.drop == 1:
+                drop_round = r_data.round
             if r_data.phase == 3:
                 rnd = r_data.round
                 if rnd not in players_in_cut_round:
                     players_in_cut_round[rnd] = 0
                 players_in_cut_round[rnd] += 1
 
-        # here's the roster fixes
         if p_code in players:
+            players[p_code].drop = drop_round
             continue
 
+        # here's the roster fixes
         players[p_code] = Player(
             name=p_code,
             code=p_code,
@@ -158,7 +162,7 @@ def process_rk9scraper_event(data, tour_format, official_order, year, code):
             },
             cut=False,
             p2=False,
-            drop=-1,
+            drop=drop_round,
             team=[],
             rounds=[],
         )
@@ -238,6 +242,7 @@ def get_grouped_pairings(year, code, tour_format):
                     bye=int(p1_bye),
                     late=int(p1_late),
                     phase=phase,
+                    drop=match[player_num]['dropped'],
                 ))
 
     return pairings_by_player

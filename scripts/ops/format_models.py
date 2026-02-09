@@ -26,6 +26,7 @@ class Round():
     phase: int
     bye: int = 0
     late: int = 0
+    drop: int = 0
 
 @dataclass
 class Player():
