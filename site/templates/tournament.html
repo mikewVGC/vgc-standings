@@ -612,6 +612,9 @@ __TEMPLATE_FOOTER__
                     <div v-else class="monicon monicon-ph"></div>
                 </td>
             </tr>
+            <tr v-if="!filteredPlayers.length" v-cloak>
+                <td colspan="6">No matching results.</td>
+            </tr>
         </tbody>
     </table>
 

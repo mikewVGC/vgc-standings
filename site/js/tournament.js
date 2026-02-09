@@ -536,7 +536,7 @@ export default {
         },
 
         isFiltered() {
-            return this.filters.items.length || this.filters.teras.length;
+            return this.filters.items.length || this.filters.teras.length || this.filters.moves.length;
         },
 
         getSortedClass(column) {
