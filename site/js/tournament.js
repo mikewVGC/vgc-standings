@@ -513,6 +513,10 @@ export default {
             this.applyFilters(monData);
         },
 
+        hasFilter(filterType, filterValue) {
+            return this.filters[filterType].includes(filterValue);
+        },
+
         applyFilters(monData) {
             this.filteredPlayers = [];
 
@@ -927,14 +931,23 @@ export default {
                 getSpritePos(name) {
                     return this.$parent.getSpritePos(name);
                 },
-                toggleItemFilter(e) {
-                    return this.$parent.toggleFilter('items', e.target.value, this.mon);
+                toggleItemFilter(itemCode) {
+                    return this.$parent.toggleFilter('items', itemCode, this.mon);
                 },
-                toggleTeraFilter(e) {
-                    return this.$parent.toggleFilter('teras', e.target.value, this.mon);
+                hasItemFilter(itemCode) {
+                    return this.$parent.hasFilter('items', itemCode);
                 },
-                toggleMoveFilter(e) {
-                    return this.$parent.toggleFilter('moves', e.target.value, this.mon);
+                toggleTeraFilter(teraName) {
+                    return this.$parent.toggleFilter('teras', teraName, this.mon);
+                },
+                hasTeraFilter(teraName) {
+                    return this.$parent.hasFilter('teras', teraName);
+                },
+                toggleMoveFilter(moveName) {
+                    return this.$parent.toggleFilter('moves', moveName, this.mon);
+                },
+                hasMoveFilter(moveName) {
+                    return this.$parent.hasFilter('moves', moveName);
                 },
                 isFiltered() {
                     return this.$parent.isFiltered();

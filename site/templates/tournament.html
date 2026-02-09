@@ -494,14 +494,8 @@ __TEMPLATE_FOOTER__
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="itemInfo in mon.items">
-                    <td>
-                        <input
-                            type="checkbox"
-                            :value="itemInfo.code"
-                            @change="toggleItemFilter"
-                        />
-                    </td>
+                <tr v-for="itemInfo in mon.items" @click="toggleItemFilter(itemInfo.code)">
+                    <td><input type="checkbox" :checked="hasItemFilter(itemInfo.code)" /></td>
                     <td>
                         <div
                             v-if="itemInfo.code != 'noitem'"
@@ -529,14 +523,8 @@ __TEMPLATE_FOOTER__
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="moveInfo in mon.moves">
-                    <td>
-                        <input
-                            type="checkbox"
-                            :value="moveInfo.name"
-                            @change="toggleMoveFilter"
-                        />
-                    </td>
+                <tr v-for="moveInfo in mon.moves" @click="toggleMoveFilter(moveInfo.name)">
+                    <td><input type="checkbox" :checked="hasMoveFilter(moveInfo.name)" /></td>
                     <td>{{ moveInfo.name }}</td>
                     <td>{{ moveInfo.count }}</td>
                     <td><span class="pct">({{ getPct(moveInfo.count / mon.counts.total) }})</span></td>
@@ -556,14 +544,8 @@ __TEMPLATE_FOOTER__
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="teraInfo in mon.teras">
-                    <td>
-                        <input
-                            type="checkbox"
-                            :value="teraInfo.name"
-                            @change="toggleTeraFilter"
-                        />
-                    </td>
+                <tr v-for="teraInfo in mon.teras" @click="toggleTeraFilter(teraInfo.name)">
+                    <td><input type="checkbox" :checked="hasTeraFilter(teraInfo.name)" /></td>
                     <td>
                         <div :class="`tera-icon tera-${teraInfo.name.toLowerCase()}`">Tera {{ teraInfo.name }}</div>
                     </td>
@@ -575,6 +557,24 @@ __TEMPLATE_FOOTER__
         </table>
 
     </div>
+
+    <!-- <table id="ability-info">
+        <thead>
+            <tr>
+                <th colspan="9">Abilities</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+            <template v-for="abilityInfo in mon.abilities">
+                <td>{{ abilityInfo.name }}</td>
+                <td>{{ abilityInfo.count }}</td>
+                <td><span class="pct">({{ getPct(abilityInfo.count / mon.counts.total) }})</span></td>
+            </template>
+                <td v-if="mon.abilities.length < 3" :colspan="3 * (3 - mon.abilities.length)"></td>
+            </tr>
+        </tbody>
+    </table> -->
 
     <h3>All {{ mon.name }} Teams <em v-if="isFiltered()" v-cloak>(Results are being filtered)</em></h3>
 

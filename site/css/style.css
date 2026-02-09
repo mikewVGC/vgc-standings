@@ -452,12 +452,15 @@ ul#standings-sections li:first-child {
 
 .config-container table td {
     height: 30px;
-
 }
 
 .config-container table thead tr {
     position: sticky;
     top: 0;
+}
+
+.config-container table input, .config-container table div {
+    cursor: pointer;
 }
 
 #item-info, #tera-info, #move-info {
@@ -475,6 +478,18 @@ ul#standings-sections li:first-child {
 
 #item-info td:nth-child(4), #tera-info td:nth-child(4), #move-info td:nth-child(3) {
     text-align: right;
+}
+
+#ability-info td:nth-child(1), #ability-info td:nth-child(4), #ability-info td:nth-child(7) {
+    width: 20%;
+}
+
+#ability-info td:nth-child(2), #ability-info td:nth-child(5), #ability-info td:nth-child(8) {
+    width: 5%;
+}
+
+#ability-info td:nth-child(3), #ability-info td:nth-child(6), #ability-info td:nth-child(9) {
+    width: 5%;
 }
 
 #pairings td {
