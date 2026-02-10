@@ -65,10 +65,12 @@ header#header h1 {
 }
 
 .tabgroup div::before {
-    padding: .5em 0;
+    padding: 0;
     display: inline-block;
-    font-size: 1.1em;
+    font-size: 1.2em;
     content: "/";
+    position: relative;
+    top: 3px;
 }
 
 .tabgroup div:first-child a, .tabgroup div.active a {
@@ -206,6 +208,12 @@ table#opponents a, table#standings a, table#usage a, table#country-stats a, tabl
     display: block;
 }
 
+table#standings td.team-container a,
+table#country-players td.team-container a,
+table#mon-users td.team-container a {
+    display: inline;
+}
+
 table#opponents td.W, td.W {
     background: #D1FFD1;
 }
@@ -240,6 +248,10 @@ table#standings td:nth-child(7)
 
 .team-container {
     width: 220px;
+}
+
+.team-container a {
+    display: inline;
 }
 
 .monicon, .itemicon, .hditemicon {

@@ -256,14 +256,16 @@ export default {
             }
 
             window.addEventListener('click', (e) => {
-                let targetEl = e.target;
-                if (targetEl && e.target.tagName === 'A') {
-                    if ('pass' in targetEl.dataset && targetEl.dataset.pass == 1) {
+                if (e.target && e.target.closest('a')) {
+                    if ('pass' in e.target.dataset && e.target.dataset.pass == 1) {
                         return;
                     }
 
+                    const anchor = e.target.closest('a');
+
                     e.preventDefault();
-                    const url = e.target.getAttribute('href');
+
+                    const url = anchor.getAttribute('href');
                     history.pushState({ page: url }, null, url);
 
                     const chips = window.location.pathname.split('/');
