@@ -467,9 +467,7 @@ __TEMPLATE_FOOTER__
             </thead>
             <tbody>
                 <tr>
-                    <td>
-                        <img :src="`${monImgBase}/${mon.dex}.png`" width="150" height="150" />
-                    </td>
+                    <td></td>
                     <td>{{ mon.counts.total }} <span class="pct">({{ getPct(mon.counts.total / eventInfo.playerCount, 4) }})</span></td>
                     <td>{{ mon.counts.points }} <span class="pct">({{ getPct(mon.counts.points / eventInfo.playerCount, 4) }})</span></td>
                     <td>{{ mon.counts.phase2 }} <span class="pct">({{ getPct(mon.counts.phase2 / eventInfo.phase2Count, 4) }})</span></td>
@@ -483,98 +481,112 @@ __TEMPLATE_FOOTER__
 
     <h3>{{ mon.name }} Configurations</h3>
 
-    <div class="config-container">
+    <div class="mon-config-container" :style="{ backgroundImage: `url(${monImgBase}/${mon.dex}.png)` }">
 
-        <table id="item-info">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th colspan="2">Item Name</th>
-                    <th colspan="2">Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="itemInfo in mon.items" @click="toggleItemFilter(itemInfo.code)">
-                    <td><input type="checkbox" :checked="hasItemFilter(itemInfo.code)" /></td>
-                    <td>
-                        <div
-                            v-if="itemInfo.code != 'noitem'"
-                            class="itemicon"
-                            :style="{ backgroundPosition: getSpritePos(itemInfo.code) }"
-                            :title="itemInfo.name"
-                        >{{ itemInfo.name }}</div>
-                    </td>
-                    <td>{{ itemInfo.name }}</td>
-                    <td>{{ itemInfo.count }}</td>
-                    <td><span class="pct">({{ getPct(itemInfo.count / mon.counts.total) }})</span></td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="config-container">
+
+            <table id="item-info">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th colspan="2">Item Name</th>
+                        <th colspan="2">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="itemInfo in mon.items" @click="toggleItemFilter(itemInfo.code)">
+                        <td><input type="checkbox" :checked="hasItemFilter(itemInfo.code)" /></td>
+                        <td>
+                            <div
+                                v-if="itemInfo.code != 'noitem'"
+                                class="itemicon"
+                                :style="{ backgroundPosition: getSpritePos(itemInfo.code) }"
+                                :title="itemInfo.name"
+                            >{{ itemInfo.name }}</div>
+                        </td>
+                        <td>{{ itemInfo.name }}</td>
+                        <td>{{ itemInfo.count }}</td>
+                        <td><span class="pct">({{ getPct(itemInfo.count / mon.counts.total) }})</span></td>
+                    </tr>
+                    <tr v-if="mon.items.length < 3" v-for="n in 3 - mon.items.length"><td colspan="5"></td></tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div class="config-container">
+
+            <table id="move-info">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Move Name</th>
+                        <th colspan="2">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="moveInfo in mon.moves" @click="toggleMoveFilter(moveInfo.name)">
+                        <td><input type="checkbox" :checked="hasMoveFilter(moveInfo.name)" /></td>
+                        <td>{{ moveInfo.name }}</td>
+                        <td>{{ moveInfo.count }}</td>
+                        <td><span class="pct">({{ getPct(moveInfo.count / mon.counts.total) }})</span></td>
+                    </tr>
+                    <tr v-if="mon.moves.length < 3" v-for="n in 3 - mon.moves.length"><td colspan="4"></td></tr>
+                </tbody>
+            </table>
+
+        </div>
+
+        <div class="mon-img-holder"></div>
+
+        <div class="config-container">
+
+            <table id="tera-info">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th colspan="2">Tera Type</th>
+                        <th colspan="2">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="teraInfo in mon.teras" @click="toggleTeraFilter(teraInfo.name)">
+                        <td><input type="checkbox" :checked="hasTeraFilter(teraInfo.name)" /></td>
+                        <td>
+                            <div :class="`tera-icon tera-${teraInfo.name.toLowerCase()}`">Tera {{ teraInfo.name }}</div>
+                        </td>
+                        <td>{{ teraInfo.name }}</td>
+                        <td>{{ teraInfo.count }}</td>
+                        <td><span class="pct">({{ getPct(teraInfo.count / mon.counts.total) }})</span></td>
+                    </tr>
+                    <tr v-if="mon.teras.length < 3" v-for="n in 3 - mon.teras.length"><td colspan="5"></td></tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div class="config-container">
+
+            <table id="ability-info">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Ability</th>
+                        <th colspan="2">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="abilityInfo in mon.abilities" @click="toggleAbilityFilter(abilityInfo.name)">
+                        <td><input type="checkbox" :checked="hasAbilityFilter(abilityInfo.name)" /></td>
+                        <td>{{ abilityInfo.name }}</td>
+                        <td>{{ abilityInfo.count }}</td>
+                        <td><span class="pct">({{ getPct(abilityInfo.count / mon.counts.total) }})</span></td>
+                    </tr>
+                    <tr v-for="n in 3 - mon.abilities.length"><td colspan="4"></td></tr>
+                </tbody>
+            </table>
+
+        </div>
 
     </div>
-    <div class="config-container">
-
-        <table id="move-info">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Move Name</th>
-                    <th colspan="2">Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="moveInfo in mon.moves" @click="toggleMoveFilter(moveInfo.name)">
-                    <td><input type="checkbox" :checked="hasMoveFilter(moveInfo.name)" /></td>
-                    <td>{{ moveInfo.name }}</td>
-                    <td>{{ moveInfo.count }}</td>
-                    <td><span class="pct">({{ getPct(moveInfo.count / mon.counts.total) }})</span></td>
-                </tr>
-            </tbody>
-        </table>
-
-    </div>
-    <div class="config-container">
-
-        <table id="tera-info">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th colspan="2">Tera Type</th>
-                    <th colspan="2">Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="teraInfo in mon.teras" @click="toggleTeraFilter(teraInfo.name)">
-                    <td><input type="checkbox" :checked="hasTeraFilter(teraInfo.name)" /></td>
-                    <td>
-                        <div :class="`tera-icon tera-${teraInfo.name.toLowerCase()}`">Tera {{ teraInfo.name }}</div>
-                    </td>
-                    <td>{{ teraInfo.name }}</td>
-                    <td>{{ teraInfo.count }}</td>
-                    <td><span class="pct">({{ getPct(teraInfo.count / mon.counts.total) }})</span></td>
-                </tr>
-            </tbody>
-        </table>
-
-    </div>
-
-    <!-- <table id="ability-info">
-        <thead>
-            <tr>
-                <th colspan="9">Abilities</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-            <template v-for="abilityInfo in mon.abilities">
-                <td>{{ abilityInfo.name }}</td>
-                <td>{{ abilityInfo.count }}</td>
-                <td><span class="pct">({{ getPct(abilityInfo.count / mon.counts.total) }})</span></td>
-            </template>
-                <td v-if="mon.abilities.length < 3" :colspan="3 * (3 - mon.abilities.length)"></td>
-            </tr>
-        </tbody>
-    </table> -->
 
     <h3>All {{ mon.name }} Teams <em v-if="isFiltered()" v-cloak>(Results are being filtered)</em></h3>
 

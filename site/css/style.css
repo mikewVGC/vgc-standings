@@ -440,13 +440,21 @@ ul#standings-sections li:first-child {
     padding-left: .25em;
 }
 
+.mon-config-container {
+    background-repeat: no-repeat;
+    background-position: -10px 40px;
+    background-size: 225px auto;
+    padding-left: 215px;
+}
+
 .config-container {
     display: inline-block;
     overflow-y: scroll;
     overflow-x: hidden;
-    width: 32%;
-    height: 12em;
-    margin-right: 1.25%;
+    width: 48%;
+    height: 9em;
+    margin-bottom: .75em;
+    margin-right: .5em;
     vertical-align: top;
 }
 
@@ -480,28 +488,24 @@ ul#standings-sections li:first-child {
     width: 100%;
 }
 
-#item-info td:first-child, #tera-info td:first-child, #move-info td:first-child {
-    padding: .3em .1em;
+#item-info td:first-child,
+#tera-info td:first-child,
+#move-info td:first-child,
+#ability-info td:first-child {
+    width: 15px;
 }
 
 #item-info td:nth-child(2), #tera-info td:nth-child(2) {
-    width: 28px;
+    width: 24px;
+    overflow: hidden;
 }
 
-#item-info td:nth-child(4), #tera-info td:nth-child(4), #move-info td:nth-child(3) {
+#item-info td:nth-child(4),
+#tera-info td:nth-child(4),
+#move-info td:nth-child(3),
+#ability-info td:nth-child(3)
+{
     text-align: right;
-}
-
-#ability-info td:nth-child(1), #ability-info td:nth-child(4), #ability-info td:nth-child(7) {
-    width: 20%;
-}
-
-#ability-info td:nth-child(2), #ability-info td:nth-child(5), #ability-info td:nth-child(8) {
-    width: 5%;
-}
-
-#ability-info td:nth-child(3), #ability-info td:nth-child(6), #ability-info td:nth-child(9) {
-    width: 5%;
 }
 
 #pairings td {
@@ -1063,6 +1067,11 @@ ul#pairing-round-select li a {
         display: block;
         width: 100%;
         margin-bottom: 1em;
+    }
+
+    .mon-config-container {
+        padding: 0;
+        background: transparent !important;
     }
 }
 

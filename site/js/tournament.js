@@ -22,6 +22,7 @@ export default {
                 items: [],
                 teras: [],
                 moves: [],
+                abilities: [],
             },
 
             filteredPlayers: [],
@@ -528,7 +529,8 @@ export default {
 
                 if ((!this.filters.items.length || this.filters.items.includes(pmon.itemcode)) &&
                     (!this.filters.teras.length || this.filters.teras.includes(pmon.tera)) &&
-                    (!this.filters.moves.length || this.filters.moves.every(m => pmon.moves.includes(m)))
+                    (!this.filters.moves.length || this.filters.moves.every(m => pmon.moves.includes(m))) &&
+                    (!this.filters.abilities.length || this.filters.abilities.includes(pmon.ability))
                 ) {
                     this.filteredPlayers.push(pcode);
                 }
@@ -539,10 +541,16 @@ export default {
             this.filters.items = [];
             this.filters.teras = [];
             this.filters.moves = [];
+            this.filters.abilities = [];
         },
 
         isFiltered() {
-            return this.filters.items.length || this.filters.teras.length || this.filters.moves.length;
+            return (
+                this.filters.items.length ||
+                this.filters.teras.length ||
+                this.filters.moves.length ||
+                this.filters.abilities.length
+            );
         },
 
         getSortedClass(column) {
@@ -950,6 +958,12 @@ export default {
                 },
                 hasMoveFilter(moveName) {
                     return this.$parent.hasFilter('moves', moveName);
+                },
+                toggleAbilityFilter(abilityName) {
+                    return this.$parent.toggleFilter('abilities', abilityName, this.mon);
+                },
+                hasAbilityFilter(abilityName) {
+                    return this.$parent.hasFilter('abilities', abilityName);
                 },
                 isFiltered() {
                     return this.$parent.isFiltered();
