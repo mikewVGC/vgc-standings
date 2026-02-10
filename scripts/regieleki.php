@@ -15,13 +15,6 @@ if (!file_exists(__DIR__ . "/../regieleki.ini")) {
 
 elog("Regieleki starting!");
 
-$updates_file = __DIR__ . "/../public/data/updates.json";
-
-if (!file_exists($updates_file)) {
-    elog("Updates file not found, creating a blank one");
-    file_put_contents($updates_file, '{}');
-}
-
 // parse regieleki.ini (see README)
 [
     'current_season'        => $current_season,
@@ -118,8 +111,6 @@ while (1) {
         $to_process[$tour] = $tour_info;
     }
 
-    $updates = json_decode(file_get_contents($updates_file), true);
-
     $process_cmd = [];
     foreach ($to_process as $tour => $process) {
         elog("[{$tour}] Downloading {$process['remote']}... ", '');
@@ -132,7 +123,6 @@ while (1) {
         }
 
         elog_cont("Done!");
-        $updates[$tour] = sha1($remote_data);
 
         if (file_put_contents($process['local'], $remote_data) === false){
             elog_cont("[{$tour}] Unable to write to '{$local_file}', skipping");
@@ -144,9 +134,6 @@ while (1) {
         // small sleep between downloads
         sleep(mt_rand(1, 3));
     }
-
-    elog("Writing updates file");
-    file_put_contents($updates_file, json_encode($updates));
 
     if (!empty($process_cmd)) {
         elog("Building Reportworm... ", '');

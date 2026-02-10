@@ -41,7 +41,7 @@ export default {
 
             nav: [],
 
-            liveUpdates: '',
+            lastContentLength: 0,
         }
     },
     computed: {
@@ -357,7 +357,7 @@ export default {
                     // this should probably be done via websockets, but
                     // this site is all static files, so it's just
                     // going to be the old dumb polling strategy
-                    setTimeout(this.checkForUpdates, 120 * 1000);
+                    this.checkForUpdates();
                 }
 
                 cb();
@@ -390,29 +390,22 @@ export default {
                 return;
             }
 
-            /*
-            fetch(`/api/v1/updates`, {
-                method: "GET",
+            fetch(`/api/v1/${this.season}/${this.major}`, {
+                method: "HEAD",
                 headers: { "Content-type": "application/json" },
             }).then((r) => {
-                if (!r.ok) {
-                    return false;
+                // simple content length comparison should be fine for our purposes
+                const headerContentLength = r.headers.get('Content-Length');
+                if (this.lastContentLength > 0 && headerContentLength != this.lastContentLength) {
+                    this.getRegional(() => {
+                        // don't need to fetch usage during an event, probably
+                    });
                 }
-                return r.json();
-            }).then((d) => {
-                if (!d) {
-                    return;
-                }
+                this.lastContentLength = headerContentLength;
 
-                if (d[this.major]) {
-                    if (this.liveUpdates != d[this.major]) {
-                        this.getRegional(() => {
-                        });
-                        this.liveUpdates = d[this.major];
-                    }
-                }
+                // every 4 minutes -- the backend only updates every ~7 minutes
+                setTimeout(this.checkForUpdates, 240 * 1000);
             });
-            */
         },
 
         getPairings(round) {
