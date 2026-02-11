@@ -4,8 +4,12 @@ __TEMPLATE_HEAD__
 
 __TEMPLATE_HEADER__
 
-    <h3 v-if="eventInfo.in_progress" class="event-in-progress" v-cloak>
+    <h3 v-if="eventInfo.status == 'in_progress'" class="event-in-progress" v-cloak>
         This event is currently in progress! <span>So some things might look weird.</span>
+    </h3>
+
+    <h3 v-if="eventInfo.processed && eventInfo.status == 'upcoming'" class="event-team-submit" v-cloak>
+        This event hasn't started yet! The players below have already submitted teams.
     </h3>
 
     <h3 v-if="'note' in eventInfo" class="event-incomplete-data" v-cloak>

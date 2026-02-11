@@ -116,7 +116,7 @@ footer p {
     margin: 0;
 }
 
-.event-in-progress, .event-incomplete-data {
+.event-in-progress, .event-incomplete-data, .event-team-submit {
     background: #B8EEFC;
     color: #254852;
     border: 1px solid #254852;
@@ -129,6 +129,13 @@ footer p {
     background: #FCFAB8;
     color: #524B25;
     border: 1px solid #524B25;
+    font-weight: normal;
+}
+
+.event-team-submit {
+    background: #C0FCB8;
+    color: #295225;
+    border: 1px solid #295225;
     font-weight: normal;
 }
 

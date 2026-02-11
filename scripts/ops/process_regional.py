@@ -21,6 +21,7 @@ from lib.tournament import (
     calculate_res,
     calculate_oppopp,
     tour_in_progress,
+    determine_event_status,
 )
 
 class EnhancedJSONEncoder(json.JSONEncoder):
@@ -144,9 +145,11 @@ def process_regional(year, code, event_info):
         players[player].place = pidx + 1
         players_ordered[player] = players[player]
 
+    event_info["processed"] = True
     event_info["dates"] = make_nice_date_str(event_info['start'], event_info['end'])
     event_info["playerCount"] = len(players_ordered)
     event_info["phase2Count"] = phase_two_count
+    event_info["status"] = determine_event_status(event_info)
 
     event_info['in_progress'] = False
     if tour_in_progress(event_info, players_ordered):
