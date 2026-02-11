@@ -162,20 +162,10 @@ def get_round_name(rnd, tour_format, players = 0):
     return "Top Cut"
 
 
-# returns if tour is considered "in progress" (ongoing)
-def tour_in_progress(event_info, players = False):
-    if players:
-        # check if the tour is actually over (a finalist won)
-        for player in players.values():
-            for match in player.rounds:
-                if match.res != 'W' and match.res != 'L':
-                    break
-                if match.rname != 'Finals':
-                    break
-                return False
-            break
-
-    # otherwise we'll get rough start times based on best guess timezone
+"""
+get a fudged timezone for the event
+"""
+def _get_event_tz(event_info):
     tz = None
     if event_info['region'] == 'North America':
         tz = ZoneInfo("America/Chicago")
@@ -189,11 +179,72 @@ def tour_in_progress(event_info, players = False):
         else:
             tz = ZoneInfo("America/Sao_Paulo")
 
+    return tz
+
+
+"""
+returns if tour is considered "in progress" (ongoing)
+"""
+def tour_in_progress(event_info, players = False):
+    if players:
+        # check if the tour is actually over (a finalist won)
+        for player in players.values():
+            for match in player.rounds:
+                if match.res != 'W' and match.res != 'L':
+                    break
+                if match.rname != 'Finals':
+                    break
+                return False
+            break
+
+    # otherwise we'll get rough start times based on best guess timezone
+    tz = _get_event_tz(event_info)
+
     start = datetime.strptime(f"{event_info['start']} 08:00:00", "%Y-%m-%d %H:%M:%S").replace(tzinfo=tz)
     end = datetime.strptime(f"{event_info['end']} 18:00:00", "%Y-%m-%d %H:%M:%S").replace(tzinfo=tz)
     now = datetime.now(tz)
 
-    return start >= now or now <= end
+    return now >= start and now <= end
+
+
+"""
+only check if we're on/after the start time
+"""
+def _tour_has_started(event_info, players = False):
+    tz = _get_event_tz(event_info)
+
+    start = datetime.strptime(f"{event_info['start']} 08:00:00", "%Y-%m-%d %H:%M:%S").replace(tzinfo=tz)
+    now = datetime.now(tz)
+
+    return now >= start
+
+
+"""
+only check if we're after the end time
+"""
+def _tour_has_ended(event_info, players = False):
+    tz = _get_event_tz(event_info)
+
+    end = datetime.strptime(f"{event_info['end']} 18:00:00", "%Y-%m-%d %H:%M:%S").replace(tzinfo=tz)
+    now = datetime.now(tz)
+
+    return now >= end
+
+
+"""
+statuses: complete, upcoming, in_progress
+"""
+def determine_event_status(event_info):
+    if not event_info['processed']:
+        return "upcoming"
+
+    if tour_in_progress(event_info):
+        return "in_progress"
+
+    if event_info['processed'] and not _tour_has_started(event_info):
+        return "upcoming"
+
+    return "complete"
 
 
 """

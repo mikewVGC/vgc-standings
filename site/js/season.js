@@ -61,9 +61,9 @@ export default {
                 }
                 return r.json();
             }).then(d => {
-                this.majors = d.filter((m) => m.processed == true && m.in_progress == false);
-                this.futureMajors = d.filter((m) => m.processed == false).reverse();
-                this.inProgressMajors = d.filter((m) => m.in_progress == true);
+                this.majors = d.filter((m) => m.status == 'complete');
+                this.futureMajors = d.filter((m) => m.status == 'upcoming').reverse();
+                this.inProgressMajors = d.filter((m) => m.status == 'in_progress');
                 this.currentView = 'season-main';
 
                 this.inProgressMajors.reverse();

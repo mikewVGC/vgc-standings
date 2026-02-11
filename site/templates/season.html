@@ -115,7 +115,8 @@ __TEMPLATE_FOOTER__
                     />
                 </td>
                 <td>
-                    {{ major.name }}
+                    <a v-if="major.processed" :href="`${season}/${major.code}`">{{ major.name }}</a>
+                    <span v-else>{{ major.name }}</span>
                     <div class="reg-location"><em>{{ major.country }}</em></div>
                 </td>
                 <td>{{ major.dates }}</td>

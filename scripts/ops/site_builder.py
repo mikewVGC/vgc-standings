@@ -23,15 +23,11 @@ class SiteBuilder():
 
         first_major, last_major, worlds = get_season_bookends(majors)
 
-        recent = list(filter(lambda major: major['processed'], list(majors.values())))
-        upcoming = list(filter(lambda major: not major['processed'], list(majors.values())))
+        recent = list(filter(lambda major: major['status'] == "complete", list(majors.values())))
+        upcoming = list(filter(lambda major: major['status'] == "upcoming", list(majors.values())))
+        in_progress = list(filter(lambda major: major['status'] == "in_progress", list(majors.values())))
 
         recent.reverse()
-
-        in_progress = list(filter(lambda major: tour_in_progress(major), recent))
-
-        recent = [ major for major in recent if major not in in_progress ]
-
         in_progress.reverse()
 
         bootstrap = {

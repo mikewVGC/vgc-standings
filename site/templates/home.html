@@ -33,7 +33,10 @@ __TEMPLATE_HEADER__
         <h3 v-if="upcoming.length > 0" v-cloak>Upcoming Events</h3>
 
         <ul v-cloak>
-            <li v-for="event in upcoming"><p><strong>{{ event.name }}</strong> will be played on {{ event.dates }}, using {{ event.format }}.</p></li>
+            <li v-for="event in upcoming"><p><strong>
+                <a v-if="event.processed" :href="`/${currentSeason}/${event.code}`">{{ event.name }}</a>
+                <span v-else>{{ event.name }}</span>
+            </strong> will be played on {{ event.dates }}, using {{ event.format }}.</p></li>
         </ul>
 
     </div>
