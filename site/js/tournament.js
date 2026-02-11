@@ -386,7 +386,7 @@ export default {
         },
 
         checkForUpdates() {
-            if (!this.eventInfo.in_progress) {
+            if (this.eventInfo.status != 'in_progress') {
                 return;
             }
 

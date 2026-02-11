@@ -6,7 +6,6 @@ import subprocess
 from ops.process_regional import process_regional, process_season, was_event_processed
 from ops.site_builder import SiteBuilder
 from ops.usage import Usage
-from lib.tournament import determine_event_status
 from lib.util import get_season_bookends, make_nice_date_str
 
 # every day I try to make this a little less crazy
@@ -79,13 +78,11 @@ def main():
 
             if cl.build_only or not event_should_be_processed:
                 print(f"[{year}] Checking for processed data for '{event_code}'... ", end="")
-                majors[event_code]['processed'], proc_event_info = was_event_processed(year, event_code)
+                _, proc_event_info = was_event_processed(year, event_code)
                 majors[event_code].update(proc_event_info)
             else:
                 print(f"[{year}] Processing data for '{event_code}'... ", end="")
-                majors[event_code]['processed'] = process_regional(year, event_code, event_info)
-
-            majors[event_code]['status'] = determine_event_status(majors[event_code])
+                majors[event_code] = process_regional(year, event_code, event_info)
 
             if event_should_be_processed and majors[event_code]['processed']:
                 print("building usage... ", end="")

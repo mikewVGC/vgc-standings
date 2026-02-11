@@ -3,7 +3,6 @@ import json
 import shutil
 import os
 
-from lib.tournament import tour_in_progress
 from lib.util import make_season_info_str, make_nice_date_str, get_season_bookends
 
 class SiteBuilder():

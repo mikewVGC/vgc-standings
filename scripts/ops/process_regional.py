@@ -55,7 +55,8 @@ def process_regional(year, code, event_info):
                     data_type = 'playlatamscraper'
             except FileNotFoundError:
                 print("Main standings file not found, maybe this hasn't happened yet? ", end="")
-                return False
+                event_info['processed'] = False
+                return event_info
 
     try:
         # check for a vgcpastes teamlist (currently only milwaukee 2023)
@@ -161,7 +162,7 @@ def process_regional(year, code, event_info):
             "standings": players_ordered,
         }, cls=EnhancedJSONEncoder, indent=2))
 
-    return True
+    return event_info
 
 
 """
@@ -190,6 +191,9 @@ def was_event_processed(year, event_code):
             data = json.loads(file.read())
             event_info = data['event']
     except FileNotFoundError:
-        return False, {}
+        return False, { 'processed': False, 'status': 'upcoming' }
+
+    event_info['processed'] = True
+    event_info['status'] = determine_event_status(event_info)
 
     return True, event_info

@@ -12,6 +12,6 @@ def main():
     )
     parser.add_argument('--p', help="Number of players")
 
-    cl = parser.parse_args()
+    #cl = parser.parse_args()
 
 main()

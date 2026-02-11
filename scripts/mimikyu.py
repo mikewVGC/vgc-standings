@@ -207,6 +207,6 @@ def main():
             file.write(json.dumps(players, indent=4))
 
         print('[simulating] Press enter when ready for next round', end="")
-        line = input()
+        input()
 
 main()
