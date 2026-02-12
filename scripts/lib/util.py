@@ -6,10 +6,12 @@ import unicodedata
 from urllib.parse import quote
 
 
-# make player names URL friendly:
-#  Chuppa Cross IV -> chuppa-cross-iv
-#  Jérémy Côté     -> jeremy-cote
-def make_code(name):
+"""
+make player names URL friendly:
+ Chuppa Cross IV -> chuppa-cross-iv
+ Jérémy Côté     -> jeremy-cote
+"""
+def make_code(name:str) -> str:
     if len(name.strip()) == 0:
         return ""
 
@@ -25,19 +27,25 @@ def make_code(name):
     return coded
 
 
-# make a lookup code from a mon name
-def make_mon_code(name):
+"""
+make a lookup code from a mon name
+"""
+def make_mon_code(name:str) -> str:
     return re.sub(r"[^\w]+", '', name.lower())
 
 
-# convert to showdown item code: Covert Cloak -> covertcloak
-def make_item_code(name):
+"""
+convert to showdown item code: Covert Cloak -> covertcloak
+"""
+def make_item_code(name:str) -> str:
     return re.sub(r"[^\w]+", '', name.lower().replace(' ', ''))
 
 
-# convert mon name from rk9 to showdown
-# this is missing anything not present in SV
-def fix_mon_name(name):
+"""
+convert mon name from rk9 to showdown...
+this is missing anything not present in SV
+"""
+def fix_mon_name(name:str) -> str:
     # these are "default" for multi-forme mons on Showdown
     # they get removed: Urshifu [Single Strike Form] -> Urshifu
     ignored = (
@@ -84,12 +92,12 @@ def fix_mon_name(name):
         "Kyurem",
     )
 
-    monInfo = re.findall(r"([\w -]+)(\[(\w)\]){0,1}", name)
-    fixedName = monInfo[0][0].strip()
+    mon_info = re.findall(r"([\w -]+)(\[(\w)\]){0,1}", name)
+    fixed_name = mon_info[0][0].strip()
 
-    if len(monInfo) > 1:
+    if len(mon_info) > 1:
         # this will have form/gender etc
-        secondary = monInfo[1][0]
+        secondary = mon_info[1][0]
 
         for chop in chopped:
             if secondary.endswith(f" {chop}"):
@@ -102,13 +110,15 @@ def fix_mon_name(name):
             secondary = converted[secondary]
 
         if len(secondary):
-            fixedName = f"{fixedName}-{secondary}"
+            fixed_name = f"{fixed_name}-{secondary}"
 
-    return fixedName
+    return fixed_name
 
 
-# makes the "________ the XXXX season!" string on the homa page
-def make_season_info_str(majors):
+"""
+makes the "________ the XXXX season!" string on the homa page
+"""
+def make_season_info_str(majors:dict) -> str:
     complete = len(list(filter(lambda major: major['processed'], list(majors.values()))))
     upcoming = len(list(filter(lambda major: not major['processed'], list(majors.values()))))
 
@@ -133,8 +143,10 @@ def make_season_info_str(majors):
     return "We are currently in the middle of"
 
 
-# get first, last, and worlds from a list of majors
-def get_season_bookends(majors):
+"""
+get first, last, and worlds from a list of majors
+"""
+def get_season_bookends(majors:dict) -> (dict, dict, dict):
     major_codes = list(majors.keys())
     first_major = majors[major_codes[0]]
     last_major = majors[major_codes[len(major_codes) - 2]]
@@ -143,8 +155,10 @@ def get_season_bookends(majors):
     return first_major, last_major, worlds
 
 
-# this makes lame-o 2025-10-15 - 2025-10-17 style dates into coolio Oct. 15 - 17, 2025 style
-def make_nice_date_str(start, end, separator = '-', use_full_months = False):
+"""
+this makes lame-o 2025-10-15 - 2025-10-17 style dates into coolio Oct. 15 - 17, 2025 style
+"""
+def make_nice_date_str(start:str, end:str, separator:str = '-', use_full_months:bool = False) -> str:
     start_dt = datetime.datetime.strptime(start, "%Y-%m-%d")
     end_dt = datetime.datetime.strptime(end, "%Y-%m-%d")
 

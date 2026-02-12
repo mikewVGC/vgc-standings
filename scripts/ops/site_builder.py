@@ -7,11 +7,11 @@ from lib.util import make_season_info_str, make_nice_date_str, get_season_booken
 
 class SiteBuilder():
 
-    def __init__(self, config = {}, prod = False):
+    def __init__(self, config:dict = {}, prod:bool = False) -> None:
         self.config = config
         self.prod = prod
 
-    def build_home(self, year, majors, all_other_seasons):
+    def build_home(self, year:int, majors:dict, all_other_seasons:dict) -> None:
         with open("site/templates/home.html", 'r') as homefile:
             home = homefile.read()
 
@@ -46,7 +46,7 @@ class SiteBuilder():
             file.write(home)
 
 
-    def build_season(self):
+    def build_season(self) -> None:
         with open("site/templates/season.html", 'r') as seasonfile:
             season = seasonfile.read()
 
@@ -59,7 +59,7 @@ class SiteBuilder():
             file.write(season)
 
 
-    def build_tournament(self):
+    def build_tournament(self) -> None:
         img_base = '/static/img/art'
         if self.prod and 'monImgBase' in self.config:
             img_base = self.config['monImgBase']
@@ -89,10 +89,8 @@ class SiteBuilder():
         with open("public/static/tournament.html", 'w') as file:
             file.write(tour)
 
-        return True
 
-
-    def build_meta_ssi(self, file, title, description):
+    def build_meta_ssi(self, file:str, title:str, description:str) -> None:
         with open("site/templates/head-ssi.html", 'r') as headssifile:
             headssi = headssifile.read()
 
@@ -103,7 +101,7 @@ class SiteBuilder():
             file.write(headssi)
 
 
-    def _add_google_analytics(self, dest_data):
+    def _add_google_analytics(self, dest_data:str) -> str:
         tag = None
         if self.prod and 'googleTag' in self.config and len(self.config['googleTag']) > 0:
             tag = self.config['googleTag']
@@ -120,7 +118,7 @@ class SiteBuilder():
         return dest_data
 
 
-    def _add_header_footer(self, dest_data):
+    def _add_header_footer(self, dest_data:str) -> str:
         with open("site/templates/header.html", 'r') as headerfile:
             header = headerfile.read()
             dest_data = dest_data.replace('__TEMPLATE_HEADER__', header)
@@ -141,7 +139,7 @@ class SiteBuilder():
         return dest_data
 
 
-    def _add_script(self, script_name, dest_data):
+    def _add_script(self, script_name:str, dest_data:dict) -> str:
         min_script = '' if not self.prod else '.min'
 
         if not self.prod:
@@ -153,7 +151,7 @@ class SiteBuilder():
         return dest_data
 
 
-    def _add_stylesheet(self, dest_data):
+    def _add_stylesheet(self, dest_data:str) -> str:
         min_style = '' if not self.prod else '.min'
 
         if not self.prod:

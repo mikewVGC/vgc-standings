@@ -2,9 +2,11 @@
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
-# returns (day 1 rounds, day 2 rounds, top cut min)
-# I don't think actually uses the third value yet?
-def get_tournament_structure(season, competitors, event_info):
+"""
+returns (day 1 rounds, day 2 rounds, top cut min)
+I don't think actually uses the third value yet?
+"""
+def get_tournament_structure(season:int, competitors:int, event_info:dict) -> tuple | None:
     # the first three 2023 regionals had no day 2, instead day 1 rolled into top cut
     if season == 2023 and event_info['code'] in ['san-diego', 'liverpool', 'orlando']:
         if competitors >= 513:
@@ -85,8 +87,10 @@ def get_tournament_structure(season, competitors, event_info):
     return None
 
 
-# given a number of competitors, return how many will earn points
-def get_points_threshold(season, competitors):
+"""
+given a number of competitors, return how many will earn points
+"""
+def get_points_threshold(season:int, competitors:int) -> int | None:
     if season == 2023:
         if competitors >= 800:
             return 256
@@ -142,8 +146,10 @@ def get_points_threshold(season, competitors):
     return None
 
 
-# get "fancy" round name: Cut, T8 etc
-def get_round_name(rnd, tour_format, players = 0):
+"""
+get "fancy" round name: Cut, T8 etc
+"""
+def get_round_name(rnd:str, tour_format:list, players:int = 0) -> str:
     last_swiss = tour_format[0] + tour_format[1]
     if int(rnd) <= last_swiss:
         return rnd
@@ -165,7 +171,7 @@ def get_round_name(rnd, tour_format, players = 0):
 """
 get a fudged timezone for the event
 """
-def _get_event_tz(event_info):
+def _get_event_tz(event_info:dict) -> ZoneInfo:
     tz = None
     if event_info['region'] == 'North America':
         tz = ZoneInfo("America/Chicago")
@@ -185,7 +191,7 @@ def _get_event_tz(event_info):
 """
 returns if tour is considered "in progress" (ongoing)
 """
-def tour_in_progress(event_info, players = False):
+def tour_in_progress(event_info:dict, players:bool = False) -> bool:
     if players:
         # check if the tour is actually over (a finalist won)
         for player in players.values():
@@ -210,7 +216,7 @@ def tour_in_progress(event_info, players = False):
 """
 only check if we're on/after the start time
 """
-def _tour_has_started(event_info, players = False):
+def _tour_has_started(event_info:dict) -> bool:
     tz = _get_event_tz(event_info)
 
     start = datetime.strptime(f"{event_info['start']} 08:00:00", "%Y-%m-%d %H:%M:%S").replace(tzinfo=tz)
@@ -222,7 +228,7 @@ def _tour_has_started(event_info, players = False):
 """
 only check if we're after the end time
 """
-def _tour_has_ended(event_info, players = False):
+def _tour_has_ended(event_info:dict) -> bool:
     tz = _get_event_tz(event_info)
 
     end = datetime.strptime(f"{event_info['end']} 18:00:00", "%Y-%m-%d %H:%M:%S").replace(tzinfo=tz)
@@ -234,7 +240,7 @@ def _tour_has_ended(event_info, players = False):
 """
 statuses: complete, upcoming, in_progress
 """
-def determine_event_status(event_info):
+def determine_event_status(event_info:dict) -> str:
     if not event_info['processed']:
         return "upcoming"
 
@@ -250,7 +256,7 @@ def determine_event_status(event_info):
 """
 In order to get accurate res, we need to calculate both day 1 and day 2 win pct
 """
-def calculate_win_pct(player, players, tour_format, drop_round = None):
+def calculate_win_pct(player:str, players:dict, tour_format:list, drop_round:int | None = None) -> list:
     phases = [
         [ 0, tour_format[0] ],
     ]
@@ -313,7 +319,7 @@ After a lot of trial and error, here is how res works:
         * .833 for Player Cs' win pct (10 - 2 record)
     * Notably when a player drops you need to get their 
 """
-def calculate_res(player, players, tour_format):
+def calculate_res(player:str, players:dict, tour_format:list) -> float:
     matches = players[player].rounds
     total = 0
     match_count = 0
@@ -359,7 +365,7 @@ ugh... this mostly works but there are some instances where it doesn't match up 
 the official standings / order on rk9 ... I also need to validate the rk9 order matches
 the one on pokemon.com
 """
-def calculate_oppopp(player, players, tour_format):
+def calculate_oppopp(player:str, players:dict, tour_format:list) -> float:
     matches = players[player].rounds
     # made_phase_two = players[player].drop == -1 or players[player].drop > tour_format[0]
 
@@ -415,19 +421,19 @@ def calculate_oppopp(player, players, tour_format):
 # by the usage functions, which parse the data, so they don't
 # use the data models, which is why everything is a dict
 
-def player_earned_points(player, points_threshold):
+def player_earned_points(player:dict, points_threshold:int) -> bool:
     if not points_threshold:
         return False
     return player['place'] <= points_threshold
 
 
-def player_made_phase_two(player, tour_format):
+def player_made_phase_two(player:dict, tour_format:list) -> bool:
     if len(player['rounds']) > tour_format[0]:
         return True
     return False
 
 
-def player_made_cut(player, tour_format):
+def player_made_cut(player:dict, tour_format:list) -> bool:
     if player['drop'] == -1 and len(player['rounds']) > tour_format[0] + tour_format[1]:
         return True
     return False

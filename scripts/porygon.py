@@ -5,7 +5,7 @@ import subprocess
 
 from ops.process_regional import process_regional, process_season, was_event_processed
 from ops.site_builder import SiteBuilder
-from ops.usage import Usage
+from ops.usage import compile_usage
 from lib.util import get_season_bookends, make_nice_date_str
 
 # every day I try to make this a little less crazy
@@ -51,8 +51,6 @@ def main():
             "dates": "",
         }
 
-    usage = Usage(config)
-
     builder = SiteBuilder(config, cl.prod)
 
     current_majors = {}
@@ -86,7 +84,7 @@ def main():
 
             if event_should_be_processed and majors[event_code]['processed']:
                 print("building usage... ", end="")
-                usage.compile_usage(year, event_code)
+                compile_usage(year, event_code)
 
             builder.build_meta_ssi(
                 f"{year}/{event_code}",

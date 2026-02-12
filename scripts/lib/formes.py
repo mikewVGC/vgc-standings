@@ -13,7 +13,7 @@ cosmetic_forms = {
 }
 
 # returns dex #, primary typing
-def get_mon_data_from_code(mon_code):
+def get_mon_data_from_code(mon_code:str) -> (int, str):
     if mon_code in pokedex:
         return pokedex[mon_code]['num'], pokedex[mon_code]['types'][0]
     
@@ -164,7 +164,7 @@ image_alts = {
     "decidueyehisui": 10244,
 }
 
-def get_mon_alt_from_code(mon_code):
+def get_mon_alt_from_code(mon_code:str) -> int | None:
     if mon_code in image_alts:
         return image_alts[mon_code]
     return None
@@ -189,7 +189,7 @@ battle_change_forms = {
     "terapagos": "terapagosterastal",
 }
 
-def get_icon_alt(mon_code, mon_data):
+def get_icon_alt(mon_code:str, mon_data:dict) -> str:
     if mon_code in item_change_forms and mon_data['item'] == item_change_forms[mon_code]['item']:
         return item_change_forms[mon_code]['form']
 

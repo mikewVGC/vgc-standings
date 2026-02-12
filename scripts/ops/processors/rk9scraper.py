@@ -20,9 +20,18 @@ from ops.format_models import (
     Player,
 )
 
-# rk9scraper is my own non-public scraper, used for some 2023 regionals
-# that pokedata is missing or has incomplete data of...
-def process_rk9scraper_event(data, tour_format, official_order, year, code):
+"""
+rk9scraper is my own non-public scraper, used for some 2023 regionals
+that pokedata is missing or has incomplete data of...
+"""
+def process_rk9scraper_event(
+    data:list,
+    tour_format:list,
+    official_order:list,
+    year:int,
+    code:str
+) -> (list, int, dict):
+
     players = {}
     phase_two_count = 0
     players_in_cut_round = {}
@@ -178,7 +187,7 @@ def process_rk9scraper_event(data, tour_format, official_order, year, code):
     return players, phase_two_count, players_in_cut_round
 
 
-def get_grouped_pairings(year, code, tour_format):
+def get_grouped_pairings(year:int, code:str, tour_format:list) -> dict:
     pairings = []
     with open(f"data/majors/{year}/{code}-pairings.json", encoding='utf8') as file:
         pairings = json.loads(file.read())

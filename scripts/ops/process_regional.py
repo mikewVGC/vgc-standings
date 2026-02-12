@@ -3,12 +3,12 @@ import json
 import re
 import dataclasses
 
+from collections import OrderedDict
+
 from ops.processors.pokedata import process_pokedata_event
 from ops.processors.rk9scraper import process_rk9scraper_event
 from ops.processors.vgcpastes import process_vgcpastes_teamlist
 from ops.processors.playlatamscraper import process_playlatamscraper_event
-
-from collections import OrderedDict
 
 from lib.util import (
     make_code,
@@ -24,6 +24,10 @@ from lib.tournament import (
     determine_event_status,
 )
 
+DT_POKEDATA = 'pokedata'
+DT_RK9SCRAPER = 'rk9scraper'
+DT_PLAYLATAMSCRAPER = 'playlatamscraper'
+
 class EnhancedJSONEncoder(json.JSONEncoder):
     def default(self, o):
         if dataclasses.is_dataclass(o):
@@ -33,7 +37,7 @@ class EnhancedJSONEncoder(json.JSONEncoder):
 """
 build the standings/matches json
 """
-def process_regional(year, code, event_info):
+def process_regional(year:int, code:str, event_info:dict) -> dict:
     data = []
     data_type = ''
     parse_teams = False
@@ -42,31 +46,33 @@ def process_regional(year, code, event_info):
         # thanks to pokedata.ovh for the standings json!
         with open(f"data/majors/{year}/{code}-standings.json", encoding='utf8') as file:
             data = json.loads(file.read())
-            data_type = 'pokedata'
+            data_type = DT_POKEDATA
     except FileNotFoundError:
         try:
             with open(f"data/majors/{year}/{code}-roster.json", encoding='utf8') as file:
                 data = json.loads(file.read())
-                data_type = 'rk9scraper'
+                data_type = DT_RK9SCRAPER
         except FileNotFoundError:
             try:
                 with open(f"data/majors/{year}/{code}-roster.pl.json", encoding='utf8') as file:
                     data = json.loads(file.read())
-                    data_type = 'playlatamscraper'
+                    data_type = DT_PLAYLATAMSCRAPER
             except FileNotFoundError:
                 print("Main standings file not found, maybe this hasn't happened yet? ", end="")
                 event_info['processed'] = False
+                event_info['status'] = 'upcoming'
+
                 return event_info
 
+    # check for a vgcpastes teamlist to fill in missing teams
     try:
-        # check for a vgcpastes teamlist (currently only milwaukee 2023)
         with open(f"data/majors/{year}/{code}-teams.txt", encoding='utf8') as file:
             parse_teams = True
     except FileNotFoundError:
         ...
 
     official_order = []
-    # thanks to rk9 (would be nice if they published official res etc)
+    # thanks to rk9 (would be nice if they published official res!)
     official_standings = f"data/majors/{year}/{code}-official.txt"
     try:
         with open(official_standings) as file:
@@ -89,11 +95,11 @@ def process_regional(year, code, event_info):
     phase_two_count = 0
     players_in_cut_round = {}
 
-    if data_type == 'pokedata':
+    if data_type == DT_POKEDATA:
         players, phase_two_count, players_in_cut_round = process_pokedata_event(data, tour_format, official_order)
-    elif data_type == 'rk9scraper':
+    elif data_type == DT_RK9SCRAPER:
         players, phase_two_count, players_in_cut_round = process_rk9scraper_event(data, tour_format, official_order, year, code)
-    elif data_type == 'playlatamscraper':
+    elif data_type == DT_PLAYLATAMSCRAPER:
         players, phase_two_count, players_in_cut_round = process_playlatamscraper_event(data, tour_format, official_order, year, code)
 
     if parse_teams:
@@ -168,7 +174,7 @@ def process_regional(year, code, event_info):
 """
 build the season json... this mostly just copies the corresponding <year>.json
 """
-def process_season(year, season_data):
+def process_season(year:int, season_data:dict) -> None:
     for code, event_data in season_data.items():
         event_data["dates"] = make_nice_date_str(event_data['start'], event_data['end'])
 
@@ -183,7 +189,7 @@ def process_season(year, season_data):
 this is used with the build_only flag, we check the file exists and
 return True/False with the event info data that process_regional added
 """
-def was_event_processed(year, event_code):
+def was_event_processed(year:int, event_code:str) -> (bool, dict):
     event_info = {}
 
     try:

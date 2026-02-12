@@ -20,7 +20,14 @@ from ops.format_models import (
     Player,
 )
 
-def process_playlatamscraper_event(data, tour_format, official_order, year, code):
+def process_playlatamscraper_event(
+    data:list,
+    tour_format:list,
+    official_order:list,
+    year:int,
+    code:str
+) -> (list, int, dict):
+
     players = {}
     phase_two_count = 0
     players_in_cut_round = {}
@@ -173,7 +180,7 @@ def process_playlatamscraper_event(data, tour_format, official_order, year, code
     return players, phase_two_count, players_in_cut_round
 
 
-def get_grouped_pairings(year, code, tour_format):
+def get_grouped_pairings(year:int, code:str, tour_format:list) -> dict:
     pairings = []
     with open(f"data/majors/{year}/{code}-pairings.pl.json", encoding='utf8') as file:
         pairings = json.loads(file.read())

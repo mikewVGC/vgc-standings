@@ -17,7 +17,7 @@ from lib.formes import (
 from ops.format_models import TeamMember
 
 
-def process_vgcpastes_teamlist(players, year, code):
+def process_vgcpastes_teamlist(players:dict, year:int, code:str) -> bool:
     player_pastes = {}
     try:
         with open(f"data/majors/{year}/{code}-teams.txt", encoding='utf8') as file:
@@ -45,7 +45,7 @@ def process_vgcpastes_teamlist(players, year, code):
     return True
 
 
-def fetch_paste(url):
+def fetch_paste(url:str) -> str:
     cache = "data/pastes"
     paste_id = url.rsplit('/', 1)[-1]
     try:
@@ -69,7 +69,7 @@ def fetch_paste(url):
     return data
 
 
-def parse_paste(paste):
+def parse_paste(paste:str) -> list:
     mons = []
 
     paste.append("\n")

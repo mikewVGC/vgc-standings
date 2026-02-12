@@ -20,8 +20,10 @@ from ops.format_models import (
     Player,
 )
 
-# process pokedata's json format (where most data comes from)
-def process_pokedata_event(data, tour_format, official_order):
+"""
+process pokedata's json format (where most data comes from)
+"""
+def process_pokedata_event(data:list, tour_format:list, official_order:list) -> (list, int, dict):
 
     name_reg = r"^([^\[]+)( {0,1}\[[A-Z]{0,2}\]){0,1}$"
 
@@ -157,8 +159,10 @@ def process_pokedata_event(data, tour_format, official_order):
     return players, phase_two_count, players_in_cut_round
 
 
-# this is largely guesswork / doing the first thing that makes sense
-def fix_duplicates(players, dupes):
+"""
+this is largely guesswork / doing the first thing that makes sense
+"""
+def fix_duplicates(players:dict, dupes:list) -> None:
     # fix the opponents of the dupes so they point to the correct player
     for dupe in dupes:
         for rnd in players[dupe].rounds:
