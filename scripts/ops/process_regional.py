@@ -152,11 +152,13 @@ def process_regional(year:int, code:str, event_info:dict) -> dict:
         players[player].place = pidx + 1
         players_ordered[player] = players[player]
 
-    event_info["processed"] = True
-    event_info["dates"] = make_nice_date_str(event_info['start'], event_info['end'])
-    event_info["playerCount"] = len(players_ordered)
-    event_info["phase2Count"] = phase_two_count
-    event_info["status"] = determine_event_status(event_info)
+    event_info['processed'] = True
+    event_info['dates'] = make_nice_date_str(event_info['start'], event_info['end'])
+    event_info['playerCount'] = len(players_ordered)
+    event_info['phase2Count'] = phase_two_count
+    event_info['status'] = determine_event_status(event_info)
+    if event_info['status'] == 'complete':
+        event_info['winner'] = next(iter(players_ordered.values()))['name']
 
     event_info['in_progress'] = False
     if tour_in_progress(event_info, players_ordered):
@@ -201,5 +203,8 @@ def was_event_processed(year:int, event_code:str) -> (bool, dict):
 
     event_info['processed'] = True
     event_info['status'] = determine_event_status(event_info)
+    event_info['winner'] = ''
+    if event_info['status'] == 'complete':
+        event_info['winner'] = next(iter(data['standings'].values()))['name']
 
     return True, event_info
