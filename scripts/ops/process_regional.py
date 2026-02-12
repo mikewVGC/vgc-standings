@@ -158,7 +158,7 @@ def process_regional(year:int, code:str, event_info:dict) -> dict:
     event_info['phase2Count'] = phase_two_count
     event_info['status'] = determine_event_status(event_info)
     if event_info['status'] == 'complete':
-        event_info['winner'] = next(iter(players_ordered.values()))['name']
+        event_info['winner'] = next(iter(players_ordered.values())).name
 
     event_info['in_progress'] = False
     if tour_in_progress(event_info, players_ordered):
