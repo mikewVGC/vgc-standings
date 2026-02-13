@@ -41,7 +41,7 @@ export default {
 
             nav: [],
 
-            lastETag: 0,
+            lastModified: '',
         }
     },
     computed: {
@@ -394,14 +394,14 @@ export default {
                 method: "HEAD",
                 headers: { "Content-type": "application/json" },
             }).then((r) => {
-                // simple etag comparison should be fine for our purposes
-                const eTag = r.headers.get('ETag');
-                if (this.lastETag > 0 && eTag != this.lastETag) {
+                // simple last modified comparison should be fine for our purposes
+                const lastModified = r.headers.get('Last-Modified');
+                if (this.lastModified > 0 && lastModified != this.lastModified) {
                     this.getRegional(() => {
                         // don't need to fetch usage during an event, probably
                     });
                 }
-                this.lastETag = eTag;
+                this.lastModified = lastModified;
 
                 // every 4 minutes -- the backend only updates every ~7 minutes
                 setTimeout(this.checkForUpdates, 240 * 1000);
