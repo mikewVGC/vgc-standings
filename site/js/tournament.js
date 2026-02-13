@@ -41,7 +41,7 @@ export default {
 
             nav: [],
 
-            lastContentLength: 0,
+            lastETag: 0,
         }
     },
     computed: {
@@ -394,14 +394,14 @@ export default {
                 method: "HEAD",
                 headers: { "Content-type": "application/json" },
             }).then((r) => {
-                // simple content length comparison should be fine for our purposes
-                const headerContentLength = r.headers.get('Content-Length');
-                if (this.lastContentLength > 0 && headerContentLength != this.lastContentLength) {
+                // simple etag comparison should be fine for our purposes
+                const eTag = r.headers.get('ETag');
+                if (this.lastETag > 0 && eTag != this.lastETag) {
                     this.getRegional(() => {
                         // don't need to fetch usage during an event, probably
                     });
                 }
-                this.lastContentLength = headerContentLength;
+                this.lastETag = eTag;
 
                 // every 4 minutes -- the backend only updates every ~7 minutes
                 setTimeout(this.checkForUpdates, 240 * 1000);
