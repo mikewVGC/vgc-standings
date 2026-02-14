@@ -83,6 +83,9 @@ if ($build_prod) {
 
 elog("Setup done. Running...");
 
+$backoff = 0;
+$attempts = 0;
+
 while (1) {
     $to_process = [];
 
@@ -122,6 +125,19 @@ while (1) {
             continue;
         }
 
+        if (json_decode($remote_data) === null) {
+            $attempts++;
+
+            // backoff starts at +1 minute
+            $backoff = $sleep_time * pow(2, $attempts);
+
+            elog_cont("Invalid JSON, starting backoff...");
+            break;
+        } else {
+            $backoff = 0;
+            $attempts = 0;
+        }
+
         elog_cont("Done!");
 
         if (file_put_contents($process['local'], $remote_data) === false){
@@ -143,7 +159,7 @@ while (1) {
         elog("Nothing to process right now...");
     }
 
-    $sleep_time = $refresh_rate + mt_rand($fuzz_refresh_min, $fuzz_refresh_max);
+    $sleep_time = $refresh_rate + mt_rand($fuzz_refresh_min, $fuzz_refresh_max) + $backoff;
     elog("Sleeping for {$sleep_time} seconds...");
     sleep($sleep_time);
 }
