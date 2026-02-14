@@ -129,7 +129,7 @@ while (1) {
             $attempts++;
 
             // backoff starts at +1 minute
-            $backoff = $sleep_time * pow(2, $attempts);
+            $backoff = $refresh_rate * pow(2, $attempts);
 
             elog_cont("Invalid JSON, starting backoff...");
             break;
