@@ -15,6 +15,8 @@ export default {
             usage: [],
             allRounds: [],
 
+            favs: [],
+
             monUsageSearch: '',
             playerStandingsSearch: '',
 
@@ -93,6 +95,7 @@ export default {
                         eventInfo: this.eventInfo,
                         playerStandingsSearch: this.playerStandingsSearch,
                         filteredStandings: this.filteredStandings,
+                        validFavs: this.validFavs,
                     };
 
                 case 'player':
@@ -248,6 +251,12 @@ export default {
                 }
             );
         },
+
+        validFavs() {
+            return this.favs
+                .filter(f => this.standings[f] !== undefined)
+                .sort((a, b) => this.standings[a].place > this.standings[b].place);
+        },
     },
     methods: {
         init() {
@@ -280,6 +289,11 @@ export default {
                     this.currentRoute = chips.slice(3).join('/');
                 }
             });
+
+            let maybeFavs = localStorage.getItem('player-favorites');
+            if (maybeFavs) {
+                this.favs = JSON.parse(maybeFavs);
+            }
 
             const chips = window.location.pathname.split('/');
             history.pushState({ page: window.location.pathname }, null, window.location.pathname);
@@ -352,7 +366,7 @@ export default {
                 this.countryStats = Object.values(this.countryStats);
                 this.countryStats.sort((a, b) => a.players.length < b.players.length);
 
-                if (this.eventInfo.in_progress) {
+                if (this.eventInfo.status == 'in_progress') {
                     // in-progress events go into live update mode... in theory
                     // this should probably be done via websockets, but
                     // this site is all static files, so it's just
@@ -602,6 +616,21 @@ export default {
         toggleOpponentsCompact() {
             this.opponentsCompact = !this.opponentsCompact;
         },
+
+        toggleFav(playerCode) {
+            let findPlayer = this.favs.findIndex(p => p == playerCode);
+            if (findPlayer >= 0) {
+                this.favs.splice(findPlayer, 1);
+            } else {
+                this.favs.push(playerCode);
+            }
+
+            localStorage.setItem('player-favorites', JSON.stringify(this.favs));
+        },
+
+        isFav(playerCode) {
+            return this.favs.findIndex(p => p == playerCode) >= 0;
+        },
     },
     components: {
         'loading': {
@@ -609,7 +638,7 @@ export default {
         },
         'standings-main': {
             template: '#standings-main-template',
-            props: [ 'season', 'standings', 'eventInfo', 'playerStandingsSearch', 'filteredStandings' ],
+            props: [ 'season', 'standings', 'eventInfo', 'playerStandingsSearch', 'filteredStandings', 'validFavs' ],
             created: function() {
                 document.title = `${this.eventInfo.name} Standings -- Reportworm Standings`;
 
@@ -623,6 +652,26 @@ export default {
                     link: `/${this.season}/${this.eventInfo.code}`,
                     active: true,
                 }]);
+            },
+            components: {
+                'standings-row': {
+                    template: '#standings-row-template',
+                    props: [ 'standings', 'pcode', 'eventInfo', 'season', 'showDrop', 'alwaysShowRes' ],
+                    methods: {
+                        toggleFav(playerCode) {
+                            this.$parent.toggleFav(playerCode);
+                        },
+                        isFav(playerCode) {
+                            return this.$parent.isFav(playerCode);
+                        },
+                        getSpritePos(name) {
+                            return this.$parent.getSpritePos(name);
+                        },
+                        getPct(dec, precision) {
+                            return this.$parent.getPct(dec, precision)
+                        },
+                    },
+                },
             },
             methods: {
                 getSpritePos(name) {
@@ -640,6 +689,12 @@ export default {
                 clearStandingsSearch() {
                     document.getElementById('playerStandingsSearch').value = '';
                     this.$parent.playerStandingsSearch = '';
+                },
+                toggleFav(playerCode) {
+                    this.$parent.toggleFav(playerCode);
+                },
+                isFav(playerCode) {
+                    return this.$parent.isFav(playerCode);
                 },
             },
         },
@@ -833,6 +888,26 @@ export default {
                     active: true,
                 }]);
             },
+            components: {
+                'standings-row': {
+                    template: '#standings-row-template',
+                    props: [ 'standings', 'pcode', 'eventInfo', 'season', 'showDrop', 'alwaysShowRes' ],
+                    methods: {
+                        toggleFav(playerCode) {
+                            this.$parent.toggleFav(playerCode);
+                        },
+                        isFav(playerCode) {
+                            return this.$parent.isFav(playerCode);
+                        },
+                        getSpritePos(name) {
+                            return this.$parent.getSpritePos(name);
+                        },
+                        getPct(dec, precision) {
+                            return this.$parent.getPct(dec, precision)
+                        },
+                    },
+                },
+            },
             methods: {
                 getCountryName(code) {
                     if (!code) {
@@ -848,6 +923,12 @@ export default {
                 },
                 setNav(navData) {
                     return this.$parent.setNav(navData);
+                },
+                toggleFav(playerCode) {
+                    this.$parent.toggleFav(playerCode);
+                },
+                isFav(playerCode) {
+                    return this.$parent.isFav(playerCode);
                 },
             },
         },
@@ -927,6 +1008,26 @@ export default {
 
                 this.$parent.resetFilters();
             },
+            components: {
+                'standings-row': {
+                    template: '#standings-row-template',
+                    props: [ 'standings', 'pcode', 'eventInfo', 'season', 'showDrop', 'alwaysShowRes' ],
+                    methods: {
+                        toggleFav(playerCode) {
+                            this.$parent.toggleFav(playerCode);
+                        },
+                        isFav(playerCode) {
+                            return this.$parent.isFav(playerCode);
+                        },
+                        getSpritePos(name) {
+                            return this.$parent.getSpritePos(name);
+                        },
+                        getPct(dec, precision) {
+                            return this.$parent.getPct(dec, precision)
+                        },
+                    },
+                },
+            },
             methods: {
                 getPct(dec, precision) {
                     return this.$parent.getPct(dec, precision)
@@ -963,6 +1064,12 @@ export default {
                 },
                 setNav(navData) {
                     return this.$parent.setNav(navData);
+                },
+                toggleFav(playerCode) {
+                    this.$parent.toggleFav(playerCode);
+                },
+                isFav(playerCode) {
+                    return this.$parent.isFav(playerCode);
                 },
             },
         },

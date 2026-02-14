@@ -203,6 +203,16 @@ th.sortable.down {
     display: none;
 }
 
+.favicon {
+    color: #808080;
+    cursor: pointer;
+}
+
+.faved {
+    color: #ED9D00;
+    cursor: pointer;
+}
+
 table#opponents td:nth-child(3) {
     background: #F0F0F0;
 }
@@ -211,11 +221,11 @@ table#opponents tr:nth-child(odd) td:nth-child(3) {
     background: #F8F8F8;
 }
 
-table#opponents a, table#standings a, table#usage a, table#country-stats a, table.usage-table a {
+table#opponents a, tabl.main-standings a, table#usage a, table#country-stats a {
     display: block;
 }
 
-table#standings td.team-container a,
+table.main-standings td.team-container a,
 table#country-players td.team-container a,
 table#mon-users td.team-container a {
     display: inline;
@@ -237,20 +247,24 @@ table#opponents tr:nth-child(odd) td.L, tr:nth-child(odd) td.L {
     background: #E8BEBE;
 }
 
-table#standings thead tr {
+table.main-standings thead tr {
     position: sticky;
-    top: 0;
+    top: -32px;
 }
 
-table#standings td:nth-child(3) {
+table.main-standings td:nth-child(4) {
     text-align: right;
 }
 
-table#standings td:nth-child(4),
-table#standings td:nth-child(6),
-table#standings td:nth-child(7)
+table.main-standings td:nth-child(5),
+table.main-standings td:nth-child(7),
+table.main-standings td:nth-child(8)
 {
     text-align: center;
+}
+
+table#favorites {
+    margin-bottom: .5em;
 }
 
 .team-container {
@@ -437,7 +451,7 @@ ul#standings-sections li:first-child {
 }
 
 .filter-area {
-    padding-bottom: .5em;
+    padding: .5em 0;
 }
 
 .searchFunc {
@@ -761,7 +775,7 @@ ul#pairing-round-select li a {
         display: block;
     }
 
-    table#standings thead {
+    table.main-standings thead {
         display: none;
     }
 
@@ -770,83 +784,87 @@ ul#pairing-round-select li a {
         overflow-x: scroll;
     }
 
-    table#standings tr {
+    table.main-standings tr {
         display: block;
     }
 
-    table#standings td {
+    table.main-standings td {
         display: inline-block;
     }
 
-    table#standings td:nth-child(4),
-    table#standings td:nth-child(6),
-    table#standings td:nth-child(7)
+    table.main-standings td:nth-child(5),
+    table.main-standings td:nth-child(7),
+    table.main-standings td:nth-child(8)
     {
         text-align: left;
     }
 
-    table#standings td::before {
+    table.main-standings td::before {
         display: block;
         font-size: .8em;
         color: #505050;
     }
 
-    table#standings td:nth-child(1) {
+    table.main-standings td:nth-child(1) {
         text-align: center;
         width: 10%;
     }
 
-    table#standings td:nth-child(1)::before {
+    table.main-standings td:nth-child(1)::before {
         content: "Place";
     }
 
-    table#standings td:nth-child(2) {
+    table.main-standings td:nth-child(2) {
+        display: none;
+    }
+
+    table.main-standings td:nth-child(3) {
         width: 68%;
     }
 
-    table#standings td:nth-child(2)::before {
+    table.main-standings td:nth-child(3)::before {
         content: "Name";
     }
 
-    table#standings td:nth-child(3) {
+    table.main-standings td:nth-child(4) {
     }
 
-    table#standings td:nth-child(3)::before {
+    table.main-standings td:nth-child(4)::before {
         content: "W";
     }
 
-    table#standings td:nth-child(4) {
+    table.main-standings td:nth-child(5) {
         display: none;
     }
 
-    table#standings td:nth-child(5)::before {
+    table.main-standings td:nth-child(6)::before {
         content: "L";
     }
 
-    table#standings td:nth-child(6) {
+    table.main-standings td:nth-child(7) {
         display: none;
     }
 
-    table#standings td:nth-child(7),
-    table#standings td:nth-child(8)
+    table.main-standings td:nth-child(8),
+    table.main-standings td:nth-child(9)
     {
         width: 15%;
         height: 52px;
     }
 
-    table#standings td:nth-child(6)::before {
+    table.main-standings td:nth-child(7)::before {
         content: "Drop";
     }
 
-    table#standings td:nth-child(7)::before {
+    table.main-standings td:nth-child(8)::before {
         content: "Res";
     }
 
-    table#standings td:nth-child(8)::before {
+    table.main-standings td:nth-child(9)::before {
         content: "OpRes";
     }
 
-    table#standings td:nth-child(9)::before {
+    table.main-standings td:nth-child(10)::before {
         content: "Team";
     }
 
@@ -1052,71 +1070,6 @@ ul#pairing-round-select li a {
         display: none;
     }
 
-    table.usage-table td::before {
-        display: block;
-        font-size: .8em;
-        color: #505050;
-    }
-
-    table.usage-table td:nth-child(1),
-    table.usage-table td:nth-child(3),
-    table.usage-table td:nth-child(4),
-    table.usage-table td:nth-child(5)
-    {
-        text-align: center;
-    }
-
-    table.usage-table td:nth-child(1) {
-        width: 10%;
-    }
-
-    table.usage-table td:nth-child(1)::before {
-        content: "Place";
-    }
-
-    table.usage-table td:nth-child(2) {
-        width: 66%;
-    }
-
-    table.usage-table td:nth-child(2)::before {
-        content: "Name";
-    }
-
-    table.usage-table td:nth-child(3)::before {
-        content: "Record";
-    }
-
-    table.usage-table td:nth-child(4),
-    table.usage-table td:nth-child(5)
-    {
-        width: 15%;
-        height: 52px;
-    }
-
-    table.usage-table td:nth-child(4)::before {
-        content: "Res";
-    }
-
-    table.usage-table td:nth-child(5)::before {
-        content: "OpRes";
-    }
-
-    table.usage-table td:nth-child(6)::before {
-        content: "Team";
-    }
-
-    table.usage-table thead {
-        display: none;
-    }
-
-    table.usage-table tr {
-        display: block;
-    }
-
-    table.usage-table td {
-        display: inline-block;
-    }
-
     .config-container {
         display: block;
         width: 100%;
@@ -1142,6 +1095,11 @@ ul#pairing-round-select li a {
 
     h2 em, h3 em {
         color: #A0A0A0;
+    }
+
+    input {
+        background-color: #606060;
+        color: #E8E8E8;
     }
 
     header#header h1 {
@@ -1202,11 +1160,15 @@ ul#pairing-round-select li a {
         background: #d94343;
     }
 
+    .favicon {
+        color: #A0A0A0;
+    }
+
     #player-info td {
         background: #505050;
     }
 
-    .eventslist .reg-location {
+    .eventslist .reg-location, .eventslist .reg-region {
         color: #E0E0E0;
     }
 
@@ -1249,7 +1211,7 @@ ul#pairing-round-select li a {
 
     /* mobile dark mode */
     @media (max-width: 30.5em) {
-        table#standings td::before {
+        table.main-standings td::before {
             color: #D0D0D0;
         }
 
@@ -1258,10 +1220,6 @@ ul#pairing-round-select li a {
         }
 
         table#opponents td::before {
-            color: #D0D0D0;
-        }
-
-        table.usage-table td::before {
             color: #D0D0D0;
         }
 

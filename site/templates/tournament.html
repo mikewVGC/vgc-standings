@@ -49,8 +49,42 @@ __TEMPLATE_FOOTER__
         <li><a :href="`/${season}/${eventInfo.code}/pairings`">Pairings</a></li>
     </ul>
 
+    <table id="favorites" class="main-standings" v-if="validFavs.length" v-cloak>
+        <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th>Favorites</th>
+                <th colspan="3">Record</th>
+                <th>Drop</th>
+                <th>Res</th>
+                <th>OpRes</th>
+                <th>Team</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr
+                is="vue:standings-row"
+                v-for="pcode in validFavs"
+                :key="pcode"
+                :pcode="pcode"
+                :standings="standings"
+                :event-info="eventInfo"
+                :season="season"
+                :show-drop="true"
+                :always-show-res="false"
+            ></tr>
+        </tbody>
+    </table>
+
     <div class="filter-area" v-if="standings">
-        <input type="text" placeholder="Search by name" id="playerStandingsSearch" @input="searchPlayerStandings" />
+        <input
+            type="text"
+            placeholder="Search by name"
+            id="playerStandingsSearch"
+            @input="searchPlayerStandings"
+            :value="playerStandingsSearch"
+        />
         <div
             class="searchFunc clearSearch"
             v-if="playerStandingsSearch.length"
@@ -58,9 +92,10 @@ __TEMPLATE_FOOTER__
         >&times;</div>
     </div>
 
-    <table id="standings">
+    <table id="standings" class="main-standings">
         <thead>
             <tr>
+                <th></th>
                 <th></th>
                 <th>Name</th>
                 <th colspan="3">Record</th>
@@ -71,28 +106,52 @@ __TEMPLATE_FOOTER__
             </tr>
         </thead>
         <tbody>
-            <tr v-for="pcode in filteredStandings">
-                <td>{{ standings[pcode].place }}</td>
-                <td><a :href="`/${season}/${eventInfo.code}/player/${standings[pcode].code}`">{{ standings[pcode].name }}</a></td>
-                <td>{{ standings[pcode].record.w }}</td>
-                <td>-</td>
-                <td>{{ standings[pcode].record.l }}</td>
-                <td>{{ standings[pcode].drop != -1 ? standings[pcode].drop : '&nbsp;' }}</td>
-                <td>{{ standings[pcode].cut ? '&nbsp;' : getPct(standings[pcode].res.opp, 5) }}</td>
-                <td>{{ standings[pcode].cut ? '&nbsp;' : getPct(standings[pcode].res.oppopp, 5) }}</td>
-                <td class="team-container">
-                    <a :href="`/${season}/${eventInfo.code}/player/${standings[pcode].code}`">
-                        <div
-                            v-for="mon in standings[pcode].team"
-                            class="monicon"
-                            :style="{ backgroundPosition: getSpritePos(mon.altcode || mon.code) }"
-                            :title="mon.name"
-                        >{{ mon.name }}</div>
-                    </a>
-                </td>
-            </tr>
+            <tr
+                is="vue:standings-row"
+                v-for="pcode in filteredStandings"
+                :key="pcode"
+                :pcode="pcode"
+                :standings="standings"
+                :event-info="eventInfo"
+                :season="season"
+                :show-drop="true"
+                :always-show-res="false"
+            ></tr>
         </tbody>
     </table>
+</template>
+
+<template id="standings-row-template">
+    <tr>
+        <td>{{ standings[pcode].place }}</td>
+        <td>
+            <div
+                @click="toggleFav(pcode)"
+                :class="[ isFav(pcode) ? 'faved' : 'favicon' ]"
+                v-if="1"
+            >
+                <span  title="Remove Favorite" v-if="isFav(pcode)">&#9733;</span>
+                <span title="Add Favorite" v-else>&#9734;</span>
+            </div>
+        </td>
+        <td><a :href="`/${season}/${eventInfo.code}/player/${standings[pcode].code}`">{{ standings[pcode].name }}</a></td>
+        <td>{{ standings[pcode].record.w }}</td>
+        <td>-</td>
+        <td>{{ standings[pcode].record.l }}</td>
+        <td>{{ showDrop && standings[pcode].drop != -1 ? standings[pcode].drop : '&nbsp;' }}</td>
+        <td>{{ standings[pcode].cut && !alwaysShowRes ? '&nbsp;' : getPct(standings[pcode].res.opp, 5) }}</td>
+        <td>{{ standings[pcode].cut && !alwaysShowRes ? '&nbsp;' : getPct(standings[pcode].res.oppopp, 5) }}</td>
+        <td class="team-container">
+            <a :href="`/${season}/${eventInfo.code}/player/${standings[pcode].code}`">
+                <div
+                    v-for="mon in standings[pcode].team"
+                    class="monicon"
+                    :style="{ backgroundPosition: getSpritePos(mon.altcode || mon.code) }"
+                    :title="mon.name"
+                >{{ mon.name }}</div>
+            </a>
+        </td>
+    </tr>
 </template>
 
 <template id="player-template">
@@ -184,6 +243,7 @@ __TEMPLATE_FOOTER__
                 <td>{{ opp.rname }}</td>
                 <td>
                     <template v-if="opp.bye">Bye</template>
+                    <template v-else-if="opp.late">Late</template>
                     <a v-else :href="`/${season}/${eventInfo.code}/player/${opp.opp}`">{{ opponents[opp.opp].name }}</a>
                 </td>
                 <td :class="[ opp.bye ? '' : opp.res ]">{{ opp.bye ? "" : opp.res }}</td>
@@ -325,38 +385,31 @@ __TEMPLATE_FOOTER__
 
     <h2>Players from {{ country }} &mdash; {{ eventInfo.name }}</h2>
 
-    <table id="country-players" class="usage-table">
+    <table id="country-players" class="main-standings">
         <thead>
             <tr>
                 <th></th>
+                <th></th>
                 <th>Name</th>
-                <th>Record</th>
-                <th>Res.</th>
-                <th>Op Res.</th>
+                <th colspan="3">Record</th>
+                <th></th>
+                <th>Res</th>
+                <th>OpRes</th>
                 <th>Team</th>
             </tr>
         </thead>
         <tbody>
-            <tr v-for="pcode in countryStats.players">
-                <td>{{ standings[pcode].place }}</td>
-                <td><a :href="`/${season}/${eventInfo.code}/player/${pcode}`">{{ standings[pcode].name }}</a></td>
-                <td>({{ standings[pcode].record.w }} - {{ standings[pcode].record.l }})</td>
-                <td>{{ getPct(standings[pcode].res.opp) }}</td>
-                <td>{{ getPct(standings[pcode].res.oppopp) }}</td>
-                <td class="team-container">
-                    <div v-if="standings[pcode].team">
-                        <a :href="`/${season}/${eventInfo.code}/player/${pcode}`">
-                            <div
-                                v-for="tmon in standings[pcode].team"
-                                class="monicon"
-                                :style="{ backgroundPosition: getSpritePos(tmon.altcode || tmon.code) }"
-                                :title="tmon.name"
-                            >{{ tmon.name }}</div>
-                        </a>
-                    </div>
-                    <div v-else class="monicon monicon-ph"></div>
-                </td>
-            </tr>
+            <tr
+                is="vue:standings-row"
+                v-for="pcode in countryStats.players"
+                :key="pcode"
+                :pcode="pcode"
+                :standings="standings"
+                :event-info="eventInfo"
+                :season="season"
+                :show-drop="false"
+                :always-show-res="true"
+            ></tr>
         </tbody>
     </table>
 
@@ -373,7 +426,13 @@ __TEMPLATE_FOOTER__
     </ul>
 
     <div class="filter-area" v-if="usage.length">
-        <input type="text" placeholder="Search by name" id="monUsageNameSearch" @input="searchMonUsage" />
+        <input
+            type="text"
+            placeholder="Search by name"
+            id="monUsageNameSearch"
+            @input="searchMonUsage"
+            :value="monUsageSearch"
+        />
         <div
             class="searchFunc clearSearch"
             v-if="monUsageSearch.length"
@@ -450,6 +509,23 @@ __TEMPLATE_FOOTER__
         </table>
     </div>
 
+</template>
+
+<template id="usage-list-icon-template">
+    <tr @click="toggleItemFilter(itemInfo.code)">
+        <td><input type="checkbox" :checked="hasItemFilter(itemInfo.code)" /></td>
+        <td>
+            <div
+                v-if="itemInfo.code != 'noitem'"
+                class="itemicon"
+                :style="{ backgroundPosition: getSpritePos(itemInfo.code) }"
+                :title="itemInfo.name"
+            >{{ itemInfo.name }}</div>
+        </td>
+        <td>{{ itemInfo.name }}</td>
+        <td>{{ itemInfo.count }}</td>
+        <td><span class="pct">({{ getPct(itemInfo.count / mon.counts.total) }})</span></td>
+    </tr>
 </template>
 
 <template id="mon-template">
@@ -594,40 +670,31 @@ __TEMPLATE_FOOTER__
 
     <h3>All {{ mon.name }} Teams <em v-if="isFiltered()" v-cloak>(Results are being filtered)</em></h3>
 
-    <table id="mon-users" class="usage-table">
+    <table id="mon-users" class="main-standings">
         <thead>
             <tr class="info-header">
                 <th title="Placement">Pl.</th>
-                <th>Player</th>
-                <th>Record</th>
+                <th></th>
+                <th>Name</th>
+                <th colspan="3">Record</th>
+                <th></th>
                 <th>Res</th>
-                <th>Op Res</th>
+                <th>OpRes</th>
                 <th>Team</th>
             </tr>
         </thead>
         <tbody>
-            <tr v-for="pcode in filteredPlayers">
-                <td>{{ standings[pcode].place }}</td>
-                <td>
-                    <a :href="`/${season}/${eventInfo.code}/player/${pcode}`">{{ standings[pcode].name }}</a>
-                </td>
-                <td>({{ standings[pcode].record.w }} - {{ standings[pcode].record.l }})</td>
-                <td>{{ getPct(standings[pcode].res.opp) }}</td>
-                <td>{{ getPct(standings[pcode].res.oppopp) }}</td>
-                <td class="team-container">
-                    <div v-if="standings[pcode].team">
-                        <a :href="`/${season}/${eventInfo.code}/player/${pcode}`">
-                            <div
-                                v-for="tmon in standings[pcode].team"
-                                class="monicon"
-                                :style="{ backgroundPosition: getSpritePos(tmon.altcode || tmon.code) }"
-                                :title="tmon.name"
-                            >{{ tmon.name }}</div>
-                        </a>
-                    </div>
-                    <div v-else class="monicon monicon-ph"></div>
-                </td>
-            </tr>
+            <tr
+                is="vue:standings-row"
+                v-for="pcode in filteredPlayers"
+                :key="pcode"
+                :pcode="pcode"
+                :standings="standings"
+                :event-info="eventInfo"
+                :season="season"
+                :show-drop="false"
+                :always-show-res="true"
+            ></tr>
             <tr v-if="!filteredPlayers.length" v-cloak>
                 <td colspan="6">No matching results.</td>
             </tr>
