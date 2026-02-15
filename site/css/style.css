@@ -21,7 +21,7 @@ header#header {
 header#header a {
     display: block;
     height: 100%;
-    width: 100%;
+    width: 90%;
     max-width: 375px;
 }
 
@@ -648,8 +648,15 @@ ul#pairing-round-select li a {
     display: none;
 }
 
+/* this is like 800px display? ... works for sideways phones */
+@media (max-width: 50.5em) {
+    .team-container {
+        width: 110px;
+    }
+}
+
 /* mobile */
-@media (max-width: 30.5em) {
+@media (max-width: 40.5em) {
     h1, h2 {
         margin-top: .1em;
     }
@@ -773,6 +780,10 @@ ul#pairing-round-select li a {
     ul#standings-sections li:first-child {
         padding-left: 0;
         display: block;
+    }
+
+    .team-container {
+        width: 220px;
     }
 
     table.main-standings thead {
