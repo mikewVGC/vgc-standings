@@ -120,6 +120,8 @@ In the root you need to create a simple `config.json` file with the following it
 
 `googleTag` is optional (leave it blank if you don't want to use it) and contains your Google Analytics tag, but only the part *after* the `G-`. `monImgBase` is if you want to load the large Pokemon images from a CDN or object storage and should contain the full root URL of their location. You can leave this blank and it will assume the images are in `public/static/img/art`.
 
+There's an optional field, `liveRefresh`, which can be set to the live event refresh rate. Basically this is how often, in seconds, live events will check if there have been changes made to the standings (via a file created by Regieleki). If you leave this out live mode will refresh every four minutes. If you try to set it lower than 30 it will be set back to 30.
+
 Beyond that, make sure to use the `--prod` flag when you run Porygon.
 
 ## Regieleki -- Live Updates
@@ -161,9 +163,23 @@ This script is super simple and really non-robust. You can only run it one way:
 php scripts/regieleki.php
 ```
 
-I recommend using the values above as they seem pretty stable when I tried them. Note that this script will download files from Pokedata, so be considerate! Using `tournament_start_time` is not required but I really recommend if a regional is starting during off hours for you so you're not trying to download data while nothing is happening.
+I recommend using the values above as they seem pretty stable when I tried them. Note that this script will download files from Pokedata (or any site), so be considerate! Using `tournament_start_time` is not required but I really recommend if a regional is starting during off hours for you so you're not trying to download data while nothing is happening.
+
+Every time it downloads a valid JSON file it will create a hash of the file and write that to `public/data/{year}/updates.json` with the following structure:
+
+```json
+{
+    "{tour-code}": "{tour-hash}"
+}
+```
+
+When an event is in progress, the front-end will periodically hit this endpoint and see if the hash has changed from the last reload. If it does it will reload the data from the standings endpoint.
 
 But, again, nobody should run this thing in production.
+
+## Mimikyu -- Test Tournament
+
+The instructions on how this works are in the comment block at the top of the file. There's no reason to run this unless you're testing out live updates.
 
 ## License
 

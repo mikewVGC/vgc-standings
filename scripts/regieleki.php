@@ -30,6 +30,14 @@ elog("Regieleki starting!");
 
 $data_dir = __DIR__ . "/../data/majors/{$current_season}";
 
+$updates_file = __DIR__ . "/../public/data/{$current_season}/updates.json";
+if (!file_exists($updates_file)) {
+    elog("Updates file not found, creating empty one");
+    file_put_contents($updates_file, "{}");
+}
+
+$updates = [];
+
 elog("Got " . count($tournaments_to_check) . " tours to check");
 
 $tournament_settings = [];
@@ -140,15 +148,30 @@ while (1) {
 
         elog_cont("Done!");
 
-        if (file_put_contents($process['local'], $remote_data) === false){
-            elog_cont("[{$tour}] Unable to write to '{$local_file}', skipping");
-            continue;
+        $tour_hash = sha1($remote_data);
+
+        if (!isset($updates[$tour])) {
+            $updates[$tour] = "";
         }
 
-        $process_cmd[] = $process['process'];
+        if ($updates[$tour] !== $tour_hash) {
+            if (file_put_contents($process['local'], $remote_data) === false){
+                elog_cont("[{$tour}] Unable to write to '{$local_file}', skipping");
+                continue;
+            }
+            $updates[$tour] = $tour_hash;
+
+            $process_cmd[] = $process['process'];
+        } else {
+            elog("[{$tour}] No changes to tour data, moving on");
+        }
 
         // small sleep between downloads
         sleep(mt_rand(1, 3));
+    }
+
+    if (file_put_contents($updates_file, json_encode($updates)) === false) {
+        elog("Unable to write to '{$updates_file}'");
     }
 
     if (!empty($process_cmd)) {
@@ -163,6 +186,9 @@ while (1) {
     elog("Sleeping for {$sleep_time} seconds...");
     sleep($sleep_time);
 }
+
+elog("Resetting updates file");
+file_put_contents($updates_file, "{}");
 
 elog("All done! Thanks for running Regieleki!");
 exit;

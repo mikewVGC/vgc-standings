@@ -13,14 +13,14 @@ Format to add to 2026.json:
         "region": "Europe",
         "country": "Germany",
         "flag": "de",
-        "start": "2026-02-08",
-        "end": "2026-02-14",
+        "start": "2026-01-01",
+        "end": "2026-12-31",
         "game": "Scarlet & Violet",
         "format": "Regulation H"
     },
 
-Make sure the current date falls within start/end dates. The other fields don't
-matter too much.
+Make sure the current date falls within start/end dates (or just use the full year
+like above). The other fields don't matter too much.
 
 Next:
 
@@ -41,6 +41,7 @@ have to run the rebuild script each time to see the changes loaded.
 """
 
 import argparse
+import hashlib
 import json
 import random
 
@@ -205,6 +206,13 @@ def main():
 
         with open(f"data/majors/{year}/test-city-standings.json", 'w') as file:
             file.write(json.dumps(players, indent=4))
+
+        sha1_hash = hashlib.sha1()
+        sha1_hash.update(json.dumps(players).encode("utf-8"))
+        update_hash = sha1_hash.hexdigest()
+
+        with open(f"public/data/{year}/updates.json", 'w') as file:
+            file.write(json.dumps({ "test-city": update_hash }, indent=4))
 
         print('[simulating] Press enter when ready for next round', end="")
         input()

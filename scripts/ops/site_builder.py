@@ -79,6 +79,11 @@ class SiteBuilder():
                 countrydata = countryfile.read()
                 tour = tour.replace('__COUNTRY_CODE_DATA__', countrydata)
 
+            if 'liveRefresh' in self.config:
+                tour = tour.replace('__LIVE_UPDATE_FREQUENCY__', str(self.config['liveRefresh']))
+            else:
+                tour = tour.replace('__LIVE_UPDATE_FREQUENCY__', '""')
+
             tour = tour.replace('__MON_IMG_BASE__', img_base)
 
             tour = self._add_header_footer(tour)

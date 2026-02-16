@@ -43,7 +43,8 @@ export default {
 
             nav: [],
 
-            lastModified: '',
+            latestHash: '',
+            liveUpdateFrequency: 240,
         }
     },
     computed: {
@@ -300,6 +301,10 @@ export default {
             this.currentRoute = chips.slice(3).join('/');
 
             this.setMajor(chips[1], chips[2]);
+
+            if (this.liveUpdateFrequency < 30) {
+                this.liveUpdateFrequency = 30;
+            }
         },
 
         setNav(navData) {
@@ -371,7 +376,9 @@ export default {
                     // this should probably be done via websockets, but
                     // this site is all static files, so it's just
                     // going to be the old dumb polling strategy
-                    this.checkForUpdates();
+                    setTimeout(() => {
+                        this.checkForUpdates();
+                    }, this.liveUpdateFrequency * 1000);
                 }
 
                 cb();
@@ -404,22 +411,32 @@ export default {
                 return;
             }
 
-            fetch(`/api/v1/${this.season}/${this.major}`, {
-                method: "HEAD",
+            fetch(`/api/v1/${this.season}/updates`, {
+                method: "GET",
                 headers: { "Content-type": "application/json" },
             }).then((r) => {
-                // simple last modified comparison should be fine for our purposes
-                const lastModified = r.headers.get('Last-Modified');
-                if (this.lastModified > 0 && lastModified != this.lastModified) {
+                return r.json();
+            }).then((d) => {
+                const latestHash = d[this.eventInfo.code] || false;
+                if (this.latestHash.length && latestHash && latestHash != this.latestHash) {
                     this.getRegional(() => {
                         // don't need to fetch usage during an event, probably
                     });
+                } else {
+                    // the backend only updates every ~7 minutes
+                    setTimeout(() => {
+                        this.checkForUpdates();
+                    }, this.liveUpdateFrequency * 1000);
                 }
-                this.lastModified = lastModified;
 
-                // every 4 minutes -- the backend only updates every ~7 minutes
-                setTimeout(this.checkForUpdates, 240 * 1000);
+                this.latestHash = latestHash;
             });
+        },
+
+        setLiveUpdateFrequency(frequency) {
+            if (frequency >= 30) {
+                this.liveUpdateFrequency = frequency;
+            }
         },
 
         getPairings(round) {
