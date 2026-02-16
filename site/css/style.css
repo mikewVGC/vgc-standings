@@ -521,12 +521,13 @@ ul#standings-sections li:first-child {
     overflow: hidden;
 }
 
-#item-info td:nth-child(4),
-#tera-info td:nth-child(4),
-#move-info td:nth-child(3),
-#ability-info td:nth-child(3)
-{
+.config-container td:nth-child(4) {
     text-align: right;
+}
+
+#move-info td:nth-child(2),
+#ability-info  td:nth-child(2) {
+    padding: 0;
 }
 
 #pairings td {

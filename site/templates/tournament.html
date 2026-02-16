@@ -512,19 +512,19 @@ __TEMPLATE_FOOTER__
 </template>
 
 <template id="usage-list-icon-template">
-    <tr @click="toggleItemFilter(itemInfo.code)">
-        <td><input type="checkbox" :checked="hasItemFilter(itemInfo.code)" /></td>
+    <tr @click="toggleFilter(type, code)">
+        <td><input type="checkbox" :checked="hasFilter(type, code)" /></td>
         <td>
             <div
-                v-if="itemInfo.code != 'noitem'"
-                class="itemicon"
-                :style="{ backgroundPosition: getSpritePos(itemInfo.code) }"
-                :title="itemInfo.name"
-            >{{ itemInfo.name }}</div>
+                v-if="code != 'noitem' && iconclass.length"
+                :class="iconclass"
+                :style="{ backgroundPosition: type != 'teras' ? getSpritePos(code) : 'center center' }"
+                :title="name"
+            >{{ name }}</div>
         </td>
-        <td>{{ itemInfo.name }}</td>
-        <td>{{ itemInfo.count }}</td>
-        <td><span class="pct">({{ getPct(itemInfo.count / mon.counts.total) }})</span></td>
+        <td>{{ name }}</td>
+        <td>{{ count }}</td>
+        <td><span class="pct">({{ getPct(count / total) }})</span></td>
     </tr>
 </template>
 
@@ -574,20 +574,16 @@ __TEMPLATE_FOOTER__
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="itemInfo in mon.items" @click="toggleItemFilter(itemInfo.code)">
-                        <td><input type="checkbox" :checked="hasItemFilter(itemInfo.code)" /></td>
-                        <td>
-                            <div
-                                v-if="itemInfo.code != 'noitem'"
-                                class="itemicon"
-                                :style="{ backgroundPosition: getSpritePos(itemInfo.code) }"
-                                :title="itemInfo.name"
-                            >{{ itemInfo.name }}</div>
-                        </td>
-                        <td>{{ itemInfo.name }}</td>
-                        <td>{{ itemInfo.count }}</td>
-                        <td><span class="pct">({{ getPct(itemInfo.count / mon.counts.total) }})</span></td>
-                    </tr>
+                    <tr
+                        is="vue:usage-list-icon"
+                        v-for="itemInfo in mon.items"
+                        :code="itemInfo.code"
+                        :name="itemInfo.name"
+                        :count="itemInfo.count"
+                        :total="mon.counts.total"
+                        iconclass="itemicon"
+                        type="items"
+                    ></tr>
                     <tr v-if="mon.items.length < 3" v-for="n in 3 - mon.items.length"><td colspan="5"></td></tr>
                 </tbody>
             </table>
@@ -598,19 +594,23 @@ __TEMPLATE_FOOTER__
             <table id="move-info">
                 <thead>
                     <tr>
-                        <th></th>
+                        <th colspan="2"></th>
                         <th>Move Name</th>
                         <th colspan="2">Total</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="moveInfo in mon.moves" @click="toggleMoveFilter(moveInfo.name)">
-                        <td><input type="checkbox" :checked="hasMoveFilter(moveInfo.name)" /></td>
-                        <td>{{ moveInfo.name }}</td>
-                        <td>{{ moveInfo.count }}</td>
-                        <td><span class="pct">({{ getPct(moveInfo.count / mon.counts.total) }})</span></td>
-                    </tr>
-                    <tr v-if="mon.moves.length < 3" v-for="n in 3 - mon.moves.length"><td colspan="4"></td></tr>
+                    <tr
+                        is="vue:usage-list-icon"
+                        v-for="moveInfo in mon.moves"
+                        :code="moveInfo.name"
+                        :name="moveInfo.name"
+                        :count="moveInfo.count"
+                        :total="mon.counts.total"
+                        iconclass=""
+                        type="moves"
+                    ></tr>
+                    <tr v-if="mon.moves.length < 3" v-for="n in 3 - mon.moves.length"><td colspan="5"></td></tr>
                 </tbody>
             </table>
 
@@ -629,15 +629,16 @@ __TEMPLATE_FOOTER__
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="teraInfo in mon.teras" @click="toggleTeraFilter(teraInfo.name)">
-                        <td><input type="checkbox" :checked="hasTeraFilter(teraInfo.name)" /></td>
-                        <td>
-                            <div :class="`tera-icon tera-${teraInfo.name.toLowerCase()}`">Tera {{ teraInfo.name }}</div>
-                        </td>
-                        <td>{{ teraInfo.name }}</td>
-                        <td>{{ teraInfo.count }}</td>
-                        <td><span class="pct">({{ getPct(teraInfo.count / mon.counts.total) }})</span></td>
-                    </tr>
+                    <tr
+                        is="vue:usage-list-icon"
+                        v-for="teraInfo in mon.teras"
+                        :code="teraInfo.name"
+                        :name="teraInfo.name"
+                        :count="teraInfo.count"
+                        :total="mon.counts.total"
+                        :iconclass="`tera-icon tera-${teraInfo.name.toLowerCase()}`"
+                        type="teras"
+                    ></tr>
                     <tr v-if="mon.teras.length < 3" v-for="n in 3 - mon.teras.length"><td colspan="5"></td></tr>
                 </tbody>
             </table>
@@ -648,19 +649,23 @@ __TEMPLATE_FOOTER__
             <table id="ability-info">
                 <thead>
                     <tr>
-                        <th></th>
+                        <th colspan="2"></th>
                         <th>Ability</th>
                         <th colspan="2">Total</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="abilityInfo in mon.abilities" @click="toggleAbilityFilter(abilityInfo.name)">
-                        <td><input type="checkbox" :checked="hasAbilityFilter(abilityInfo.name)" /></td>
-                        <td>{{ abilityInfo.name }}</td>
-                        <td>{{ abilityInfo.count }}</td>
-                        <td><span class="pct">({{ getPct(abilityInfo.count / mon.counts.total) }})</span></td>
-                    </tr>
-                    <tr v-for="n in 3 - mon.abilities.length"><td colspan="4"></td></tr>
+                    <tr
+                        is="vue:usage-list-icon"
+                        v-for="abilityInfo in mon.abilities"
+                        :code="abilityInfo.name"
+                        :name="abilityInfo.name"
+                        :count="abilityInfo.count"
+                        :total="mon.counts.total"
+                        iconclass=""
+                        type="abilities"
+                    ></tr>
+                    <tr v-for="n in 3 - mon.abilities.length"><td colspan="5"></td></tr>
                 </tbody>
             </table>
 

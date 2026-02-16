@@ -1044,6 +1044,24 @@ export default {
                         },
                     },
                 },
+                'usage-list-icon': {
+                    template: '#usage-list-icon-template',
+                    props: [ 'code', 'name', 'count', 'type', 'total', 'type', 'iconclass' ],
+                    methods: {
+                        getSpritePos(name) {
+                            return this.$parent.getSpritePos(name);
+                        },
+                        getPct(dec, precision) {
+                            return this.$parent.getPct(dec, precision)
+                        },
+                        hasFilter(type, code) {
+                            return this.$parent.hasFilter(type, code);
+                        },
+                        toggleFilter(type, code) {
+                            return this.$parent.toggleFilter(type, code);
+                        },
+                    },
+                },
             },
             methods: {
                 getPct(dec, precision) {
@@ -1052,29 +1070,11 @@ export default {
                 getSpritePos(name) {
                     return this.$parent.getSpritePos(name);
                 },
-                toggleItemFilter(itemCode) {
-                    return this.$parent.toggleFilter('items', itemCode, this.mon);
+                hasFilter(type, code) {
+                    return this.$parent.hasFilter(type, code, this.mon);
                 },
-                hasItemFilter(itemCode) {
-                    return this.$parent.hasFilter('items', itemCode);
-                },
-                toggleTeraFilter(teraName) {
-                    return this.$parent.toggleFilter('teras', teraName, this.mon);
-                },
-                hasTeraFilter(teraName) {
-                    return this.$parent.hasFilter('teras', teraName);
-                },
-                toggleMoveFilter(moveName) {
-                    return this.$parent.toggleFilter('moves', moveName, this.mon);
-                },
-                hasMoveFilter(moveName) {
-                    return this.$parent.hasFilter('moves', moveName);
-                },
-                toggleAbilityFilter(abilityName) {
-                    return this.$parent.toggleFilter('abilities', abilityName, this.mon);
-                },
-                hasAbilityFilter(abilityName) {
-                    return this.$parent.hasFilter('abilities', abilityName);
+                toggleFilter(type, code) {
+                    return this.$parent.toggleFilter(type, code, this.mon);
                 },
                 isFiltered() {
                     return this.$parent.isFiltered();
