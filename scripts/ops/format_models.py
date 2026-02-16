@@ -39,5 +39,6 @@ class Player():
     cut: bool
     p2: bool
     drop: int
+    points: int
     team: list[TeamMember] | None = None
     rounds: list[Round] | None = None

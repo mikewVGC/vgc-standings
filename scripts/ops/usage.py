@@ -22,6 +22,7 @@ def compile_usage(year:int, event_code:str) -> None:
         return
 
     standings = data['standings']
+    event_info = data['event']
 
     num_players = len(standings.keys())
 
@@ -51,6 +52,7 @@ def compile_usage(year:int, event_code:str) -> None:
                     },
                     "w": 0,
                     "l": 0,
+                    "points": 0,
                     "players": [],
                     "items": {},
                     "abilities": {},
@@ -67,6 +69,9 @@ def compile_usage(year:int, event_code:str) -> None:
                     'count': 0,
                 }
             mon_stats[code]['items'][item_code]['count'] += 1
+
+            if event_info['status'] == "complete" and 'points' in pdata:
+                mon_stats[code]['points'] += pdata['points']
 
             ability = mon['ability'] if mon['ability'] else "Unknown"
             if ability not in mon_stats[code]['abilities']:

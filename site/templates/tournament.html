@@ -164,6 +164,7 @@ __TEMPLATE_FOOTER__
                 <th></th>
                 <th>Placement</th>
                 <th>Record</th>
+                <th>Points</th>
                 <th>Drop</th>
                 <th>Opp Win %</th>
                 <th>Opp Opp Win %</th>
@@ -181,6 +182,7 @@ __TEMPLATE_FOOTER__
                 </td>
                 <td>{{ player.place }}</td>
                 <td>{{ player.record.w }} - {{ player.record.l }}</td>
+                <td>{{ player.points }}</th>
                 <td>{{ player.drop != -1 ? player.drop : '-' }}</td>
                 <td>{{ getPct(player.res.opp) }}</td>
                 <td>{{ getPct(player.res.oppopp) }}</td>
@@ -538,17 +540,19 @@ __TEMPLATE_FOOTER__
                 <tr>
                     <th></th>
                     <th title="Total used">Total</th>
+                    <th title="Total points earned this event">Total<br />Points</th>
                     <th title="Number that earned points">Points</th>
                     <th title="Number that made Phase 2">Phase 2</th>
-                    <th title="Phase 2 Conversion Rate">Ph2 Cnv</th>
+                    <th title="Phase 2 Conversion Rate">Phase 2<br />Conv.</th>
                     <th title="Number that made Top Cut">Cut</th>
-                    <th title="Top Cut Conversion Rate">Cut Cnv</th>
+                    <th title="Top Cut Conversion Rate">Cut Conv.</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td></td>
                     <td>{{ mon.counts.total }} <span class="pct">({{ getPct(mon.counts.total / eventInfo.playerCount, 4) }})</span></td>
+                    <td>{{ mon.points.toLocaleString() }}</td>
                     <td>{{ mon.counts.points }} <span class="pct">({{ getPct(mon.counts.points / eventInfo.playerCount, 4) }})</span></td>
                     <td>{{ mon.counts.phase2 }} <span class="pct">({{ getPct(mon.counts.phase2 / eventInfo.phase2Count, 4) }})</span></td>
                     <td>{{ getPct(mon.counts.phase2Conversion, 5) }}</td>

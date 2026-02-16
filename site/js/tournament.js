@@ -623,7 +623,7 @@ export default {
             if (precision == undefined) {
                 precision = 5;
             }
-            return (dec * 100).toPrecision(dec >= 1 ? precision : dec < .1 ? precision - 2 : precision - 1) + "%";
+            return (dec * 100).toPrecision(dec >= 1 ? precision : dec < .1 ? precision - 2 : precision - 1).toLocaleString() + "%";
         },
 
         setCountryCodes(data) {

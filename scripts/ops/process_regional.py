@@ -21,6 +21,7 @@ from lib.tournament import (
     calculate_res,
     calculate_oppopp,
     determine_event_status,
+    get_points_earned,
 )
 
 DT_POKEDATA = 'pokedata'
@@ -136,7 +137,7 @@ def process_regional(year:int, code:str, event_info:dict) -> dict:
             player.record['w'],
             player.res['self'],
             player.res['opp'],
-            player.res['oppopp']
+            player.res['oppopp'],
         ), reverse=True)
 
         players = {}
@@ -151,6 +152,8 @@ def process_regional(year:int, code:str, event_info:dict) -> dict:
         players[player].place = pidx + 1
         players_ordered[player] = players[player]
 
+    event_is_ic = True if event_info['code'] in ('ocic', 'laic', 'euic', 'naic') else False
+
     event_info['processed'] = True
     event_info['dates'] = make_nice_date_str(event_info['start'], event_info['end'])
     event_info['playerCount'] = len(players_ordered)
@@ -158,6 +161,10 @@ def process_regional(year:int, code:str, event_info:dict) -> dict:
     event_info['status'] = determine_event_status(event_info)
     if event_info['status'] == 'complete':
         event_info['winner'] = next(iter(players_ordered.values())).name
+
+        # one more loop for points!
+        for player in players_ordered.values():
+            player.points = get_points_earned(year, len(players_ordered), player.place, event_is_ic)
 
     with open(f"public/data/{year}/{code}.json", 'w') as file:
         file.write(json.dumps({

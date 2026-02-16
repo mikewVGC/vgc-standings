@@ -144,6 +144,7 @@ def process_pokedata_event(data:list, tour_format:list, official_order:list) -> 
             cut=True if len(rounds) > tour_format[0] + tour_format[1] else False,
             p2=made_phase_two,
             drop=player['drop'],
+            points=0,
             team=team,
             rounds=rounds,
         )

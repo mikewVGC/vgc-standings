@@ -461,6 +461,10 @@ ul#standings-sections li:first-child {
     padding-left: .25em;
 }
 
+#usage-info thead th {
+    vertical-align: bottom;
+}
+
 .mon-config-container {
     background-repeat: no-repeat;
     background-position: -10px 40px;

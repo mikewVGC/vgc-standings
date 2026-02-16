@@ -143,6 +143,7 @@ def process_playlatamscraper_event(
             cut=True if len(player_pairings) > tour_format[0] + tour_format[1] else False,
             p2=made_phase_two,
             drop=-1,
+            points=0,
             team=team,
             rounds=player_pairings,
         )

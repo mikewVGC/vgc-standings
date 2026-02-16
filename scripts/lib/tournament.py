@@ -146,6 +146,85 @@ def get_points_threshold(season:int, competitors:int) -> int | None:
 
     return None
 
+"""
+Get the champ points a player earned based on # of competitors and placement
+"""
+def get_points_earned(season:int, competitors:int, place:int, ic:bool = False) -> int | None:
+    # below the threshold let's just not bother
+    if place > get_points_threshold(season, competitors):
+        return 0
+
+    if season == 2023:
+        if place == 1:
+            return 500 if ic else 200
+        elif place == 2:
+            return 400 if ic else 160
+        elif place <= 4:
+            return 320 if ic else 130
+        elif place <= 8:
+            return 250 if ic else 100
+        elif place <= 16 and competitors >= 48:
+            return 200 if ic else 80
+        elif place <= 32 and competitors >= 100:
+            return 160 if ic else 60
+        elif place <= 64 and competitors >= 200:
+            return 130 if ic else 50
+        elif place <= 128 and competitors >= 400:
+            return 100 if ic else 40
+        elif place <= 256 and competitors >= 800:
+            return 80 if ic else 30
+        elif place <= 512 and competitors >= 1600 and ic:
+            return 60
+
+    if season == 2024:
+        if place == 1:
+            return 500 if ic else 200
+        elif place == 2:
+            return 400 if ic else 160
+        elif place <= 4:
+            return 320 if ic else 130
+        elif place <= 8:
+            return 250 if ic else 100
+        elif place <= 16 and competitors >= 48:
+            return 200 if ic else 80
+        elif place <= 32 and competitors >= 80:
+            return 160 if ic else 60
+        elif place <= 64 and competitors >= 128:
+            return 130 if ice else 50
+        elif place <= 128 and competitors >= 256:
+            return 100 if ic else 40
+        elif place <= 256 and competitors >= 512:
+            return 80 if ic else 30
+        elif place <= 512 and competitors >= 1024:
+            return 60 if ic else 20
+        elif place <= 1024 and competitors >= 2046 and ic:
+            return 50
+
+    if season == 2025 or season == 2026:
+        if place == 1:
+            return 500 if ic else 350
+        elif place == 2 and competitors >= 4:
+            return 480 if ic else 325
+        elif place <= 4 and competitors >= 8:
+            return 420 if ic else 300
+        elif place <= 8 and competitors >= 17:
+            return 380 if ic else 280
+        elif place <= 16 and competitors >= 33:
+            return 300 if ic else 160
+        elif place <= 32 and competitors >= 65:
+            return 200 if ic else 125
+        elif place <= 64 and competitors >= 129:
+            return 105 if ic else 100
+        elif place <= 128 and competitors >= 257:
+            return 120 if ic else 80
+        elif place <= 256 and competitors >= 513:
+            return 100 if ic else 60
+        elif place <= 512 and competitors >= 1025:
+            return 80 if ic else 40
+        elif place <= 1024 and competitors >= 2049:
+            return 40 if ic else 20
+
+    return 0
 
 """
 get "fancy" round name: Cut, T8 etc
