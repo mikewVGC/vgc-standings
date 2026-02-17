@@ -158,7 +158,11 @@ def process_regional(year:int, code:str, event_info:dict) -> dict:
     event_info['dates'] = make_nice_date_str(event_info['start'], event_info['end'])
     event_info['playerCount'] = len(players_ordered)
     event_info['phase2Count'] = phase_two_count
-    event_info['cutCount'] = list(players_in_cut_round.values())[0]
+    event_info['cutCount'] = 0
+    # worlds day 1 doesn't have cut
+    if len(players_in_cut_round.values()):
+        event_info['cutCount'] = list(players_in_cut_round.values())[0]
+
     event_info['status'] = determine_event_status(event_info)
     if event_info['status'] == 'complete':
         event_info['winner'] = next(iter(players_ordered.values())).name
