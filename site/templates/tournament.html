@@ -455,16 +455,19 @@ __TEMPLATE_FOOTER__
                         title="Total used"
                         @click="sortUsage('total')"
                         :class="getSortedClass('total')"
+                        colspan="2"
                     >Total</th>
                     <th class="sortable"
                         title="Number that earned points"
                         @click="sortUsage('points')"
                         :class="getSortedClass('points')"
+                        colspan="2"
                     >Points</th>
                     <th class="sortable"
                         title="Number that made Phase 2"
                         @click="sortUsage('phase2')"
                         :class="getSortedClass('phase2')"
+                        colspan="2"
                     >Phase 2</th>
                     <th class="sortable"
                         title="Phase 2 Conversion Rate"
@@ -475,6 +478,7 @@ __TEMPLATE_FOOTER__
                         title="Number that made Top Cut"
                         @click="sortUsage('cut')"
                         :class="getSortedClass('cut')"
+                        colspan="2"
                     >Cut</th>
                     <th class="sortable"
                         title="Top Cut Conversion Rate"
@@ -493,11 +497,15 @@ __TEMPLATE_FOOTER__
                         >{{ mon.name }}</div>
                     </td>
                     <td><a :href="`/${season}/${eventInfo.code}/mon/${mon.code}`">{{ mon.name }}</a></td>
-                    <td>{{ mon.counts.total }} <span class="pct">({{ getPct(mon.counts.total / eventInfo.playerCount, 4) }})</span></td>
-                    <td>{{ mon.counts.points }} <span class="pct">({{ getPct(mon.counts.points / eventInfo.playerCount, 4) }})</span></td>
-                    <td>{{ mon.counts.phase2 }} <span class="pct">({{ getPct(mon.counts.phase2 / eventInfo.phase2Count, 4) }})</span></td>
+                    <td>{{ mon.counts.total }}</td>
+                    <td><span class="pct">({{ getPct(mon.counts.total / eventInfo.playerCount, 4) }})</span></td>
+                    <td>{{ mon.counts.points }}</td>
+                    <td><span class="pct">({{ getPct(mon.counts.points / eventInfo.playerCount, 4) }})</span></td>
+                    <td>{{ mon.counts.phase2 }}</td>
+                    <td><span class="pct">({{ getPct(mon.counts.phase2 / eventInfo.phase2Count, 4) }})</span></td>
                     <td>{{ getPct(mon.counts.phase2Conversion, 5) }}</td>
                     <td>{{ mon.counts.cut }}</td>
+                    <td><span class="pct">({{ getPct(mon.counts.cut / eventInfo.cutCount, 4) }})</span></td>
                     <td>{{ getPct(mon.counts.cutConversion, 5) }}</td>
                 </tr>
                 <tr v-if="usage.length == 0" v-cloak>
@@ -551,12 +559,24 @@ __TEMPLATE_FOOTER__
             <tbody>
                 <tr>
                     <td></td>
-                    <td>{{ mon.counts.total }} <span class="pct">({{ getPct(mon.counts.total / eventInfo.playerCount, 4) }})</span></td>
+                    <td>
+                        {{ mon.counts.total }} 
+                        <span class="pct">({{ getPct(mon.counts.total / eventInfo.playerCount, 4) }})</span>
+                    </td>
                     <td>{{ mon.points.toLocaleString() }}</td>
-                    <td>{{ mon.counts.points }} <span class="pct">({{ getPct(mon.counts.points / eventInfo.playerCount, 4) }})</span></td>
-                    <td>{{ mon.counts.phase2 }} <span class="pct">({{ getPct(mon.counts.phase2 / eventInfo.phase2Count, 4) }})</span></td>
+                    <td>
+                        {{ mon.counts.points }} 
+                        <span class="pct">({{ getPct(mon.counts.points / eventInfo.playerCount, 4) }})</span>
+                    </td>
+                    <td>
+                        {{ mon.counts.phase2 }} 
+                        <span class="pct">({{ getPct(mon.counts.phase2 / eventInfo.phase2Count, 4) }})</span>
+                    </td>
                     <td>{{ getPct(mon.counts.phase2Conversion, 5) }}</td>
-                    <td>{{ mon.counts.cut }}</td>
+                    <td>
+                        {{ mon.counts.cut }} 
+                        <span class="pct">({{ getPct(mon.counts.cut / eventInfo.cutCount, 4) }})</span>
+                    </td>
                     <td>{{ getPct(mon.counts.cutConversion, 5) }}</td>
                 </tr>
             </tbody>
@@ -619,8 +639,6 @@ __TEMPLATE_FOOTER__
             </table>
 
         </div>
-
-        <div class="mon-img-holder"></div>
 
         <div class="config-container">
 

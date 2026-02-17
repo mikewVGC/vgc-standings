@@ -249,7 +249,7 @@ table#opponents tr:nth-child(odd) td.L, tr:nth-child(odd) td.L {
 
 table.main-standings thead tr {
     position: sticky;
-    top: -32px;
+    top: 0;
 }
 
 table.main-standings td:nth-child(4) {
@@ -413,6 +413,29 @@ table#usage td:nth-child(1) {
     width: 36px;
 }
 
+table#usage th {
+    white-space: nowrap;
+}
+
+table#usage td:nth-child(3),
+table#usage td:nth-child(5),
+table#usage td:nth-child(7),
+table#usage td:nth-child(9),
+table#usage td:nth-child(10),
+table#usage td:nth-child(12) {
+    text-align: right;
+}
+
+table#usage td:nth-child(2),
+table#usage td:nth-child(4),
+table#usage td:nth-child(6),
+table#usage td:nth-child(8),
+table#usage td:nth-child(9),
+table#usage td:nth-child(11) {
+    /*border-right: 1px solid #A0A0A0;*/
+    padding-left: 0;
+}
+
 .pct {
     color: #505050;
     font-size: .8em;
@@ -476,11 +499,16 @@ ul#standings-sections li:first-child {
     display: inline-block;
     overflow-y: scroll;
     overflow-x: hidden;
-    width: 48%;
+    width: calc(50% - .25em);
     height: 9em;
     margin-bottom: .75em;
     margin-right: .5em;
     vertical-align: top;
+}
+
+.config-container:nth-child(2),
+.config-container:nth-child(4) {
+    margin-right: 0;
 }
 
 .config-container::-webkit-scrollbar {

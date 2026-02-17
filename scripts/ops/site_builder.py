@@ -3,6 +3,8 @@ import json
 import shutil
 import os
 
+from datetime import date
+
 from lib.util import make_season_info_str, make_nice_date_str, get_season_bookends
 
 class SiteBuilder():
@@ -134,6 +136,7 @@ class SiteBuilder():
 
         with open("site/templates/footer.html", 'r') as footerfile:
             footer = footerfile.read()
+            footer = footer.replace('__YEAR__', str(date.today().year))
             dest_data = dest_data.replace('__TEMPLATE_FOOTER__', footer)
 
         vue_tpl = "vue" if not self.prod else "vue-prod"
