@@ -60,6 +60,7 @@ export default {
             this.currentView = 'standings-main';
 
             if (route != '/') {
+                // route -> view
                 chunks = route.split('/');
                 switch (chunks[0]) {
                     case 'player':
@@ -85,6 +86,7 @@ export default {
                 secondary = chunks[1] || "";
             }
 
+            // view -> props
             switch (this.currentView) {
                 case 'loading':
                     return {};
@@ -254,6 +256,7 @@ export default {
         },
 
         validFavs() {
+            // make sure favs played in this tour and sort by standings
             return this.favs
                 .filter(f => this.standings[f] !== undefined)
                 .sort((a, b) => this.standings[a].place > this.standings[b].place);
@@ -261,11 +264,13 @@ export default {
     },
     methods: {
         init() {
+            // the site had url hashes for like two weeks, so we account for those links
             if (window.location.hash.length > 1) {
                 window.location = `${window.location.pathname}${window.location.hash.slice(1)}`;
                 return;
             }
 
+            // main listener that lets us have nice looking urls
             window.addEventListener('click', (e) => {
                 if (e.target && e.target.closest('a')) {
                     if ('pass' in e.target.dataset && e.target.dataset.pass == 1) {
@@ -284,6 +289,7 @@ export default {
                 }
             });
 
+            // listen on back button events
             window.addEventListener('popstate', (e) => {
                 if (e.state) {
                     const chips = e.state.page.split('/');
@@ -291,17 +297,20 @@ export default {
                 }
             });
 
+            // load up the favs from local storage
             let maybeFavs = localStorage.getItem('player-favorites');
             if (maybeFavs) {
                 this.favs = JSON.parse(maybeFavs);
             }
 
+            // some init setup
             const chips = window.location.pathname.split('/');
             history.pushState({ page: window.location.pathname }, null, window.location.pathname);
             this.currentRoute = chips.slice(3).join('/');
 
             this.setMajor(chips[1], chips[2]);
 
+            // safeguard
             if (this.liveUpdateFrequency < 30) {
                 this.liveUpdateFrequency = 30;
             }
@@ -372,10 +381,9 @@ export default {
                 this.countryStats.sort((a, b) => a.players.length < b.players.length);
 
                 if (this.eventInfo.status == 'in_progress') {
-                    // in-progress events go into live update mode... in theory
-                    // this should probably be done via websockets, but
-                    // this site is all static files, so it's just
-                    // going to be the old dumb polling strategy
+                    // in-progress events go into live update mode... in theory this
+                    // should probably be done via websockets, but this site is all
+                    // static files, so it's just going to be the dumb polling
                     setTimeout(() => {
                         this.checkForUpdates();
                     }, this.liveUpdateFrequency * 1000);
@@ -397,9 +405,9 @@ export default {
             }).then((d) => {
                 this.usage = d;
 
-                this.usage.forEach(usage => {
-                    usage.counts['phase2Conversion'] = usage.counts.phase2 / usage.counts.total;
-                    usage.counts['cutConversion'] = usage.counts.cut / usage.counts.phase2;
+                this.usage.forEach(u => {
+                    u.counts['phase2Conversion'] = u.counts.phase2 / u.counts.total;
+                    u.counts['cutConversion'] = u.counts.cut / u.counts.phase2;
                 });
 
                 this.loaded = true;
@@ -421,9 +429,10 @@ export default {
                 if (this.latestHash.length && latestHash && latestHash != this.latestHash) {
                     this.getRegional(() => {
                         // don't need to fetch usage during an event, probably
+                        // but we can add it here later if needed...
                     });
                 } else {
-                    // the backend only updates every ~7 minutes
+                    // the backend will only update every ~7 minutes (via pokedata)
                     setTimeout(() => {
                         this.checkForUpdates();
                     }, this.liveUpdateFrequency * 1000);
@@ -602,6 +611,7 @@ export default {
             this.spriteCoords = data;
         },
 
+        // for mons / items
         getSpritePos(name) {
             let pos = this.spriteCoords[name] || [ 0, 0 ];
             return `-${pos[0] + 2}px -${pos[1]}px`;
@@ -611,6 +621,7 @@ export default {
             this.hdItemCoords = data;
         },
 
+        // for paste
         getHDItemSpritePos(name) {
             let pos = this.hdItemCoords[name] || [ 4000, 4000 ];
             return `-${pos[0] * 40}px -${pos[1] * 40}px`;

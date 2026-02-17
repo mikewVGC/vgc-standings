@@ -117,6 +117,9 @@ __TEMPLATE_FOOTER__
                 :show-drop="true"
                 :always-show-res="false"
             ></tr>
+            <tr v-if="!filteredStandings.length">
+                <td colspan="10">No results</td>
+            </tr>
         </tbody>
     </table>
 </template>
@@ -509,11 +512,11 @@ __TEMPLATE_FOOTER__
                     <td>{{ getPct(mon.counts.cutConversion, 5) }}</td>
                 </tr>
                 <tr v-if="usage.length == 0" v-cloak>
-                    <td colspan="8">No usage stats for this event yet.</td>
+                    <td colspan="12">No usage stats for this event yet.</td>
                 </tr>
 
                 <tr v-if="usage.length && !filteredUsage.length" v-cloak>
-                    <td colspan="8">No results</td>
+                    <td colspan="12">No results</td>
                 </tr>
             </tbody>
         </table>

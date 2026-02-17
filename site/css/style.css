@@ -53,9 +53,9 @@ header#header h1 {
 
 .tabgroup div#home-button {
     background-image: url(/static/img/home-white.png);
-    background-size: 55%;
+    background-size: auto 22px;
     background-repeat: no-repeat;
-    background-position: center;
+    background-position: .5em center;
 }
 
 .tabgroup div a {
@@ -64,7 +64,11 @@ header#header h1 {
     padding: .5em 1em .5em 1em;
 }
 
-.tabgroup div::before {
+.tabgroup div#home-button a {
+    padding-right: 1.65em;
+}
+
+.tabgroup div::after {
     padding: 0;
     display: inline-block;
     font-size: 1.2em;
@@ -77,7 +81,7 @@ header#header h1 {
     color: #000;
 }
 
-.tabgroup div:first-child::before {
+.tabgroup div:last-child::after {
     content: "";
 }
 
@@ -730,15 +734,16 @@ ul#pairing-round-select li a {
         display: inline-block;
     }
 
-    .tabgroup div:first-child a {
+    .tabgroup div#home-button a {
         padding: .1em .2em;
+        width: 20px;
     }
 
     .tabgroup div a {
         padding: 0;
     }
 
-    .tabgroup div::before {
+    .tabgroup div::after {
         padding: 0;
         content: "";
     }
