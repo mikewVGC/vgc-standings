@@ -736,25 +736,31 @@ export default {
                 'eventInfo',
                 'opponentsCompact',
             ],
+            created: function() {
+                this.createdOrUpdated();
+            },
             updated: function() {
-                document.title = `${this.player.name} -- ${this.eventInfo.name} -- Reportworm Standings`;
-
-                this.setNav([{
-                    text: `${this.season} Season`,
-                    link: `/${this.season}`,
-                    active: false,
-                    pass: 1,
-                }, {
-                    text: `${this.eventInfo.name}`,
-                    link: `/${this.season}/${this.eventInfo.code}`,
-                    active: false,
-                }, {
-                    text: `${this.player.name}`,
-                    link: `/${this.season}/${this.eventInfo.code}/player/${this.player.code}`,
-                    active: true,
-                }]);
+                this.createdOrUpdated();
             },
             methods: {
+                createdOrUpdated() {
+                    document.title = `${this.player.name} -- ${this.eventInfo.name} -- Reportworm Standings`;
+
+                    this.setNav([{
+                        text: `${this.season} Season`,
+                        link: `/${this.season}`,
+                        active: false,
+                        pass: 1,
+                    }, {
+                        text: `${this.eventInfo.name}`,
+                        link: `/${this.season}/${this.eventInfo.code}`,
+                        active: false,
+                    }, {
+                        text: `${this.player.name}`,
+                        link: `/${this.season}/${this.eventInfo.code}/player/${this.player.code}`,
+                        active: true,
+                    }]);
+                },
                 getSpritePos(name) {
                     return this.$parent.getSpritePos(name);
                 },
@@ -794,25 +800,31 @@ export default {
         'pairings': {
             template: '#pairings-template',
             props: [ 'season', 'eventInfo', 'pairings', 'allRounds', 'round', 'standings' ],
+            created: function() {
+                this.createdOrUpdated();
+            },
             updated: function() {
-                document.title = `${this.round.name} Pairings -- ${this.eventInfo.name} -- Reportworm Standings`;
-
-                this.setNav([{
-                    text: `${this.season} Season`,
-                    link: `/${this.season}`,
-                    active: false,
-                    pass: 1,
-                }, {
-                    text: `${this.eventInfo.name}`,
-                    link: `/${this.season}/${this.eventInfo.code}`,
-                    active: false,
-                }, {
-                    text: `${this.round.name} Pairings`,
-                    link: `/${this.season}/${this.eventInfo.code}/pairings/${this.round.num}`,
-                    active: true,
-                }]);
+                this.createdOrUpdated();
             },
             methods: {
+                createdOrUpdated() {
+                    document.title = `${this.round.name} Pairings -- ${this.eventInfo.name} -- Reportworm Standings`;
+
+                    this.setNav([{
+                        text: `${this.season} Season`,
+                        link: `/${this.season}`,
+                        active: false,
+                        pass: 1,
+                    }, {
+                        text: `${this.eventInfo.name}`,
+                        link: `/${this.season}/${this.eventInfo.code}`,
+                        active: false,
+                    }, {
+                        text: `${this.round.name} Pairings`,
+                        link: `/${this.season}/${this.eventInfo.code}/pairings/${this.round.num}`,
+                        active: true,
+                    }]);
+                },
                 pairingWinClass(pairing, player) {
                     if (!player) {
                         return '';
