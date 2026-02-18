@@ -224,7 +224,7 @@ def get_points_earned(season:int, competitors:int, place:int, ic:bool = False) -
         elif place <= 1024 and competitors >= 2049:
             return 40 if ic else 20
 
-     if season == 2026:
+    if season == 2026:
         if place == 1:
             return 500 if ic else 350
         elif place == 2 and competitors >= 4:
