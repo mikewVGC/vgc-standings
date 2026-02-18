@@ -736,7 +736,7 @@ export default {
                 'eventInfo',
                 'opponentsCompact',
             ],
-            created: function() {
+            updated: function() {
                 document.title = `${this.player.name} -- ${this.eventInfo.name} -- Reportworm Standings`;
 
                 this.setNav([{
@@ -794,7 +794,7 @@ export default {
         'pairings': {
             template: '#pairings-template',
             props: [ 'season', 'eventInfo', 'pairings', 'allRounds', 'round', 'standings' ],
-            created: function() {
+            updated: function() {
                 document.title = `${this.round.name} Pairings -- ${this.eventInfo.name} -- Reportworm Standings`;
 
                 this.setNav([{

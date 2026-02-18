@@ -464,6 +464,11 @@ ul#standings-info li:last-child, ul#standings-sections li:last-child {
     border-right: 0;
 }
 
+.small-note {
+    font-size: .75em;
+    float: right;
+}
+
 ul#standings-sections {
     font-size: 1.1em;
     font-weight: bold;
