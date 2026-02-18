@@ -448,6 +448,7 @@ table#usage td:nth-child(11) {
 ul#standings-info, ul#standings-sections {
     list-style-type: none;
     padding: 0;
+    position: relative;
 }
 
 ul#standings-info li, ul#standings-sections li {
@@ -476,6 +477,21 @@ ul#standings-sections {
 
 ul#standings-sections li:first-child {
     border-right: 0;
+}
+
+ul#rk9-links {
+    list-style-type: none;
+    font-size: .85em;
+    margin-left: 2em;
+    display: inline-block;
+    float: right;
+    position: absolute;
+    right: 0px;
+}
+
+ul#rk9-links li {
+    display: inline-block;
+    padding: .25em .5em;
 }
 
 #usage tr#filters-row input {
