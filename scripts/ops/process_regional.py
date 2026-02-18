@@ -17,11 +17,13 @@ from lib.util import (
 from lib.tournament import (
     get_tournament_structure,
     get_round_name,
-    calculate_win_pct,
-    calculate_res,
-    calculate_oppopp,
     determine_event_status,
     get_points_earned,
+)
+from lib.res import (
+    calculate_win_pct,
+    calculate_res,
+    calculate_oppopp
 )
 
 DT_POKEDATA = 'pokedata'
