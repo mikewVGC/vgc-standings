@@ -47,6 +47,10 @@ __TEMPLATE_HEADER__
         <li v-for="season in pastSeasons"><a :href="`/${season.year}`"><p><strong>{{ season.year }} Season</strong></a> - Took place from {{ season.dates }}</p></li>
     </ul>
 
+    <h2>Other Info</h2>
+
+    <p>Please note that while every attempt is made to have accurate standings and data, Reportworm Standings are calculated outside of tournament software and are thus not official. Please consult your <a href="https://trainer.pokemon.com/profile" target="_blank">Play Pokemon Profile</a> and <a href="https://rk9.gg/profile" target="_blank">RK9 Profile</a> for official standings and info.</p>
+
     <h2 @click="toggleCredits()" id="creditsTitle">
         Credits 
         <span v-if="!showCredits" v-cloak>&#9656;</span>

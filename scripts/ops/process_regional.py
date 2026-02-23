@@ -19,6 +19,7 @@ from lib.tournament import (
     get_round_name,
     determine_event_status,
     get_points_earned,
+    get_points_threshold,
 )
 from lib.res import (
     calculate_win_pct,
@@ -158,6 +159,7 @@ def process_regional(year:int, code:str, event_info:dict) -> dict:
 
     event_info['processed'] = True
     event_info['dates'] = make_nice_date_str(event_info['start'], event_info['end'])
+    event_info['points'] = get_points_threshold(year, len(players_ordered))
     event_info['playerCount'] = len(players_ordered)
     event_info['phase2Count'] = phase_two_count
     event_info['cutCount'] = 0

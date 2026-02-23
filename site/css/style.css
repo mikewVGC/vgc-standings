@@ -561,7 +561,7 @@ ul#rk9-links li {
     cursor: pointer;
 }
 
-#item-info, #tera-info, #move-info {
+#item-info, #tera-info, #move-info, #ability-info {
     font-size: .9em;
     width: 100%;
 }

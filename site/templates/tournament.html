@@ -356,7 +356,7 @@ __TEMPLATE_FOOTER__
                     <th>Phase 2</th>
                     <th>Cut</th>
                     <th>Top Player</th>
-                    <th></th>
+                    <th>Place</th>
                 </tr>
             </thead>
             <tbody>
@@ -468,11 +468,11 @@ __TEMPLATE_FOOTER__
                         colspan="2"
                     >Total</th>
                     <th class="sortable"
-                        title="Number that earned points"
+                        :title="`Number that earned points (Top ${eventInfo.points})`"
                         @click="sortUsage('points')"
                         :class="getSortedClass('points')"
                         colspan="2"
-                    >Points</th>
+                    >Top {{ eventInfo.points }}</th>
                     <th class="sortable"
                         title="Number that made Phase 2"
                         @click="sortUsage('phase2')"
@@ -559,7 +559,7 @@ __TEMPLATE_FOOTER__
                     <th></th>
                     <th title="Total used">Total</th>
                     <th title="Total points earned this event">Total<br />Points</th>
-                    <th title="Number that earned points">Points</th>
+                    <th title="Number that earned points">Top {{ eventInfo.points }}</th>
                     <th title="Number that made Phase 2">Phase 2</th>
                     <th title="Phase 2 Conversion Rate">Phase 2<br />Conv.</th>
                     <th title="Number that made Top Cut">Cut</th>
@@ -733,7 +733,7 @@ __TEMPLATE_FOOTER__
                 :always-show-res="true"
             ></tr>
             <tr v-if="!filteredPlayers.length" v-cloak>
-                <td colspan="6">No matching results.</td>
+                <td colspan="10">No matching results.</td>
             </tr>
         </tbody>
     </table>
