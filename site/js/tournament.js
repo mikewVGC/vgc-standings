@@ -289,6 +289,10 @@ export default {
                         return;
                     }
 
+                    if (e.metaKey || e.ctrlKey) {
+                        return;
+                    }
+
                     const anchor = e.target.closest('a');
 
                     e.preventDefault();
