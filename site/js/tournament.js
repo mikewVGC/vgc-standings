@@ -158,8 +158,7 @@ export default {
                         for (const pairing of pairings) {
                             if (validFavs.includes(pairing.player) || validFavs.includes(pairing.opp)) {
                                 favPairings.push(pairing);
-                                // TODO: remove pairing from pairings array
-                                break;
+                                // TODO: remove pairing from pairings array ?
                             }
                         }
                     }
