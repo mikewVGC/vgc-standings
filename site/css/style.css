@@ -217,12 +217,25 @@ th.sortable.down {
     cursor: pointer;
 }
 
+table#opponents th:nth-child(3) {
+    text-align: center;
+}
+
+table#opponents th:nth-child(4) {
+    text-align: center;
+}
+
 table#opponents td:nth-child(3) {
     background: #F0F0F0;
+    width: 3em;
 }
 
 table#opponents tr:nth-child(odd) td:nth-child(3) {
     background: #F8F8F8;
+}
+
+table#opponents td:nth-child(4) {
+    text-align: center;
 }
 
 table#opponents a, tabl.main-standings a, table#usage a, table#country-stats a {
@@ -233,6 +246,10 @@ table.main-standings td.team-container a,
 table#country-players td.team-container a,
 table#mon-users td.team-container a {
     display: inline;
+}
+
+td.W, td.L {
+    text-align: center;
 }
 
 table#opponents td.W, td.W {
@@ -1164,7 +1181,7 @@ ul#pairing-round-select li a {
     }
 
     a {
-        color: #2EE7FF;
+        color: #1BD9F7;
     }
 
     h2 em, h3 em {
@@ -1219,19 +1236,19 @@ ul#pairing-round-select li a {
     }
 
     table#opponents td.W, td.W {
-        background: #318531;
+        background: #25802C;
     }
 
     table#opponents tr:nth-child(odd) td.W, tr:nth-child(odd) td.W {
-        background: #3CA63C;
+        background: #2FA139;
     }
 
     table#opponents td.L, td.L {
-        background: #a13333;
+        background: #802525;
     }
 
     table#opponents tr:nth-child(odd) td.L, tr:nth-child(odd) td.L {
-        background: #d94343;
+        background: #A12F2F;
     }
 
     .favicon {
