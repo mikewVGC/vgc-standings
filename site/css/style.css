@@ -587,25 +587,29 @@ ul#rk9-links li {
     padding: 0;
 }
 
-#pairings td {
+.pairings td {
     text-align: center;
 }
 
-#pairings td:first-child, #pairings td:last-child {
+.pairings td:first-child, .pairings td:last-child {
     width: 45%;
 }
 
-#pairings td:nth-child(2) div {
+.pairings td:nth-child(2) div {
     font-size: .8em;
 }
 
-#pairings td:nth-child(2) span {
+.pairings td:nth-child(2) span {
     font-size: 2.5em;
     display: block;
 }
 
-#pairings .table-place {
+.pairings .table-place {
     height: 60px;
+}
+
+#fav-pairings {
+    margin-bottom: 1.5em;
 }
 
 ul#pairing-round-select {

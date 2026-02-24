@@ -291,6 +291,30 @@ __TEMPLATE_FOOTER__
 
 </template>
 
+<template id="pairing-row-template">
+    <tr>
+        <td :class="pairingWinClass(pairing, pairing.player)">
+            <a
+                :href="`/${season}/${eventInfo.code}/player/${pairing.player}`"
+            >{{ standings[pairing.player].name }}</a><br />
+            ({{ getRecordThroughRound(pairing.player, round.num) }})
+        </td>
+        <td>
+            <div v-if="pairing.table > 0">Table <span>{{ pairing.table }}</span></div>
+            <div v-else class="table-place"></div>
+        </td>
+        <td :class="pairingWinClass(pairing, pairing.opp)">
+            <span v-if="pairing.opp">
+                <a
+                    :href="`/${season}/${eventInfo.code}/player/${pairing.opp}`"
+                >{{ standings[pairing.opp].name }}</a><br />
+                ({{ getRecordThroughRound(pairing.opp, round.num) }})
+            </span>
+            <span v-if="pairing.other">{{ pairing.other }}</span>
+        </td>
+    </tr>
+</template>
+
 <template id="pairings-template">
 
     <h2>{{ eventInfo.name }} Pairings &mdash; {{ round.name }}</h2>
@@ -303,7 +327,29 @@ __TEMPLATE_FOOTER__
         </li>
     </ul>
 
-    <table id="pairings">
+    <table class="pairings" id="fav-pairings" v-if="favPairings.length">
+        <thead>
+            <tr>
+                <th>Favorites</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr
+                is="vue:pairing-row"
+                v-for="pairing, i in favPairings"
+                :key="`fav-tbl-${i}`"
+                :pairing="pairing"
+                :standings="standings"
+                :season="season"
+                :round="round"
+                :event-info="eventInfo"
+            ></tr>
+        </tbody>
+    </table>
+
+    <table class="pairings" id="main-pairings">
         <thead>
             <tr>
                 <th>&nbsp;</th>
@@ -312,27 +358,16 @@ __TEMPLATE_FOOTER__
             </tr>
         </thead>
         <tbody>
-            <tr v-for="pairing in pairings">
-                <td :class="pairingWinClass(pairing, pairing.player)">
-                    <a
-                        :href="`/${season}/${eventInfo.code}/player/${pairing.player}`"
-                    >{{ standings[pairing.player].name }}</a><br />
-                    ({{ getRecordThroughRound(pairing.player, round.num) }})
-                </td>
-                <td>
-                    <div v-if="pairing.table > 0">Table <span>{{ pairing.table }}</span></div>
-                    <div v-else class="table-place"></div>
-                </td>
-                <td :class="pairingWinClass(pairing, pairing.opp)">
-                    <span v-if="pairing.opp">
-                        <a
-                            :href="`/${season}/${eventInfo.code}/player/${pairing.opp}`"
-                        >{{ standings[pairing.opp].name }}</a><br />
-                        ({{ getRecordThroughRound(pairing.opp, round.num) }})
-                    </span>
-                    <span v-if="pairing.other">{{ pairing.other }}</span>
-                </td>
-            </tr>
+            <tr
+                is="vue:pairing-row"
+                v-for="pairing, i in pairings"
+                :key="`tbl-${i}`"
+                :pairing="pairing"
+                :standings="standings"
+                :season="season"
+                :round="round"
+                :event-info="eventInfo"
+            ></tr>
             <tr v-if="pairings.length == 0" v-cloak>
                 <td colspan="3">No pairings for this round yet!</td>
             </tr>

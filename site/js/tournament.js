@@ -152,6 +152,18 @@ export default {
                     let roundName = secondary;
                     let roundNum = secondary;
 
+                    let favPairings = [];
+                    let validFavs = this.validFavs;
+                    if (validFavs.length) {
+                        for (const pairing of pairings) {
+                            if (validFavs.includes(pairing.player) || validFavs.includes(pairing.opp)) {
+                                favPairings.push(pairing);
+                                // TODO: remove pairing from pairings array
+                                break;
+                            }
+                        }
+                    }
+
                     if (pairings.length) {
                         roundName = pairings[0].rname;
                         roundNum = pairings[0].round;
@@ -164,6 +176,7 @@ export default {
                     return {
                         season: this.season,
                         eventInfo: this.eventInfo,
+                        favPairings: favPairings,
                         pairings: pairings,
                         standings: this.standings,
                         round: { name: roundName, num: roundNum },
@@ -799,12 +812,26 @@ export default {
         },
         'pairings': {
             template: '#pairings-template',
-            props: [ 'season', 'eventInfo', 'pairings', 'allRounds', 'round', 'standings' ],
+            props: [ 'season', 'eventInfo', 'pairings', 'favPairings', 'allRounds', 'round', 'standings' ],
             created: function() {
                 this.createdOrUpdated();
             },
             updated: function() {
                 this.createdOrUpdated();
+            },
+            components: {
+                'pairing-row': {
+                    template: '#pairing-row-template',
+                    props: [ 'pairings', 'standings', 'round', 'eventInfo', 'pairing', 'season' ],
+                    methods: {
+                        pairingWinClass(pairing, player) {
+                            return this.$parent.pairingWinClass(pairing, player);
+                        },
+                        getRecordThroughRound(playerCode, round) {
+                            return this.$parent.getRecordThroughRound(playerCode, round);
+                        },
+                    },
+                },
             },
             methods: {
                 createdOrUpdated() {
