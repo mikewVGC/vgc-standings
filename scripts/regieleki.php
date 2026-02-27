@@ -62,6 +62,11 @@ if (!empty($tournament_start_time)) {
             exit;
         }
 
+        if (empty($start_time)) {
+            elog("[{$tour}] No start time set, will start now!");
+            continue;
+        }
+
         $start = (new DateTime($start_time))->getTimestamp();
         $tournament_settings[$tour]['start'] = $start;
         $tournament_settings[$tour]['end'] = $start + 28800;
@@ -76,9 +81,12 @@ if (!empty($tournament_end_time)) {
             exit;
         }
 
-        $end = (new DateTime($end_time))->getTimestamp();
-        $tournament_settings[$tour]['end'] = $end;
-        elog("[{$tour}] Scheduled to finish at " . date("Y-m-d H:i:s", $end));
+        if (!empty($end_time)) {
+            $end = (new DateTime($end_time))->getTimestamp();
+            $tournament_settings[$tour]['end'] = $end;
+        }
+
+        elog("[{$tour}] Scheduled to finish at " . date("Y-m-d H:i:s", $tournament_settings[$tour]['end']));
     }
 }
 
@@ -218,7 +226,7 @@ function make_request($url) {
             'Accept-Language: en-us,en;q=0.5',
             'Pragma: ',
         ],
-        CURLOPT_USERAGENT => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36',
+        CURLOPT_USERAGENT => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36',
         CURLOPT_ENCODING => 'gzip,deflate',
         CURLOPT_AUTOREFERER => true,
         CURLOPT_RETURNTRANSFER => true,
