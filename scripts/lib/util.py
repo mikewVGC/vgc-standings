@@ -16,6 +16,9 @@ def make_code(name:str) -> str:
         return ""
 
     coded = name.encode('utf-8').decode('unicode_escape')
+    if len(coded) != len(name):
+        coded = name
+
     coded = re.sub(r"[^\w-]+", '', coded.lower().replace(' ', '-'))
     coded = unicodedata.normalize('NFKD', coded)
     coded = coded.encode('ascii', 'ignore').decode('utf-8')
