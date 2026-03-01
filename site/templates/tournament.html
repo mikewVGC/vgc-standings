@@ -628,7 +628,10 @@ __TEMPLATE_FOOTER__
         </table>
     </div>
 
-    <h3>{{ mon.name }} Configurations</h3>
+    <h3>
+        {{ mon.name }} Configurations
+        <div id="clear-mon-filter" @click="resetFilters(mon)" v-if="isFiltered()" v-cloak>Clear</div>
+    </h3>
 
     <div class="mon-config-container" :style="{ backgroundImage: `url(${monImgBase}/${mon.dex}.png)` }">
 
@@ -740,7 +743,12 @@ __TEMPLATE_FOOTER__
 
     </div>
 
-    <h3>All {{ mon.name }} Teams <em v-if="isFiltered()" v-cloak>(Results are being filtered)</em></h3>
+    <h3>Players Using {{ mon.name }} 
+        <span>
+            <strong> &mdash; Team Count</strong>: {{ filteredPlayers.length }}
+            <span v-if="isFiltered()" v-cloak>(Filtered)</span>
+        </span>
+    </h3>
 
     <table id="mon-users" class="main-standings">
         <thead>
@@ -767,7 +775,7 @@ __TEMPLATE_FOOTER__
                 :show-drop="false"
                 :always-show-res="true"
             ></tr>
-            <tr v-if="!filteredPlayers.length" v-cloak>
+            <tr v-if="filteredPlayers.length == 0" v-cloak>
                 <td colspan="10">No matching results.</td>
             </tr>
         </tbody>

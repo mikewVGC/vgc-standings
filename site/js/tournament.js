@@ -246,10 +246,12 @@ export default {
             return this.playerCodes.filter(
                 (pcode) => {
                     // this is hideous
-                    return this.standings[pcode].name
-                        .toLowerCase()
+                    return this.standings[pcode].search
                         .includes(
-                            this.playerStandingsSearch.toLowerCase()
+                            this.playerStandingsSearch
+                                .toLowerCase()
+                                .normalize('NFD')
+                                .replace(/[\u0300-\u036f]/g, '')
                         );
                 }
             );
@@ -262,7 +264,7 @@ export default {
 
             return this.usage.filter(
                 (usage) => {
-                    return usage.code.startsWith(this.monUsageSearch.toLowerCase());
+                    return usage.code.includes(this.monUsageSearch.toLowerCase().replace(' ', ''));
                 }
             );
         },
@@ -310,6 +312,18 @@ export default {
                 if (e.state) {
                     const chips = e.state.page.split('/');
                     this.currentRoute = chips.slice(3).join('/');
+                }
+            });
+
+            document.addEventListener("keydown", (e) => {
+                if (e.code === 'F3' || ((e.ctrlKey || e.metaKey) && e.code === 'KeyF')) {
+                    if (this.currentView == 'standings-main') {
+                        document.getElementById('playerStandingsSearch').focus();
+                        e.preventDefault();
+                    } else if (this.currentView == 'usage') {
+                        document.getElementById('monUsageNameSearch').focus();
+                        e.preventDefault();
+                    }
                 }
             });
 
@@ -364,10 +378,17 @@ export default {
                 this.countryStats = {};
                 this.playerCodes = [];
 
-                // compile country stats
                 for (const [playerCode, player ] of Object.entries(this.standings)) {
+                    // create playerCodes array
                     this.playerCodes.push(playerCode);
 
+                    // add search string
+                    this.standings[playerCode].search = player.name
+                        .toLowerCase()
+                        .normalize('NFD')
+                        .replace(/[\u0300-\u036f]/g, '');
+
+                    // compile country stats
                     let country = player.country;
                     if (!country) {
                         continue;
@@ -1131,6 +1152,10 @@ export default {
                 },
                 isFiltered() {
                     return this.$parent.isFiltered();
+                },
+                resetFilters(mon) {
+                    this.$parent.resetFilters();
+                    this.$parent.applyFilters(mon);
                 },
                 setNav(navData) {
                     return this.$parent.setNav(navData);

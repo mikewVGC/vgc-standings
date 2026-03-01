@@ -380,6 +380,11 @@ h2 em, h3 em {
     font-weight: normal;
 }
 
+h3 span {
+    font-weight: normal;
+    font-size: .8em;
+}
+
 #team .paste-mon {
     position: relative;
     display: inline-block;
@@ -413,7 +418,7 @@ h2 em, h3 em {
     -ms-user-select: none;
 }
 
-#team-copy {
+#team-copy, #clear-mon-filter {
     display: inline-block;
     float: right;
     border: 1px solid #000;
