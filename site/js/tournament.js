@@ -316,6 +316,7 @@ export default {
             });
 
             document.addEventListener("keydown", (e) => {
+                // ctrl+F, F3, cmd+F use the built in searches
                 if (e.code === 'F3' || ((e.ctrlKey || e.metaKey) && e.code === 'KeyF')) {
                     if (this.currentView == 'standings-main') {
                         document.getElementById('playerStandingsSearch').focus();
@@ -323,6 +324,15 @@ export default {
                     } else if (this.currentView == 'usage') {
                         document.getElementById('monUsageNameSearch').focus();
                         e.preventDefault();
+                    }
+                }
+
+                // clear/reset search
+                if (event.key === 'Escape') {
+                    if (this.currentView == 'standings-main') {
+                        this.playerStandingsSearch = '';
+                    } else if (this.currentView == 'usage') {
+                        this.monUsageSearch = '';
                     }
                 }
             });
@@ -752,7 +762,6 @@ export default {
                     this.$parent.playerStandingsSearch = e.target.value;
                 },
                 clearStandingsSearch() {
-                    document.getElementById('playerStandingsSearch').value = '';
                     this.$parent.playerStandingsSearch = '';
                 },
                 toggleFav(playerCode) {
@@ -1065,7 +1074,6 @@ export default {
                     this.$parent.monUsageSearch = e.target.value;
                 },
                 clearMonSearch() {
-                    document.getElementById('monUsageNameSearch').value = '';
                     this.$parent.monUsageSearch = '';
                 },
             }
