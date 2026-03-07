@@ -227,10 +227,11 @@ def get_grouped_pairings(year:int, code:str, tour_format:list) -> dict:
                         num += 1
 
                 result = ''
-                if match[player_num] == match['winner']:
-                    result = 'W'
-                else:
-                    result = 'L'
+                if len(match['winner']):
+                    if match[player_num] == match['winner']:
+                        result = 'W'
+                    else:
+                        result = 'L'
 
                 pairings_by_player[pp_code].append(Round(
                     round=rnd,
