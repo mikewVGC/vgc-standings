@@ -165,19 +165,6 @@ def process_playlatamscraper_event(
             if len(opp):
                 players[opp].rounds[round_num - 1].opp = dupe
 
-    # playlatam doesn't have standings usually, so we have to dump official standings and fix them
-    sorted_players = sorted(list(players.values()), key=lambda player: (
-        player.record['w'],
-        player.res['self'],
-        player.res['opp'],
-        player.res['oppopp']
-    ), reverse=True)
-
-    for i, player in enumerate(sorted_players):
-        # uncomment this for a list (doesn't take cut into account)
-        # print(f"{i + 1}. {player.name}")
-        pass
-
     return players, phase_two_count, players_in_cut_round
 
 
@@ -196,6 +183,9 @@ def get_grouped_pairings(year:int, code:str, tour_format:list) -> dict:
 
             p1_code = make_code(p1)
             p2_code = make_code(p2)
+
+            if p2_code == 'no-opponent':
+                p2_code = ''
 
             p1_bye = False
             p1_late = False

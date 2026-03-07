@@ -135,7 +135,7 @@ def process_regional(year:int, code:str, event_info:dict) -> dict:
     players_ordered = OrderedDict()
 
     # just do the sorting ourselves for worlds 2023 day 1
-    if year == 2023 and code == 'worlds-day-1':
+    if year == 2023 and code == 'worlds-day-1' or data_type == DT_PLAYLATAMSCRAPER:
         sorted_worlds = sorted(list(players.values()), key=lambda player: (
             player.record['w'],
             player.res['self'],
