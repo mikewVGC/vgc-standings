@@ -77,6 +77,7 @@ def process_regional(year:int, code:str, event_info:dict, prod:bool) -> dict:
     official_order = []
     # thanks to rk9 (would be nice if they published official res!)
     official_standings = f"data/majors/{year}/{code}-official.txt"
+    official_standings_found = False
     try:
         with open(official_standings) as file:
             lines = file.read().splitlines()
@@ -89,6 +90,7 @@ def process_regional(year:int, code:str, event_info:dict, prod:bool) -> dict:
                     name_code = f"{name_code}-{num}"
                     num += 1
                 official_order.append(name_code)
+            official_standings_found = True
     except FileNotFoundError:
         print("Official standings not found, skipping. ", end="")
 
@@ -135,7 +137,7 @@ def process_regional(year:int, code:str, event_info:dict, prod:bool) -> dict:
     players_ordered = OrderedDict()
 
     # just do the sorting ourselves for worlds 2023 day 1 + playlatam scrapes
-    if year == 2023 and code == 'worlds-day-1' or data_type == DT_PLAYLATAMSCRAPER:
+    if year == 2023 and code == 'worlds-day-1' or (data_type == DT_PLAYLATAMSCRAPER and not official_standings_found):
         sorted_worlds = sorted(list(players.values()), key=lambda player: (
             player.record['w'],
             player.res['self'],
