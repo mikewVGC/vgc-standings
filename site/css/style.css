@@ -148,7 +148,7 @@ footer p {
     font-size: .85em;
 }
 
-input {
+input, select {
     border: 1px solid #000000;
     border-radius: .4em;
     height: 1.75em;
@@ -524,11 +524,21 @@ ul#rk9-links li {
     padding: .5em 0;
 }
 
+.filter-area div.section {
+    display: inline-block;
+    padding-right: 1.25em;
+}
+
+.filter-area label {
+    padding-right: .35em;
+}
+
 .searchFunc {
     display: inline-block;
     font-size: 1.25em;
     cursor: pointer;
     padding-left: .25em;
+    width: 1em;
 }
 
 #usage-info thead th {

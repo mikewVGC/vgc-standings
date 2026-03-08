@@ -19,6 +19,7 @@ export default {
 
             monUsageSearch: '',
             playerStandingsSearch: '',
+            usageFilter: 'all',
 
             filters: {
                 items: [],
@@ -258,13 +259,23 @@ export default {
         },
 
         filteredUsage() {
-            if (!this.monUsageSearch.length) {
+            if (!this.monUsageSearch.length && this.usageFilter == 'all') {
                 return this.usage;
             }
 
             return this.usage.filter(
                 (usage) => {
-                    return usage.code.includes(this.monUsageSearch.toLowerCase().replace(' ', ''));
+                    let tSearch = true;
+                    if (this.usageFilter != 'all') {
+                        tSearch = usage.counts[this.usageFilter] > 0;
+                    }
+
+                    let nSearch = true;
+                    if (this.monUsageSearch.length) {
+                        nSearch = usage.code.includes(this.monUsageSearch.toLowerCase().replace(' ', ''));
+                    }
+
+                    return nSearch && tSearch;
                 }
             );
         },
@@ -580,6 +591,14 @@ export default {
                 }
                 return 0;
             });
+        },
+
+        updateUsageFilter(newVal) {
+            if (![ 'all', 'points', 'phase2', 'cut' ].includes(newVal)) {
+                return;
+            }
+
+            this.usageFilter = newVal;
         },
 
         setFilteredPlayers(players) {
@@ -1034,7 +1053,7 @@ export default {
         },
         'usage': {
             template: '#usage-template',
-            props: [ 'model', 'season', 'usage', 'eventInfo', 'filteredUsage', 'monUsageSearch' ],
+            props: [ 'model', 'season', 'usage', 'eventInfo', 'filteredUsage', 'monUsageSearch', 'usageFilter' ],
             created: function() {
                 document.title = `Usage Stats -- ${this.eventInfo.name} -- Reportworm Standings`;
 
@@ -1075,6 +1094,9 @@ export default {
                 },
                 clearMonSearch() {
                     this.$parent.monUsageSearch = '';
+                },
+                updateUsageFilter(e) {
+                    this.$parent.updateUsageFilter(e.target.value);
                 },
             }
         },

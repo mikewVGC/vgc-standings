@@ -12,7 +12,7 @@ from lib.formes import get_mon_data_from_code, get_mon_alt_from_code
 from lib.util import make_item_code
 
 
-def compile_usage(year:int, event_code:str) -> None:
+def compile_usage(year:int, event_code:str, prod:bool) -> None:
     data = {}
     try:
         with open(f"public/data/{year}/{event_code}.json", 'r') as file:
@@ -130,5 +130,11 @@ def compile_usage(year:int, event_code:str) -> None:
         mon_stat['moves'] = list(mon_stat['moves'].values())
         mon_stat['moves'].sort(key=lambda move: move['count'], reverse=True)
 
+    indent_amt = 2
+    separators = None
+    if prod:
+        indent_amt = None
+        separators = (',', ':')
+
     with open(f"public/data/{year}/{event_code}-usage.json", 'w') as file:
-        file.write(json.dumps(mon_stats))
+        file.write(json.dumps(mon_stats, indent=indent_amt, separators=separators))

@@ -80,11 +80,11 @@ def main():
                 majors[event_code].update(proc_event_info)
             else:
                 print(f"[{year}] Processing data for '{event_code}'... ", end="")
-                majors[event_code] = process_regional(year, event_code, event_info)
+                majors[event_code] = process_regional(year, event_code, event_info, cl.prod)
 
             if event_should_be_processed and majors[event_code]['processed']:
                 print("building usage... ", end="")
-                compile_usage(year, event_code)
+                compile_usage(year, event_code, cl.prod)
 
             builder.build_meta_ssi(
                 f"{year}/{event_code}",

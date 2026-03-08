@@ -40,7 +40,7 @@ class EnhancedJSONEncoder(json.JSONEncoder):
 """
 build the standings/matches json
 """
-def process_regional(year:int, code:str, event_info:dict) -> dict:
+def process_regional(year:int, code:str, event_info:dict, prod:bool) -> dict:
     data = []
     data_type = ''
     parse_teams = False
@@ -175,11 +175,17 @@ def process_regional(year:int, code:str, event_info:dict) -> dict:
         for player in players_ordered.values():
             player.points = get_points_earned(year, len(players_ordered), player.place, event_is_ic)
 
+    indent_amt = 2
+    separators = None
+    if prod:
+        indent_amt = None
+        separators = (',', ':')
+
     with open(f"public/data/{year}/{code}.json", 'w') as file:
         file.write(json.dumps({
             "event": event_info,
             "standings": players_ordered,
-        }, cls=EnhancedJSONEncoder, indent=2))
+        }, cls=EnhancedJSONEncoder, indent=indent_amt, separators=separators))
 
     return event_info
 

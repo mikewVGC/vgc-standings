@@ -473,18 +473,31 @@ __TEMPLATE_FOOTER__
     </ul>
 
     <div class="filter-area" v-if="usage.length">
-        <input
-            type="text"
-            placeholder="Search by name"
-            id="monUsageNameSearch"
-            @input="searchMonUsage"
-            :value="monUsageSearch"
-        />
-        <div
-            class="searchFunc clearSearch"
-            v-if="monUsageSearch.length"
-            @click="clearMonSearch"
-        >&times;</div>
+        <div class="section">
+            <input
+                type="text"
+                placeholder="Search by name"
+                id="monUsageNameSearch"
+                @input="searchMonUsage"
+                :value="monUsageSearch"
+            />
+            <div
+                class="searchFunc clearSearch"
+                v-if="monUsageSearch.length"
+                @click="clearMonSearch"
+            >&times;</div>
+            <div class="searchFunc" v-else></div>
+        </div>
+
+        <div class="section">
+            <label>Display Only:</label>
+            <select @change="updateUsageFilter" v-bind="usageFilter">
+                <option value="all" default="default">All Pokemon</option>
+                <option value="points">Points Earned (Top {{eventInfo.points}})</option>
+                <option value="phase2">Made Phase 2</option>
+                <option value="cut">Made Top Cut</option>
+            </select>
+        </div>
     </div>
 
     <div class="table-holder">
