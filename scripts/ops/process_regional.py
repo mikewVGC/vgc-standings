@@ -134,7 +134,7 @@ def process_regional(year:int, code:str, event_info:dict, prod:bool) -> dict:
 
     players_ordered = OrderedDict()
 
-    # just do the sorting ourselves for worlds 2023 day 1
+    # just do the sorting ourselves for worlds 2023 day 1 + playlatam scrapes
     if year == 2023 and code == 'worlds-day-1' or data_type == DT_PLAYLATAMSCRAPER:
         sorted_worlds = sorted(list(players.values()), key=lambda player: (
             player.record['w'],
@@ -167,7 +167,7 @@ def process_regional(year:int, code:str, event_info:dict, prod:bool) -> dict:
     if len(players_in_cut_round.values()):
         event_info['cutCount'] = list(players_in_cut_round.values())[0]
 
-    event_info['status'] = determine_event_status(event_info)
+    event_info['status'] = determine_event_status(event_info, players_ordered)
     if event_info['status'] == 'complete':
         event_info['winner'] = next(iter(players_ordered.values())).name
 

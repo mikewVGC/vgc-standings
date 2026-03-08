@@ -295,7 +295,7 @@ def _get_event_tz(event_info:dict) -> ZoneInfo:
 """
 returns if tour is considered "in progress" (ongoing)
 """
-def tour_in_progress(event_info:dict, players:bool = False) -> bool:
+def tour_in_progress(event_info:dict, players:dict = False) -> bool:
     if players:
         # check if the tour is actually over (a finalist won)
         for player in players.values():
@@ -344,11 +344,11 @@ def _tour_has_ended(event_info:dict) -> bool:
 """
 statuses: complete, upcoming, in_progress
 """
-def determine_event_status(event_info:dict) -> str:
+def determine_event_status(event_info:dict, players:dict = False) -> str:
     if not event_info['processed']:
         return "upcoming"
 
-    if tour_in_progress(event_info):
+    if tour_in_progress(event_info, players):
         return "in_progress"
 
     if event_info['processed'] and not _tour_has_started(event_info):
