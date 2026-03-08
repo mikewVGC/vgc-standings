@@ -1015,6 +1015,7 @@ ul#pairing-round-select li a {
         display: inline-block;
         text-align: center;
         padding: .5em .85em;
+        width: 16%;
     }
 
     table#player-info tr td::before {
@@ -1031,15 +1032,19 @@ ul#pairing-round-select li a {
         content: "Record";
     }
 
-    table#player-info tr td:nth-child(4) {
-        display: none;
+    table#player-info tr td:nth-child(4)::before {
+        content: "Points";
     }
 
     table#player-info tr td:nth-child(5)::before {
-        content: "Res.";
+        content: "Drop";
     }
 
     table#player-info tr td:nth-child(6)::before {
+        content: "Res.";
+    }
+
+    table#player-info tr td:nth-child(7)::before {
         content: "Op Res.";
     }
 
