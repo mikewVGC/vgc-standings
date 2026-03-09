@@ -62,7 +62,7 @@ __TEMPLATE_FOOTER__
                 <th></th>
                 <th></th>
                 <th>Favorites</th>
-                <th colspan="3">Record</th>
+                <th colspan="5">Record</th>
                 <th>Drop</th>
                 <th>Res</th>
                 <th>OpRes</th>
@@ -105,7 +105,7 @@ __TEMPLATE_FOOTER__
                 <th></th>
                 <th></th>
                 <th>Name</th>
-                <th colspan="3">Record</th>
+                <th colspan="5">Record</th>
                 <th>Drop</th>
                 <th>Res</th>
                 <th>OpRes</th>
@@ -148,6 +148,8 @@ __TEMPLATE_FOOTER__
         <td>{{ standings[pcode].record.w }}</td>
         <td>-</td>
         <td>{{ standings[pcode].record.l }}</td>
+        <td><span v-if="standings[pcode].record.t" v-cloak>-</span></td>
+        <td><span v-if="standings[pcode].record.t" v-cloak>{{ standings[pcode].record.t }}</span></td>
         <td>{{ showDrop && standings[pcode].drop != -1 ? standings[pcode].drop : '&nbsp;' }}</td>
         <td>{{ standings[pcode].cut && !alwaysShowRes ? '&nbsp;' : getPct(standings[pcode].res.opp, 5) }}</td>
         <td>{{ standings[pcode].cut && !alwaysShowRes ? '&nbsp;' : getPct(standings[pcode].res.oppopp, 5) }}</td>
@@ -191,7 +193,10 @@ __TEMPLATE_FOOTER__
                     /></a>
                 </td>
                 <td>{{ player.place }}</td>
-                <td>{{ player.record.w }} - {{ player.record.l }}</td>
+                <td>
+                    {{ player.record.w }} - {{ player.record.l }}
+                    <span v-if="player.record.t" v-cloak> - {{ player.record.t }}</span>
+                </td>
                 <td>{{ player.points }}</th>
                 <td>{{ player.drop != -1 ? player.drop : '-' }}</td>
                 <td>{{ getPct(player.res.opp) }}</td>
@@ -261,7 +266,8 @@ __TEMPLATE_FOOTER__
                 <td :class="[ opp.bye ? '' : opp.res ]">{{ opp.bye ? "" : opp.res }}</td>
                 <td>
                     <template v-if="opponents[opp.opp].record">
-                    ({{ opponents[opp.opp].record.w }} - {{ opponents[opp.opp].record.l }})
+                    ({{ opponents[opp.opp].record.w }} - {{ opponents[opp.opp].record.l }}
+                    <span v-if="opponents[opp.opp].record.t" v-cloak> - {{ opponents[opp.opp].record.t }}</span>)
                     </template>
                 </td>
                 <td>
@@ -438,7 +444,7 @@ __TEMPLATE_FOOTER__
                 <th></th>
                 <th></th>
                 <th>Name</th>
-                <th colspan="3">Record</th>
+                <th colspan="5">Record</th>
                 <th></th>
                 <th>Res</th>
                 <th>OpRes</th>
@@ -769,7 +775,7 @@ __TEMPLATE_FOOTER__
                 <th title="Placement">Pl.</th>
                 <th></th>
                 <th>Name</th>
-                <th colspan="3">Record</th>
+                <th colspan="5">Record</th>
                 <th></th>
                 <th>Res</th>
                 <th>OpRes</th>

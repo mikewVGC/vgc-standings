@@ -915,7 +915,7 @@ export default {
                         if (pairing.other == 'Bye') {
                             return 'W';
                         }
-                        return '';
+                        return 'T';
                     }
                     if (pairing.winner == player) {
                         return 'W';
@@ -925,6 +925,7 @@ export default {
                 getRecordThroughRound(playerCode, round) {
                     let wins = 0;
                     let loss = 0;
+                    let ties = 0;
                     const player = this.standings[playerCode];
 
                     for (let x = 0; x <= player.rounds.length; x++) {
@@ -940,9 +941,17 @@ export default {
                         if (player.rounds[x].res == 'L' || player.rounds[x].late) {
                             loss++;
                         }
+                        if (player.rounds[x].res == 'T') {
+                            ties++;
+                        }
                     }
 
-                    return `${wins} - ${loss}`;
+                    let rec = `${wins} - ${loss}`;
+                    if (ties) {
+                        rec = `${rec} - ${ties}`;
+                    }
+
+                    return rec;
                 },
                 setNav(navData) {
                     return this.$parent.setNav(navData);

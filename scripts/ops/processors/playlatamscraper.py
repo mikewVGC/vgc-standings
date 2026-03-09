@@ -117,11 +117,14 @@ def process_playlatamscraper_event(
 
         wins = 0
         losses = 0
+        ties = 0
         for game in player_pairings:
             if game.res == 'W':
                 wins +=1
             elif game.res == 'L':
                 losses += 1
+            else:
+                ties += 1
 
         country = ''
         if 'country' in player:
@@ -134,7 +137,7 @@ def process_playlatamscraper_event(
             code=player_code,
             country=country.lower(),
             place='',
-            record={ 'w': wins, 'l': losses },
+            record={ 'w': wins, 'l': losses, 't': ties },
             res={
                 'self': [],
                 'opp': 0,

@@ -113,18 +113,21 @@ def process_rk9scraper_event(
 
         wins = 0
         losses = 0
+        ties = 0
         for game in player_pairings:
             if game.res == 'W':
                 wins +=1
             elif game.res == 'L':
                 losses += 1
+            else:
+                ties += 1
 
         players[player_code] = Player(
             name=f"{player['first_name']} {player['last_name']}",
             code=player_code,
             country=player['country'].lower(),
             place=player['place'],
-            record={ 'w': wins, 'l': losses },
+            record={ 'w': wins, 'l': losses, 't': ties },
             res={
                 'self': [],
                 'opp': 0,

@@ -135,7 +135,11 @@ def process_pokedata_event(data:list, tour_format:list, official_order:list) -> 
             code=player_code,
             country=player_country.lower(),
             place=int(player['placing']),
-            record={ 'w': player['record']['wins'], 'l': player['record']['losses'] },
+            record={
+                'w': player['record']['wins'],
+                'l': player['record']['losses'],
+                't': player['record']['ties'],
+            },
             res={
                 'self': [],
                 'opp': 0,

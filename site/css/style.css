@@ -248,7 +248,7 @@ table#mon-users td.team-container a {
     display: inline;
 }
 
-td.W, td.L {
+td.W, td.L, td.T {
     text-align: center;
 }
 
@@ -266,6 +266,14 @@ table#opponents td.L, td.L {
 
 table#opponents tr:nth-child(odd) td.L, tr:nth-child(odd) td.L {
     background: #E8BEBE;
+}
+
+table#opponents td.T, td.T {
+    background: #FFFFD1;
+}
+
+table#opponents tr:nth-child(odd) td.T, tr:nth-child(odd) td.T {
+    background: #FFFFD1;
 }
 
 table.main-standings thead tr {
@@ -939,7 +947,9 @@ ul#pairing-round-select li a {
         content: "W";
     }
 
-    table.main-standings td:nth-child(5) {
+    table.main-standings td:nth-child(5),
+    table.main-standings td:nth-child(7),
+    table.main-standings td:nth-child(8) {
         display: none;
     }
 
@@ -947,30 +957,30 @@ ul#pairing-round-select li a {
         content: "L";
     }
 
-    table.main-standings td:nth-child(7) {
+    table.main-standings td:nth-child(9) {
         display: none;
     }
 
-    table.main-standings td:nth-child(8),
-    table.main-standings td:nth-child(9)
+    table.main-standings td:nth-child(10),
+    table.main-standings td:nth-child(11)
     {
         width: 15%;
         height: 52px;
     }
 
-    table.main-standings td:nth-child(7)::before {
+    table.main-standings td:nth-child(9)::before {
         content: "Drop";
     }
 
-    table.main-standings td:nth-child(8)::before {
+    table.main-standings td:nth-child(10)::before {
         content: "Res";
     }
 
-    table.main-standings td:nth-child(9)::before {
+    table.main-standings td:nth-child(11)::before {
         content: "OpRes";
     }
 
-    table.main-standings td:nth-child(10)::before {
+    table.main-standings td:nth-child(12)::before {
         content: "Team";
     }
 
@@ -1269,6 +1279,14 @@ ul#pairing-round-select li a {
 
     table#opponents tr:nth-child(odd) td.L, tr:nth-child(odd) td.L {
         background: #A12F2F;
+    }
+
+    table#opponents td.T, td.T {
+        background: #DB8802;
+    }
+
+    table#opponents tr:nth-child(odd) td.T, tr:nth-child(odd) td.T {
+        background: #DB8802;
     }
 
     .favicon {
