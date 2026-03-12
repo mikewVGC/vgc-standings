@@ -549,31 +549,71 @@ ul#rk9-links li {
     width: 1em;
 }
 
-#usage-info thead th {
-    vertical-align: bottom;
+.usage-container {
+    display: inline-block;
+    vertical-align: top;
+}
+
+#usage-stats {
+    width: 40%;
+}
+
+#usage-facts {
+    width: 30%;
+}
+
+.usage-list h3 {
+    margin: 0 0 .25em 0;
+    padding: 0 0 .25em .25em;
+    border-bottom: 1px solid #444;
+    width: 90%;
+}
+
+.usage-list table tr {
+    background: transparent;
+    border: 0;
+}
+
+.usage-list > div {
+    display: inline-block;
+    padding-bottom: .3em;
+}
+
+.usage-list table tr td:nth-child(odd) {
+    text-align: right;
+    padding-right: .5em;
+    width: calc(60% - .5em);
+    color: #666;
+    font-style: italic;
+}
+
+.mon-usage-container {
+    background-repeat: no-repeat;
+    background-position: right top;
+    background-size: 275px auto;
 }
 
 .mon-config-container {
-    background-repeat: no-repeat;
-    background-position: -5px 40px;
-    background-size: 225px auto;
-    padding-left: 215px;
+    position: relative;
 }
 
 .config-container {
     display: inline-block;
     overflow-y: scroll;
     overflow-x: hidden;
-    width: calc(50% - .25em);
+    width: calc(33% - .25em);
     height: 9em;
     margin-bottom: .75em;
     margin-right: .5em;
     vertical-align: top;
 }
 
-.config-container:nth-child(2),
-.config-container:nth-child(4) {
+.config-container-big {
+    width: 33%;
     margin-right: 0;
+    height: 18.75em;
+    position: absolute;
+    top: 0;
 }
 
 .config-container::-webkit-scrollbar {
@@ -601,19 +641,16 @@ ul#rk9-links li {
     cursor: pointer;
 }
 
-#item-info, #tera-info, #move-info, #ability-info {
+.config-container table {
     font-size: .9em;
     width: 100%;
 }
 
-#item-info td:first-child,
-#tera-info td:first-child,
-#move-info td:first-child,
-#ability-info td:first-child {
+.config-container table td:first-child {
     width: 15px;
 }
 
-#item-info td:nth-child(2), #tera-info td:nth-child(2) {
+#item-info td:nth-child(2), #tera-info td:nth-child(2), #teammate-info td:nth-child(2) {
     width: 24px;
     overflow: hidden;
 }
@@ -1197,9 +1234,26 @@ ul#pairing-round-select li a {
         margin-bottom: 1em;
     }
 
-    .mon-config-container {
-        padding: 0;
+    .mon-usage-container {
         background: transparent !important;
+    }
+
+    .usage-container {
+        font-size: .9em;
+    }
+
+    #usage-stats {
+        width: 50%;
+
+    }
+
+    #usage-facts {
+        width: 50%;
+    }
+
+    .config-container-big {
+        position: revert;
+        height: 12em;
     }
 }
 
@@ -1336,6 +1390,14 @@ ul#pairing-round-select li a {
 
     .config-container::-webkit-scrollbar-thumb {
         background: rgba(255, 255, 255, 0.4);
+    }
+
+    .usage-list h3 {
+        border-bottom: 1px solid #CCC;
+    }
+
+    .usage-list > div:nth-child(even), .usage-list table tr td:nth-child(odd) {
+        color: #DDD;
     }
 
     /* mobile dark mode */

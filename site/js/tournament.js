@@ -26,6 +26,7 @@ export default {
                 teras: [],
                 moves: [],
                 abilities: [],
+                teammates: [],
             },
 
             filteredPlayers: [],
@@ -409,6 +410,9 @@ export default {
                         .normalize('NFD')
                         .replace(/[\u0300-\u036f]/g, '');
 
+                    // add sorted team
+                    this.resetTeamSort(playerCode);
+
                     // compile country stats
                     let country = player.country;
                     if (!country) {
@@ -593,6 +597,36 @@ export default {
             });
         },
 
+        // not really "sorting" but always put the specified mons first
+        // this is meant to take the filtered list of mon codes, so this
+        // method is a little annoying
+        sortTeam(playerCode, monsFirst) {
+            this.standings[playerCode].teamSorted.sort((a, b) => {
+                if (monsFirst.includes(a['code']) && monsFirst.includes(b['code'])) {
+                    if (monsFirst.indexOf(a['code']) < monsFirst.indexOf(b['code'])) {
+                        return -1;
+                    }
+                    return 1;
+                }
+                if (monsFirst.includes(a['code'])) {
+                    return -1;
+                }
+                if (monsFirst.includes(b['code'])) {
+                    return 1;
+                }
+                return 0;
+            });
+        },
+
+        resetTeamSort(playerCode) {
+            this.standings[playerCode].teamSorted = [];
+            for (let i = 0; i < this.standings[playerCode].team.length; i++) {
+                this.standings[playerCode].teamSorted.push(
+                    this.standings[playerCode].team[i]
+                );
+            }
+        },
+
         updateUsageFilter(newVal) {
             if (![ 'all', 'points', 'phase2', 'cut' ].includes(newVal)) {
                 return;
@@ -629,8 +663,17 @@ export default {
                 if ((!this.filters.items.length || this.filters.items.includes(pmon.itemcode)) &&
                     (!this.filters.teras.length || this.filters.teras.includes(pmon.tera)) &&
                     (!this.filters.moves.length || this.filters.moves.every(m => pmon.moves.includes(m))) &&
-                    (!this.filters.abilities.length || this.filters.abilities.includes(pmon.ability))
+                    (!this.filters.abilities.length || this.filters.abilities.includes(pmon.ability)) &&
+                    (!this.filters.teammates.length ||
+                        this.filters.teammates.every(
+                            m => this.standings[pcode].team.filter(t => t.code == m).length > 0
+                        )
+                    )
                 ) {
+                    if (this.filters.teammates.length > 0) {
+                        this.sortTeam(pcode, [ monData.code, ...this.filters.teammates ]);
+                    }
+
                     this.filteredPlayers.push(pcode);
                 }
             }
@@ -641,6 +684,7 @@ export default {
             this.filters.teras = [];
             this.filters.moves = [];
             this.filters.abilities = [];
+            this.filters.teammates = [];
         },
 
         isFiltered() {
@@ -648,7 +692,8 @@ export default {
                 this.filters.items.length ||
                 this.filters.teras.length ||
                 this.filters.moves.length ||
-                this.filters.abilities.length
+                this.filters.abilities.length ||
+                this.filters.teammates.length
             );
         },
 
@@ -1080,7 +1125,6 @@ export default {
                     link: `/${this.season}/${this.eventInfo.code}/usage`,
                     active: true,
                 }]);
-
             },
             methods: {
                 getSpritePos(name) {
@@ -1137,11 +1181,16 @@ export default {
                 this.$parent.setFilteredPlayers(this.mon.players);
 
                 this.$parent.resetFilters();
+
+                for (const [playerCode, player ] of Object.entries(this.standings)) {
+                    this.$parent.resetTeamSort(playerCode);
+                    this.$parent.sortTeam(playerCode, [ this.mon.code ]);
+                }
             },
             components: {
                 'standings-row': {
                     template: '#standings-row-template',
-                    props: [ 'standings', 'pcode', 'eventInfo', 'season', 'showDrop', 'alwaysShowRes' ],
+                    props: [ 'standings', 'pcode', 'eventInfo', 'season', 'showDrop', 'alwaysShowRes', 'teamKey' ],
                     methods: {
                         toggleFav(playerCode) {
                             this.$parent.toggleFav(playerCode);

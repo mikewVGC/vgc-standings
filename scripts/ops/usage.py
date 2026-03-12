@@ -31,6 +31,8 @@ def compile_usage(year:int, event_code:str, prod:bool) -> None:
     mon_stats = {}
     # item_stats = {}
 
+    mon_hashes = {}
+
     for player, pdata in standings.items():
         for mon in pdata['team']:
             code = mon['code']
@@ -53,12 +55,25 @@ def compile_usage(year:int, event_code:str, prod:bool) -> None:
                     "w": 0,
                     "l": 0,
                     "points": 0,
+                    "distinct": 0,
                     "players": [],
                     "items": {},
                     "abilities": {},
                     "teras": {},
                     "moves": {},
+                    "teammates": {},
                 }
+
+            if code not in mon_hashes:
+                mon_hashes[code] = {}
+
+            moves = sorted(mon['moves'])
+            mon_hash = f"{mon['code']}-{mon['ability']}-{mon['item']}-{mon['tera']}" + '-'.join(moves)
+
+            if mon_hash not in mon_hashes[code]:
+                mon_hashes[code][mon_hash] = 0
+
+            mon_hashes[code][mon_hash] += 1
 
             item_name = mon['item'] if mon['item'] else "No Item"
             item_code = make_item_code(item_name)
@@ -97,6 +112,19 @@ def compile_usage(year:int, event_code:str, prod:bool) -> None:
                     }
                 mon_stats[code]['moves'][move_name]['count'] += 1
 
+            for tmate in pdata['team']:
+                mate_code = tmate['code']
+                if mate_code == code:
+                    continue
+
+                if mate_code not in mon_stats[code]['teammates']:
+                    mon_stats[code]['teammates'][mate_code] = {
+                        'name': tmate['name'],
+                        'code': mate_code,
+                        'count': 0,
+                    }
+                mon_stats[code]['teammates'][mate_code]['count'] += 1
+
             mon_stats[code]['players'].append(player)
 
             mon_stats[code]['counts']['total'] += 1
@@ -118,17 +146,32 @@ def compile_usage(year:int, event_code:str, prod:bool) -> None:
     mon_stats.sort(key=lambda mon: mon['counts']['total'], reverse=True)
 
     for mon_stat in mon_stats:
-        mon_stat['items'] = list(mon_stat['items'].values())
-        mon_stat['items'].sort(key=lambda item: item['count'], reverse=True)
+        mon_stat['distinct'] = len(mon_hashes[mon_stat['code']])
 
-        mon_stat['abilities'] = list(mon_stat['abilities'].values())
-        mon_stat['abilities'].sort(key=lambda ability: ability['count'], reverse=True)
+        mon_stat['items'] = sorted(
+            list(mon_stat['items'].values()),
+            key=lambda item: (-item['count'], item['name'])
+        )
 
-        mon_stat['teras'] = list(mon_stat['teras'].values())
-        mon_stat['teras'].sort(key=lambda tera: tera['count'], reverse=True)
+        mon_stat['abilities'] = sorted(
+            list(mon_stat['abilities'].values()),
+            key=lambda ability: (-ability['count'], ability['name'])
+        )
 
-        mon_stat['moves'] = list(mon_stat['moves'].values())
-        mon_stat['moves'].sort(key=lambda move: move['count'], reverse=True)
+        mon_stat['teras'] = sorted(
+            list(mon_stat['teras'].values()),
+            key=lambda tera: (-tera['count'], tera['name'])
+        )
+
+        mon_stat['moves'] = sorted(
+            list(mon_stat['moves'].values()),
+            key=lambda move: (-move['count'], move['name'])
+        )
+
+        mon_stat['teammates'] = sorted(
+            list(mon_stat['teammates'].values()),
+            key=lambda tmate: (-tmate['count'], tmate['name'])
+        )
 
     indent_amt = 2
     separators = None

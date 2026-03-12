@@ -125,7 +125,7 @@ __TEMPLATE_FOOTER__
                 :always-show-res="false"
             ></tr>
             <tr v-if="!filteredStandings.length">
-                <td colspan="10">No results</td>
+                <td colspan="12">No results</td>
             </tr>
         </tbody>
     </table>
@@ -156,7 +156,7 @@ __TEMPLATE_FOOTER__
         <td class="team-container">
             <a :href="`/${season}/${eventInfo.code}/player/${standings[pcode].code}`">
                 <div
-                    v-for="mon in standings[pcode].team"
+                    v-for="mon in standings[pcode][teamKey ? teamKey : 'team']"
                     class="monicon"
                     :style="{ backgroundPosition: getSpritePos(mon.altcode || mon.code) }"
                     :title="mon.name"
@@ -604,159 +604,200 @@ __TEMPLATE_FOOTER__
 
 <template id="mon-template">
 
-    <h2>{{ mon.name }} Usage &mdash; {{ eventInfo.name }}</h2>
+    <div class="mon-usage-container" :style="{ backgroundImage: `url(${monImgBase}/${mon.dex}.png)` }">
 
-    <div class="table-holder">
-        <table id="usage-info">
-            <thead>
+        <h2>{{ mon.name }} Usage &mdash; {{ eventInfo.name }}</h2>
+
+        <div class="usage-container usage-list" id="usage-stats">
+            <h3>Overall Usage</h3>
+
+            <table>
                 <tr>
-                    <th></th>
-                    <th title="Total used">Total</th>
-                    <th title="Total points earned this event">Total<br />Points</th>
-                    <th title="Number that earned points">Top {{ eventInfo.points }}</th>
-                    <th title="Number that made Phase 2">Phase 2</th>
-                    <th title="Phase 2 Conversion Rate">Phase 2<br />Conv.</th>
-                    <th title="Number that made Top Cut">Cut</th>
-                    <th title="Top Cut Conversion Rate">Cut Conv.</th>
+                    <td>Total Brought</td>
+                    <td>
+                        {{ mon.counts.total }} <span class="pct">({{ getPct(mon.counts.total / eventInfo.playerCount, 4) }})</span>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
                 <tr>
-                    <td></td>
+                    <td>Finished Top {{ eventInfo.points }}</td>
                     <td>
-                        {{ mon.counts.total }} 
-                        <span class="pct">({{ getPct(mon.counts.total / eventInfo.playerCount, 4) }})</span>
+                        {{ mon.counts.points }} <span class="pct">({{ getPct(mon.counts.points / eventInfo.playerCount, 4) }})</span>
                     </td>
+                </tr>
+                <tr>
+                    <td>Made Phase 2</td>
+                    <td>
+                        {{ mon.counts.phase2 }} <span class="pct">({{ getPct(mon.counts.phase2 / eventInfo.phase2Count, 4) }})</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Made Top Cut</td>
+                    <td>
+                        {{ mon.counts.cut }} <span class="pct">({{ getPct(mon.counts.cut / eventInfo.cutCount, 4) }})</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="usage-container usage-list" id="usage-facts">
+            <h3>Stats</h3>
+
+            <table>
+                <tr>
+                    <td>Points Earned</td>
                     <td>{{ mon.points.toLocaleString() }}</td>
-                    <td>
-                        {{ mon.counts.points }} 
-                        <span class="pct">({{ getPct(mon.counts.points / eventInfo.playerCount, 4) }})</span>
-                    </td>
-                    <td>
-                        {{ mon.counts.phase2 }} 
-                        <span class="pct">({{ getPct(mon.counts.phase2 / eventInfo.phase2Count, 4) }})</span>
-                    </td>
+                </tr>
+                <tr>
+                    <td>Distinct Configs</td>
+                    <td>{{ mon.distinct }}</td>
+                </tr>
+                <tr>
+                    <td>Phase 1 &rarr; Phase 2</td>
                     <td>{{ getPct(mon.counts.phase2Conversion, 5) }}</td>
-                    <td>
-                        {{ mon.counts.cut }} 
-                        <span class="pct">({{ getPct(mon.counts.cut / eventInfo.cutCount, 4) }})</span>
-                    </td>
+                </tr>
+                <tr>
+                    <td>Phase 2 &rarr; Cut</td>
                     <td>{{ getPct(mon.counts.cutConversion, 5) }}</td>
                 </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <h3>
-        {{ mon.name }} Configurations
-        <div id="clear-mon-filter" @click="resetFilters(mon)" v-if="isFiltered()" v-cloak>Clear</div>
-    </h3>
-
-    <div class="mon-config-container" :style="{ backgroundImage: `url(${monImgBase}/${mon.dex}.png)` }">
-
-        <div class="config-container">
-
-            <table id="item-info">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th colspan="2">Item Name</th>
-                        <th colspan="2">Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr
-                        is="vue:usage-list-icon"
-                        v-for="itemInfo in mon.items"
-                        :code="itemInfo.code"
-                        :name="itemInfo.name"
-                        :count="itemInfo.count"
-                        :total="mon.counts.total"
-                        iconclass="itemicon"
-                        type="items"
-                    ></tr>
-                    <tr v-if="mon.items.length < 3" v-for="n in 3 - mon.items.length"><td colspan="5"></td></tr>
-                </tbody>
             </table>
-
-        </div>
-        <div class="config-container">
-
-            <table id="move-info">
-                <thead>
-                    <tr>
-                        <th colspan="2"></th>
-                        <th>Move Name</th>
-                        <th colspan="2">Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr
-                        is="vue:usage-list-icon"
-                        v-for="moveInfo in mon.moves"
-                        :code="moveInfo.name"
-                        :name="moveInfo.name"
-                        :count="moveInfo.count"
-                        :total="mon.counts.total"
-                        iconclass=""
-                        type="moves"
-                    ></tr>
-                    <tr v-if="mon.moves.length < 3" v-for="n in 3 - mon.moves.length"><td colspan="5"></td></tr>
-                </tbody>
-            </table>
-
         </div>
 
-        <div class="config-container">
+        <h3>
+            {{ mon.name }} Configurations
+            <div id="clear-mon-filter" @click="resetFilters(mon)" v-if="isFiltered()" v-cloak>Clear</div>
+        </h3>
 
-            <table id="tera-info">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th colspan="2">Tera Type</th>
-                        <th colspan="2">Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr
-                        is="vue:usage-list-icon"
-                        v-for="teraInfo in mon.teras"
-                        :code="teraInfo.name"
-                        :name="teraInfo.name"
-                        :count="teraInfo.count"
-                        :total="mon.counts.total"
-                        :iconclass="`tera-icon tera-${teraInfo.name.toLowerCase()}`"
-                        type="teras"
-                    ></tr>
-                    <tr v-if="mon.teras.length < 3" v-for="n in 3 - mon.teras.length"><td colspan="5"></td></tr>
-                </tbody>
-            </table>
+        <div class="mon-config-container">
+            <div class="config-container">
 
-        </div>
-        <div class="config-container">
+                <table id="item-info">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th colspan="2">Item Name</th>
+                            <th colspan="2">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            is="vue:usage-list-icon"
+                            v-for="itemInfo in mon.items"
+                            :code="itemInfo.code"
+                            :name="itemInfo.name"
+                            :count="itemInfo.count"
+                            :total="mon.counts.total"
+                            iconclass="itemicon"
+                            type="items"
+                        ></tr>
+                        <tr v-if="mon.items.length < 3" v-for="n in 3 - mon.items.length"><td colspan="5"></td></tr>
+                    </tbody>
+                </table>
 
-            <table id="ability-info">
-                <thead>
-                    <tr>
-                        <th colspan="2"></th>
-                        <th>Ability</th>
-                        <th colspan="2">Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr
-                        is="vue:usage-list-icon"
-                        v-for="abilityInfo in mon.abilities"
-                        :code="abilityInfo.name"
-                        :name="abilityInfo.name"
-                        :count="abilityInfo.count"
-                        :total="mon.counts.total"
-                        iconclass=""
-                        type="abilities"
-                    ></tr>
-                    <tr v-for="n in 3 - mon.abilities.length"><td colspan="5"></td></tr>
-                </tbody>
-            </table>
+            </div>
+            <div class="config-container">
+
+                <table id="move-info">
+                    <thead>
+                        <tr>
+                            <th colspan="2"></th>
+                            <th>Move Name</th>
+                            <th colspan="2">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            is="vue:usage-list-icon"
+                            v-for="moveInfo in mon.moves"
+                            :code="moveInfo.name"
+                            :name="moveInfo.name"
+                            :count="moveInfo.count"
+                            :total="mon.counts.total"
+                            iconclass=""
+                            type="moves"
+                        ></tr>
+                        <tr v-if="mon.moves.length < 3" v-for="n in 3 - mon.moves.length"><td colspan="5"></td></tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div class="config-container">
+
+                <table id="tera-info">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th colspan="2">Tera Type</th>
+                            <th colspan="2">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            is="vue:usage-list-icon"
+                            v-for="teraInfo in mon.teras"
+                            :code="teraInfo.name"
+                            :name="teraInfo.name"
+                            :count="teraInfo.count"
+                            :total="mon.counts.total"
+                            :iconclass="`tera-icon tera-${teraInfo.name.toLowerCase()}`"
+                            type="teras"
+                        ></tr>
+                        <tr v-if="mon.teras.length < 3" v-for="n in 3 - mon.teras.length"><td colspan="5"></td></tr>
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="config-container">
+
+                <table id="ability-info">
+                    <thead>
+                        <tr>
+                            <th colspan="2"></th>
+                            <th>Ability</th>
+                            <th colspan="2">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            is="vue:usage-list-icon"
+                            v-for="abilityInfo in mon.abilities"
+                            :code="abilityInfo.name"
+                            :name="abilityInfo.name"
+                            :count="abilityInfo.count"
+                            :total="mon.counts.total"
+                            iconclass=""
+                            type="abilities"
+                        ></tr>
+                        <tr v-for="n in 3 - mon.abilities.length"><td colspan="5"></td></tr>
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="config-container config-container-big">
+
+                <table id="teammate-info">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th colspan="2">Teammate</th>
+                            <th colspan="2">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            is="vue:usage-list-icon"
+                            v-for="tmateInfo in mon.teammates"
+                            :code="tmateInfo.code"
+                            :name="tmateInfo.name"
+                            :count="tmateInfo.count"
+                            :total="mon.counts.total"
+                            iconclass="monicon"
+                            type="teammates"
+                        ></tr>
+                    </tbody>
+                </table>
+
+            </div>
 
         </div>
 
@@ -793,9 +834,10 @@ __TEMPLATE_FOOTER__
                 :season="season"
                 :show-drop="false"
                 :always-show-res="true"
+                team-key="teamSorted"
             ></tr>
             <tr v-if="filteredPlayers.length == 0" v-cloak>
-                <td colspan="10">No matching results.</td>
+                <td colspan="12">No matching results.</td>
             </tr>
         </tbody>
     </table>
