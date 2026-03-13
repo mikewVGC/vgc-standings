@@ -400,6 +400,9 @@ export default {
                 this.countryStats = {};
                 this.playerCodes = [];
 
+                // add sorted team
+                this.resetTeamSort();
+
                 for (const [playerCode, player ] of Object.entries(this.standings)) {
                     // create playerCodes array
                     this.playerCodes.push(playerCode);
@@ -409,9 +412,6 @@ export default {
                         .toLowerCase()
                         .normalize('NFD')
                         .replace(/[\u0300-\u036f]/g, '');
-
-                    // add sorted team
-                    this.resetTeamSort(playerCode);
 
                     // compile country stats
                     let country = player.country;
@@ -600,30 +600,35 @@ export default {
         // not really "sorting" but always put the specified mons first
         // this is meant to take the filtered list of mon codes, so this
         // method is a little annoying
-        sortTeam(playerCode, monsFirst) {
-            this.standings[playerCode].teamSorted.sort((a, b) => {
-                if (monsFirst.includes(a['code']) && monsFirst.includes(b['code'])) {
-                    if (monsFirst.indexOf(a['code']) < monsFirst.indexOf(b['code'])) {
+        sortTeams(monsFirst) {
+            for (const [playerCode, player ] of Object.entries(this.standings)) {
+                this.standings[playerCode].teamSorted.sort((a, b) => {
+                    if (monsFirst.includes(a['code']) && monsFirst.includes(b['code'])) {
+                        if (monsFirst.indexOf(a['code']) < monsFirst.indexOf(b['code'])) {
+                            return -1;
+                        }
+                        return 1;
+                    }
+                    if (monsFirst.includes(a['code'])) {
                         return -1;
                     }
-                    return 1;
-                }
-                if (monsFirst.includes(a['code'])) {
-                    return -1;
-                }
-                if (monsFirst.includes(b['code'])) {
-                    return 1;
-                }
-                return 0;
-            });
+                    if (monsFirst.includes(b['code'])) {
+                        return 1;
+                    }
+                    return 0;
+                });
+            }
         },
 
-        resetTeamSort(playerCode) {
-            this.standings[playerCode].teamSorted = [];
-            for (let i = 0; i < this.standings[playerCode].team.length; i++) {
-                this.standings[playerCode].teamSorted.push(
-                    this.standings[playerCode].team[i]
-                );
+        // remove all team sorts
+        resetTeamSort() {
+            for (const [playerCode, player ] of Object.entries(this.standings)) {
+                this.standings[playerCode].teamSorted = [];
+                for (let i = 0; i < this.standings[playerCode].team.length; i++) {
+                    this.standings[playerCode].teamSorted.push(
+                        this.standings[playerCode].team[i]
+                    );
+                }
             }
         },
 
@@ -640,10 +645,16 @@ export default {
         },
 
         toggleFilter(filterType, filterCode, monData) {
-            if (this.filters[filterType].filter(item => item == filterCode).length == 0) {
+            if (!this.filters[filterType].includes(filterCode)) {
+                // add filter
                 this.filters[filterType].push(filterCode);
             } else {
+                // remove filter
                 this.filters[filterType] = this.filters[filterType].filter(v => v != filterCode);
+
+                if (filterType == 'teammates') {
+                    this.resetTeamSort();
+                }
             }
 
             this.applyFilters(monData);
@@ -670,13 +681,11 @@ export default {
                         )
                     )
                 ) {
-                    if (this.filters.teammates.length > 0) {
-                        this.sortTeam(pcode, [ monData.code, ...this.filters.teammates ]);
-                    }
-
                     this.filteredPlayers.push(pcode);
                 }
             }
+
+            this.sortTeams(this.filters.teammates);
         },
 
         resetFilters() {
@@ -685,6 +694,8 @@ export default {
             this.filters.moves = [];
             this.filters.abilities = [];
             this.filters.teammates = [];
+
+            this.resetTeamSort();
         },
 
         isFiltered() {
@@ -1180,12 +1191,9 @@ export default {
 
                 this.$parent.setFilteredPlayers(this.mon.players);
 
-                this.$parent.resetFilters();
-
-                for (const [playerCode, player ] of Object.entries(this.standings)) {
-                    this.$parent.resetTeamSort(playerCode);
-                    this.$parent.sortTeam(playerCode, [ this.mon.code ]);
-                }
+                this.resetFilters(this.mon);
+                this.$parent.resetTeamSort();
+                this.toggleFilter('teammates', this.mon.code);
             },
             components: {
                 'standings-row': {
@@ -1241,9 +1249,11 @@ export default {
                 isFiltered() {
                     return this.$parent.isFiltered();
                 },
-                resetFilters(mon) {
+                resetFilters() {
+                    // reset
                     this.$parent.resetFilters();
-                    this.$parent.applyFilters(mon);
+                    // reapply the current mon
+                    this.$parent.applyFilters(this.mon);
                 },
                 setNav(navData) {
                     return this.$parent.setNav(navData);
