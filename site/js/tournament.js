@@ -698,13 +698,22 @@ export default {
             this.resetTeamSort();
         },
 
-        isFiltered() {
+        isFiltered(monCodeException) {
+            let teamFilter = this.filters.teammates.length;
+            if (
+                monCodeException &&
+                this.filters.teammates.length == 1 &&
+                this.filters.teammates.includes(monCodeException)
+            ) {
+                teamFilter = 0;
+            }
+
             return (
                 this.filters.items.length ||
                 this.filters.teras.length ||
                 this.filters.moves.length ||
                 this.filters.abilities.length ||
-                this.filters.teammates.length
+                teamFilter
             );
         },
 
@@ -1191,9 +1200,7 @@ export default {
 
                 this.$parent.setFilteredPlayers(this.mon.players);
 
-                this.resetFilters(this.mon);
-                this.$parent.resetTeamSort();
-                this.toggleFilter('teammates', this.mon.code);
+                this.resetFilters();
             },
             components: {
                 'standings-row': {
@@ -1247,13 +1254,13 @@ export default {
                     return this.$parent.toggleFilter(type, code, this.mon);
                 },
                 isFiltered() {
-                    return this.$parent.isFiltered();
+                    return this.$parent.isFiltered(this.mon.code);
                 },
                 resetFilters() {
                     // reset
                     this.$parent.resetFilters();
                     // reapply the current mon
-                    this.$parent.applyFilters(this.mon);
+                    this.toggleFilter('teammates', this.mon.code);
                 },
                 setNav(navData) {
                     return this.$parent.setNav(navData);
