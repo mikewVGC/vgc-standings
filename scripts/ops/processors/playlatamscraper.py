@@ -1,6 +1,8 @@
 
 import json
 
+from lib.tournament import player_made_phase_two
+
 from lib.util import (
     make_code,
     fix_mon_name,
@@ -103,11 +105,6 @@ def process_playlatamscraper_event(
         if player_code in pairings_by_player:
             rounds = pairings_by_player[player_code]
 
-        made_phase_two = False
-        if len(rounds) > tour_format[0]:
-            made_phase_two = True
-            phase_two_count += 1
-
         player_pairings = []
         if player_code in pairings_by_player:
             player_pairings = pairings_by_player[player_code]
@@ -144,12 +141,18 @@ def process_playlatamscraper_event(
                 'oppopp': 0,
             },
             cut=True if len(player_pairings) > tour_format[0] + tour_format[1] else False,
-            p2=made_phase_two,
+            p2=False,
             drop=-1,
             points=0,
             team=team,
             rounds=player_pairings,
         )
+
+        made_phase_two = False
+        if player_made_phase_two(players[player_code], tour_format):
+            made_phase_two = True
+            phase_two_count += 1
+            players[player_code].p2 = True
 
     for p_code, rounds in pairings_by_player.items():
         # this part is just used to set the players_in_cut_round var

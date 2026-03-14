@@ -1,6 +1,8 @@
 
 import re
 
+from lib.tournament import player_made_phase_two
+
 from lib.util import (
     make_code,
     fix_mon_name,
@@ -103,11 +105,6 @@ def process_pokedata_event(data:list, tour_format:list, official_order:list) -> 
                 phase=phase,
             ))
 
-        made_phase_two = False
-        if len(rounds) > tour_format[0]:
-            made_phase_two = True
-            phase_two_count += 1
-
         pdata = re.findall(name_reg, player['name'])
         if not len(pdata):
             print('uh oh', player, pdata)
@@ -146,12 +143,18 @@ def process_pokedata_event(data:list, tour_format:list, official_order:list) -> 
                 'oppopp': 0,
             },
             cut=True if len(rounds) > tour_format[0] + tour_format[1] else False,
-            p2=made_phase_two,
+            p2=False,
             drop=player['drop'],
             points=0,
             team=team,
             rounds=rounds,
         )
+
+        made_phase_two = False
+        if player_made_phase_two(players[player_code], tour_format):
+            made_phase_two = True
+            phase_two_count += 1
+            players[player_code].p2 = True
 
         # add missing players to official order. this is likely due
         # to a DQ or some other issue, but it also allows this

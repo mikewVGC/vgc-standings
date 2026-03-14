@@ -2,6 +2,9 @@ from __future__ import annotations
 
 from datetime import datetime
 from zoneinfo import ZoneInfo
+from dataclasses import dataclass, asdict
+
+from ops.format_models import Player
 
 """
 returns (day 1 rounds, day 2 rounds, top cut min)
@@ -356,6 +359,29 @@ def determine_event_status(event_info:dict, players:dict = False) -> str:
 
     return "complete"
 
+"""
+determines if the player made phase 2... can take Player or dict,
+but the dict needs to be compatible with Player
+"""
+def player_made_phase_two(player:dict|Player, tour_format:list) -> bool:
+    pl = player
+    if type(pl) is Player:
+        pl = asdict(player)
+
+    # simple check for after day 2 has begun
+    if len(pl['rounds']) > tour_format[0]:
+        return True
+
+    # lazy check for after phase 1 has completed
+    if (
+        len(pl['rounds']) == tour_format[0] and
+        tour_format[1] > 0 and
+        pl['record']['l'] <= 2
+    ):
+        return True
+
+    return False
+
 
 # some easy helper functions ... notably these are called
 # by the usage functions, which parse the data, so they don't
@@ -365,12 +391,6 @@ def player_earned_points(player:dict, points_threshold:int) -> bool:
     if not points_threshold:
         return False
     return player['place'] <= points_threshold
-
-
-def player_made_phase_two(player:dict, tour_format:list) -> bool:
-    if len(player['rounds']) > tour_format[0]:
-        return True
-    return False
 
 
 def player_made_cut(player:dict, tour_format:list) -> bool:
