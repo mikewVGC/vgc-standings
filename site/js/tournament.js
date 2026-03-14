@@ -535,6 +535,8 @@ export default {
                     winner = playerCode;
                 } else if (match.res == 'L') {
                     winner = opp;
+                } else if (match.res == 'T') {
+                    winner = 'tie';
                 }
 
                 if (!winner && !opp && !match.late && !match.bye) {
@@ -980,10 +982,13 @@ export default {
                         if (pairing.other == 'Bye') {
                             return 'W';
                         }
-                        return 'T';
+                        return '';
                     }
                     if (pairing.winner == player) {
                         return 'W';
+                    }
+                    if (pairing.winner == 'tie') {
+                        return 'T';
                     }
                     return 'L';
                 },
