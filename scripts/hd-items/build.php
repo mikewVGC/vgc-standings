@@ -16,17 +16,15 @@ function build_item_coords($data) {
 
     $final_data = [];
     foreach ($items as $item) {
+        if (!empty($item)) {
+            $final_data[$item] = [ $x, $y ];
+        }
+
         $x++;
         if ($x % 26 == 0) {
             $x = 0;
             $y++;
         }
-
-        if (empty($item)) {
-            continue;
-        }
-
-        $final_data[$item] = [ $x, $y ];
     }
 
     $path = "data/common/hd-item-coords.json";
@@ -122,14 +120,15 @@ $json_data = '[
     "",
     "",
     "",
-    "griseouscore",
-    "adamantcrystal",
+    "griseousorb",
+    "adamantorb",
     "lustrousorb",
     "cheriberry",
     "chestoberry",
     "pechaberry",
     "rawstberry",
     "aspearberry",
+    "leppaberry",
     "oranberry",
     "persimberry",
     "lumberry",
@@ -516,9 +515,9 @@ $json_data = '[
     "",
     "",
     "",
-    "",
-    "",
-    "",
+    "adamantcrystal",
+    "lustrousglobe",
+    "griseouscore",
     "blankplate",
     "",
 
