@@ -51,16 +51,23 @@ def process_playlatamscraper_event(
                 mon['species'] = 'Kyogre'
             if mon['species'] == 'Groudon [Groudon]':
                 mon['species'] = 'Groudon'
+            # platlatam has the crowned forms for some reason
             if mon['species'] == 'Zamazenta [Hero of Many Battles]':
-                mon['species'] = 'Zamazenta-Crowned'
+                mon['species'] = 'Zamazenta'
             if mon['species'] == 'Zacian [Hero of Many Battles]':
-                mon['species'] = 'Zacian-Crowned'
+                mon['species'] = 'Zacian'
             if mon['species'] == 'Koraidon [Apex Build]':
                 mon['species'] = 'Koraidon'
             if mon['species'] == 'Miraidon [Ultimate Mode]':
                 mon['species'] = 'Miraidon'
+            if mon['species'] == 'Tauros [Paldean Form Blaze Breed]':
+                mon['species'] = 'Tauros [Paldean Form - Blaze Breed]'
+            if mon['species'] == 'Tauros [Paldean Form Aqua Breed]':
+                mon['species'] = 'Tauros [Paldean Form - Aqua Breed]'
             if mon['species'].startswith('Alcremie'):
                 mon['species'] = 'Alcremie'
+            if mon['species'].startswith('Vivillon'):
+                mon['species'] = 'Vivillon'
 
             mon_name = fix_mon_name(mon['species'])
             mon_code = make_mon_code(mon_name)
@@ -69,6 +76,12 @@ def process_playlatamscraper_event(
             alt = get_mon_alt_from_code(mon_code)
             if alt:
                 dex_num = alt
+
+            # for consistency
+            if mon['species'] == 'Zamazenta' or mon['species'] == 'Zacian':
+                for i, move in enumerate(mon['moves']):
+                    if move == "Behemoth Bash" or move == "Behemoth Blade":
+                        mon['moves'][i] = "Iron Head"
 
             team.append(TeamMember(
                 name=mon_name,

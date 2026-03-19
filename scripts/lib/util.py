@@ -66,6 +66,8 @@ def fix_mon_name(name:str) -> str:
         "Green", # Squawkabilly
         "Red-Striped",
         "Chest",
+        "West", # rk9 doesn't differentiate between Gastrodon forms but other platforms do sometimes
+        "East", # west is the default to match Showdown, and also pink gastro is better anyway
     )
 
     # convert map -> rk9: Showdown
@@ -80,6 +82,7 @@ def fix_mon_name(name:str) -> str:
         "Alolan": "Alola",
         "Family of Four": "Four",
         "Rapid Strike": "Rapid-Strike",
+        "Low Key": "Low-Key",
     }
 
     # these are present in rk9 but not in Showdown names
@@ -93,6 +96,7 @@ def fix_mon_name(name:str) -> str:
         "Rider",
         "Plumage",
         "Kyurem",
+        "Sea",
     )
 
     mon_info = re.findall(r"([\w -]+)(\[(\w)\]){0,1}", name)
