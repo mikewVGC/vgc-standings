@@ -266,8 +266,10 @@ __TEMPLATE_FOOTER__
                 <td :class="[ opp.bye ? '' : opp.res ]">{{ opp.bye ? "" : opp.res }}</td>
                 <td>
                     <template v-if="opponents[opp.opp].record">
-                    ({{ opponents[opp.opp].record.w }} - {{ opponents[opp.opp].record.l }}
-                    <span v-if="opponents[opp.opp].record.t" v-cloak> - {{ opponents[opp.opp].record.t }}</span>)
+                    ({{ opponents[opp.opp].record.w }} - {{ opponents[opp.opp].record.l }}<span
+                        v-if="opponents[opp.opp].record.t"
+                        v-cloak
+                    > - {{ opponents[opp.opp].record.t }}</span>)
                     </template>
                 </td>
                 <td>
