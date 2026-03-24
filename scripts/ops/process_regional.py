@@ -151,6 +151,12 @@ def process_regional(year:int, code:str, event_info:dict, prod:bool) -> dict:
             players[p.code] = p
             official_order.append(p.code)
 
+    if (data_type == DT_PLAYLATAMSCRAPER and not official_standings_found):
+        c = 1
+        for player in players:
+            print(f"{c}. {players[player].name}")
+            c += 1
+
     # adjust the order based on rk9 standings
     for pidx, player in enumerate(official_order):
         # set the placement

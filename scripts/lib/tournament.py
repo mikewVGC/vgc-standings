@@ -18,6 +18,10 @@ def get_tournament_structure(season:int, competitors:int, event_info:dict) -> tu
         elif competitors >= 410: # liverpool had 487, the other two > 513
             return (9, 0, 5)
 
+    # lima and bogota 2024 are a little messed up because they're mixed divisioon
+    if season == 2024 and (event_info['code'] == "lima" or "bogota"):
+        return (6, 0, 3)
+
     # 2023 - 2024 did not have asym top cut, the last element is # cut rounds (3 = top 8)
     if season == 2023 or (season == 2024 and event_info['code'] != "worlds"):
         if competitors >= 800:
