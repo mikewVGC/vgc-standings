@@ -283,7 +283,7 @@ __TEMPLATE_FOOTER__
                             <div
                                 v-for="mon in opponents[opp.opp].team"
                                 class="monicon"
-                                :style="{ backgroundPosition: getSpritePos(mon.code) }"
+                                :style="{ backgroundPosition: getSpritePos(mon.altcode || mon.code) }"
                                 :title="mon.name"
                             >{{ mon.name }}</div>
                         </a>

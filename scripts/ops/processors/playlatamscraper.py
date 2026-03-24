@@ -161,9 +161,7 @@ def process_playlatamscraper_event(
             rounds=player_pairings,
         )
 
-        made_phase_two = False
         if player_made_phase_two(players[player_code], tour_format):
-            made_phase_two = True
             phase_two_count += 1
             players[player_code].p2 = True
 
