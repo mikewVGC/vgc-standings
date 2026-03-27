@@ -68,8 +68,10 @@ Python mostly, but also Go and PHP in the event you plan to run a live version (
 Porygon is a simple command line script used to process standings data and rebuild the relevant pages. The easiest thing is to just do a full development run:
 
 ```
-python3 scripts/porygon.py
+./scripts/porygon.py
 ```
+
+(Make sure you set up the venv first, otherwise you can just run `python3 scripts/porygon.py`)
 
 This will process and build all events found via `manifest.json`. Standings and usage JSON (which serve as the API) will be put in `public/data/{season}` and static HTML pages (which display all the data) will be put in `public/static` as `index.html`, `season.html`, and `tournament.html`.
 

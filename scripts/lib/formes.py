@@ -414,7 +414,11 @@ def get_icon_alt(mon_code:str, mon_data:dict) -> str:
             if mon_data['item'] == item_change['item']:
                 return item_change['form']
 
-    if mon_code in move_change_forms and move_change_forms[mon_code]['move'] in mon_data['moves']:
+    moves_key = 'moves'
+    if 'badges' in mon_data:
+        moves_key = 'badges'
+
+    if mon_code in move_change_forms and move_change_forms[mon_code]['move'] in mon_data[moves_key]:
         return move_change_forms[mon_code]['form']
 
     if mon_code in battle_change_forms:

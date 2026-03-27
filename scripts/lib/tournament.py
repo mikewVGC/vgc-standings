@@ -19,11 +19,15 @@ def get_tournament_structure(season:int, competitors:int, event_info:dict) -> tu
             return (9, 0, 5)
 
     # lima and bogota 2024 are a little messed up because they're mixed divisioon
-    if season == 2024 and (event_info['code'] == "lima" or "bogota"):
+    if season == 2024 and (event_info['code'] in ['lima', 'bogota']):
         return (6, 0, 3)
 
+    # notably 2024 worlds uses the 2025 structure
+    if season == 2024 and event_info['code'] == "worlds":
+        return (8, 3, 8)
+
     # 2023 - 2024 did not have asym top cut, the last element is # cut rounds (3 = top 8)
-    if season == 2023 or (season == 2024 and event_info['code'] != "worlds"):
+    if season == 2023 or season == 2024:
         if competitors >= 800:
             return (9, 6, 3)
         elif competitors >= 227:
@@ -43,8 +47,7 @@ def get_tournament_structure(season:int, competitors:int, event_info:dict) -> tu
         elif competitors >= 4:
             return (3, 0, 0)
 
-    # notably 2024 worlds uses the 2025 structure
-    if season == 2025 or (season == 2024 and event_info['code'] == "worlds"):
+    if season == 2025:
         if competitors >= 4097:
             return (9, 5, 8)
         elif competitors >= 2049:
