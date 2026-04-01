@@ -217,6 +217,7 @@ export default {
                         usage: this.usage,
                         filteredUsage: this.filteredUsage,
                         monUsageSearch: this.monUsageSearch,
+                        usageFilter: this.usageFilter,
                     };
 
                 case 'mon':
@@ -817,7 +818,7 @@ export default {
             components: {
                 'standings-row': {
                     template: '#standings-row-template',
-                    props: [ 'standings', 'pcode', 'eventInfo', 'season', 'showDrop', 'alwaysShowRes' ],
+                    props: [ 'standings', 'pcode', 'eventInfo', 'season', 'showDrop', 'alwaysShowRes', 'teamKey' ],
                     methods: {
                         toggleFav(playerCode) {
                             this.$parent.toggleFav(playerCode);

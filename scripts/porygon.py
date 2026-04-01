@@ -19,6 +19,7 @@ def main():
     parser.add_argument('--prod', action="store_true", help="Build production version")
     parser.add_argument('--build-only', action="store_true", help="Don't process any events, only rebuild pages")
     parser.add_argument('--process', help="Only process specified regional(s). Format: year1:name1,year2:name2")
+    parser.add_argument('--limitless', action="store_true", help="Process Limitless events instead of official ones")
 
     cl = parser.parse_args()
 
@@ -36,13 +37,17 @@ def main():
     except FileNotFoundError:
         print("Couldn't load config, but that's okay")
 
+    manifest_file = "data/majors/manifest.json"
+    if cl.limitless:
+        manifest_file = "data/majors/manifest-limitless.json"
+
     manifest = {}
     try:
-        with open("data/majors/manifest.json") as file:
+        with open(manifest_file) as file:
             manifest = json.loads(file.read())
     except FileNotFoundError:
         # manifest is required
-        print("Could not find manifest.json, exiting")
+        print("Could not find manifest, exiting")
         return
 
     non_current_seasons = {}
