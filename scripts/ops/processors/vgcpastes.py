@@ -128,6 +128,8 @@ def parse_paste(paste:str) -> list:
                     _, mon['ability'] = matches[0][3].split(': ')
                 elif matches[0][3].startswith("Tera Type: "):
                     _, mon['tera'] = matches[0][3].split(': ')
+                elif matches[0][3].startswith("Shiny: "):
+                    ...
                 else:
                     mon['species'] = matches[0][3] # if there's no nickname species is here!
         
