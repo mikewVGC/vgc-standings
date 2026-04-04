@@ -398,7 +398,7 @@ item_change_forms = {
     "baxcalibur": [{ "item": "Baxcalibrite", "form": "baxcaliburmega" }],
 }
 
-# rayquaza just has to be differebnt
+# rayquaza just has to be different
 move_change_forms = {
     "rayquaza": { "move": "Dragon Ascent", "form": "rayquazamega" },
 }
@@ -408,17 +408,19 @@ battle_change_forms = {
     "terapagos": "terapagosterastal",
 }
 
-def get_icon_alt(mon_code:str, mon_data:dict) -> str:
+def get_icon_alt(mon_code:str, mon_data:dict, megas_legal:bool) -> str:
     if mon_code in item_change_forms:
         for item_change in item_change_forms[mon_code]:
             if mon_data['item'] == item_change['item']:
-                return item_change['form']
+                altform = item_change['form']
+                if altform.endswith('mega') and megas_legal:
+                    return altform
 
     moves_key = 'moves'
     if 'badges' in mon_data:
         moves_key = 'badges'
 
-    if mon_code in move_change_forms and move_change_forms[mon_code]['move'] in mon_data[moves_key]:
+    if megas_legal and mon_code in move_change_forms and move_change_forms[mon_code]['move'] in mon_data[moves_key]:
         return move_change_forms[mon_code]['form']
 
     if mon_code in battle_change_forms:

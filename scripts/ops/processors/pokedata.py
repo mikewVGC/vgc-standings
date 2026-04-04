@@ -1,7 +1,10 @@
 
 import re
 
-from lib.tournament import player_made_phase_two
+from lib.tournament import (
+    player_made_phase_two,
+    is_mega_format,
+)
 
 from lib.util import (
     make_code,
@@ -25,7 +28,7 @@ from ops.format_models import (
 """
 process pokedata's json format (where most data comes from)
 """
-def process_pokedata_event(data:list, tour_format:list, official_order:list) -> (list, int, dict):
+def process_pokedata_event(data:list, tour_format:list, official_order:list, event_info:dict) -> (list, int, dict):
 
     name_reg = r"^([^\[]+)( {0,1}\[[A-Z]{0,2}\]){0,1}$"
 
@@ -60,7 +63,7 @@ def process_pokedata_event(data:list, tour_format:list, official_order:list) -> 
             team.append(TeamMember(
                 name=mon_name,
                 code=mon_code,
-                altcode=get_icon_alt(mon_code, mon),
+                altcode=get_icon_alt(mon_code, mon, is_mega_format(event_info)),
                 dex=dex_num,
                 ptype=ptype.lower(),
                 tera=mon['teratype'],

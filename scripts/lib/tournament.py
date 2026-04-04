@@ -367,6 +367,19 @@ def determine_event_status(event_info:dict, players:dict = False) -> str:
     return "complete"
 
 """
+if megas are legal in a specific format or not
+"""
+def is_mega_format(event_info:dict) -> bool:
+    if event_info['format'] in [
+        'Regulation M-A',
+    ] and event_info['game'] in [
+        'Champions',
+    ]:
+        return True
+
+    return False
+
+"""
 determines if the player made phase 2... can take Player or dict,
 but the dict needs to be compatible with Player
 """

@@ -7,6 +7,7 @@ from urllib import request
 from urllib.error import URLError, HTTPError
 
 from lib.util import make_code, make_mon_code, make_item_code
+from lib.tournament import is_mega_format
 
 from lib.formes import (
     get_mon_data_from_code,
@@ -17,7 +18,7 @@ from lib.formes import (
 from ops.format_models import TeamMember
 
 
-def process_vgcpastes_teamlist(players:dict, year:int, code:str) -> bool:
+def process_vgcpastes_teamlist(players:dict, event_info:dict, year:int, code:str) -> bool:
     player_pastes = {}
     try:
         with open(f"data/majors/{year}/{code}-teams.txt", encoding='utf8') as file:
@@ -40,7 +41,7 @@ def process_vgcpastes_teamlist(players:dict, year:int, code:str) -> bool:
             continue
         paste = fetch_paste(paste).splitlines()
         if len(paste):
-            players[player].team = parse_paste(paste)
+            players[player].team = parse_paste(paste, event_info)
 
     return True
 
@@ -69,7 +70,7 @@ def fetch_paste(url:str) -> str:
     return data
 
 
-def parse_paste(paste:str) -> list:
+def parse_paste(paste:str, event_info:dict) -> list:
     mons = []
 
     paste.append("\n")
@@ -102,7 +103,7 @@ def parse_paste(paste:str) -> list:
             mons.append(TeamMember(
                 name=mon['species'],
                 code=mon_code,
-                altcode=get_icon_alt(mon_code, mon),
+                altcode=get_icon_alt(mon_code, mon, is_mega_format(event_info)),
                 dex=dex_num,
                 ptype=ptype.lower(),
                 tera=mon['tera'],

@@ -1,7 +1,10 @@
 
 import json
 
-from lib.tournament import player_made_phase_two
+from lib.tournament import (
+    player_made_phase_two,
+    is_mega_format,
+)
 
 from lib.util import (
     make_code,
@@ -30,6 +33,7 @@ def process_rk9scraper_event(
     data:list,
     tour_format:list,
     official_order:list,
+    event_info:dict,
     year:int,
     code:str
 ) -> (list, int, dict):
@@ -65,7 +69,7 @@ def process_rk9scraper_event(
             team.append(TeamMember(
                 name=mon_name,
                 code=mon_code,
-                altcode=get_icon_alt(mon_code, mon),
+                altcode=get_icon_alt(mon_code, mon, is_mega_format(event_info)),
                 dex=dex_num,
                 ptype=ptype.lower(),
                 tera=mon['tera'],

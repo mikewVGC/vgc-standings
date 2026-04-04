@@ -101,15 +101,15 @@ def process_regional(year:int, code:str, event_info:dict, prod:bool) -> dict:
     players_in_cut_round = {}
 
     if data_type == DT_POKEDATA:
-        players, phase_two_count, players_in_cut_round = process_pokedata_event(data, tour_format, official_order)
+        players, phase_two_count, players_in_cut_round = process_pokedata_event(data, tour_format, official_order, event_info)
     elif data_type == DT_RK9SCRAPER:
-        players, phase_two_count, players_in_cut_round = process_rk9scraper_event(data, tour_format, official_order, year, code)
+        players, phase_two_count, players_in_cut_round = process_rk9scraper_event(data, tour_format, official_order, event_info, year, code)
     elif data_type == DT_PLAYLATAMSCRAPER:
-        players, phase_two_count, players_in_cut_round = process_playlatamscraper_event(data, tour_format, official_order, year, code)
+        players, phase_two_count, players_in_cut_round = process_playlatamscraper_event(data, tour_format, official_order, event_info, year, code)
 
     if parse_teams:
         # this will just add teams to the players
-        process_vgcpastes_teamlist(players, year, code)
+        process_vgcpastes_teamlist(players, event_info, year, code)
 
     # more loops for calculating various resistances
     for player in players:
