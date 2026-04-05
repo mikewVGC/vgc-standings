@@ -413,7 +413,7 @@ def get_icon_alt(mon_code:str, mon_data:dict, megas_legal:bool) -> str:
         for item_change in item_change_forms[mon_code]:
             if mon_data['item'] == item_change['item']:
                 altform = item_change['form']
-                if altform.endswith('mega') and megas_legal:
+                if not altform.endswith('mega') or (altform.endswith('mega') and megas_legal):
                     return altform
 
     moves_key = 'moves'
