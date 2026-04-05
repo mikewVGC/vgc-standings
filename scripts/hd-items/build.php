@@ -190,7 +190,7 @@ $json_data = '[
     "jabocaberry",
     "rowapberry",
     "brightpowder",
-    "powerherb",
+    "whiteherb",
     "",
     "quickclaw",
     "soothebell",
