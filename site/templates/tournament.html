@@ -197,7 +197,7 @@ __TEMPLATE_FOOTER__
                     {{ player.record.w }} - {{ player.record.l }}
                     <span v-if="player.record.t" v-cloak> - {{ player.record.t }}</span>
                 </td>
-                <td>{{ player.points }}</th>
+                <td>{{ eventInfo.code.startsWith('worlds') ? '-' : player.points }}</td>
                 <td>{{ player.drop != -1 ? player.drop : '-' }}</td>
                 <td>{{ getPct(player.res.opp) }}</td>
                 <td>{{ getPct(player.res.oppopp) }}</td>
@@ -501,7 +501,9 @@ __TEMPLATE_FOOTER__
             <label>Display Only:</label>
             <select @change="updateUsageFilter" :value="usageFilter">
                 <option value="all">All Pokemon</option>
-                <option value="points">Points Earned (Top {{eventInfo.points}})</option>
+                <option value="points">{{ eventInfo.code.startsWith('worlds') ?
+                    `Top ${eventInfo.points}` :
+                    `Points Earned (Top ${eventInfo.points})` }}</option>
                 <option value="phase2">Made Phase 2</option>
                 <option value="cut">Made Top Cut</option>
             </select>
@@ -647,7 +649,7 @@ __TEMPLATE_FOOTER__
             <table>
                 <tr>
                     <td>Points Earned</td>
-                    <td>{{ mon.points.toLocaleString() }}</td>
+                    <td>{{ eventInfo.code.startsWith('worlds') ? '-' : mon.points.toLocaleString() }}</td>
                 </tr>
                 <tr>
                     <td>Distinct Configs</td>
