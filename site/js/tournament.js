@@ -370,6 +370,10 @@ export default {
         },
 
         setNav(navData) {
+            if (this.season == 'limitless') {
+                navData.shift();
+            }
+
             this.nav = navData;
         },
 
@@ -472,6 +476,8 @@ export default {
                     u.counts['phase2Conversion'] = u.counts.phase2 / u.counts.total;
                     u.counts['cutConversion'] = u.counts.cut / u.counts.phase2;
                 });
+
+                console.log(this.usage);
 
                 this.loaded = true;
             });

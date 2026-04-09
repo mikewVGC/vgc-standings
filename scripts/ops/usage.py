@@ -12,7 +12,7 @@ from lib.formes import get_mon_data_from_code, get_mon_alt_from_code
 from lib.util import make_item_code
 
 
-def compile_usage(year:int, event_code:str, prod:bool) -> None:
+def compile_usage(year:int, event_code:str, prod:bool, limitless:bool = False) -> None:
     data = {}
     try:
         with open(f"public/data/{year}/{event_code}.json", 'r') as file:
@@ -43,7 +43,7 @@ def compile_usage(year:int, event_code:str, prod:bool) -> None:
                     dexNum = alt
 
                 mon_stats[code] = {
-                    "name": mon['name'],
+                    "name": mon['name'].title(),
                     "code": code,
                     "dex": dexNum,
                     "counts": {

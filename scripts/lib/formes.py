@@ -419,6 +419,8 @@ def get_icon_alt(mon_code:str, mon_data:dict, megas_legal:bool) -> str:
     moves_key = 'moves'
     if 'badges' in mon_data:
         moves_key = 'badges'
+    if 'attacks' in mon_data:
+        moves_key = 'attacks'
 
     if megas_legal and mon_code in move_change_forms and move_change_forms[mon_code]['move'] in mon_data[moves_key]:
         return move_change_forms[mon_code]['form']

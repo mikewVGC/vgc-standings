@@ -9,6 +9,7 @@ from ops.processors.pokedata import process_pokedata_event
 from ops.processors.rk9scraper import process_rk9scraper_event
 from ops.processors.vgcpastes import process_vgcpastes_teamlist
 from ops.processors.playlatamscraper import process_playlatamscraper_event
+from ops.processors.limitless import process_limitless_event
 
 from lib.util import (
     make_code,
@@ -30,6 +31,7 @@ from lib.res import (
 DT_POKEDATA = 'pokedata'
 DT_RK9SCRAPER = 'rk9scraper'
 DT_PLAYLATAMSCRAPER = 'playlatamscraper'
+DT_LIMITLESS = 'limitless'
 
 class EnhancedJSONEncoder(json.JSONEncoder):
     def default(self, o):
@@ -40,33 +42,22 @@ class EnhancedJSONEncoder(json.JSONEncoder):
 """
 build the standings/matches json
 """
-def process_regional(year:int, code:str, event_info:dict, prod:bool) -> dict:
-    data = []
-    data_type = ''
+def process_regional(year:int, code:str, event_info:dict, prod:bool, limitless:bool = False) -> dict:
+
+    try:
+        data, data_type = get_data_and_type(year, code, limitless)
+    except Exception as e:
+        print(f"{e} ", end="")
+
+        event_info['processed'] = False
+        event_info['status'] = 'upcoming'
+
+        return event_info
+
+    if limitless:
+        data_type = DT_LIMITLESS
+
     parse_teams = False
-
-    try :
-        # thanks to pokedata.ovh for the standings json!
-        with open(f"data/majors/{year}/{code}-standings.json", encoding='utf8') as file:
-            data = json.loads(file.read())
-            data_type = DT_POKEDATA
-    except FileNotFoundError:
-        try:
-            with open(f"data/majors/{year}/{code}-roster.json", encoding='utf8') as file:
-                data = json.loads(file.read())
-                data_type = DT_RK9SCRAPER
-        except FileNotFoundError:
-            try:
-                with open(f"data/majors/{year}/{code}-roster.pl.json", encoding='utf8') as file:
-                    data = json.loads(file.read())
-                    data_type = DT_PLAYLATAMSCRAPER
-            except FileNotFoundError:
-                print("Main standings file not found, maybe this hasn't happened yet? ", end="")
-                event_info['processed'] = False
-                event_info['status'] = 'upcoming'
-
-                return event_info
-
     # check for a vgcpastes teamlist to fill in missing teams
     try:
         with open(f"data/majors/{year}/{code}-teams.txt", encoding='utf8') as file:
@@ -106,6 +97,8 @@ def process_regional(year:int, code:str, event_info:dict, prod:bool) -> dict:
         players, phase_two_count, players_in_cut_round = process_rk9scraper_event(data, tour_format, official_order, event_info, year, code)
     elif data_type == DT_PLAYLATAMSCRAPER:
         players, phase_two_count, players_in_cut_round = process_playlatamscraper_event(data, tour_format, official_order, event_info, year, code)
+    elif data_type == DT_LIMITLESS:
+        players, phase_two_count, players_in_cut_round = process_limitless_event(data, tour_format, official_order, event_info)
 
     if parse_teams:
         # this will just add teams to the players
@@ -180,8 +173,9 @@ def process_regional(year:int, code:str, event_info:dict, prod:bool) -> dict:
         event_info['winner'] = next(iter(players_ordered.values())).name
 
         # one more loop for points!
-        for player in players_ordered.values():
-            player.points = get_points_earned(year, len(players_ordered), player.place, event_is_ic)
+        if not limitless:
+            for player in players_ordered.values():
+                player.points = get_points_earned(year, len(players_ordered), player.place, event_is_ic)
 
     indent_amt = 2
     separators = None
@@ -197,6 +191,30 @@ def process_regional(year:int, code:str, event_info:dict, prod:bool) -> dict:
 
     return event_info
 
+
+"""
+figure out which format the data is stored in... limitless is explicitly set because... it is
+"""
+def get_data_and_type(year:int, code:str, limitless:bool = False):
+    try :
+        # thanks to pokedata.ovh for the standings json!
+        with open(f"data/majors/{year}/{code}-standings.json", encoding='utf8') as file:
+            data = json.loads(file.read())
+            data_type = DT_POKEDATA
+    except FileNotFoundError:
+        try:
+            with open(f"data/majors/{year}/{code}-roster.json", encoding='utf8') as file:
+                data = json.loads(file.read())
+                data_type = DT_RK9SCRAPER
+        except FileNotFoundError:
+            try:
+                with open(f"data/majors/{year}/{code}-roster.pl.json", encoding='utf8') as file:
+                    data = json.loads(file.read())
+                    data_type = DT_PLAYLATAMSCRAPER
+            except FileNotFoundError:
+                raise Exception("Main standings file not found, maybe this hasn't happened yet?")
+
+    return data, data_type
 
 """
 build the season json... this mostly just copies the corresponding <year>.json

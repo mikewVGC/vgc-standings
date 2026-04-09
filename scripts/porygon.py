@@ -86,11 +86,11 @@ def main():
                 majors[event_code].update(proc_event_info)
             else:
                 print(f"[{year}] Processing data for '{event_code}'... ", end="")
-                majors[event_code] = process_regional(year, event_code, event_info, cl.prod)
+                majors[event_code] = process_regional(year, event_code, event_info, cl.prod, cl.limitless)
 
             if event_should_be_processed and majors[event_code]['processed']:
                 print("building usage... ", end="")
-                compile_usage(year, event_code, cl.prod)
+                compile_usage(year, event_code, cl.prod, cl.limitless)
 
             builder.build_meta_ssi(
                 f"{year}/{event_code}",
@@ -114,6 +114,10 @@ def main():
         print("[ALL] Minifying js and css... ", end="")
         subprocess.run(["go", "run", "scripts/packer/main.go"], capture_output=True)
         print("Done!")
+
+    if cl.limitless:
+        print("Finished!")
+        return
 
     print("[ALL] Rebuilding season page... ", end="")
     builder.build_season()

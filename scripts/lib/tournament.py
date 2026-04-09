@@ -27,7 +27,7 @@ def get_tournament_structure(season:int, competitors:int, event_info:dict) -> tu
         return (8, 3, 8)
 
     # 2023 - 2024 did not have asym top cut, the last element is # cut rounds (3 = top 8)
-    if season == 2023 or season == 2024:
+    if season == 2023 or season == 2024 or season == "limitless":
         if competitors >= 800:
             return (9, 6, 3)
         elif competitors >= 227:
@@ -132,7 +132,7 @@ def get_points_threshold(season:int, competitors:int) -> int | None:
         if competitors >= 8:
             return 8
 
-    if season == 2025 or season == 2026:
+    if season == 2025 or season == 2026 or season == "limitless":
         if competitors >= 2049:
             return 1024
         if competitors >= 1025:
