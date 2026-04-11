@@ -308,7 +308,7 @@ table#favorites {
     width: 36px;
     height: 30px;
     display: inline-block;
-    background: url(/static/img/pokemonicons-sheet.png?2) no-repeat;
+    background: url(/static/img/pokemonicons-sheet.png?3) no-repeat;
     overflow: hidden;
     text-indent: -9999em;
     image-rendering: pixelated;
@@ -594,14 +594,15 @@ ul#rk9-links li {
 }
 
 .mon-config-container {
-    position: relative;
+    width: 33%;
+    display: inline-block;
 }
 
 .config-container {
-    display: inline-block;
+    display: block;
     overflow-y: scroll;
     overflow-x: hidden;
-    width: calc(33% - .25em);
+    width: calc(100% - .25em);
     height: 9em;
     margin-bottom: .75em;
     margin-right: .5em;
@@ -609,11 +610,8 @@ ul#rk9-links li {
 }
 
 .config-container-big {
-    width: 33%;
     margin-right: 0;
     height: 18.75em;
-    position: absolute;
-    top: 0;
 }
 
 .config-container::-webkit-scrollbar {

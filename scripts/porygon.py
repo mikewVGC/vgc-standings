@@ -8,6 +8,7 @@ from ops.process_regional import process_regional, process_season, was_event_pro
 from ops.site_builder import SiteBuilder
 from ops.usage import compile_usage
 from lib.util import get_season_bookends, make_nice_date_str
+from lib.ruleset import load_rulesets
 
 # every day I try to make this a little less crazy
 
@@ -22,6 +23,8 @@ def main():
     parser.add_argument('--limitless', action="store_true", help="Process Limitless events instead of official ones")
 
     cl = parser.parse_args()
+
+    rulesets = load_rulesets()
 
     allowlist = []
     if cl.process:
@@ -86,7 +89,14 @@ def main():
                 majors[event_code].update(proc_event_info)
             else:
                 print(f"[{year}] Processing data for '{event_code}'... ", end="")
-                majors[event_code] = process_regional(year, event_code, event_info, cl.prod, cl.limitless)
+                majors[event_code] = process_regional(
+                    year,
+                    event_code,
+                    event_info,
+                    rulesets.get_ruleset(event_info['format']),
+                    cl.prod,
+                    cl.limitless
+                )
 
             if event_should_be_processed and majors[event_code]['processed']:
                 print("building usage... ", end="")

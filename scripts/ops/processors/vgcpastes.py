@@ -7,7 +7,6 @@ from urllib import request
 from urllib.error import URLError, HTTPError
 
 from lib.util import make_code, make_mon_code, make_item_code
-from lib.tournament import is_mega_format
 
 from lib.formes import (
     get_mon_data_from_code,
@@ -103,7 +102,7 @@ def parse_paste(paste:str, event_info:dict) -> list:
             mons.append(TeamMember(
                 name=mon['species'],
                 code=mon_code,
-                altcode=get_icon_alt(mon_code, mon, is_mega_format(event_info)),
+                altcode=get_icon_alt(mon_code, mon, event_info['rules']['mega']),
                 dex=dex_num,
                 ptype=ptype.lower(),
                 tera=mon['tera'],

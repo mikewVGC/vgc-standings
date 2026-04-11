@@ -223,7 +223,7 @@ __TEMPLATE_FOOTER__
                 <div><span :class="`type-${mon.ptype}`">{{ mon.name }}</span> @ {{ mon.item }}  </div>
                 <div><span class="attr">Ability:</span> {{ mon.ability }}  </div>
                 <div class="kinda-hide">Level: 50  </div>
-                <div><span class="attr">Tera Type:</span> <span :class="`type-${mon.tera.toLowerCase()}`">{{ mon.tera }}</span>  </div>
+                <div v-if="eventInfo.rules.tera"><span class="attr">Tera Type:</span> <span :class="`type-${mon.tera.toLowerCase()}`">{{ mon.tera }}</span>  </div>
                 <div v-for="move in mon.moves">- {{ move }}  </div>
                 <br />
             </div>
@@ -672,33 +672,7 @@ __TEMPLATE_FOOTER__
         </h3>
 
         <div class="mon-config-container">
-            <div class="config-container">
-
-                <table id="item-info">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th colspan="2">Item Name</th>
-                            <th colspan="2">Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr
-                            is="vue:usage-list-icon"
-                            v-for="itemInfo in mon.items"
-                            :code="itemInfo.code"
-                            :name="itemInfo.name"
-                            :count="itemInfo.count"
-                            :total="mon.counts.total"
-                            iconclass="itemicon"
-                            type="items"
-                        ></tr>
-                        <tr v-if="mon.items.length < 3" v-for="n in 3 - mon.items.length"><td colspan="5"></td></tr>
-                    </tbody>
-                </table>
-
-            </div>
-            <div class="config-container">
+            <div class="config-container" :class="{ 'config-container-big': !eventInfo.rules.tera }">
 
                 <table id="move-info">
                     <thead>
@@ -724,8 +698,7 @@ __TEMPLATE_FOOTER__
                 </table>
 
             </div>
-
-            <div class="config-container">
+            <div class="config-container" v-if="eventInfo.rules.tera">
 
                 <table id="tera-info">
                     <thead>
@@ -747,6 +720,36 @@ __TEMPLATE_FOOTER__
                             type="teras"
                         ></tr>
                         <tr v-if="mon.teras.length < 3" v-for="n in 3 - mon.teras.length"><td colspan="5"></td></tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+        <div class="mon-config-container">
+
+            <div class="config-container">
+
+                <table id="item-info">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th colspan="2">Item Name</th>
+                            <th colspan="2">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            is="vue:usage-list-icon"
+                            v-for="itemInfo in mon.items"
+                            :code="itemInfo.code"
+                            :name="itemInfo.name"
+                            :count="itemInfo.count"
+                            :total="mon.counts.total"
+                            iconclass="itemicon"
+                            type="items"
+                        ></tr>
+                        <tr v-if="mon.items.length < 3" v-for="n in 3 - mon.items.length"><td colspan="5"></td></tr>
                     </tbody>
                 </table>
 
@@ -777,6 +780,10 @@ __TEMPLATE_FOOTER__
                 </table>
 
             </div>
+
+        </div>
+        <div class="mon-config-container">
+
             <div class="config-container config-container-big">
 
                 <table id="teammate-info">

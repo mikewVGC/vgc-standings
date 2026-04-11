@@ -4,6 +4,8 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 from dataclasses import asdict
 
+from lib.limitless import determine_tournament_structure
+
 from ops.format_models import Player
 
 """
@@ -11,6 +13,9 @@ returns (day 1 rounds, day 2 rounds, top cut min)
 I don't think actually uses the third value yet?
 """
 def get_tournament_structure(season:int, competitors:int, event_info:dict) -> tuple | None:
+    if season == "limitless":
+        return determine_tournament_structure(season, competitors, event_info)
+
     # the first three 2023 regionals had no day 2, instead day 1 rolled into top cut
     if season == 2023 and event_info['code'] in ['san-diego', 'liverpool', 'orlando']:
         if competitors >= 513:
@@ -27,7 +32,7 @@ def get_tournament_structure(season:int, competitors:int, event_info:dict) -> tu
         return (8, 3, 8)
 
     # 2023 - 2024 did not have asym top cut, the last element is # cut rounds (3 = top 8)
-    if season == 2023 or season == 2024 or season == "limitless":
+    if season == 2023 or season == 2024:
         if competitors >= 800:
             return (9, 6, 3)
         elif competitors >= 227:
@@ -366,18 +371,6 @@ def determine_event_status(event_info:dict, players:dict = False) -> str:
 
     return "complete"
 
-"""
-if megas are legal in a specific format or not
-"""
-def is_mega_format(event_info:dict) -> bool:
-    if event_info['format'] in [
-        'Regulation M-A',
-    ] and event_info['game'] in [
-        'Champions',
-    ]:
-        return True
-
-    return False
 
 """
 determines if the player made phase 2... can take Player or dict,

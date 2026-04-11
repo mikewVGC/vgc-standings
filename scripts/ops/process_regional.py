@@ -27,6 +27,7 @@ from lib.res import (
     calculate_res,
     calculate_oppopp
 )
+from lib.ruleset import Ruleset
 
 DT_POKEDATA = 'pokedata'
 DT_RK9SCRAPER = 'rk9scraper'
@@ -42,7 +43,14 @@ class EnhancedJSONEncoder(json.JSONEncoder):
 """
 build the standings/matches json
 """
-def process_regional(year:int, code:str, event_info:dict, prod:bool, limitless:bool = False) -> dict:
+def process_regional(
+    year:int,
+    code:str,
+    event_info:dict,
+    ruleset:Ruleset | None,
+    prod:bool,
+    limitless:bool = False
+) -> dict:
 
     try:
         data, data_type = get_data_and_type(year, code, limitless)
@@ -56,6 +64,11 @@ def process_regional(year:int, code:str, event_info:dict, prod:bool, limitless:b
 
     if limitless:
         data_type = DT_LIMITLESS
+
+    if ruleset:
+        event_info['rules'] = ruleset.dump_info()
+    elif event_info['rules']:
+        event_info['rules'] = Ruleset(**event_info['rules']).dump_info()
 
     parse_teams = False
     # check for a vgcpastes teamlist to fill in missing teams
@@ -130,8 +143,13 @@ def process_regional(year:int, code:str, event_info:dict, prod:bool, limitless:b
     players_ordered = OrderedDict()
 
     # just do the sorting ourselves for worlds 2023 day 1 + playlatam scrapes
-    if year == 2023 and code == 'worlds-day-1' or (data_type == DT_PLAYLATAMSCRAPER and not official_standings_found):
+    if (
+        (year == 2023 and code == 'worlds-day-1') or 
+        (data_type == DT_PLAYLATAMSCRAPER and not official_standings_found) or
+        (data_type == DT_LIMITLESS and not official_standings_found)
+    ):
         sorted_worlds = sorted(list(players.values()), key=lambda player: (
+            -player.place,
             player.record['w'],
             player.res['self'],
             player.res['opp'],

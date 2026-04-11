@@ -1,9 +1,10 @@
 
 import json
+import math
+import re
 
 from lib.tournament import (
     player_made_phase_two,
-    is_mega_format,
 )
 
 from lib.util import (
@@ -17,6 +18,7 @@ from lib.formes import (
     get_mon_data_from_code,
     get_mon_alt_from_code,
     get_icon_alt,
+    get_mon_name_fromn_code,
 )
 
 from ops.format_models import (
@@ -49,31 +51,61 @@ def process_limitless_event(data:list, tour_format:list, official_order:list, ev
         team = []
 
         for mon in player['decklist']:
+            # for now in limitless we can assume this combo means eternal floette
+            if mon['id'] == 'floette' and mon['item'] == 'Floettite':
+                mon['id'] = 'floette-eternal'
+                mon['name'] = 'Eternal Floette'
+
+            meow = mon['name'].lower().startswith("meowstic")
+
             mon_code = make_mon_code(mon['id'])
             dex_num, ptype = get_mon_data_from_code(mon_code)
+
+            if meow:
+                print("\n", mon['name'], mon['id'], mon_code, dex_num)
+
+            tera_type = "" if 'tera' not in mon else mon['tera']
+            if not event_info['rules']['tera']:
+                tera_type = ""
+
+            mon_alt = get_icon_alt(mon_code, mon, event_info['rules']['mega'])
+
+            mon_name = ""
+            if mon_alt:
+                mon_name = get_mon_name_fromn_code(mon_alt)
+                mon_code = mon_alt
+            else:
+                mon_name = mon['id'].title()
+
+            if meow:
+                print(f"\nname: {mon['name']} -- id: {mon['id']} -- name: {mon_name} -- alt: {mon_alt} -- code: {mon_code} -- dex: {dex_num}")
 
             alt = get_mon_alt_from_code(mon_code)
             if alt:
                 dex_num = alt
 
             team.append(TeamMember(
-                name=mon['id'].title(),
+                name=mon_name,
                 code=mon_code,
-                altcode=get_icon_alt(mon_code, mon, is_mega_format(event_info)),
+                altcode=mon_alt,
                 dex=dex_num,
                 ptype=ptype.lower(),
-                tera=mon['tera'],
+                tera=str(tera_type),
                 ability=mon['ability'],
                 item=mon['item'],
                 itemcode=make_item_code(mon['item']),
                 moves=mon['attacks'],
             ))
 
+        place = player['placing']
+        if place == None:
+            place = 1000
+
         players[player_code] = Player(
             name=player['name'],
             code=player_code,
             country="" if not player['country'] else player['country'].lower(),
-            place=player['placing'],
+            place=place,
             record={
                 'w': player['record']['wins'],
                 'l': player['record']['losses'],
@@ -121,6 +153,29 @@ def get_grouped_pairings(code:str, tour_format:list, details:dict) -> dict:
 
     pairings_by_player = {}
 
+    swiss_rounds_p1 = 0
+    swiss_rounds_p2 = 0
+    for phase in details['phases']:
+        if phase['type'] == "SWISS":
+            if phase['phase'] == 1:
+                swiss_rounds_p1 += phase['rounds']
+            if phase['phase'] != 1:
+                swiss_rounds_p2 += phase['rounds']
+
+    # first pass so we can figure out the size of cut
+    max_cut = 0
+    for match in pairings:
+        if match['phase'] == 1:
+            continue
+
+        res = re.findall(r"^T([0-9]{1,3})-[0-9]{1,2}$", match['match'])
+        if int(res[0]) > max_cut:
+            max_cut = int(res[0])
+
+    cut_rounds = math.floor(math.log2(max_cut))
+
+    tour_format = (swiss_rounds_p1, swiss_rounds_p2, cut_rounds)
+
     # group the pairings by each player
     for match in pairings:
         p1_code = match['player1']
@@ -143,7 +198,7 @@ def get_grouped_pairings(code:str, tour_format:list, details:dict) -> dict:
         phase = match['phase']
 
         if phase > 1:
-            cut_round = 2 ** tour_format[2]
+            cut_round = 2 ** cut_rounds
             rnum = 0
             while cut_round >= 2:
                 cut_round = int(cut_round)

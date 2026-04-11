@@ -24,6 +24,15 @@ def get_mon_data_from_code(mon_code:str) -> (int, str):
 
     return 0, ''
 
+# same idea, but just returns the name
+def get_mon_name_fromn_code(mon_code:str) -> str:
+    if mon_code in pokedex:
+        return pokedex[mon_code]['name']
+
+    print(f"{mon_code} not found in pokedex")
+
+    return ''
+
 
 # for mapping alternate forms to images
 # left out a lot of mons not legal in SV
@@ -256,16 +265,17 @@ image_alts = {
     "lucariomegaz": 10309,
     "heatranmega": 10310,
     "darkraimega": 10311, # probably not legal
-    "golurkmega": 10312,
-    "meowsticmega": 10313,
-    "crabominablemega": 10314,
-    "golisopodmega": 10315,
-    "magearnamega": 10316, # also not legal
-    "zeraoramega": 10317, #samsies
-    "scovillianmega": 10318,
-    "glimmoramega": 10319,
-    "tatsugirimega": 10320,
-    "baxcaliburmega": 10321,
+    "golurkmega": 10313,
+    "meowsticmmega": 10314,
+    "meowsticfmega": 10314,
+    "crabominablemega": 10315,
+    "golisopodmega": 10316,
+    "magearnamega": 10317, # also not legal
+    "zeraoramega": 10319, #samsies
+    "scovillianmega": 10320,
+    "glimmoramega": 10321,
+    "tatsugirimega": 10324,
+    "baxcaliburmega": 10325,
 }
 
 def get_mon_alt_from_code(mon_code:str) -> int | None:
@@ -385,7 +395,8 @@ item_change_forms = {
     "heatran": [{ "item": "Heatranite", "form": "heatranmega" }],
     "darkrai": [{ "item": "Darkranite", "form": "darkraimega" }],
     "golurk": [{ "item": "Golurkite", "form": "golurkmega" }],
-    "meowstic": [{ "item": "Meowsticite", "form": "meowsticmega" }],
+    "meowstic": [{ "item": "Meowsticite", "form": "meowsticmmega" }],
+    "meowsticf": [{ "item": "Meowsticite", "form": "meowsticfmega" }],
     "crabominable": [{ "item": "Crabominite", "form": "crabominablemega" }],
     "golisopod": [{ "item": "Golisopite", "form": "golisopodmega" }],
     "magearna": [{ "item": "Magearnite", "form": "magearnamega" }],

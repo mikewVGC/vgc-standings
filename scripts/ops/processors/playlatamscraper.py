@@ -3,7 +3,6 @@ import json
 
 from lib.tournament import (
     player_made_phase_two,
-    is_mega_format,
 )
 
 from lib.util import (
@@ -90,7 +89,7 @@ def process_playlatamscraper_event(
             team.append(TeamMember(
                 name=mon_name,
                 code=mon_code,
-                altcode=get_icon_alt(mon_code, mon, is_mega_format(event_info)),
+                altcode=get_icon_alt(mon_code, mon, event_info['rules']['mega']),
                 dex=dex_num,
                 ptype=ptype.lower(),
                 tera=mon['tera'],

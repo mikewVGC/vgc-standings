@@ -1,0 +1,54 @@
+[
+    {
+        "name": "Regulation A",
+        "game": "Scarlet & Violet",
+        "tera": true
+    },
+    {
+        "name": "Regulation B",
+        "game": "Scarlet & Violet",
+        "tera": true
+    },
+    {
+        "name": "Regulation C",
+        "game": "Scarlet & Violet",
+        "tera": true
+    },
+    {
+        "name": "Regulation D",
+        "game": "Scarlet & Violet",
+        "tera": true
+    },
+    {
+        "name": "Regulation E",
+        "game": "Scarlet & Violet",
+        "tera": true
+    },
+    {
+        "name": "Regulation F",
+        "game": "Scarlet & Violet",
+        "tera": true
+    },
+    {
+        "name": "Regulation G",
+        "game": "Scarlet & Violet",
+        "tera": true,
+        "restricted": 1
+    },
+    {
+        "name": "Regulation H",
+        "game": "Scarlet & Violet",
+        "tera": true
+    },
+    {
+        "name": "Regulation I",
+        "game": "Scarlet & Violet",
+        "tera": true,
+        "restricted": 2
+    },
+    {
+        "name": "Regulation M-A",
+        "game": "Champions",
+        "mega": true
+    }
+]
