@@ -315,7 +315,7 @@ table#favorites {
 }
 
 .itemicon {
-    background: url(/static/img/itemicons-sheet.png) no-repeat;
+    background: url(/static/img/itemicons-sheet.png?1) no-repeat;
     width: 24px;
     height: 24px;
 }
