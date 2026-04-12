@@ -13,7 +13,7 @@ cosmetic_forms = {
     "tatsugiristretchy": "tatsugiri",
 }
 
-# returns dex #, primary typing
+# returns: dex #, primary typing
 def get_mon_data_from_code(mon_code:str) -> (int, str):
     if mon_code in pokedex:
         return pokedex[mon_code]['num'], pokedex[mon_code]['types'][0]
@@ -25,11 +25,17 @@ def get_mon_data_from_code(mon_code:str) -> (int, str):
     return 0, ''
 
 # same idea, but just returns the name
-def get_mon_name_fromn_code(mon_code:str) -> str:
+def get_mon_name_from_code(mon_code:str) -> str:
     if mon_code in pokedex:
         return pokedex[mon_code]['name']
 
-    print(f"{mon_code} not found in pokedex")
+    return ''
+
+# get base form
+def get_mon_base_form_from_code(mon_code:str) -> str:
+    if mon_code in pokedex:
+        if 'baseSpecies' in pokedex[mon_code]:
+            return pokedex[mon_code]['baseSpecies']
 
     return ''
 
@@ -173,7 +179,7 @@ image_alts = {
     "goodrahisui": 10242,
     "avalugghisui": 10243,
     "decidueyehisui": 10244,
-    "floetteeternal": 10060,
+    "floetteeternal": 10061,
 
     # gmax forms can go here, if needed
     # 10196 -> 10228
@@ -278,6 +284,9 @@ image_alts = {
     "baxcaliburmega": 10325,
 }
 
+"""
+alt dex code for big images
+"""
 def get_mon_alt_from_code(mon_code:str) -> int | None:
     if mon_code in image_alts:
         return image_alts[mon_code]
@@ -330,7 +339,7 @@ item_change_forms = {
         { "item": "Absolite", "form": "absolmega" },
         { "item": "Absolite Z", "form": "absolmegaz" }
     ],
-    "gharchomp": [
+    "garchomp": [
         { "item": "Garchompite", "form": "garchompmega" },
         { "item": "Garchompite Z", "form": "garchompmegaz" },
     ],

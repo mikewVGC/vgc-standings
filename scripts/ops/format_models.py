@@ -7,6 +7,7 @@ from dataclasses import dataclass
 class TeamMember():
     name: str
     code: str
+    altname: str
     altcode: str
     dex: int
     ptype: str

@@ -593,6 +593,10 @@ ul#rk9-links li {
     background-size: 275px auto;
 }
 
+.mon-usage-container h2 {
+    width: 80%;
+}
+
 .mon-config-container {
     width: 33%;
     display: inline-block;
@@ -1234,6 +1238,10 @@ ul#pairing-round-select li a {
 
     .mon-usage-container {
         background: transparent !important;
+    }
+
+    .mon-usage-container h2 {
+        width: 100%;
     }
 
     .usage-container {

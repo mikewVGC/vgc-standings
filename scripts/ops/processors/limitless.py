@@ -18,7 +18,8 @@ from lib.formes import (
     get_mon_data_from_code,
     get_mon_alt_from_code,
     get_icon_alt,
-    get_mon_name_fromn_code,
+    get_mon_name_from_code,
+    get_mon_base_form_from_code,
 )
 
 from ops.format_models import (
@@ -51,43 +52,47 @@ def process_limitless_event(data:list, tour_format:list, official_order:list, ev
         team = []
 
         for mon in player['decklist']:
-            # for now in limitless we can assume this combo means eternal floette
-            if mon['id'] == 'floette' and mon['item'] == 'Floettite':
-                mon['id'] = 'floette-eternal'
-                mon['name'] = 'Eternal Floette'
-
-            meow = mon['name'].lower().startswith("meowstic")
+            # limitless data requires a lot of normalization because it accepts both
+            # the base form and mega form for teamsheets... I don't think other
+            # data sources will do this, so this section will likely be less convoluted
 
             mon_code = make_mon_code(mon['id'])
-            dex_num, ptype = get_mon_data_from_code(mon_code)
 
-            if meow:
-                print("\n", mon['name'], mon['id'], mon_code, dex_num)
+            mon_name = mon['id'].title()
+
+            # this will get the non-mega version if they've submitted the mega
+            # this will cause the ability to be incorrect if it changes after mega
+            base_form = get_mon_base_form_from_code(mon_code)
+            if base_form:
+                mon_code = make_mon_code(base_form)
+                mon_name = base_form
+
+            # limitless also doesn't support eternal floette so we have to assume
+            if mon_code == 'floette' and mon['item'] == 'Floettite' or mon_code == 'floettemega':
+                mon_code = make_mon_code('floette-eternal')
+                mon_name = 'Floette-Eternal'
+
+            dex_num, ptype = get_mon_data_from_code(mon_code)
 
             tera_type = "" if 'tera' not in mon else mon['tera']
             if not event_info['rules']['tera']:
                 tera_type = ""
 
-            mon_alt = get_icon_alt(mon_code, mon, event_info['rules']['mega'])
+            mon_alt_code = get_icon_alt(mon_code, mon, event_info['rules']['mega'])
 
-            mon_name = ""
-            if mon_alt:
-                mon_name = get_mon_name_fromn_code(mon_alt)
-                mon_code = mon_alt
-            else:
-                mon_name = mon['id'].title()
+            mon_alt_name = ""
+            if mon_alt_code:
+                mon_alt_name = get_mon_name_from_code(mon_alt_code)
 
-            if meow:
-                print(f"\nname: {mon['name']} -- id: {mon['id']} -- name: {mon_name} -- alt: {mon_alt} -- code: {mon_code} -- dex: {dex_num}")
-
-            alt = get_mon_alt_from_code(mon_code)
+            alt = get_mon_alt_from_code(mon_alt_code)
             if alt:
                 dex_num = alt
 
             team.append(TeamMember(
                 name=mon_name,
                 code=mon_code,
-                altcode=mon_alt,
+                altname=mon_alt_name,
+                altcode=mon_alt_code,
                 dex=dex_num,
                 ptype=ptype.lower(),
                 tera=str(tera_type),
