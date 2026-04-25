@@ -245,7 +245,7 @@ image_alts = {
     "feraligatrmega": 10283,
     "skarmorymega": 10284,
     "froslassmega": 10285,
-    "emboaremega": 10286,
+    "emboarmega": 10286,
     "excadrillmega": 10287,
     "scolipedemega": 10288,
     "scraftymega": 10289,

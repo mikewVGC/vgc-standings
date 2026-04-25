@@ -68,6 +68,7 @@ def process_rk9scraper_event(
             team.append(TeamMember(
                 name=mon_name,
                 code=mon_code,
+                altname=mon_name,
                 altcode=get_icon_alt(mon_code, mon, event_info['rules']['mega']),
                 dex=dex_num,
                 ptype=ptype.lower(),

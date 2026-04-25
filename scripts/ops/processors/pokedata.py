@@ -1,5 +1,6 @@
 
 import re
+import json
 
 from lib.tournament import (
     player_made_phase_two,
@@ -50,6 +51,10 @@ def process_pokedata_event(data:list, tour_format:list, official_order:list, eve
         if 'drop' not in player:
             player['drop'] = -1
 
+        # sometimes this happens
+        if isinstance(player['decklist'], str):
+            player['decklist'] = json.loads(player['decklist'])
+
         for mon in player['decklist']:
             mon_name = fix_mon_name(mon['name'])
             mon_code = make_mon_code(mon_name)
@@ -62,6 +67,7 @@ def process_pokedata_event(data:list, tour_format:list, official_order:list, eve
             team.append(TeamMember(
                 name=mon_name,
                 code=mon_code,
+                altname=mon_name,
                 altcode=get_icon_alt(mon_code, mon, event_info['rules']['mega']),
                 dex=dex_num,
                 ptype=ptype.lower(),
