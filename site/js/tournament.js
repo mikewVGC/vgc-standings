@@ -477,8 +477,6 @@ export default {
                     u.counts['cutConversion'] = u.counts.cut / u.counts.phase2;
                 });
 
-                console.log(this.usage);
-
                 this.loaded = true;
             });
         },

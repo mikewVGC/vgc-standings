@@ -40,7 +40,15 @@ def process_limitless_event(data:list, tour_format:list, official_order:list, ev
     with open(f"data/majors/limitless/{event_info['code']}-details.json", encoding='utf8') as file:
         details = json.loads(file.read())
 
-    pairings_by_player = get_grouped_pairings(event_info['code'], tour_format, details)
+    # limitless allows numerical names for players, which messes up the front-end... don't ask
+    number_players = {}
+    for player in data:
+        player_code = player['player']
+        if player_code.isdigit():
+            number_players[player_code] = f"{player_code}_"
+            player['player'] = number_players[player_code]
+
+    pairings_by_player = get_grouped_pairings(event_info['code'], tour_format, details, number_players)
 
     for player in data:
         player_code = player['player']
@@ -84,7 +92,12 @@ def process_limitless_event(data:list, tour_format:list, official_order:list, ev
             if mon_alt_code:
                 mon_alt_name = get_mon_name_from_code(mon_alt_code)
 
-            alt = get_mon_alt_from_code(mon_alt_code)
+            alt = ""
+            if mon_alt_code:
+                alt = get_mon_alt_from_code(mon_alt_code)
+            else:
+                alt = get_mon_alt_from_code(mon_code)
+
             if alt:
                 dex_num = alt
 
@@ -151,7 +164,7 @@ def process_limitless_event(data:list, tour_format:list, official_order:list, ev
     return players, phase_two_count, players_in_cut_round
 
 
-def get_grouped_pairings(code:str, tour_format:list, details:dict) -> dict:
+def get_grouped_pairings(code:str, tour_format:list, details:dict, number_players:dict) -> dict:
     pairings = []
     with open(f"data/majors/limitless/{code}-pairings.json", encoding='utf8') as file:
         pairings = json.loads(file.read())
@@ -169,15 +182,37 @@ def get_grouped_pairings(code:str, tour_format:list, details:dict) -> dict:
 
     # first pass so we can figure out the size of cut
     max_cut = 0
+    max_phase = 1
+    cut_rounds = 0
+
     for match in pairings:
+        if match['phase'] > max_phase:
+            max_phase = match['phase']
+
         if match['phase'] == 1:
+            continue
+        if 'match' not in match:
             continue
 
         res = re.findall(r"^T([0-9]{1,3})-[0-9]{1,2}$", match['match'])
         if int(res[0]) > max_cut:
             max_cut = int(res[0])
 
-    cut_rounds = math.floor(math.log2(max_cut))
+    if max_cut > 0:
+        cut_rounds = math.floor(math.log2(max_cut))
+    else:
+        cut_players = {}
+        cut_count = 0
+        for match in pairings:
+            if match['phase'] != max_phase:
+                continue
+
+        if match['player1']:
+            cut_players[match['player1']] = True
+        if match['player2']:
+            cut_players[match['player2']] = True
+
+        max_cut = len(cut_players.keys())
 
     tour_format = (swiss_rounds_p1, swiss_rounds_p2, cut_rounds)
 
@@ -187,6 +222,12 @@ def get_grouped_pairings(code:str, tour_format:list, details:dict) -> dict:
         p2_code = ""
         if 'player2' in match:
             p2_code = match['player2']
+
+        if p1_code in number_players:
+            p1_code = number_players[p1_code]
+
+        if len(p2_code) and p2_code in number_players:
+            p2_code = number_players[p2_code]
 
         p1_bye = False
         p1_late = False
@@ -226,11 +267,15 @@ def get_grouped_pairings(code:str, tour_format:list, details:dict) -> dict:
             if 'table' in match:
                 table_num = match['table']
 
+            winner = match['winner']
+            if winner in number_players:
+                winner = number_players[winner]
+
             pairings_by_player[p_code].append(Round(
                 round=rnd,
                 rname=f"{rnd}",
                 opp=p2_code if p_code == p1_code else p1_code,
-                res='W' if match['winner'] == p_code else 'L',
+                res='W' if winner == p_code else 'L',
                 tbl=table_num,
                 bye=int(p1_bye),
                 late=int(p1_late),

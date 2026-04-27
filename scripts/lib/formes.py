@@ -31,9 +31,11 @@ def get_mon_name_from_code(mon_code:str) -> str:
 
     return ''
 
-# get base form
+# get base form for megas
 def get_mon_base_form_from_code(mon_code:str) -> str:
     if mon_code in pokedex:
+        if 'forme' in pokedex[mon_code] and not pokedex[mon_code]['forme'].startswith('Mega'):
+            return ''
         if 'baseSpecies' in pokedex[mon_code]:
             return pokedex[mon_code]['baseSpecies']
 
@@ -56,7 +58,7 @@ image_alts = {
     "rotomfrost": 10010,
     "rotomheat": 10008,
     "rotomwash": 10009,
-    "rotommow": 100012,
+    "rotommow": 10012,
     "dialgaorigin": 10245,
     "palkiaorigin": 10246,
     "giratinaorigin": 10007,
@@ -278,7 +280,7 @@ image_alts = {
     "golisopodmega": 10316,
     "magearnamega": 10317, # also not legal
     "zeraoramega": 10319, #samsies
-    "scovillianmega": 10320,
+    "scovillainmega": 10320,
     "glimmoramega": 10321,
     "tatsugirimega": 10324,
     "baxcaliburmega": 10325,
@@ -410,7 +412,7 @@ item_change_forms = {
     "golisopod": [{ "item": "Golisopite", "form": "golisopodmega" }],
     "magearna": [{ "item": "Magearnite", "form": "magearnamega" }],
     "zeraora": [{ "item": "Zeraorite", "form": "zeraoramega" }],
-    "scovillian": [{ "item": "Scovillainite", "form": "scovillianmega" }],
+    "scovillain": [{ "item": "Scovillainite", "form": "scovillainmega" }],
     "glimmora": [{ "item": "Glimmoranite", "form": "glimmoramega" }],
     "tatsugiri": [{ "item": "Tatsugirinite", "form": "tatsugirimega" }],
     "tatsugiridroopy": [{ "item": "Tatsugirinite", "form": "tatsugirimega" }],
