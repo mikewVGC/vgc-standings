@@ -75,10 +75,19 @@ def process_limitless_event(data:list, tour_format:list, official_order:list, ev
                 mon_code = make_mon_code(base_form)
                 mon_name = base_form
 
-            # limitless also doesn't support eternal floette so we have to assume
-            if mon_code == 'floette' and mon['item'] == 'Floettite' or mon_code == 'floettemega':
+            # for a while limitless didn't support eternal floette so we fix that
+            if (mon_code == 'floette' and mon['item'].lower() == 'floettite') or mon_code == 'floettemega':
                 mon_code = make_mon_code('floette-eternal')
                 mon_name = 'Floette-Eternal'
+
+            # this happens sometimes as well
+            if mon_code == "taurospaldea":
+                mon_code = "taurospaldeacombat"
+                mon_name = "Tauros-Paldea-Combat"
+
+            if mon_code == "aegislashblade":
+                mon_code = "aegislash"
+                mon_name = "Aegislash"
 
             dex_num, ptype = get_mon_data_from_code(mon_code)
 
