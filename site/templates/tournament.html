@@ -775,7 +775,7 @@ __TEMPLATE_FOOTER__
                             iconclass=""
                             type="abilities"
                         ></tr>
-                        <tr v-for="n in 3 - mon.abilities.length"><td colspan="5"></td></tr>
+                        <tr v-if="mon.abilities.length < 3" v-for="n in 3 - mon.abilities.length"><td colspan="5"></td></tr>
                     </tbody>
                 </table>
 
