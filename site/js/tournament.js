@@ -822,7 +822,7 @@ export default {
             components: {
                 'standings-row': {
                     template: '#standings-row-template',
-                    props: [ 'standings', 'pcode', 'eventInfo', 'season', 'showDrop', 'alwaysShowRes', 'teamKey' ],
+                    props: [ 'player', 'pcode', 'eventInfo', 'season', 'showDrop', 'alwaysShowRes', 'teamKey' ],
                     methods: {
                         toggleFav(playerCode) {
                             this.$parent.toggleFav(playerCode);
@@ -1094,7 +1094,7 @@ export default {
             components: {
                 'standings-row': {
                     template: '#standings-row-template',
-                    props: [ 'standings', 'pcode', 'eventInfo', 'season', 'showDrop', 'alwaysShowRes' ],
+                    props: [ 'player', 'pcode', 'eventInfo', 'season', 'showDrop', 'alwaysShowRes' ],
                     methods: {
                         toggleFav(playerCode) {
                             this.$parent.toggleFav(playerCode);
@@ -1215,7 +1215,7 @@ export default {
             components: {
                 'standings-row': {
                     template: '#standings-row-template',
-                    props: [ 'standings', 'pcode', 'eventInfo', 'season', 'showDrop', 'alwaysShowRes', 'teamKey' ],
+                    props: [ 'player', 'pcode', 'eventInfo', 'season', 'showDrop', 'alwaysShowRes', 'teamKey' ],
                     methods: {
                         toggleFav(playerCode) {
                             this.$parent.toggleFav(playerCode);

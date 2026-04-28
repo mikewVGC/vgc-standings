@@ -75,7 +75,7 @@ __TEMPLATE_FOOTER__
                 v-for="pcode in validFavs"
                 :key="pcode"
                 :pcode="pcode"
-                :standings="standings"
+                :player="standings[pcode]"
                 :event-info="eventInfo"
                 :season="season"
                 :show-drop="true"
@@ -118,7 +118,7 @@ __TEMPLATE_FOOTER__
                 v-for="pcode in filteredStandings"
                 :key="pcode"
                 :pcode="pcode"
-                :standings="standings"
+                :player="standings[pcode]"
                 :event-info="eventInfo"
                 :season="season"
                 :show-drop="true"
@@ -133,7 +133,7 @@ __TEMPLATE_FOOTER__
 
 <template id="standings-row-template">
     <tr>
-        <td>{{ standings[pcode].place }}</td>
+        <td>{{ player.place }}</td>
         <td>
             <div
                 @click="toggleFav(pcode)"
@@ -144,19 +144,19 @@ __TEMPLATE_FOOTER__
                 <span title="Add Favorite" v-else>&#9734;</span>
             </div>
         </td>
-        <td><a :href="`/${season}/${eventInfo.code}/player/${standings[pcode].code}`">{{ standings[pcode].name }}</a></td>
-        <td>{{ standings[pcode].record.w }}</td>
+        <td><a :href="`/${season}/${eventInfo.code}/player/${player.code}`">{{ player.name }}</a></td>
+        <td>{{ player.record.w }}</td>
         <td>-</td>
-        <td>{{ standings[pcode].record.l }}</td>
-        <td><span v-if="standings[pcode].record.t" v-cloak>-</span></td>
-        <td><span v-if="standings[pcode].record.t" v-cloak>{{ standings[pcode].record.t }}</span></td>
-        <td>{{ showDrop && standings[pcode].drop != -1 ? standings[pcode].drop : '&nbsp;' }}</td>
-        <td>{{ standings[pcode].cut && !alwaysShowRes ? '&nbsp;' : getPct(standings[pcode].res.opp, 5) }}</td>
-        <td>{{ standings[pcode].cut && !alwaysShowRes ? '&nbsp;' : getPct(standings[pcode].res.oppopp, 5) }}</td>
+        <td>{{ player.record.l }}</td>
+        <td><span v-if="player.record.t" v-cloak>-</span></td>
+        <td><span v-if="player.record.t" v-cloak>{{ player.record.t }}</span></td>
+        <td>{{ showDrop && player.drop != -1 ? player.drop : '&nbsp;' }}</td>
+        <td>{{ player.cut && !alwaysShowRes ? '&nbsp;' : getPct(player.res.opp, 5) }}</td>
+        <td>{{ player.cut && !alwaysShowRes ? '&nbsp;' : getPct(player.res.oppopp, 5) }}</td>
         <td class="team-container">
-            <a :href="`/${season}/${eventInfo.code}/player/${standings[pcode].code}`">
+            <a :href="`/${season}/${eventInfo.code}/player/${player.code}`">
                 <div
-                    v-for="mon in standings[pcode][teamKey ? teamKey : 'team']"
+                    v-for="mon in player[teamKey ? teamKey : 'team']"
                     class="monicon"
                     :style="{ backgroundPosition: getSpritePos(mon.altcode || mon.code) }"
                     :title="mon.name"
@@ -459,7 +459,7 @@ __TEMPLATE_FOOTER__
                 v-for="pcode in countryStats.players"
                 :key="pcode"
                 :pcode="pcode"
-                :standings="standings"
+                :player="standings[pcode]"
                 :event-info="eventInfo"
                 :season="season"
                 :show-drop="false"
@@ -840,7 +840,7 @@ __TEMPLATE_FOOTER__
                 v-for="pcode in filteredPlayers"
                 :key="pcode"
                 :pcode="pcode"
-                :standings="standings"
+                :player="standings[pcode]"
                 :event-info="eventInfo"
                 :season="season"
                 :show-drop="false"
