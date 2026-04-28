@@ -2,7 +2,7 @@
 
 function build_item_coords($data) {
     $w = 3120;
-    $h = 3000;
+    $h = 3420;
     $x_num = 26;
 
     $items = json_decode($data, true);
@@ -21,7 +21,7 @@ function build_item_coords($data) {
         }
 
         $x++;
-        if ($x % 26 == 0) {
+        if ($x % $x_num == 0) {
             $x = 0;
             $y++;
         }
@@ -704,6 +704,87 @@ $json_data = '[
     "wellspringmask",
     "hearthflamemask",
     "fairyfeather",
+    "",
+    "",
+    "",
+    "",
+    "",
+
+    "gengarite",
+    "gardevoirite",
+    "ampharosite",
+    "venusaurite",
+    "charizarditex",
+    "blastoisinite",
+    "medichamite",
+    "houndoominite",
+    "aggronite",
+    "banettite",
+    "tyranitarite",
+    "scizorite",
+    "pinsirite",
+    "aerodactylite",
+    "lucarionite",
+    "abomasite",
+    "kangaskhanite",
+    "gyaradosite",
+    "absolite",
+    "charizarditey",
+    "alakazite",
+    "heracronite",
+    "manectite",
+    "garchompite",
+    "sablenite",
+    "altarianite",
+
+    "galladite",
+    "audinite",
+    "sharpedonite",
+    "slowbronite",
+    "steelixite",
+    "pidgeotite",
+    "glalitite",
+    "cameruptite",
+    "lopunnite",
+    "beedrillite",
+    "clefablite",
+    "victreebelite",
+    "starminite",
+    "dragoninite",
+    "meganiumite",
+    "feraligite",
+    "skarmorite",
+    "froslassite",
+    "emboarite",
+    "excadrite",
+    "chandelurite",
+    "chesnaughtite",
+    "delphoxite",
+    "greninjite",
+    "floettite",
+    "hawluchanite",
+
+    "drampanite",
+    "chimechite",
+    "golurkite",
+    "meowsticite",
+    "crabominite",
+    "scovillainite",
+    "glimmoranite",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
     "",
     "",
     "",

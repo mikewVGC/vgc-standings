@@ -315,14 +315,14 @@ table#favorites {
 }
 
 .itemicon {
-    background: url(/static/img/itemicons-sheet.png?1) no-repeat;
+    background: url(/static/img/itemicons-sheet.png?2) no-repeat;
     width: 24px;
     height: 24px;
 }
 
 .hditemicon {
-    background: url(/static/img/item-sprite-hd.webp) no-repeat;
-    background-size: 1040px 1000px;
+    background: url(/static/img/item-sprite-hd.webp?2) no-repeat;
+    background-size: 1040px 1140px;
     width: 40px;
     height: 40px;
     image-rendering: unset;
