@@ -379,7 +379,7 @@ item_change_forms = {
     "feraligatr": [{ "item": "Feraligite", "form": "feraligatrmega" }],
     "skarmory": [{ "item": "Skarmorite", "form": "skarmorymega" }],
     "froslass": [{ "item": "Froslassite", "form": "froslassmega" }],
-    "emboare": [{ "item": "Emboarite", "form": "emboaremega" }],
+    "emboar": [{ "item": "Emboarite", "form": "emboarmega" }],
     "excadrill": [{ "item": "Excadrite", "form": "excadrillmega" }],
     "scolipede": [{ "item": "Scolipite", "form": "scolipedemega" }],
     "scrafty": [{ "item": "Scraftinite", "form": "scraftymega" }],
@@ -401,7 +401,7 @@ item_change_forms = {
         { "item": "Raichunite X", "form": "raichumegax" },
         { "item": "Raichunite Y", "form": "raichumegay" }
     ],
-    "chimeco": [{ "item": "Chimechite", "form": "chimecomega" }],
+    "chimecho": [{ "item": "Chimechite", "form": "chimechomega" }],
     "staraptor": [{ "item": "Staraptite", "form": "staraptormega" }],
     "heatran": [{ "item": "Heatranite", "form": "heatranmega" }],
     "darkrai": [{ "item": "Darkranite", "form": "darkraimega" }],
