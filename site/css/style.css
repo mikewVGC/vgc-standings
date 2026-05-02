@@ -308,14 +308,14 @@ table#favorites {
     width: 36px;
     height: 30px;
     display: inline-block;
-    background: url(/static/img/pokemonicons-sheet.png?3) no-repeat;
+    background: url(/static/img/pokemonicons-sheet.png?4) no-repeat;
     overflow: hidden;
     text-indent: -9999em;
     image-rendering: pixelated;
 }
 
 .itemicon {
-    background: url(/static/img/itemicons-sheet.png?2) no-repeat;
+    background: url(/static/img/itemicons-sheet.png?3) no-repeat;
     width: 24px;
     height: 24px;
 }
