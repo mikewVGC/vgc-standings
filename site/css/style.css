@@ -1230,6 +1230,11 @@ ul#pairing-round-select li a {
         display: none;
     }
 
+    .mon-config-container {
+        width: 100%;
+        display: block;
+    }
+
     .config-container {
         display: block;
         width: 100%;
@@ -1242,6 +1247,12 @@ ul#pairing-round-select li a {
 
     .mon-usage-container h2 {
         width: 100%;
+    }
+
+    .filter-area label {
+        display: block;
+        font-size: .75em;
+        margin: .6em 0 .25em 0;
     }
 
     .usage-container {

@@ -16,18 +16,18 @@ __TEMPLATE_HEADER__
             Current Season: <a :href="`/${currentSeason}`">{{ currentSeason }} VGC Season</a>
         </h2>
 
-        <p v-cloak>{{ seasonStatus }} the <strong><a :href="`/${currentSeason}`">{{ currentSeason }} VGC Season</a></strong>. The season runs from {{ seasonDates }}. The {{ currentSeason }} World Championships will be played {{ worldsDate }}.</p>
+        <p v-cloak>{{ seasonStatus }} the <strong><a :href="`/${currentSeason}`">{{ currentSeason }} VGC Season</a></strong>. The season runs from {{ seasonDates }}. The <strong>{{ currentSeason }} World Championships</strong> will be played <em>{{ worldsDate }}</em>.</p>
 
         <h3 v-if="inProgress.length > 0" v-cloak>In Progress Events</h3>
 
         <ul v-cloak>
-            <li v-for="event in inProgress"><p><strong><a :href="`/${currentSeason}/${event.code}`">{{ event.name }}</a></strong> is currently in progress.</p></li>
+            <li v-for="event in inProgress"><p><strong><a :href="`/${currentSeason}/${event.code}`">{{ event.name }}</a></strong> is currently in progress</p></li>
         </ul>
 
         <h3 v-if="recent.length > 0" v-cloak>Most Recent Events</h3>
 
         <ul v-cloak>
-            <li v-for="event in recent"><p><strong><a :href="`/${currentSeason}/${event.code}`">{{ event.name }}</a></strong> was played on {{ event.dates }}, using {{ event.format }}.</p></li>
+            <li v-for="event in recent"><p><strong><a :href="`/${currentSeason}/${event.code}`">{{ event.name }}</a></strong> was played on {{ event.dates }}, using {{ event.format }}</p></li>
         </ul>
 
         <h3 v-if="upcoming.length > 0" v-cloak>Upcoming Events</h3>
@@ -36,7 +36,7 @@ __TEMPLATE_HEADER__
             <li v-for="event in upcoming"><p><strong>
                 <a v-if="event.processed" :href="`/${currentSeason}/${event.code}`">{{ event.name }}</a>
                 <span v-else>{{ event.name }}</span>
-            </strong> will be played on {{ event.dates }}, using {{ event.format }}.</p></li>
+            </strong> will be played on {{ event.dates }}, using {{ event.format }}</p></li>
         </ul>
 
     </div>
