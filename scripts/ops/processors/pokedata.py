@@ -53,7 +53,10 @@ def process_pokedata_event(data:list, tour_format:list, official_order:list, eve
 
         # sometimes this happens
         if isinstance(player['decklist'], str):
-            player['decklist'] = json.loads(player['decklist'])
+            try:
+                player['decklist'] = json.loads(player['decklist'])
+            except json.decoder.JSONDecodeError:
+                player['decklist'] = []
 
         for mon in player['decklist']:
             mon_name = fix_mon_name(mon['name'])
