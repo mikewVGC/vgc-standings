@@ -79,6 +79,17 @@ Notably when first processing regionals you will need to create the correspondin
 
 You can create a production build by using the `--prod` flag. This will minify the CSS and Javascript and a few other optimizations. You can skip event processing and only rebuild the templates with the `--build-only` flag. If you only want to build a smaller set of events you can use the `--process` argument. The format is a list of one or more years and codes separated by a comma formatted as such: `2025:baltimore,2026:toronto`. You can also process a full season with: `2025:*`.
 
+### Limitless Support
+
+The scripts also support Limitless data (if you get tournament pairings and standings from their API), though it requires jumping through additional hoops:
+
+1. Create `limitless.json` alongside the season json files with the same structure
+2. Create `manifest-limitless.json` with the only "season" as `"limitless"`
+3. All Limitless data goes in `\limitless`
+4. Run: `./scripts/porygon.py --limitless --process limitless:tournament-code`
+
+Notably Limitless processing will not rebuild the site, so you'll need to run it normally without the `limitless` flag in order to see changes.
+
 ### Ruff Formatting
 
 I've added ruff to the repo to keep myself honest, at least on the Python side. You should run it on the `scripts/` directory and fix whatever it says to fix:
@@ -133,16 +144,9 @@ During a regional you might want to do live updates... why would you want to do 
 ```
 ; ini file for Regieleki
 
+[main_config]
+; season / year we're processing
 current_season = 2026
-
-; list of tournament data URLs to check (should be pokedata)
-tournaments_to_check['<regional_code>'] = "<pokedata json URL>"
-
-; add a start time for when we should start collecting data
-tournament_start_time['<regional_code>'] = "2026-02-07 8:00am Australia/Sydney"
-
-; add an end time to stop collecting data
-tournament_end_time['<regional_code>'] = "2026-02-07 6:00pm Australia/Sydney"
 
 ; refresh rate determines how often tournament standings will be downloaded (in seconds)
 refresh_rate = 420
@@ -155,11 +159,19 @@ refresh_fuzz_max = 45
 
 ; if we should do a production build or not
 build_prod = 0
+
+; tournament specific section(s) with data url and optional start/end times
+[<regional-code>]
+pokedata_url = <pokedata json URL>
+start_time   = 2026-05-09 8:00am
+end_time     = 2026-05-09 9:00pm
+time_zone    = Australia/Sydney
+
 ```
 
-Get the regional's code from the JSON (`toronto`, `las-vegas`, `lille`, etc.) and URL of JSON data from Pokedata and put them into the correct places. You can leave the rest unchanged, and I honestly don't recommend lowering the refresh rate as it will do a fetch from Pokedata every 7 minutes. Once it fetches the data it will run Porygon to process the data and it should be updated when people reload.
+Get the regional's code from the JSON (`toronto`, `las-vegas`, `lille`, etc.) and URL of JSON data from Pokedata and put them into the correct places. You can leave the rest unchanged, and I don't recommend lowering the refresh rate as it will do a fetch from Pokedata every 7 minutes (any higher can get you temporarily IP blocked). Once it fetches the data it will run Porygon to process the data and it should be updated when people reload.
 
-This script is super simple and really non-robust. You can only run it one way:
+This script is super simple and not very robust. You can only run it one way:
 
 ```
 php scripts/regieleki.php

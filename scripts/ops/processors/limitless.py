@@ -8,8 +8,6 @@ from lib.tournament import (
 )
 
 from lib.util import (
-    make_code,
-    fix_mon_name,
     make_mon_code,
     make_item_code,
 )
@@ -125,7 +123,7 @@ def process_limitless_event(data:list, tour_format:list, official_order:list, ev
             ))
 
         place = player['placing']
-        if place == None:
+        if place is None:
             place = 1000
 
         players[player_code] = Player(
@@ -160,10 +158,10 @@ def process_limitless_event(data:list, tour_format:list, official_order:list, ev
 
     for p_code, rounds in pairings_by_player.items():
         # this part is just used to set the players_in_cut_round var
-        drop_round = -1
+        #drop_round = -1
         for r_data in rounds:
-            if r_data.drop == 1:
-                drop_round = r_data.round
+            #if r_data.drop == 1:
+            #    drop_round = r_data.round
             if r_data.phase == 3:
                 rnd = r_data.round
                 if rnd not in players_in_cut_round:
@@ -211,7 +209,7 @@ def get_grouped_pairings(code:str, tour_format:list, details:dict, number_player
         cut_rounds = math.floor(math.log2(max_cut))
     else:
         cut_players = {}
-        cut_count = 0
+        #cut_count = 0
         for match in pairings:
             if match['phase'] != max_phase:
                 continue

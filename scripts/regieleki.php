@@ -15,80 +15,51 @@ if (!file_exists(__DIR__ . "/../regieleki.ini")) {
 
 elog("Regieleki starting!");
 
+$data_dir_base = __DIR__ . "/../data/majors";
+
 // parse regieleki.ini (see README)
-[
-    'current_season'        => $current_season,
-    'tournaments_to_check'  => $tournaments_to_check,
-    'tournament_start_time' => $tournament_start_time,
-    'tournament_end_time'   => $tournament_end_time,
-    'refresh_rate'          => $refresh_rate,
-    'build_prod'            => $build_prod,
-    'refresh_fuzz_min'      => $fuzz_refresh_min,
-    'refresh_fuzz_max'      => $fuzz_refresh_max,
-
-] = parse_ini_file("regieleki.ini");
-
-$data_dir = __DIR__ . "/../data/majors/{$current_season}";
-
-$updates_file = __DIR__ . "/../public/data/{$current_season}/updates.json";
-if (!file_exists($updates_file)) {
-    elog("Updates file not found, creating empty one");
-    file_put_contents($updates_file, "{}");
-}
-
-$updates = [];
-
-elog("Got " . count($tournaments_to_check) . " tours to check");
+$ini_data = parse_ini_file("regieleki.ini", true);
 
 $tournament_settings = [];
 $tour_tracker = [];
 
-foreach ($tournaments_to_check as $tour => $remote_json) {
-    $tournament_settings[$tour] = [
+foreach ($ini_data as $section => $data) {
+    if ($section == "main_config") {
+        foreach ($data as $key => $value) {
+            ${$key} = $value;
+        }
+        continue;
+    }
+
+    $tournament_settings[$section] = [
         'start' => time(),
         'end' => time() + 28800, // 8 hours
-        'remote' => $remote_json,
-        'local' => "{$data_dir}/{$tour}-standings.json",
-        'process' => "{$current_season}:{$tour}",
+        'remote' => $data['pokedata_url'],
+        'local' => "{$data_dir_base}/{$current_season}/{$section}-standings.json",
+        'process' => "{$current_season}:{$section}",
     ];
 
-    $tour_tracker[$tour] = true;
-}
-
-if (!empty($tournament_start_time)) {
-    foreach ($tournament_start_time as $tour => $start_time) {
-        if (!isset($tournament_settings[$tour])) {
-            elog("Tour code '{$tour}' is missing from URL list. Typo? Exiting.");
-            exit;
-        }
-
-        if (empty($start_time)) {
-            elog("[{$tour}] No start time set, will start now!");
-            continue;
-        }
-
-        $start = (new DateTime($start_time))->getTimestamp();
-        $tournament_settings[$tour]['start'] = $start;
-        $tournament_settings[$tour]['end'] = $start + 28800;
-        elog("[{$tour}] Initial delay set, will start collecting at " . date("Y-m-d H:i:s", $start));
+    if (!empty($data['start_time'])) {
+        $start = (new DateTime("{$data['start_time']} {$data['time_zone']}"))->getTimestamp();
+        $tournament_settings[$section]['start'] = $start;
+        $tournament_settings[$section]['end'] = $start + 28800;
+        elog("[{$section}] Initial delay set, will start collecting at " . date("Y-m-d H:i:s", $start));
+    } else {
+        elog("[{$section}] No start time set, will start now!");
     }
-}
 
-if (!empty($tournament_end_time)) {
-    foreach ($tournament_end_time as $tour => $end_time) {
-        if (!isset($tournament_settings[$tour])) {
-            elog("Tour code '{$tour}' is missing from URL list. Typo? Exiting.");
-            exit;
-        }
-
-        if (!empty($end_time)) {
-            $end = (new DateTime($end_time))->getTimestamp();
-            $tournament_settings[$tour]['end'] = $end;
-        }
-
-        elog("[{$tour}] Scheduled to finish at " . date("Y-m-d H:i:s", $tournament_settings[$tour]['end']));
+    if (!empty($data['end_time'])) {
+        $end = (new DateTime("{$data['start_time']} {$data['time_zone']}"))->getTimestamp();
+        $tournament_settings[$section]['end'] = $end;
     }
+    elog("[{$section}] Scheduled to finish at " . date("Y-m-d H:i:s", $tournament_settings[$section]['end']));
+
+    $tour_tracker[$section] = true;
 }
+
+$data_dir = "{$data_dir_base}/{$current_season}";
+
+elog("Got " . count($tournament_settings) . " tours to check");
 
 if ($build_prod) {
     elog("Will build as production (--prod)");
@@ -101,6 +72,14 @@ elog("Setup done. Running...");
 
 $backoff = 0;
 $attempts = 0;
+
+$updates_file = __DIR__ . "/../public/data/{$current_season}/updates.json";
+if (!file_exists($updates_file)) {
+    elog("Updates file not found, creating empty one");
+    file_put_contents($updates_file, "{}");
+}
+
+$updates = [];
 
 while (1) {
     $to_process = [];
@@ -190,7 +169,7 @@ while (1) {
         elog("Nothing to process right now...");
     }
 
-    $sleep_time = $refresh_rate + mt_rand($fuzz_refresh_min, $fuzz_refresh_max) + $backoff;
+    $sleep_time = $refresh_rate + mt_rand($refresh_fuzz_min, $refresh_fuzz_max) + $backoff;
     elog("Sleeping for {$sleep_time} seconds...");
     sleep($sleep_time);
 }
@@ -200,6 +179,7 @@ file_put_contents($updates_file, "{}");
 
 elog("All done! Thanks for running Regieleki!");
 exit;
+
 
 function elog($text, $end = "\n") {
     echo "[ELEKI] {$text}{$end}";
