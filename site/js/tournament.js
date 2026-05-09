@@ -559,7 +559,7 @@ export default {
                 });
             }
 
-            pairings.sort((a, b) => a.table > b.table);
+            pairings.sort((a, b) => parseInt(a.table) > parseInt(b.table));
 
             return pairings;
         },

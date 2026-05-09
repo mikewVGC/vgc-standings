@@ -49,7 +49,7 @@ foreach ($ini_data as $section => $data) {
     }
 
     if (!empty($data['end_time'])) {
-        $end = (new DateTime("{$data['start_time']} {$data['time_zone']}"))->getTimestamp();
+        $end = (new DateTime("{$data['end_time']} {$data['time_zone']}"))->getTimestamp();
         $tournament_settings[$section]['end'] = $end;
     }
     elog("[{$section}] Scheduled to finish at " . date("Y-m-d H:i:s", $tournament_settings[$section]['end']));

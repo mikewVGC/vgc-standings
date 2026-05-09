@@ -110,7 +110,7 @@ def process_pokedata_event(data:list, tour_format:list, official_order:list, eve
                 rname=rnd,
                 opp=opp_code if opp_code not in [ 'bye', 'late', 'none' ] else '',
                 res=opp['result'],
-                tbl=opp['table'],
+                tbl=int(opp['table']),
                 bye=1 if opp_code == "bye" else 0,
                 late=1 if opp_code == "late" else 0,
                 phase=phase,
