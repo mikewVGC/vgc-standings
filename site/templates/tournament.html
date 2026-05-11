@@ -265,7 +265,7 @@ __TEMPLATE_FOOTER__
                     <template v-else-if="opp.late">Late</template>
                     <a v-else :href="`/${season}/${eventInfo.code}/player/${opp.opp}`">{{ opponents[opp.opp].name }}</a>
                 </td>
-                <td :class="[ opp.bye ? '' : opp.res ]">{{ opp.bye ? "" : opp.res }}</td>
+                <td :class="[ opp.bye ? '' : opp.res ]">{{ opp.bye ? "" : (opp.res ? opp.res : "-") }}</td>
                 <td>
                     <template v-if="opponents[opp.opp].record">
                     ({{ opponents[opp.opp].record.w }} - {{ opponents[opp.opp].record.l }}<span

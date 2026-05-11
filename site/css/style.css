@@ -248,7 +248,7 @@ table#mon-users td.team-container a {
     display: inline;
 }
 
-td.W, td.L, td.T {
+td.W, td.L, td.T, table#opponents td:nth-child(3) {
     text-align: center;
 }
 
@@ -919,9 +919,15 @@ ul#pairing-round-select li a {
         padding: .1em .75em .1em 0;
     }
 
+    ul#standings-sections li {
+        font-size: .9em;
+        border: 0;
+        display: block;
+        padding-bottom: .2em;
+    }
+
     ul#standings-sections li:first-child {
         padding-left: 0;
-        display: block;
     }
 
     .team-container {
@@ -980,6 +986,8 @@ ul#pairing-round-select li a {
     }
 
     table.main-standings td:nth-child(4) {
+        position: absolute;
+        right: 1.75em;
     }
 
     table.main-standings td:nth-child(4)::before {
@@ -990,6 +998,11 @@ ul#pairing-round-select li a {
     table.main-standings td:nth-child(7),
     table.main-standings td:nth-child(8) {
         display: none;
+    }
+
+    table.main-standings td:nth-child(6) {
+        position: absolute;
+        right: .25em;
     }
 
     table.main-standings td:nth-child(6)::before {
