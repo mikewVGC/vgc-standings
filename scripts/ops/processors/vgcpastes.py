@@ -101,6 +101,7 @@ def parse_paste(paste:str, event_info:dict) -> list:
 
             mons.append(TeamMember(
                 name=mon['species'],
+                altname=mon['species'],
                 code=mon_code,
                 altcode=get_icon_alt(mon_code, mon, event_info['rules']['mega']),
                 dex=dex_num,
