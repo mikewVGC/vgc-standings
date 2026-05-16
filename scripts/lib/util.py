@@ -66,8 +66,12 @@ def fix_mon_name(name:str) -> str:
         "Green", # Squawkabilly
         "Red-Striped",
         "Chest",
+
         "West", # rk9 doesn't differentiate between Gastrodon forms but other platforms do sometimes
         "East", # west is the default to match Showdown, and also pink gastro is better anyway
+
+        "Artisan",     # sinistcha and polteageist forms are 100% cosmetic, so group them
+        "Masterpiece",
     )
 
     # convert map -> rk9: Showdown
