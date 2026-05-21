@@ -6,7 +6,9 @@ import subprocess
 
 from ops.process_regional import process_regional, process_season, was_event_processed
 from ops.site_builder import SiteBuilder
+from ops.builder_cache import BuilderCache
 from ops.usage import compile_usage
+from ops.home_bootstrap import get_home_bootstrap_data
 from lib.util import get_season_bookends, make_nice_date_str
 from lib.ruleset import load_rulesets
 
@@ -23,8 +25,6 @@ def main():
     parser.add_argument('--limitless', action="store_true", help="Process Limitless events instead of official ones")
 
     cl = parser.parse_args()
-
-    rulesets = load_rulesets()
 
     allowlist = []
     if cl.process:
@@ -53,6 +53,27 @@ def main():
         print("Could not find manifest, exiting")
         return
 
+    builder_cache = BuilderCache(config, cl.prod)
+
+    if not cl.build_only:
+        process_data(config, manifest, allowlist, builder_cache, cl.prod, cl.limitless)
+
+    if cl.limitless:
+        print("Finished!")
+        return
+
+    build_site(config, cl.prod, builder_cache)
+
+    print("All done!")
+
+def process_data(
+    config:dict,
+    manifest:dict,
+    allowlist:list,
+    builder_cache:BuilderCache,
+    prod:bool,
+    limitless:bool = False
+):
     non_current_seasons = {}
     for season in list(filter(lambda s: s != manifest['current'], manifest['seasons'])):
         non_current_seasons[season] = {
@@ -60,7 +81,7 @@ def main():
             "dates": "",
         }
 
-    builder = SiteBuilder(config, cl.prod)
+    rulesets = load_rulesets()
 
     current_majors = {}
     for year in manifest['seasons']:
@@ -83,7 +104,7 @@ def main():
         for event_code, event_info in majors.items():
             event_should_be_processed = len(allowlist) == 0 or f"{year}-{event_code}" in allowlist or f"{year}-*" in allowlist
 
-            if cl.build_only or not event_should_be_processed:
+            if not event_should_be_processed:
                 print(f"[{year}] Checking for processed data for '{event_code}'... ", end="")
                 _, proc_event_info = was_event_processed(year, event_code)
                 majors[event_code].update(proc_event_info)
@@ -94,15 +115,15 @@ def main():
                     event_code,
                     event_info,
                     rulesets.get_ruleset(event_info['format']),
-                    cl.prod,
-                    cl.limitless
+                    prod,
+                    limitless
                 )
 
             if event_should_be_processed and majors[event_code]['processed']:
                 print("building usage... ", end="")
-                compile_usage(year, event_code, cl.prod, cl.limitless)
+                compile_usage(year, event_code, prod, limitless)
 
-            builder.build_meta_ssi(
+            builder_cache.add_meta_ssi(
                 f"{year}/{event_code}",
                 f"{event_info['name']} Standings -- {year} Season -- Reportworm Standings",
                 f"Reportworm Standings showcases standings and teamsheets for the {year} {event_info['name']}.",
@@ -114,20 +135,37 @@ def main():
         process_season(year, majors)
         print("Done!")
 
-        builder.build_meta_ssi(
+        builder_cache.add_meta_ssi(
             f"{year}",
             f"{year} Season -- Reportworm Standings",
             f"Reportworm Standings showcases standings and teamsheets for the {year} VGC Season.",
         )
 
-    if cl.prod:
+    if prod:
         print("[ALL] Minifying js and css... ", end="")
         subprocess.run(["go", "run", "scripts/packer/main.go"], capture_output=True)
         print("Done!")
 
-    if cl.limitless:
-        print("Finished!")
+    if limitless:
         return
+
+    # home (/) requires some bootstrap data
+    non_current_seasons = list(non_current_seasons.values())
+    non_current_seasons.reverse()
+
+    builder_cache.add_cache_data(
+        'home_bootstrap',
+        get_home_bootstrap_data(manifest['current'], current_majors, non_current_seasons)
+    )
+
+    builder_cache.save()
+
+def build_site(config:dict, prod:bool, builder_cache:BuilderCache):
+    builder = SiteBuilder(config, prod, builder_cache.load())
+
+    print("[ALL] Dumping SSI files... ", end="")
+    builder.build_meta_ssi()
+    print("Done!")
 
     print("[ALL] Rebuilding season page... ", end="")
     builder.build_season()
@@ -137,14 +175,9 @@ def main():
     builder.build_tournament()
     print("Done!")
 
-    # the homepage does require a bunch of data, which I might change
     print("[ALL] Building home/index page...", end="")
-    non_current_seasons = list(non_current_seasons.values())
-    non_current_seasons.reverse()
-    builder.build_home(manifest['current'], current_majors, non_current_seasons)
+    builder.build_home()
     print("Done!")
-
-    print("All done!")
 
 
 if __name__ == "__main__":

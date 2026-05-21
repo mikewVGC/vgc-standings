@@ -5,15 +5,15 @@ import os
 
 from datetime import date
 
-from lib.util import make_season_info_str, make_nice_date_str, get_season_bookends
 
 class SiteBuilder():
 
-    def __init__(self, config:dict = {}, prod:bool = False) -> None:
+    def __init__(self, config:dict = {}, prod:bool = False, cache:dict = {}) -> None:
         self.config = config
         self.prod = prod
+        self.cache = cache
 
-    def build_home(self, year:int, majors:dict, all_other_seasons:dict) -> None:
+    def build_home(self) -> None:
         with open("site/templates/home.html", 'r') as homefile:
             home = homefile.read()
 
@@ -22,25 +22,7 @@ class SiteBuilder():
         home = self._add_google_analytics(home)
         home = self._add_script('home', home)
 
-        first_major, last_major, worlds = get_season_bookends(majors)
-
-        recent = list(filter(lambda major: major['status'] == "complete", list(majors.values())))
-        upcoming = list(filter(lambda major: major['status'] == "upcoming", list(majors.values())))
-        in_progress = list(filter(lambda major: major['status'] == "in_progress", list(majors.values())))
-
-        recent.reverse()
-        in_progress.reverse()
-
-        bootstrap = {
-            "currentSeason": year,
-            "seasonStatus": make_season_info_str(majors),
-            "seasonDates": make_nice_date_str(first_major['start'], last_major['start'], 'through', True),
-            "worldsDate": worlds['dates'],
-            "recent": recent[0:3],
-            "upcoming": upcoming[0:3],
-            "inProgress": in_progress,
-            "pastSeasons": all_other_seasons,
-        }
+        bootstrap = self.cache['home_bootstrap'] if 'home_bootstrap' in self.cache else {}
 
         home = home.replace('__BOOTSTRAP_DATA__', json.dumps(bootstrap))
 
@@ -97,15 +79,19 @@ class SiteBuilder():
             file.write(tour)
 
 
-    def build_meta_ssi(self, file:str, title:str, description:str) -> None:
+    def build_meta_ssi(self) -> None:
+        if 'ssi' not in self.cache:
+            return
+
         with open("site/templates/head-ssi.html", 'r') as headssifile:
-            headssi = headssifile.read()
+            ssi_base = headssifile.read()
 
-            headssi = headssi.replace('__TITLE__', title)
-            headssi = headssi.replace('__DESCRIPTION__', description)
+            for ssi_data in self.cache['ssi']:
+                main_ssi = ssi_base.replace('__TITLE__', ssi_data['title'])
+                main_ssi = main_ssi.replace('__DESCRIPTION__', ssi_data['description'])
 
-        with open(f"public/static/ssi/{file}.html", 'w') as file:
-            file.write(headssi)
+                with open(f"public/static/ssi/{ssi_data['file']}.html", 'w') as file:
+                    file.write(main_ssi)
 
 
     def _add_google_analytics(self, dest_data:str) -> str:
