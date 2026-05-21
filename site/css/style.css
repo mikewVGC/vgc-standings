@@ -789,6 +789,21 @@ ul#pairing-round-select li a {
     display: none;
 }
 
+#reportworm-stats {
+    text-align: center;
+}
+
+#reportworm-stats a {
+    text-decoration: none;
+    color: #254852;
+}
+
+#reportworm-stats div {
+    display: inline-block;
+    float: right;
+    cursor: pointer;
+}
+
 /* this is like 800px display? ... works for sideways phones */
 @media (max-width: 50.5em) {
     .team-container {
