@@ -1438,6 +1438,15 @@ ul#pairing-round-select li a {
     .home-event-block {
         border: 1px solid #888888;
         background: #303030;
+        color: #FFFFFF;
+    }
+
+    .home-event-block div.title {
+        color: #1BD9F7;
+    }
+
+    .home-event-block.up-block div.title {
+        color: #FFFFFF;
     }
 
     th {
