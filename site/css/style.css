@@ -116,7 +116,7 @@ footer p {
 }
 
 #current-season h3 {
-    padding: .2em 0;
+    padding: 1em 0 .5em 0;
     margin: 0;
 }
 
@@ -146,6 +146,76 @@ footer p {
 .event-in-progress span {
     font-weight: normal;
     font-size: .85em;
+}
+
+.home-event-block {
+    border: 1px solid #254852;
+    border-radius: .25em;
+    background: #F0F0F0;
+    color: #000;
+    text-decoration: none;
+    display: inline-block;
+    width: calc(33% - 2.75em);
+    padding: 1em;
+    margin: 0 1em 0 0;
+}
+
+.home-event-block.ip-block {
+    width: calc(100% - 2.75em);
+    margin: 0;
+    position: relative;
+}
+
+.home-event-block.ip-block > div {
+    display: inline-block;
+    padding-bottom: 0;
+}
+
+.home-event-block.ip-block > div:nth-child(1),
+.home-event-block.ip-block > div:nth-child(2) {
+    width: 70%;
+    float: left;
+}
+
+.home-event-block.ip-block > div:nth-child(3),
+.home-event-block.ip-block > div:nth-child(4) {
+    width: 14%;
+    vertical-align: top;
+}
+
+.home-event-block:last-child {
+    margin: 0;
+}
+
+.home-event-block > div {
+    font-size: .9em;
+    padding-bottom: .5em;
+}
+
+.home-event-block > div:last-child {
+    padding-bottom: 0;
+}
+
+.home-event-block div.title {
+    font-weight: bold;
+    padding-bottom: .25em;
+    font-size: 1.1em;
+    text-decoration: underline;
+    color: #0000C0;
+}
+
+.home-event-block.up-block div.title {
+    text-decoration: none;
+    color: #000;
+}
+
+.home-event-block div strong {
+    font-size: .9em;
+    display: block;
+}
+
+.home-event-block div em {
+    font-size: .9em;
 }
 
 input, select {
@@ -867,6 +937,32 @@ ul#pairing-round-select li a {
         content: "";
     }
 
+    .home-event-block {
+        width: calc(100% - 2.75em);
+        margin-bottom: .75em;
+    }
+
+    .home-event-block.ip-block > div {
+        display: block;
+    }
+
+    .home-event-block.ip-block > div:nth-child(1),
+    .home-event-block.ip-block > div:nth-child(2),
+    .home-event-block.ip-block > div:nth-child(3),
+    .home-event-block.ip-block > div:nth-child(4) {
+        width: 100%;
+        float: revert;
+        padding-bottom: .5em;
+    }
+
+    .home-event-block.ip-block > div:nth-child(1) {
+        padding-bottom: .25em;
+    }
+
+    #current-season {
+        margin-bottom: 1em;
+    }
+
     .eventslist thead {
         display: none;
     }
@@ -1337,6 +1433,11 @@ ul#pairing-round-select li a {
 
     .tabgroup div#home-button {
         background-image: url(/static/img/home-black.png);
+    }
+
+    .home-event-block {
+        border: 1px solid #888888;
+        background: #303030;
     }
 
     th {

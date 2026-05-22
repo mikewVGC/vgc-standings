@@ -10,38 +10,73 @@ __TEMPLATE_HEADER__
 
     <p>Welcome to <em>Reportworm Standings</em>, where you can find full standings and teamsheets for VGC majors.</p>
 
+    <p v-cloak>{{ seasonStatus }} the <strong><a :href="`/${currentSeason}`">{{ currentSeason }} VGC Season</a></strong>. The season runs from {{ seasonDates }}. The <strong>{{ currentSeason }} World Championships</strong> will be played <em>{{ worldsDate }}</em>.</p>
+
     <div id="current-season" v-cloak>
 
-        <h2 v-cloak>
-            Current Season: <a :href="`/${currentSeason}`">{{ currentSeason }} VGC Season</a>
-        </h2>
+        <h2 v-cloak>Recent and Upcoming Events &mdash; <a :href="`/${currentSeason}`">{{ currentSeason }} VGC Season</a></h2>
 
-        <p v-cloak>{{ seasonStatus }} the <strong><a :href="`/${currentSeason}`">{{ currentSeason }} VGC Season</a></strong>. The season runs from {{ seasonDates }}. The <strong>{{ currentSeason }} World Championships</strong> will be played <em>{{ worldsDate }}</em>.</p>
+        <p>For the complete calendar, check out the full <strong><a :href="`/${currentSeason}`">{{ currentSeason }} VGC Season</a></strong>.</p>
 
         <h3 v-if="inProgress.length > 0" v-cloak>In Progress Events</h3>
 
-        <ul v-cloak>
-            <li v-for="event in inProgress"><p><strong><a :href="`/${currentSeason}/${event.code}`">{{ event.name }}</a></strong> is currently in progress</p></li>
-        </ul>
+        <div v-if="inProgress.length > 0">
+            <a v-for="event in inProgress" :href="`/${currentSeason}/${event.code}`" class="home-event-block ip-block">
+                <div class="title">{{ event.name }}</div>
+                <div>{{ event.dates }}</div>
+                <div>
+                    <strong>Players</strong>
+                    {{ event.playerCount }}
+                </div>
+                <div>
+                    {{ event.format }}<br />
+                    <em>{{ event.game }}</em>
+                </div>
+            </a>
+        </div>
 
-        <h3 v-if="recent.length > 0" v-cloak>Most Recent Events</h3>
+        <h3 v-if="recent.length > 0" v-cloak>Recently Completed Events</h3>
 
-        <ul v-cloak>
-            <li v-for="event in recent"><p><strong><a :href="`/${currentSeason}/${event.code}`">{{ event.name }}</a></strong> was played on {{ event.dates }}, using {{ event.format }}</p></li>
-        </ul>
+        <div v-if="recent.length > 0">
+            <a v-for="event in recent" :href="`/${currentSeason}/${event.code}`" class="home-event-block">
+                <div class="title">{{ event.name }}</div>
+                <div>{{ event.dates }}</div>
+                <div>
+                    <strong>Winner</strong>
+                    {{ event.winner }}
+                </div>
+                <div>
+                    <strong>Players</strong>
+                    {{ event.playerCount }}
+                </div>
+                <div>
+                    <strong>Format</strong>
+                    {{ event.format }}<br />
+                    <em>{{ event.game }}</em>
+                </div>
+            </a>
+        </div>
 
         <h3 v-if="upcoming.length > 0" v-cloak>Upcoming Events</h3>
 
-        <ul v-cloak>
-            <li v-for="event in upcoming"><p><strong>
-                <a v-if="event.processed" :href="`/${currentSeason}/${event.code}`">{{ event.name }}</a>
-                <span v-else>{{ event.name }}</span>
-            </strong> will be played on {{ event.dates }}, using {{ event.format }}</p></li>
-        </ul>
+        <div v-if="upcoming.length > 0">
+            <div v-for="event in upcoming" class="home-event-block up-block">
+                <div class="title">
+                    <a v-if="event.processed" :href="`/${currentSeason}/${event.code}`">{{ event.name }}</a>
+                    <span v-else>{{ event.name }}</span>
+                </div>
+                <div>{{ event.dates }}</div>
+                <div>
+                    <strong>Format</strong>
+                    {{ event.format }}<br />
+                    <em>{{ event.game }}</em>
+                </div>
+            </div>
+        </div>
 
     </div>
 
-    <h2 v-if="pastSeasons.length > 0">Past Seasons</h2>
+    <h2 v-if="pastSeasons.length > 0">Previous Seasons</h2>
 
     <ul v-cloak>
         <li v-for="season in pastSeasons"><a :href="`/${season.year}`"><p><strong>{{ season.year }} Season</strong></a> - Took place from {{ season.dates }}</p></li>
