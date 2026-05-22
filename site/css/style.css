@@ -178,6 +178,10 @@ footer p {
     float: left;
 }
 
+.home-event-block.ip-block > div:nth-child(1) {
+    width: calc(70% - 24px);
+}
+
 .home-event-block.ip-block > div:nth-child(3),
 .home-event-block.ip-block > div:nth-child(4) {
     width: 14%;
@@ -199,10 +203,17 @@ footer p {
 
 .home-event-block div.title {
     font-weight: bold;
+    min-height: 20px;
+    display: flex;
+    align-items: center;
     padding-bottom: .25em;
+    padding-left: 24px;
     font-size: 1.1em;
     text-decoration: underline;
     color: #0000C0;
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+    background-position: 0px 2px;
 }
 
 .home-event-block.up-block div.title {

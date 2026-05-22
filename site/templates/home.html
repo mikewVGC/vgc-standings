@@ -22,7 +22,10 @@ __TEMPLATE_HEADER__
 
         <div v-if="inProgress.length > 0">
             <a v-for="event in inProgress" :href="`/${currentSeason}/${event.code}`" class="home-event-block ip-block">
-                <div class="title">{{ event.name }}</div>
+                <div
+                    class="title"
+                    :style="`background-image:url(/static/img/flags/${event.flag}.svg)`"
+                >{{ event.name }}</div>
                 <div>{{ event.dates }}</div>
                 <div>
                     <strong>Players</strong>
@@ -39,7 +42,10 @@ __TEMPLATE_HEADER__
 
         <div v-if="recent.length > 0">
             <a v-for="event in recent" :href="`/${currentSeason}/${event.code}`" class="home-event-block">
-                <div class="title">{{ event.name }}</div>
+                <div
+                    :style="`background-image:url(/static/img/flags/${event.flag}.svg)`"
+                    class="title"
+                >{{ event.name }}</div>
                 <div>{{ event.dates }}</div>
                 <div>
                     <strong>Winner</strong>
@@ -61,7 +67,10 @@ __TEMPLATE_HEADER__
 
         <div v-if="upcoming.length > 0">
             <div v-for="event in upcoming" class="home-event-block up-block">
-                <div class="title">
+                <div
+                    class="title"
+                    :style="`background-image:url(/static/img/flags/${event.flag}.svg)`"
+                >
                     <a v-if="event.processed" :href="`/${currentSeason}/${event.code}`">{{ event.name }}</a>
                     <span v-else>{{ event.name }}</span>
                 </div>
