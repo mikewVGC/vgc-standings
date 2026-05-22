@@ -155,15 +155,16 @@ footer p {
     color: #000;
     text-decoration: none;
     display: inline-block;
-    width: calc(33% - 2.75em);
+    box-sizing: border-box;
+    width: calc(33% - .55em);
     padding: 1em;
     margin: 0 1em 0 0;
 }
 
 .home-event-block.ip-block {
-    width: calc(100% - 2.75em);
     margin: 0;
-    position: relative;
+    box-sizing: border-box;
+    width: 100%;
 }
 
 .home-event-block.ip-block > div {
