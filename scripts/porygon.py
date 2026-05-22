@@ -141,11 +141,6 @@ def process_data(
             f"Reportworm Standings showcases standings and teamsheets for the {year} VGC Season.",
         )
 
-    if prod:
-        print("[ALL] Minifying js and css... ", end="")
-        subprocess.run(["go", "run", "scripts/packer/main.go"], capture_output=True)
-        print("Done!")
-
     if limitless:
         return
 
@@ -162,6 +157,11 @@ def process_data(
 
 def build_site(config:dict, prod:bool, builder_cache:BuilderCache):
     builder = SiteBuilder(config, prod, builder_cache.load())
+
+    if prod:
+        print("[ALL] Minifying js and css... ", end="")
+        subprocess.run(["go", "run", "scripts/packer/main.go"], capture_output=True)
+        print("Done!")
 
     print("[ALL] Dumping SSI files... ", end="")
     builder.build_meta_ssi()
