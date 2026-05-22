@@ -300,7 +300,8 @@ export default {
             // main listener that lets us have nice looking urls
             window.addEventListener('click', (e) => {
                 if (e.target && e.target.closest('a')) {
-                    if ('pass' in e.target.dataset && e.target.dataset.pass == 1) {
+                    let tgt = e.target.closest('a');
+                    if ('pass' in tgt.dataset && tgt.dataset.pass == 1) {
                         return;
                     }
 
