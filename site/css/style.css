@@ -938,8 +938,12 @@ ul#pairing-round-select li a {
     }
 
     .home-event-block {
-        width: calc(100% - 2.75em);
+        width: calc(100% - 2em);
         margin-bottom: .75em;
+    }
+
+    .home-event-block.ip-block {
+        width: calc(100% - 2em);
     }
 
     .home-event-block.ip-block > div {
