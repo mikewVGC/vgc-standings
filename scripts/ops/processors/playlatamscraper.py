@@ -150,7 +150,7 @@ def process_playlatamscraper_event(
             name=player['name'],
             code=player_code,
             country=country.lower(),
-            place='',
+            place=0,
             record={ 'w': wins, 'l': losses, 't': ties },
             res={
                 'self': [],
