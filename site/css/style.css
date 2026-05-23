@@ -148,6 +148,12 @@ footer p {
     font-size: .85em;
 }
 
+.home-events-container {
+    display: grid;
+    grid-template-columns: calc(33% - .5em) calc(33% - .5em) 1fr;
+    gap: 1em;
+}
+
 .home-event-block {
     border: 1px solid #254852;
     border-radius: .25em;
@@ -156,13 +162,14 @@ footer p {
     text-decoration: none;
     display: inline-block;
     box-sizing: border-box;
-    width: calc(33% - .55em);
+    width: 100%;
     padding: 1em;
-    margin: 0 1em 0 0;
+    margin: 0;
+    height: content;
 }
 
 .home-event-block.ip-block {
-    margin: 0;
+    margin: 0 0 1em 0;
     box-sizing: border-box;
     width: 100%;
 }
@@ -228,6 +235,15 @@ footer p {
 
 .home-event-block div em {
     font-size: .9em;
+}
+
+.season-event-block {
+    margin-bottom: 1em;
+    width: calc(100% - .5em);
+}
+
+.season-event-block:nth-child(3n) {
+    margin-right: 0;
 }
 
 input, select {
@@ -947,6 +963,12 @@ ul#pairing-round-select li a {
     .tabgroup div::after {
         padding: 0;
         content: "";
+    }
+
+    .home-events-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1em;
     }
 
     .home-event-block {
