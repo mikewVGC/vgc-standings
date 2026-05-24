@@ -21,7 +21,33 @@ __TEMPLATE_FOOTER__
 
     <h2>{{ season }} VGC Event Calendar</h2>
 
-    <div v-if="inProgressMajors.length > 0"  class="season-events-container" v-cloak>
+    <div id="season-search">
+
+        <input
+            type="text"
+            placeholder="Search by event name"
+            @input="searchEvents"
+            :value="eventSearchStr"
+        />
+        <div
+            class="searchFunc clearSearch"
+            v-if="eventSearchStr.length"
+            @click="clearEventSearch"
+        >&times;</div>
+
+        <div id="event-type-select">
+            <label><strong>View:</strong></label>
+            <select @change="updateEventsFilter">
+                <option value="all">All Events</option>
+                <option value="in-progress">In Progress Events</option>
+                <option value="completed">Completed Events</option>
+                <option value="upcoming">Upcoming Events</option>
+            </select>
+        </div>
+
+    </div>
+
+    <div v-if="showList('in-progress')" class="season-events-container" v-cloak>
 
         <h3>In Progress Events</h3>
 
@@ -51,7 +77,7 @@ __TEMPLATE_FOOTER__
 
     </div>
 
-    <div class="season-events-container" v-if="majors.length > 0" v-cloak>
+    <div v-if="showList('completed')" v-class="season-events-container" v-cloak>
 
         <h3>Completed Events</h3>
 
@@ -82,7 +108,7 @@ __TEMPLATE_FOOTER__
 
     </div>
 
-    <div class="season-events-container" v-if="futureMajors.length > 0" v-cloak>
+    <div v-if="showList('upcoming')" class="season-events-container" v-cloak>
 
         <h3>Upcoming Events</h3>
 
@@ -109,6 +135,15 @@ __TEMPLATE_FOOTER__
         </div>
 
     </div>
+
+    <div v-if="!showList('in-progress') && !showList('completed') && !showList('upcoming')" v-cloak>
+
+        <h3>No Events Found!</h3>
+
+        <p>Your search criteria didn't match any results.</p>
+
+    </div>
+
 
 </template>
 

@@ -7,6 +7,9 @@ export default {
             futureMajors: [],
             inProgressMajors: [],
 
+            eventSearchStr: '',
+            eventTypeFilter: 'all',
+
             currentView: 'loading',
 
             nav: [],
@@ -19,13 +22,24 @@ export default {
                 case 'season-main':
                     return {
                         season: this.season,
-                        majors: this.majors,
-                        futureMajors: this.futureMajors,
-                        inProgressMajors: this.inProgressMajors,
+                        majors: this.filteredMajors,
+                        futureMajors: this.filteredFutureMajors,
+                        inProgressMajors: this.filteredInProgressMajors,
+                        eventSearchStr: this.eventSearchStr,
                     }
             }
 
             return {};
+        },
+
+        filteredMajors() {
+            return this.searchEventList(this.majors, this.eventSearchStr);
+        },
+        filteredFutureMajors() {
+            return this.searchEventList(this.futureMajors, this.eventSearchStr);
+        },
+        filteredInProgressMajors() {
+            return this.searchEventList(this.inProgressMajors, this.eventSearchStr);
         },
     },
     methods: {
@@ -37,6 +51,46 @@ export default {
             }
 
             this.setSeason(chips[1]);
+        },
+
+        searchEventList(events, searchStr) {
+            if (searchStr.length < 2) {
+                return events;
+            }
+
+            return events.filter((e) => {
+                return e.name.toLowerCase().includes(
+                    searchStr
+                        .toLowerCase()
+                        .normalize('NFD')
+                        .replace(/[\u0300-\u036f]/g, '')
+                );
+            });
+        },
+
+        getList(listName) {
+            switch (listName) {
+                case 'in-progress':
+                    return this.filteredInProgressMajors;
+                case 'completed':
+                    return this.filteredMajors;
+                case 'upcoming':
+                    return this.filteredFutureMajors;
+            }
+
+            return [];
+        },
+
+        showList(listName) {
+            if (!this.getList(listName).length) {
+                return false;
+            }
+
+            if (listName != this.eventTypeFilter && this.eventTypeFilter != 'all') {
+                return false;
+            }
+
+            return true;
         },
 
         setSeason(season) {
@@ -78,8 +132,20 @@ export default {
         },
         'season-main': {
             template: '#season-main-template',
-            props: [ 'season', 'majors', 'futureMajors', 'inProgressMajors' ],
+            props: [ 'season', 'majors', 'futureMajors', 'inProgressMajors', 'eventSearchStr' ],
             methods: {
+                searchEvents(e) {
+                    this.$parent.eventSearchStr = e.target.value;
+                },
+                clearEventSearch() {
+                    this.$parent.eventSearchStr = '';
+                },
+                showList(listName) {
+                    return this.$parent.showList(listName);
+                },
+                updateEventsFilter(e) {
+                    this.$parent.eventTypeFilter = e.target.value;
+                },
             },
         },
     },

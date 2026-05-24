@@ -194,6 +194,20 @@ footer p {
     padding-bottom: 0;
 }
 
+#season-search {
+    position: relative;
+}
+
+#season-search label {
+    padding: 0 .25em 0 .75em;
+}
+
+#event-type-select {
+    position: absolute;
+    left: 250px;
+    top: 0;
+}
+
 .season-events-container .event-block > div {
     font-size: 1em;
 }
