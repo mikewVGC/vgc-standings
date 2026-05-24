@@ -163,7 +163,7 @@ footer p {
     display: inline-block;
     box-sizing: border-box;
     width: 100%;
-    padding: 1em;
+    padding: .5em 1em;
     margin: 0;
     height: content;
 }
@@ -260,11 +260,6 @@ footer p {
     font-style: italic;
     padding-bottom: .25em;
     display: inline-block;
-}
-
-.event-block div.date {
-    font-size: 1em;
-    padding-top: .4em;
 }
 
 input, select {

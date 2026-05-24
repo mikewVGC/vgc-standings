@@ -34,7 +34,8 @@ __TEMPLATE_FOOTER__
             >
                 <strong>{{ event.region }}</strong>
                 <div>{{ event.name }}</div>
-                <em>{{ event.country }}</em>
+                <em>{{ event.country }}</em><br />
+                <em>{{ event.dates }}</em>
             </div>
             <div>
                 <strong>Format</strong>
@@ -46,8 +47,6 @@ __TEMPLATE_FOOTER__
                 <strong>Players</strong>
                 {{ event.playerCount }}
             </div>
-
-            <div class="date"><em>{{ event.dates }}</em></div>
         </a>
 
     </div>
@@ -63,7 +62,8 @@ __TEMPLATE_FOOTER__
             >
                 <strong>{{ event.region }}</strong>
                 <div>{{ event.name }}</div>
-                <em>{{ event.country }}</em>
+                <em>{{ event.country }}</em><br />
+                <em>{{ event.dates }}</em>
             </div>
             <div>
                 <strong>Format</strong>
@@ -78,8 +78,6 @@ __TEMPLATE_FOOTER__
                 <strong>Players</strong>
                 {{ event.playerCount }}
             </div>
-
-            <div class="date"><em>{{ event.dates }}</em></div>
         </a>
 
     </div>
@@ -98,7 +96,8 @@ __TEMPLATE_FOOTER__
                     <a :href="`/${season}/${event.code}`">{{ event.name }}</a><br />
                 </div>
                 <b v-else>{{ event.name }}<br /></b>
-                <em>{{ event.country }}</em>
+                <em>{{ event.country }}</em><br />
+                <em>{{ event.dates }}</em>
             </div>
             <div>
                 <strong>Format</strong>
@@ -107,8 +106,6 @@ __TEMPLATE_FOOTER__
             </div>
             <div></div>
             <div></div>
-
-            <div class="date"><em>{{ event.dates }}</em></div>
         </div>
 
     </div>
