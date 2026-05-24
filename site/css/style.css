@@ -871,39 +871,6 @@ ul#pairing-round-select li a {
     background: #E8E8E8;
 }
 
-.eventslist td:first-child {
-    vertical-align: top;
-}
-
-.eventslist a {
-    text-decoration: none;
-    display: inline-block;
-}
-
-.eventslist#eventslist-future a {
-    text-decoration: underline;
-}
-
-.eventslist div {
-    text-decoration: underline;
-}
-
-.eventslist .reg-location, .eventslist .reg-region {
-    font-size: .9em;
-    color: #404040;
-    padding-top: .2em;
-    text-decoration: none;
-}
-
-.eventslist .reg-region {
-    font-size: .8em;
-}
-
-#eventslist-completed th:last-child, #eventslist-completed td:last-child {
-    text-align: right;
-    padding-right: 2em;
-}
-
 .kinda-hide {
     height: 1px;
     overflow: hidden;
@@ -1027,66 +994,16 @@ ul#pairing-round-select li a {
         margin-bottom: 1em;
     }
 
-    .eventslist thead {
-        display: none;
+    #event-type-select {
+        position: revert;
+        left: 0;
+        padding-top: .25em;
     }
 
-    .eventslist tr {
+    #event-type-select label {
         display: block;
-        position: relative;
-        padding: .25em 0;
-    }
-
-    .eventslist tr td {
-        display: inline-block;
-    }
-
-    .eventslist tr td a {
-        display: block;
-    }
-
-    .eventslist tr td::before {
-        display: block;
-        color: #505050;
-        font-size: .8em;
-    }
-
-    .eventslist tr td:nth-child(2) {
-        width: 80%;
-        padding-top: 0;
-    }
-
-    .eventslist tr td:nth-child(4) {
-        position: absolute;
-        left: 68%;
-        top: 0%;
-        text-align: left;
-    }
-
-    .eventslist tr td:nth-child(4)::before {
-        content: "Game/Format";
-    }
-
-    .eventslist#eventslist-completed td:nth-child(5) {
-        position: absolute;
-        left: 68%;
-        top: 58%;
-        text-align: left;
-    }
-
-    .eventslist#eventslist-completed td:nth-child(5)::before {
-        content: "Players";
-    }
-
-    .eventslist#eventslist-completed td:nth-child(4) {
-        display: inline-block;
-        position: absolute;
-        left: 68%;
-        top: 0%;
-    }
-
-    .eventslist#eventslist-completed td:nth-child(4)::before {
-        content: "Game/Format";
+        padding: 0;
+        font-size: .9em;
     }
 
     ul#standings-info li {
@@ -1589,10 +1506,6 @@ ul#pairing-round-select li a {
         background: #505050;
     }
 
-    .eventslist .reg-location, .eventslist .reg-region {
-        color: #E0E0E0;
-    }
-
     #current-season {
         background: #404040;
         border: 1px solid #888888;
@@ -1649,10 +1562,6 @@ ul#pairing-round-select li a {
         }
 
         table#opponents td::before {
-            color: #D0D0D0;
-        }
-
-        .eventslist tr td::before {
             color: #D0D0D0;
         }
 
