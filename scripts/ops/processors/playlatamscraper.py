@@ -137,7 +137,7 @@ def process_playlatamscraper_event(
                 wins +=1
             elif game.res == 'L':
                 losses += 1
-            else:
+            elif game.res == 'T':
                 ties += 1
 
         country = ''
