@@ -21,19 +21,27 @@ __TEMPLATE_HEADER__
         <h3 v-if="inProgress.length > 0" v-cloak>In Progress Events</h3>
 
         <div v-if="inProgress.length > 0">
-            <a v-for="event in inProgress" :href="`/${currentSeason}/${event.code}`" class="home-event-block ip-block">
+            <a
+                v-for="event in inProgress"
+                :href="`/${currentSeason}/${event.code}`"
+                class="event-block full-block"
+            >
                 <div
                     class="title"
                     :style="`background-image:url(/static/img/flags/${event.flag}.svg)`"
-                >{{ event.name }}</div>
-                <div>{{ event.dates }}</div>
+                >
+                    <div>{{ event.name }}</div>
+                    <em>{{ event.dates }}</em>
+                </div>
+                <div></div>
+                <div>
+                    <strong>Format</strong>
+                    {{ event.format }}<br />
+                    <em>{{ event.game }}</em>
+                </div>
                 <div>
                     <strong>Players</strong>
                     {{ event.playerCount }}
-                </div>
-                <div>
-                    {{ event.format }}<br />
-                    <em>{{ event.game }}</em>
                 </div>
             </a>
         </div>
@@ -41,11 +49,11 @@ __TEMPLATE_HEADER__
         <h3 v-if="recent.length > 0" v-cloak>Recently Completed Events</h3>
 
         <div v-if="recent.length > 0" class="home-events-container">
-            <a v-for="event in recent" :href="`/${currentSeason}/${event.code}`" class="home-event-block">
+            <a v-for="event in recent" :href="`/${currentSeason}/${event.code}`" class="event-block">
                 <div
                     :style="`background-image:url(/static/img/flags/${event.flag}.svg)`"
                     class="title"
-                >{{ event.name }}</div>
+                ><div>{{ event.name }}</div></div>
                 <div>{{ event.dates }}</div>
                 <div>
                     <strong>Winner</strong>
@@ -66,7 +74,7 @@ __TEMPLATE_HEADER__
         <h3 v-if="upcoming.length > 0" v-cloak>Upcoming Events</h3>
 
         <div v-if="upcoming.length > 0" class="home-events-container">
-            <div v-for="event in upcoming" class="home-event-block up-block">
+            <div v-for="event in upcoming" class="event-block up-block">
                 <div
                     class="title"
                     :style="`background-image:url(/static/img/flags/${event.flag}.svg)`"

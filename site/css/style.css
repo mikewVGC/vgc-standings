@@ -154,7 +154,7 @@ footer p {
     gap: 1em;
 }
 
-.home-event-block {
+.event-block {
     border: 1px solid #254852;
     border-radius: .25em;
     background: #F0F0F0;
@@ -168,82 +168,103 @@ footer p {
     height: content;
 }
 
-.home-event-block.ip-block {
+.event-block.full-block {
+    display: grid;
+    grid-template-columns: 40% 20% 30% 10%;
     margin: 0 0 1em 0;
     box-sizing: border-box;
     width: 100%;
 }
 
-.home-event-block.ip-block > div {
+.event-block.full-block > div {
     display: inline-block;
     padding-bottom: 0;
 }
 
-.home-event-block.ip-block > div:nth-child(1),
-.home-event-block.ip-block > div:nth-child(2) {
-    width: 70%;
-    float: left;
-}
-
-.home-event-block.ip-block > div:nth-child(1) {
-    width: calc(70% - 24px);
-}
-
-.home-event-block.ip-block > div:nth-child(3),
-.home-event-block.ip-block > div:nth-child(4) {
-    width: 14%;
-    vertical-align: top;
-}
-
-.home-event-block:last-child {
+.event-block:last-child {
     margin: 0;
 }
 
-.home-event-block > div {
+.event-block > div {
     font-size: .9em;
     padding-bottom: .5em;
 }
 
-.home-event-block > div:last-child {
+.event-block > div:last-child {
     padding-bottom: 0;
 }
 
-.home-event-block div.title {
+.season-events-container .event-block > div {
+    font-size: 1em;
+}
+
+.event-block div.title {
     font-weight: bold;
     min-height: 20px;
-    display: flex;
     align-items: center;
     padding-bottom: .25em;
     padding-left: 24px;
     font-size: 1.1em;
-    text-decoration: underline;
-    color: #0000C0;
     background-repeat: no-repeat;
     background-size: 20px 20px;
     background-position: 0px 2px;
 }
 
-.home-event-block.up-block div.title {
+.event-block.full-block div.title {
+    background-size: 40px 40px;
+    padding-left: 46px;
+    min-height: 40px;
+}
+
+.season-events-container .event-block:nth-child(odd) {
+    background: #FAFAFA;
+}
+
+.season-events-container .event-block.full-block div.title {
+    background-size: 50px 50px;
+    padding-left: 56px;
+    min-height: 50px;
+}
+
+.event-block div.title div {
+    text-decoration: underline;
+    color: #0000C0;
+}
+
+.event-block div.title strong {
+    font-size: .8em;
+    color: #404040;
+}
+
+.event-block div.title em {
+    font-weight: normal;
+    font-size: .8em;
+}
+
+.event-block.up-block div.title {
     text-decoration: none;
     color: #000;
 }
 
-.home-event-block div strong {
+.event-block div strong {
     font-size: .9em;
     display: block;
+    color: #404040;
 }
 
-.home-event-block div em {
+.event-block div em {
     font-size: .9em;
 }
 
-.season-event-block {
-    margin-bottom: 1em;
-    width: calc(100% - .5em);
+.event-block div span {
+    font-style: italic;
+    padding-bottom: .25em;
+    display: inline-block;
 }
 
-.season-event-block:nth-child(3n) {
-    margin-right: 0;
+.event-block div.date {
+    font-size: 1em;
+    padding-top: .4em;
 }
 
 input, select {
@@ -971,30 +992,26 @@ ul#pairing-round-select li a {
         gap: 1em;
     }
 
-    .home-event-block {
+    .event-block {
         width: 100%;
         margin-bottom: .75em;
     }
 
-    .home-event-block.ip-block {
+    .event-block.full-block {
         width: 100%;
+        grid-template-columns: 100%;
     }
 
-    .home-event-block.ip-block > div {
+    .event-block.full-block > div {
         display: block;
     }
 
-    .home-event-block.ip-block > div:nth-child(1),
-    .home-event-block.ip-block > div:nth-child(2),
-    .home-event-block.ip-block > div:nth-child(3),
-    .home-event-block.ip-block > div:nth-child(4) {
-        width: 100%;
-        float: revert;
-        padding-bottom: .5em;
+    .event-block.full-block > div {
+        padding-bottom: .35em;
     }
 
-    .home-event-block.ip-block > div:nth-child(1) {
-        padding-bottom: .25em;
+    .event-block.full-block > div:last-child {
+        padding-bottom: 0;
     }
 
     #current-season {
@@ -1473,18 +1490,37 @@ ul#pairing-round-select li a {
         background-image: url(/static/img/home-black.png);
     }
 
-    .home-event-block {
+    .event-block {
         border: 1px solid #888888;
         background: #303030;
         color: #FFFFFF;
     }
 
-    .home-event-block div.title {
+    .event-block div.title div {
         color: #1BD9F7;
     }
 
-    .home-event-block.up-block div.title {
+    .event-block div.title strong {
+        color: #E0E0E0;
+    }
+
+    .event-block div strong {
+        color: #E0E0E0;
+    }
+
+    .season-events-container .event-block:nth-child(odd) {
+        background: #202020;
+    }
+
+    .event-block.up-block div.title {
         color: #FFFFFF;
+    }
+
+    .event-block.full-block {
+        display: grid;
+        margin: 0 0 1em 0;
+        box-sizing: border-box;
+        width: 100%;
     }
 
     th {

@@ -19,130 +19,97 @@ __TEMPLATE_FOOTER__
 
 <template id="season-main-template">
 
-    <h2>VGC Events For The {{ season }} Season</h2>
+    <h2>{{ season }} VGC Event Calendar</h2>
 
-    <div v-if="inProgressMajors.length > 0" v-cloak>
+    <div v-if="inProgressMajors.length > 0"  class="season-events-container" v-cloak>
 
         <h3>In Progress Events</h3>
 
         <p>In progress event data will periodically refresh, but may not always be up to date.</p>
 
-        <table class="eventslist" id="eventslist-completed">
-            <thead>
-                <tr>
-                    <th width="40"></th>
-                    <th>Event</th>
-                    <th>Dates</th>
-                    <th>Format</th>
-                    <th>Players</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="major in inProgressMajors">
-                    <td>
-                        <img
-                            :src="`/static/img/flags/${major.flag}.svg`"
-                            :title="`${major.flag}`"
-                            width="40"
-                        />
-                    </td>
-                    <td>
-                        <a :href="`${season}/${major.code}`">
-                            <div class="reg-region"><strong>{{ major.region }}</strong></div>
-                            <div>{{ major.name }}</div>
-                            <div class="reg-location"><em>{{ major.country }}</em></div>
-                        </a>
-                    </td>
-                    <td>{{ major.dates }}</td>
-                    <td>
-                        {{ major.format }}
-                        <div class="reg-location"><em>{{ major.game }}</em></div>
-                    </td>
-                    <td>{{ major.playerCount }}</td>
-                </tr>
-            </tbody>
-        </table>
+        <a v-for="event in inProgressMajors" :href="`/${season}/${event.code}`" class="event-block full-block">
+            <div
+                class="title"
+                :style="`background-image:url(/static/img/flags/${event.flag}.svg)`"
+            >
+                <strong>{{ event.region }}</strong>
+                <div>{{ event.name }}</div>
+                <em>{{ event.country }}</em>
+            </div>
+            <div>
+                <strong>Format</strong>
+                {{ event.format }}<br />
+                <em>{{ event.game }}</em>
+            </div>
+            <div></div>
+            <div>
+                <strong>Players</strong>
+                {{ event.playerCount }}
+            </div>
+
+            <div class="date"><em>{{ event.dates }}</em></div>
+        </a>
 
     </div>
 
-    <div v-if="majors.length > 0" v-cloak>
+    <div class="season-events-container" v-if="majors.length > 0" v-cloak>
 
         <h3>Completed Events</h3>
 
-        <table class="eventslist" id="eventslist-completed">
-            <thead>
-                <tr>
-                    <th width="40"></th>
-                    <th>Event</th>
-                    <th>Dates</th>
-                    <th>Format</th>
-                    <th>Players</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="major in majors">
-                    <td>
-                        <img
-                            :src="`/static/img/flags/${major.flag}.svg`"
-                            :title="`${major.flag}`"
-                            width="40"
-                        />
-                    </td>
-                    <td>
-                        <a :href="`${season}/${major.code}`">
-                            <div class="reg-region"><strong>{{ major.region }}</strong></div>
-                            <div>{{ major.name }}</div>
-                            <div class="reg-location"><em>{{ major.country }}</em></div>
-                        </a>
-                    </td>
-                    <td>{{ major.dates }}</td>
-                    <td>
-                        {{ major.format }}
-                        <div class="reg-location"><em>{{ major.game }}</em></div>
-                    </td>
-                    <td>{{ major.playerCount }}</td>
-                </tr>
-            </tbody>
-        </table>
+        <a v-for="event in majors" :href="`/${season}/${event.code}`" class="event-block full-block">
+            <div
+                class="title"
+                :style="`background-image:url(/static/img/flags/${event.flag}.svg)`"
+            >
+                <strong>{{ event.region }}</strong>
+                <div>{{ event.name }}</div>
+                <em>{{ event.country }}</em>
+            </div>
+            <div>
+                <strong>Format</strong>
+                {{ event.format }}<br />
+                <em>{{ event.game }}</em>
+            </div>
+            <div>
+                <strong>Winner</strong>
+                {{ event.winner }}
+            </div>
+            <div>
+                <strong>Players</strong>
+                {{ event.playerCount }}
+            </div>
+
+            <div class="date"><em>{{ event.dates }}</em></div>
+        </a>
 
     </div>
 
-    <div v-if="futureMajors.length > 0" v-cloak>
+    <div class="season-events-container" v-if="futureMajors.length > 0" v-cloak>
 
         <h3>Upcoming Events</h3>
 
-        <table class="eventslist" id="eventslist-future">
-            <thead>
-                <tr>
-                    <th width="40"></th>
-                    <th>Event</th>
-                    <th>Dates</th>
-                    <th>Format</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="major in futureMajors">
-                    <td>
-                        <img
-                            :src="`/static/img/flags/${major.flag}.svg`"
-                            :title="`${major.flag}`"
-                            width="40"
-                        />
-                    </td>
-                    <td>
-                        <div class="reg-region"><strong>{{ major.region }}</strong></div>
-                        <a v-if="major.processed" :href="`${season}/${major.code}`">{{ major.name }}</a>
-                        <span v-else>{{ major.name }}</span>
-                        <div class="reg-location"><em>{{ major.country }}</em></div>
-                    </td>
-                    <td>{{ major.dates }}</td>
-                    <td>
-                        {{ major.format }}
-                        <div class="reg-location"><em>{{ major.game }}</em></div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div v-for="event in futureMajors" class="event-block full-block">
+            <div
+                class="title"
+                :style="`background-image:url(/static/img/flags/${event.flag}.svg)`"
+            >
+                <strong>{{ event.region }}</strong>
+                <div v-if="event.processed">
+                    <a :href="`/${season}/${event.code}`">{{ event.name }}</a><br />
+                </div>
+                <b v-else>{{ event.name }}<br /></b>
+                <em>{{ event.country }}</em>
+            </div>
+            <div>
+                <strong>Format</strong>
+                {{ event.format }}<br />
+                <em>{{ event.game }}</em>
+            </div>
+            <div></div>
+            <div></div>
+
+            <div class="date"><em>{{ event.dates }}</em></div>
+        </div>
 
     </div>
 
