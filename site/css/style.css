@@ -500,16 +500,6 @@ tr.phase-header th {
     cursor: pointer;
 }
 
-#team {
-    font: 15px "M+ 1m", monospace;
-}
-
-#team div {
-    padding-left: 160px;
-    white-space: nowrap;
-    overflow: display;
-}
-
 h2 em, h3 em {
     font-size: .8em;
     color: #666666;
@@ -521,13 +511,22 @@ h3 span {
     font-size: .8em;
 }
 
+#team {
+    font: 15px "M+ 1m", monospace;
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+#team div {
+    white-space: nowrap;
+    overflow: display;
+}
+
 #team .paste-mon {
-    position: relative;
-    display: inline-block;
-    width: 50%;
-    height: 160px;
-    padding-left: 0;
-    padding-top: .75em;
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    padding-bottom: 1em;
+    grid-gap: 1em;
 }
 
 #team .paste-mon div {
@@ -544,10 +543,9 @@ h3 span {
 }
 
 #team .mon-big-img {
+    position: relative;
     width: 150px;
     height: 150px;
-    position: absolute;
-    padding-left: 0px;
     user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -1128,29 +1126,8 @@ ul#pairing-round-select li a {
         content: "Team";
     }
 
-    #team .paste-mon {
-        width: auto;
-        padding-left: 1em;
-        padding-top: 0;
-    }
-
-    #team .mon-big-img {
-        width: 120px;
-        height: 120px;
-    }
-
-    #team .mon-big-img img {
-        width: 120px;
-        height: 120px;
-    }
-
-    #team .paste-mon div.itemicon {
-        top: 90px;
-        right: 8px;
-    }
-
-    #team div {
-        padding-left: 120px;
+    #team {
+        grid-template-columns: 100%;
     }
 
     table#player-info {

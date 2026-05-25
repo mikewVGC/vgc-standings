@@ -13,8 +13,9 @@ class TeamMember():
     ptype: str
     tera: str
     ability: str
-    item: str
-    itemcode: str
+    nature: str = ''
+    item: str = ''
+    itemcode: str = ''
     moves: list[str] | None = None
 
 @dataclass
