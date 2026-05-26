@@ -865,8 +865,27 @@ ul#pairing-round-select li a {
     color: #666666;
 }
 
-#player-info td {
-    background: #E8E8E8;
+#player-info-block {
+    border: 1px solid #254852;
+    border-radius: .25em;
+    background: #F0F0F0;
+    color: #000;
+    font-size: 1.1em;
+    text-decoration: none;
+    display: inline-block;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 1em 1em;
+    margin: 0;
+    height: content;
+    display: grid;
+    grid-template-columns: 60px repeat(6, 1fr);
+}
+
+#player-info-block div strong {
+    display: block;
+    font-size: .8em;
+    padding-bottom: .1em;
 }
 
 .kinda-hide {
@@ -1130,53 +1149,19 @@ ul#pairing-round-select li a {
         grid-template-columns: 100%;
     }
 
-    table#player-info {
+    #player-info-block {
+        grid-template-columns: 60px repeat(3, 1fr);
         margin-bottom: 1em;
     }
 
-    table#player-info thead {
-        display: none;
+    #player-info-block div:first-child {
+        grid-row: span 2;
     }
 
-    table#player-info tr {
-        display: block;
-    }
-
-    table#player-info tr td {
-        display: inline-block;
-        text-align: center;
-        padding: .5em .85em;
-        width: 16%;
-    }
-
-    table#player-info tr td::before {
-        font-size: .8em;
-        color: #505050;
-        display: block;
-    }
-
-    table#player-info tr td:nth-child(2)::before {
-        content: "Place";
-    }
-
-    table#player-info tr td:nth-child(3)::before {
-        content: "Record";
-    }
-
-    table#player-info tr td:nth-child(4)::before {
-        content: "Points";
-    }
-
-    table#player-info tr td:nth-child(5)::before {
-        content: "Drop";
-    }
-
-    table#player-info tr td:nth-child(6)::before {
-        content: "Res.";
-    }
-
-    table#player-info tr td:nth-child(7)::before {
-        content: "Op Res.";
+    #player-info-block div:nth-child(2),
+    #player-info-block div:nth-child(3)
+    #player-info-block div:nth-child(4) {
+        padding-bottom: 1em;
     }
 
     #opp-header {
@@ -1479,8 +1464,10 @@ ul#pairing-round-select li a {
         color: #A0A0A0;
     }
 
-    #player-info td {
-        background: #505050;
+    #player-info-block {
+        border: 1px solid #888888;
+        background: #303030;
+        color: #FFFFFF;
     }
 
     #current-season {
@@ -1531,10 +1518,6 @@ ul#pairing-round-select li a {
     /* mobile dark mode */
     @media (max-width: 30.5em) {
         table.main-standings td::before {
-            color: #D0D0D0;
-        }
-
-        table#player-info tr td::before {
             color: #D0D0D0;
         }
 
