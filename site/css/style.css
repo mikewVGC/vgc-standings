@@ -841,6 +841,29 @@ ul#pairing-round-select li a {
     padding: .1em .5em;
 }
 
+#pairings-progress {
+}
+
+#pairings-progress p,
+#pairings-progress label {
+    width: 50%;
+    display: inline-block;
+}
+
+#pairings-progress p {
+    margin: .75em 0;
+}
+
+#pairings-progress label {
+    text-align: right;
+    cursor: pointer;
+}
+
+#pairings-progress label input {
+    position: relative;
+    top: .35em;
+}
+
 /* stolen from pokepast.es !!! */
 .type-normal   { color: #A8A878; }
 .type-fighting { color: #C03028; }

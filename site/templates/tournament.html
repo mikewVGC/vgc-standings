@@ -340,6 +340,17 @@ __TEMPLATE_FOOTER__
         </li>
     </ul>
 
+    <div id="pairings-progress">
+        <p>{{ matchesComplete }} / {{ totalPairings }} matches complete</p>
+        <label>
+            <input
+                type="checkbox"
+                :checked="hideFinishedPairings"
+                @change="toggleHideFinishedPairings"
+            /> Only show in progress matches
+        </label>
+    </div>
+
     <table class="pairings" id="fav-pairings" v-if="favPairings.length">
         <thead>
             <tr>
@@ -382,7 +393,10 @@ __TEMPLATE_FOOTER__
                 :event-info="eventInfo"
             ></tr>
             <tr v-if="pairings.length == 0" v-cloak>
-                <td colspan="3">No pairings for this round yet!</td>
+                <td colspan="3">
+                    <span v-if="hideFinishedPairings">All matches have finished for this round.</span>
+                    <span v-else>No pairings for this round yet!</span>
+                </td>
             </tr>
         </tbody>
     </table>

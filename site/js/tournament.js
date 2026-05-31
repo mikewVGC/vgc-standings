@@ -31,6 +31,8 @@ export default {
 
             filteredPlayers: [],
 
+            hideFinishedPairings: false,
+
             sorts: {
                 usage: { column: 'total', dir: 1 },
             },
@@ -153,16 +155,26 @@ export default {
                     let pairings = this.getPairings(secondary);
                     let roundName = secondary;
                     let roundNum = secondary;
+                    let matchesComplete = 0;
 
                     let favPairings = [];
                     let validFavs = this.validFavs;
-                    if (validFavs.length) {
-                        for (const pairing of pairings) {
-                            if (validFavs.includes(pairing.player) || validFavs.includes(pairing.opp)) {
-                                favPairings.push(pairing);
-                                // TODO: remove pairing from pairings array ?
-                            }
+                    for (const pairing of pairings) {
+                        if (pairing.winner.length) {
+                            matchesComplete++;
                         }
+                        if (validFavs.length && (validFavs.includes(pairing.player) || validFavs.includes(pairing.opp))) {
+                            favPairings.push(pairing);
+                            // TODO: remove pairing from pairings array ?
+                        }
+                    }
+
+                    let totalPairings = pairings.length;
+
+                    if (this.hideFinishedPairings) {
+                        pairings = pairings.filter(p => {
+                            return !p.winner.length && p.other != 'Late';
+                        });
                     }
 
                     if (pairings.length) {
@@ -179,6 +191,9 @@ export default {
                         eventInfo: this.eventInfo,
                         favPairings: favPairings,
                         pairings: pairings,
+                        matchesComplete: matchesComplete,
+                        totalPairings: totalPairings,
+                        hideFinishedPairings: this.hideFinishedPairings,
                         standings: this.standings,
                         round: { name: roundName, num: roundNum },
                         allRounds: this.allRounds,
@@ -935,7 +950,18 @@ export default {
         },
         'pairings': {
             template: '#pairings-template',
-            props: [ 'season', 'eventInfo', 'pairings', 'favPairings', 'allRounds', 'round', 'standings' ],
+            props: [
+                'season',
+                'eventInfo',
+                'pairings',
+                'favPairings',
+                'allRounds',
+                'round',
+                'standings',
+                'matchesComplete',
+                'hideFinishedPairings',
+                'totalPairings',
+            ],
             created: function() {
                 this.createdOrUpdated();
             },
@@ -1026,6 +1052,9 @@ export default {
                     }
 
                     return rec;
+                },
+                toggleHideFinishedPairings() {
+                    this.$parent.hideFinishedPairings = !this.$parent.hideFinishedPairings;
                 },
                 setNav(navData) {
                     return this.$parent.setNav(navData);

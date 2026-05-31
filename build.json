@@ -5,58 +5,82 @@
             "season",
             "tournament"
         ],
-        "ref": {
-            "html": {
-                "head": "templates/head.html",
-                "head-ssi": "templates/head-ssi.html",
-                "home": "templates/home.html",
-                "season": "templates/season.html",
-                "tournament": "templates/tournament.html",
-                "ga": "templates/analytics.html",
-                "header": "templates/header.html",
-                "footer": "templates/footer.html",
-                "vue": "templates/vue.html",
-                "vue-prod": "templates/vue-prod.html"
-            },
-            "files": {
-                "home-js": {
-                    "loc": "scripts/home.js",
-                    "url": "/static/home.js"
-                },
-                "home-js-min":  {
-                    "loc": "scripts/home.js",
-                    "url": "/static/home.min.js"
-                },
-                "main-css": {
-                    "loc": "css/style.css",
-                    "url": "/static/style.css"
-                },
-                "main-css-min": {
-                    "loc": "css/style.css",
-                    "url": "/static/style.min.css"
-                }
-            }
+        "refs": {
+            "tpl": "site/templates",
+            "js": "site/js",
+            "css": "site/css"
         },
         "home": {
             "type": "html",
-            "template": [
-                { "token": "__TEMPLATE_HEADER__", "tpl": "header" },
-                { "token": "__TEMPLATE_HEAD__", "tpl": "head" },
-                { "token": "__TEMPLATE_FOOTER__", "tpl": "footer" },
-                { "token": "__GOOGLE_ANALYTICS__", "tpl": "ga" }
-            ],
-            "value": [
-                { "token": "__GOOGLE_TAG__", "location": "config", "key": "googleTag" },
-                { "token": "__BOOTSTRAP_DATA__", "location": "function", "name": "ops.home_bootstrap.get_home_bootstrap_data" }
-            ],
-            "flag": [
-                { "token": "__VUE__", "flag": "prod", "value": true, "tpl": "vue-prod" },
-                { "token": "__VUE__", "flag": "prod", "value": false, "tpl": "vue" },
-                { "token": "__SCRIPT_FILE__", "flag": "prod", "value": true, "file": "home-js-min", "ts": true },
-                { "token": "__SCRIPT_FILE__", "flag": "prod", "value": false, "file": "home-js", "ts": true },
-                { "token": "__STYLESHEET_FILE__", "flag": "prod", "value": true, "file": "main-css", "ts": true },
-                { "token": "__STYLESHEET_FILE__", "flag": "prod", "value": true, "file": "main-css-min", "ts": true }
+            "base-ref": "home",
+            "out": "public/static/index.html",
+            "tokens": [
+                {
+                    "token": "__TEMPLATE_HEADER__",
+                    "type": "tpl",
+                    "ref": "header"
+                },
+                {
+                    "token": "__TEMPLATE_HEAD__",
+                    "type": "tpl",
+                    "ref": "head"
+                },
+                {
+                    "token": "__TEMPLATE_FOOTER__",
+                    "type": "tpl",
+                    "ref": "footer"
+                },
+                {
+                    "token": "__GOOGLE_ANALYTICS__",
+                    "type": "tpl",
+                    "ref": "analytics"
+                },
+                {
+                    "token": "__GOOGLE_TAG__",
+                    "type": "value",
+                    "location": "config",
+                    "key": "googleTag"
+                },
+                {
+                    "token": "__BOOTSTRAP_DATA__",
+                    "type": "value",
+                    "location": "function",
+                    "name": "ops.home_bootstrap.get_home_bootstrap_data"
+                },
+                {
+                    "token": "__VUE__",
+                    "type": "flag",
+                    "name": "prod",
+                    "values": [
+                        { "value": true, "type": "tpl", "ref": "vue-prod" },
+                        { "value": false, "type": "tpl", "ref": "vue" }
+                    ]
+                },
+                {
+                    "token": "__SCRIPT_FILE__",
+                    "type": "flag",
+                    "name": "prod",
+                    "values": [
+                        { "value": true, "type": "file", "ref": "home-js-min", "ts": true },
+                        { "value": false, "type": "file", "ref": "home-js-", "ts": true }
+                    ]
+                },
+                {
+                    "token": "__STYLESHEET_FILE__",
+                    "type": "flag",
+                    "name": "prod",
+                    "values": [
+                        { "value": true, "type": "file", "ref": "main-css-min", "ts": true },
+                        { "value": false, "type": "file", "ref": "main-css", "ts": true }
+                    ]
+                }
             ]
+        },
+        "season": {
+            "skip": true
+        },
+        "tournament": {
+            "skip": true
         }
     },
     "packer": {
