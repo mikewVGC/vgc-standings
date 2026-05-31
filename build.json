@@ -87,7 +87,7 @@
         "tpl_dir": "site",
         "out_dir": "public/static",
         "css": {
-            "css/style.css": "main.min.css"
+            "css/style.css": "style.min.css"
         },
         "js": {
             "js/home.js": "home.min.js",
