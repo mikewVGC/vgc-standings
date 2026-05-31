@@ -506,7 +506,7 @@ export default {
             }).then((r) => {
                 return r.json();
             }).then((d) => {
-                const latestHash = d[this.eventInfo.code] || false;
+                const latestHash = d[this.eventInfo.code] || '';
                 if (this.latestHash.length && latestHash && latestHash != this.latestHash) {
                     this.getRegional(() => {
                         // don't need to fetch usage during an event, probably
