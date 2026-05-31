@@ -71,7 +71,8 @@ def fix_mon_name(name:str) -> str:
         "West", # rk9 doesn't differentiate between Gastrodon forms but other platforms do sometimes
         "East", # west is the default to match Showdown, and also pink gastro is better anyway
 
-        "Artisan",     # sinistcha and polteageist forms are 100% cosmetic, so group them
+        "Artisan",        # sinistcha and polteageist forms are 100% cosmetic, so group them
+        "Family of Four", # maushold is mostly cosmetic (slight weight diff that usually doesn't matter)
         "Masterpiece",
     )
 
@@ -85,7 +86,7 @@ def fix_mon_name(name:str) -> str:
         "Hisuian": "Hisui",
         "Galarian": "Galar",
         "Alolan": "Alola",
-        "Family of Four": "Four",
+        #"Family of Four": "Four",
         "Rapid Strike": "Rapid-Strike",
         "Low Key": "Low-Key",
     }
