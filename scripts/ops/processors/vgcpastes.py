@@ -106,7 +106,8 @@ def parse_paste(paste:str, event_info:dict) -> list:
                 altcode=get_icon_alt(mon_code, mon, event_info['rules']['mega']),
                 dex=dex_num,
                 ptype=ptype.lower(),
-                tera=mon['tera'],
+                tera=mon['tera'] if 'tera' in mon else '',
+                nature=mon['nature'] if 'nature' in mon else '',
                 ability=mon['ability'],
                 item=mon['item'],
                 itemcode=make_item_code(mon['item']),
@@ -131,6 +132,8 @@ def parse_paste(paste:str, event_info:dict) -> list:
                     _, mon['tera'] = matches[0][3].split(': ')
                 elif matches[0][3].startswith("Shiny: "):
                     ...
+                elif matches[0][3].endswith(" Nature"):
+                    mon['nature'], _ = matches[0][3].split(' Nature')
                 else:
                     mon['species'] = matches[0][3] # if there's no nickname species is here!
         
