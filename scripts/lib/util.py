@@ -102,6 +102,7 @@ def fix_mon_name(name:str) -> str:
         "Plumage",
         "Kyurem",
         "Sea",
+        "Flower",
     )
 
     mon_info = re.findall(r"([\w -]+)(\[(\w)\]){0,1}", name)
