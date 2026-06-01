@@ -182,7 +182,8 @@ exit;
 
 
 function elog($text, $end = "\n") {
-    echo "[ELEKI] {$text}{$end}";
+    $date = (new DateTime())->format("H:i:s");
+    echo "[{$date}][ELEKI] {$text}{$end}";
 }
 
 function elog_cont($text, $end = "\n") {

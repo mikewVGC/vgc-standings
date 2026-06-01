@@ -74,6 +74,7 @@ def process_rk9scraper_event(
                 ptype=ptype.lower(),
                 tera=mon['tera'],
                 ability=mon['ability'],
+                nature=mon['nature'],
                 item=mon['item'],
                 itemcode=make_item_code(mon['item']),
                 moves=mon['moves'],

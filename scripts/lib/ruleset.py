@@ -11,6 +11,9 @@ class Ruleset():
         self.dynamax = False
         self.tera = False
 
+        # open nature isn't really a "rule" but it's close enough
+        self.natures = False
+
         self.restricted = 0
 
         for k, v in kwargs.items():
@@ -24,6 +27,7 @@ class Ruleset():
             'dynamax': self.dynamax,
             'tera': self.tera,
             'restricted': self.restricted,
+            'natures': self.natures,
         }
 
 class RulesetCollection():

@@ -788,7 +788,8 @@ ul#rk9-links li {
 }
 
 #move-info td:nth-child(2),
-#ability-info  td:nth-child(2) {
+#ability-info  td:nth-child(2),
+#nature-info td:nth-child(2) {
     padding: 0;
 }
 

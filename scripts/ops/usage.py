@@ -60,6 +60,7 @@ def compile_usage(year:int, event_code:str, prod:bool, limitless:bool = False) -
                     "items": {},
                     "abilities": {},
                     "teras": {},
+                    "natures": {},
                     "moves": {},
                     "teammates": {},
                 }
@@ -103,6 +104,14 @@ def compile_usage(year:int, event_code:str, prod:bool, limitless:bool = False) -
                     'count': 0,
                 }
             mon_stats[code]['teras'][tera]['count'] += 1
+
+            nature = mon['nature'] if mon['nature'] else ""
+            if len(nature) and nature not in mon_stats[code]['natures']:
+                mon_stats[code]['natures'][nature] = {
+                    'name': nature,
+                    'count': 0,
+                }
+            mon_stats[code]['natures'][nature]['count'] += 1
 
             for move_name in mon['moves']:
                 if move_name not in mon_stats[code]['moves']:
@@ -161,6 +170,11 @@ def compile_usage(year:int, event_code:str, prod:bool, limitless:bool = False) -
         mon_stat['teras'] = sorted(
             list(mon_stat['teras'].values()),
             key=lambda tera: (-tera['count'], tera['name'])
+        )
+
+        mon_stat['natures'] = sorted(
+            list(mon_stat['natures'].values()),
+            key=lambda nature: (-nature['count'], nature['name'])
         )
 
         mon_stat['moves'] = sorted(

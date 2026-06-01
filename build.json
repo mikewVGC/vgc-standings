@@ -14,6 +14,18 @@
             "type": "html",
             "base-ref": "home",
             "out": "public/static/index.html",
+            "copy": [
+                {
+                    "type": "file",
+                    "src": "js/home",
+                    "dest": "public/static"
+                },
+                {
+                    "type": "file",
+                    "src": "js/home",
+                    "dest": "public/static/home.js"
+                }
+            ],
             "tokens": [
                 {
                     "token": "__TEMPLATE_HEADER__",
@@ -44,8 +56,8 @@
                 {
                     "token": "__BOOTSTRAP_DATA__",
                     "type": "value",
-                    "location": "function",
-                    "name": "ops.home_bootstrap.get_home_bootstrap_data"
+                    "location": "cache",
+                    "key": "home_bootstrap"
                 },
                 {
                     "token": "__VUE__",
@@ -61,8 +73,8 @@
                     "type": "flag",
                     "name": "prod",
                     "values": [
-                        { "value": true, "type": "file", "ref": "home-js-min", "ts": true },
-                        { "value": false, "type": "file", "ref": "home-js-", "ts": true }
+                        { "value": true, "type": "file", "ref": "js/home", "ts": true },
+                        { "value": false, "type": "file", "ref": "js/home", "ts": true }
                     ]
                 },
                 {

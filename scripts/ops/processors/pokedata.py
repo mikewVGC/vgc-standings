@@ -68,6 +68,8 @@ def process_pokedata_event(data:list, tour_format:list, official_order:list, eve
             if alt:
                 dex_num = alt
 
+            mon_item = mon['item'] if len(mon['item']) else 'No Item'
+
             team.append(TeamMember(
                 name=mon_name,
                 code=mon_code,
@@ -77,9 +79,9 @@ def process_pokedata_event(data:list, tour_format:list, official_order:list, eve
                 ptype=ptype.lower(),
                 tera=mon['teratype'],
                 ability=mon['ability'],
-                item=mon['item'],
-                itemcode=make_item_code(mon['item']),
-                moves=mon['badges'],
+                item=mon_item,
+                itemcode=make_item_code(mon_item),
+                moves=[ m for m in mon['badges'] if m ],
             ))
 
         rounds = []

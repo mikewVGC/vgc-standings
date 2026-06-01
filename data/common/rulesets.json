@@ -49,6 +49,7 @@
     {
         "name": "Regulation M-A",
         "game": "Champions",
-        "mega": true
+        "mega": true,
+        "natures": true
     }
 ]

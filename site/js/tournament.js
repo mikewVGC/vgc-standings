@@ -27,6 +27,7 @@ export default {
                 moves: [],
                 abilities: [],
                 teammates: [],
+                natures: [],
             },
 
             filteredPlayers: [],
@@ -694,6 +695,7 @@ export default {
 
                 if ((!this.filters.items.length || this.filters.items.includes(pmon.itemcode)) &&
                     (!this.filters.teras.length || this.filters.teras.includes(pmon.tera)) &&
+                    (!this.filters.natures.length || this.filters.natures.includes(pmon.nature)) &&
                     (!this.filters.moves.length || this.filters.moves.every(m => pmon.moves.includes(m))) &&
                     (!this.filters.abilities.length || this.filters.abilities.includes(pmon.ability)) &&
                     (!this.filters.teammates.length ||
@@ -712,6 +714,7 @@ export default {
         resetFilters() {
             this.filters.items = [];
             this.filters.teras = [];
+            this.filters.natures = [];
             this.filters.moves = [];
             this.filters.abilities = [];
             this.filters.teammates = [];
@@ -732,6 +735,7 @@ export default {
             return (
                 this.filters.items.length ||
                 this.filters.teras.length ||
+                this.filters.natures.length ||
                 this.filters.moves.length ||
                 this.filters.abilities.length ||
                 teamFilter
