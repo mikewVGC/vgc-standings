@@ -55,6 +55,7 @@ def fix_mon_name(name:str) -> str:
         "Male",
         "Unremarkable",
         "Counterfeit",
+        "Phony",
         "Family of Three",
         "Amped",
         "Curly",
@@ -72,6 +73,7 @@ def fix_mon_name(name:str) -> str:
         "East", # west is the default to match Showdown, and also pink gastro is better anyway
 
         "Artisan",        # sinistcha and polteageist forms are 100% cosmetic, so group them
+        "Antique",
         "Family of Four", # maushold is mostly cosmetic (slight weight diff that usually doesn't matter)
         "Masterpiece",
     )
