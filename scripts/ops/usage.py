@@ -154,38 +154,23 @@ def compile_usage(year:int, event_code:str, prod:bool, limitless:bool = False) -
 
     mon_stats.sort(key=lambda mon: mon['counts']['total'], reverse=True)
 
+    sorts = [
+        'items',
+        'abilities',
+        'teras',
+        'natures',
+        'moves',
+        'teammates',
+    ]
+
     for mon_stat in mon_stats:
         mon_stat['distinct'] = len(mon_hashes[mon_stat['code']])
 
-        mon_stat['items'] = sorted(
-            list(mon_stat['items'].values()),
-            key=lambda item: (-item['count'], item['name'])
-        )
-
-        mon_stat['abilities'] = sorted(
-            list(mon_stat['abilities'].values()),
-            key=lambda ability: (-ability['count'], ability['name'])
-        )
-
-        mon_stat['teras'] = sorted(
-            list(mon_stat['teras'].values()),
-            key=lambda tera: (-tera['count'], tera['name'])
-        )
-
-        mon_stat['natures'] = sorted(
-            list(mon_stat['natures'].values()),
-            key=lambda nature: (-nature['count'], nature['name'])
-        )
-
-        mon_stat['moves'] = sorted(
-            list(mon_stat['moves'].values()),
-            key=lambda move: (-move['count'], move['name'])
-        )
-
-        mon_stat['teammates'] = sorted(
-            list(mon_stat['teammates'].values()),
-            key=lambda tmate: (-tmate['count'], tmate['name'])
-        )
+        for sort in sorts:
+            mon_stat[sort] = sorted(
+                list(mon_stat[sort].values()),
+                key=lambda x: (-x['count'], x['name'])
+            )
 
     indent_amt = 2
     separators = None

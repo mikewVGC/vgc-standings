@@ -717,6 +717,60 @@ __TEMPLATE_FOOTER__
                 </table>
 
             </div>
+
+            <div class="config-container">
+
+                <table id="item-info">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th colspan="2">Item Name</th>
+                            <th colspan="2">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            is="vue:usage-list-icon"
+                            v-for="itemInfo in mon.items"
+                            :code="itemInfo.code"
+                            :name="itemInfo.name"
+                            :count="itemInfo.count"
+                            :total="mon.counts.total"
+                            iconclass="itemicon"
+                            type="items"
+                        ></tr>
+                        <tr v-if="mon.items.length < 3" v-for="n in 3 - mon.items.length"><td colspan="5"></td></tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div class="config-container config-container-big">
+
+                <table id="teammate-info">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th colspan="2">Teammate</th>
+                            <th colspan="2">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            is="vue:usage-list-icon"
+                            v-for="tmateInfo in mon.teammates"
+                            :code="tmateInfo.code"
+                            :name="tmateInfo.name"
+                            :count="tmateInfo.count"
+                            :total="mon.counts.total"
+                            iconclass="monicon"
+                            type="teammates"
+                        ></tr>
+                    </tbody>
+                </table>
+
+            </div>
+
             <div class="config-container" v-if="eventInfo.rules.tera">
 
                 <table id="tera-info">
@@ -771,35 +825,6 @@ __TEMPLATE_FOOTER__
 
             </div>
 
-        </div>
-        <div class="mon-config-container">
-
-            <div class="config-container">
-
-                <table id="item-info">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th colspan="2">Item Name</th>
-                            <th colspan="2">Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr
-                            is="vue:usage-list-icon"
-                            v-for="itemInfo in mon.items"
-                            :code="itemInfo.code"
-                            :name="itemInfo.name"
-                            :count="itemInfo.count"
-                            :total="mon.counts.total"
-                            iconclass="itemicon"
-                            type="items"
-                        ></tr>
-                        <tr v-if="mon.items.length < 3" v-for="n in 3 - mon.items.length"><td colspan="5"></td></tr>
-                    </tbody>
-                </table>
-
-            </div>
             <div class="config-container">
 
                 <table id="ability-info">
@@ -822,35 +847,6 @@ __TEMPLATE_FOOTER__
                             type="abilities"
                         ></tr>
                         <tr v-if="mon.abilities.length < 3" v-for="n in 3 - mon.abilities.length"><td colspan="5"></td></tr>
-                    </tbody>
-                </table>
-
-            </div>
-
-        </div>
-        <div class="mon-config-container">
-
-            <div class="config-container config-container-big">
-
-                <table id="teammate-info">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th colspan="2">Teammate</th>
-                            <th colspan="2">Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr
-                            is="vue:usage-list-icon"
-                            v-for="tmateInfo in mon.teammates"
-                            :code="tmateInfo.code"
-                            :name="tmateInfo.name"
-                            :count="tmateInfo.count"
-                            :total="mon.counts.total"
-                            iconclass="monicon"
-                            type="teammates"
-                        ></tr>
                     </tbody>
                 </table>
 

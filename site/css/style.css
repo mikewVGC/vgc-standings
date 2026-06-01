@@ -724,24 +724,25 @@ ul#rk9-links li {
 }
 
 .mon-config-container {
-    width: 33%;
-    display: inline-block;
+    grid-template-columns: repeat(3, 1fr);
+    display: grid;
+    grid-auto-flow: row dense;
+    grid-column-gap: .25em;
+    grid-row-gap: .25em;
 }
 
 .config-container {
     display: block;
     overflow-y: scroll;
     overflow-x: hidden;
-    width: calc(100% - .25em);
     height: 9em;
-    margin-bottom: .75em;
-    margin-right: .5em;
-    vertical-align: top;
+    grid-row: span 1;
 }
 
 .config-container-big {
     margin-right: 0;
     height: 18.75em;
+    grid-row: span 2;
 }
 
 .config-container::-webkit-scrollbar {
