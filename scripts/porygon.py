@@ -5,7 +5,8 @@ import json
 import subprocess
 
 from ops.process_regional import process_regional, process_season, was_event_processed
-from ops.site_builder import SiteBuilder
+from ops.config import Config
+from ops.builder import Builder
 from ops.builder_cache import BuilderCache
 from ops.usage import compile_usage
 from ops.home_bootstrap import get_home_bootstrap_data
@@ -33,12 +34,13 @@ def main():
             year, code = chunk.split(':')
             allowlist.append(f"{year}-{code}")
 
-    config = {}
+    config = None
     try:
         with open("config.json") as file:
-            config = json.loads(file.read())
+            config = Config(json.loads(file.read()))
     except FileNotFoundError:
         print("Couldn't load config, but that's okay")
+        config = Config({})
 
     manifest_file = "data/majors/manifest.json"
     if cl.limitless:
@@ -53,10 +55,10 @@ def main():
         print("Could not find manifest, exiting")
         return
 
-    builder_cache = BuilderCache(config, cl.prod)
+    builder_cache = BuilderCache(cl.prod)
 
     if not cl.build_only:
-        process_data(config, manifest, allowlist, builder_cache, cl.prod, cl.limitless)
+        process_data(manifest, allowlist, builder_cache, cl.prod, cl.limitless)
 
     if cl.limitless:
         print("Finished!")
@@ -67,7 +69,6 @@ def main():
     print("All done!")
 
 def process_data(
-    config:dict,
     manifest:dict,
     allowlist:list,
     builder_cache:BuilderCache,
@@ -155,28 +156,12 @@ def process_data(
 
     builder_cache.save()
 
-def build_site(config:dict, prod:bool, builder_cache:BuilderCache):
-    builder = SiteBuilder(config, prod, builder_cache.load())
 
-    if prod:
-        print("[ALL] Minifying js and css... ", end="")
-        subprocess.run(["go", "run", "scripts/packer/main.go"], capture_output=True)
-        print("Done!")
+def build_site(config:Config, prod:bool, builder_cache:BuilderCache):
+    builder = Builder(config, prod, builder_cache.load())
 
-    print("[ALL] Dumping SSI files... ", end="")
-    builder.build_meta_ssi()
-    print("Done!")
-
-    print("[ALL] Rebuilding season page... ", end="")
-    builder.build_season()
-    print("Done!")
-
-    print("[ALL] Rebuilding tournament page... ", end="")
-    builder.build_tournament()
-    print("Done!")
-
-    print("[ALL] Building home/index page...", end="")
-    builder.build_home()
+    print("[ALL] Building site...", end="")
+    builder.build();
     print("Done!")
 
 

@@ -1,58 +1,118 @@
 {
     "builder": {
         "steps": [
+            "pack",
+            "copy",
             "home",
             "season",
-            "tournament"
+            "tournament",
+            "ssi"
         ],
         "refs": {
             "tpl": "site/templates",
             "js": "site/js",
             "css": "site/css"
         },
+        "common": [
+            {
+                "type": "html",
+                "tokens": [
+                    {
+                        "token": "__TEMPLATE_HEADER__",
+                        "type": "tpl",
+                        "ref": "header"
+                    },
+                    {
+                        "token": "__TEMPLATE_HEAD__",
+                        "type": "tpl",
+                        "ref": "head"
+                    },
+                    {
+                        "token": "__TEMPLATE_FOOTER__",
+                        "type": "tpl",
+                        "ref": "footer"
+                    },
+                    {
+                        "token": "__GOOGLE_ANALYTICS__",
+                        "type": "tpl",
+                        "ref": "analytics"
+                    },
+                    {
+                        "token": "__GOOGLE_TAG__",
+                        "type": "value",
+                        "location": "config",
+                        "key": "googleTag"
+                    },
+                    {
+                        "token": "__VUE__",
+                        "type": "flag",
+                        "name": "prod",
+                        "values": [
+                            { "value": true, "type": "tpl", "ref": "vue-prod" },
+                            { "value": false, "type": "tpl", "ref": "vue" }
+                        ]
+                    },
+                    {
+                        "token": "__STYLESHEET_FILE__",
+                        "type": "flag",
+                        "name": "prod",
+                        "values": [
+                            { "value": true, "type": "filename", "location": "/static/style.min.css", "ts": true },
+                            { "value": false, "type": "filename", "location": "/static/style.css", "ts": true }
+                        ]
+                    },
+                    {
+                        "token": "__YEAR__",
+                        "type": "date",
+                        "value": "year"
+                    }
+                ]
+            }
+        ],
+        "pack": {
+            "type": "command",
+            "condition": {
+                "type": "flag",
+                "name": "prod",
+                "value": true
+            },
+            "run": [ "go", "run", "scripts/packer/main.go" ]
+        },
+        "copy": {
+            "type": "copy",
+            "condition": {
+                "type": "flag",
+                "name": "prod",
+                "value": false
+            },
+            "files": [
+                {
+                    "type": "js",
+                    "ref": "home",
+                    "dest": "public/static/"
+                },
+                {
+                    "type": "js",
+                    "ref": "season",
+                    "dest": "public/static/"
+                },
+                {
+                    "type": "js",
+                    "ref": "tournament",
+                    "dest": "public/static/"
+                },
+                {
+                    "type": "css",
+                    "ref": "style",
+                    "dest": "public/static/"
+                }
+            ]
+        },
         "home": {
             "type": "html",
             "base-ref": "home",
-            "out": "public/static/index.html",
-            "copy": [
-                {
-                    "type": "file",
-                    "src": "js/home",
-                    "dest": "public/static"
-                },
-                {
-                    "type": "file",
-                    "src": "js/home",
-                    "dest": "public/static/home.js"
-                }
-            ],
+            "out": "public/index.html",
             "tokens": [
-                {
-                    "token": "__TEMPLATE_HEADER__",
-                    "type": "tpl",
-                    "ref": "header"
-                },
-                {
-                    "token": "__TEMPLATE_HEAD__",
-                    "type": "tpl",
-                    "ref": "head"
-                },
-                {
-                    "token": "__TEMPLATE_FOOTER__",
-                    "type": "tpl",
-                    "ref": "footer"
-                },
-                {
-                    "token": "__GOOGLE_ANALYTICS__",
-                    "type": "tpl",
-                    "ref": "analytics"
-                },
-                {
-                    "token": "__GOOGLE_TAG__",
-                    "type": "value",
-                    "location": "config",
-                    "key": "googleTag"
-                },
                 {
                     "token": "__BOOTSTRAP_DATA__",
                     "type": "value",
@@ -73,8 +133,24 @@
                     "type": "flag",
                     "name": "prod",
                     "values": [
-                        { "value": true, "type": "file", "ref": "js/home", "ts": true },
-                        { "value": false, "type": "file", "ref": "js/home", "ts": true }
+                        { "value": true, "type": "filename", "location": "/static/home.min.js", "ts": true },
+                        { "value": false, "type": "filename", "location": "/static/home.js", "ts": true }
+                    ]
+                }
+            ]
+        },
+        "season": {
+            "type": "html",
+            "base-ref": "season",
+            "out": "public/static/season.html",
+            "tokens": [
+                {
+                    "token": "__SCRIPT_FILE__",
+                    "type": "flag",
+                    "name": "prod",
+                    "values": [
+                        { "value": true, "type": "filename", "location": "/static/season.min.js", "ts": true },
+                        { "value": false, "type": "filename", "location": "/static/season.js", "ts": true }
                     ]
                 },
                 {
@@ -82,17 +158,76 @@
                     "type": "flag",
                     "name": "prod",
                     "values": [
-                        { "value": true, "type": "file", "ref": "main-css-min", "ts": true },
-                        { "value": false, "type": "file", "ref": "main-css", "ts": true }
+                        { "value": true, "type": "filename", "location": "/static/style.min.css", "ts": true },
+                        { "value": false, "type": "filename", "location": "/static/style.css", "ts": true }
                     ]
                 }
             ]
         },
-        "season": {
-            "skip": true
-        },
         "tournament": {
-            "skip": true
+            "type": "html",
+            "base-ref": "tournament",
+            "out": "public/static/tournament.html",
+            "tokens": [
+                {
+                    "token": "__SCRIPT_FILE__",
+                    "type": "flag",
+                    "name": "prod",
+                    "values": [
+                        { "value": true, "type": "filename", "location": "/static/tournament.min.js", "ts": true },
+                        { "value": false, "type": "filename", "location": "/static/tournament.js", "ts": true }
+                    ]
+                },
+                {
+                    "token": "__SPRITE_COORDS_DATA__",
+                    "type": "file",
+                    "location": "data/common/map-coords.json"
+                },
+                {
+                    "token": "__HD_ITEM_COORDS_DATA__",
+                    "type": "file",
+                    "location": "data/common/hd-item-coords.json"
+                },
+                {
+                    "token": "__COUNTRY_CODE_DATA__",
+                    "type": "file",
+                    "location": "data/common/country-codes.json"
+                },
+                {
+                    "token": "__MON_IMG_BASE__",
+                    "type": "value",
+                    "location": "config",
+                    "key": "monImgBase"
+                },
+                {
+                    "token": "__LIVE_UPDATE_FREQUENCY__",
+                    "type": "value",
+                    "location": "config",
+                    "key": "liveRefresh"
+                }
+            ]
+        },
+        "ssi": {
+            "type": "batch",
+            "batch_type": "html",
+            "location": "cache",
+            "key": "ssi",
+            "base-ref": "head-ssi",
+            "out": "public/static/ssi",
+            "tokens": [
+                {
+                    "token": "__TITLE__",
+                    "type": "value",
+                    "location": "loop",
+                    "name": "title"
+                },
+                {
+                    "token": "__DESCRIPTION__",
+                    "type": "value",
+                    "location": "loop",
+                    "name": "description"
+                }
+            ]
         }
     },
     "packer": {

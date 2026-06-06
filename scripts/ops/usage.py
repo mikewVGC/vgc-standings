@@ -111,7 +111,8 @@ def compile_usage(year:int, event_code:str, prod:bool, limitless:bool = False) -
                     'name': nature,
                     'count': 0,
                 }
-            mon_stats[code]['natures'][nature]['count'] += 1
+            if len(nature):
+                mon_stats[code]['natures'][nature]['count'] += 1
 
             for move_name in mon['moves']:
                 if move_name not in mon_stats[code]['moves']:

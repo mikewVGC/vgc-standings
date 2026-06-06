@@ -4,11 +4,10 @@ import os
 
 class BuilderCache():
 
-    def __init__(self, config:dict = {}, prod:bool = False) -> None:
+    def __init__(self, prod:bool = False) -> None:
         self.meta_ssi = []
         self.data = {}
 
-        self.config = config
         self.prod = prod
 
         os.makedirs("data/builder", exist_ok=True)

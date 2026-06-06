@@ -67,6 +67,7 @@ def process_rk9scraper_event(
                 dex_num = alt
 
             mon_item = mon['item'] if len(mon['item']) else 'No Item'
+            nature = mon['nature'] if 'nature' in mon else ""
 
             team.append(TeamMember(
                 name=mon_name,
@@ -77,7 +78,7 @@ def process_rk9scraper_event(
                 ptype=ptype.lower(),
                 tera=mon['tera'],
                 ability=mon['ability'],
-                nature=mon['nature'],
+                nature=nature,
                 item=mon_item,
                 itemcode=make_item_code(mon_item),
                 moves=mon['moves'],

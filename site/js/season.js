@@ -50,6 +50,23 @@ export default {
                 window.location = '/';
             }
 
+            document.addEventListener("keydown", (e) => {
+                // ctrl+F, F3, cmd+F use the built in searches
+                if (e.code === 'F3' || ((e.ctrlKey || e.metaKey) && e.code === 'KeyF')) {
+                    if (this.currentView == 'season-main') {
+                        document.getElementById('eventNameSearch').focus();
+                        e.preventDefault();
+                    }
+                }
+
+                // clear/reset search
+                if (event.key === 'Escape') {
+                    if (this.currentView == 'season-main') {
+                        this.eventSearchStr = '';
+                    }
+                }
+            });
+
             this.setSeason(chips[1]);
         },
 

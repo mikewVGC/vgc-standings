@@ -502,7 +502,7 @@ tr.phase-header th {
 
 h2 em, h3 em {
     font-size: .8em;
-    color: #666666;
+    color: #66666A;
     font-weight: normal;
 }
 
@@ -1381,8 +1381,8 @@ ul#pairing-round-select li a {
         color: #A0A0A0;
     }
 
-    input {
-        background-color: #606060;
+    input, select {
+        background-color: #606068;
         color: #E8E8E8;
     }
 
@@ -1391,8 +1391,8 @@ ul#pairing-round-select li a {
     }
 
     .tabgroup {
-        background: #404040;
-        border: 1px solid #888888;
+        background: #404048;
+        border: 1px solid #88888A;
     }
 
     .tabgroup div:first-child a, .tabgroup div.active a {
@@ -1404,8 +1404,8 @@ ul#pairing-round-select li a {
     }
 
     .event-block {
-        border: 1px solid #888888;
-        background: #303030;
+        border: 1px solid #88888A;
+        background: #303038;
         color: #FFFFFF;
     }
 
@@ -1442,7 +1442,7 @@ ul#pairing-round-select li a {
     }
 
     tr {
-        border-bottom: 1px solid #777777;
+        border-bottom: 1px solid #808088;
     }
 
     ul#standings-info li, ul#standings-sections li {
@@ -1458,7 +1458,7 @@ ul#pairing-round-select li a {
     }
 
     tr:nth-child(odd) {
-        background: #505050;
+        background: #2E2E34;
     }
 
     table#opponents td.W, td.W {
@@ -1490,14 +1490,14 @@ ul#pairing-round-select li a {
     }
 
     #player-info-block {
-        border: 1px solid #888888;
-        background: #303030;
+        border: 1px solid #88888A;
+        background: #303038;
         color: #FFFFFF;
     }
 
     #current-season {
-        background: #404040;
-        border: 1px solid #888888;
+        background: #404048;
+        border: 1px solid #88888A;
     }
 
     #current-season h2 {
@@ -1561,7 +1561,7 @@ ul#pairing-round-select li a {
 
         .tabgroup div {
             border: 1px solid #888;
-            background: #404040;
+            background: #404048;
         }
     }
 }
