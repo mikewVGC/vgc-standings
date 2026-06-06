@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import json
-import importlib
 import os
 import shutil
 import subprocess
@@ -224,7 +223,7 @@ class Builder():
             step.output()
 
 
-    def _eval_condition(self, step_data:dist) -> bool:
+    def _eval_condition(self, step_data:dict) -> bool:
         if 'condition' in step_data:
             condition = step_data['condition']
 
@@ -260,7 +259,7 @@ class Template():
             print(f"[Template] Couldn't load '{self.source}'")
 
         for token in self.tokens:
-            if token['replace'] == None:
+            if token['replace'] is None:
                 continue
 
             tpl = tpl.replace(token['search'], str(token['replace']))

@@ -2,7 +2,6 @@
 
 import argparse
 import json
-import subprocess
 
 from ops.process_regional import process_regional, process_season, was_event_processed
 from ops.config import Config
@@ -161,7 +160,7 @@ def build_site(config:Config, prod:bool, builder_cache:BuilderCache):
     builder = Builder(config, prod, builder_cache.load())
 
     print("[ALL] Building site...", end="")
-    builder.build();
+    builder.build()
     print("Done!")
 
 
