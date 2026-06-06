@@ -146,7 +146,8 @@ def process_regional(
     if (
         (year == 2023 and code == 'worlds-day-1') or 
         (data_type == DT_PLAYLATAMSCRAPER and not official_standings_found) or
-        (data_type == DT_LIMITLESS and not official_standings_found)
+        (data_type == DT_LIMITLESS and not official_standings_found) or
+        (data_type == DT_RK9SCRAPER and not official_standings_found)
     ):
         sorted_worlds = sorted(list(players.values()), key=lambda player: (
             -player.place,
