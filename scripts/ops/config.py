@@ -1,4 +1,6 @@
 
+from __future__ import annotations
+
 class Config:
 
     def __init__(self, config:dict = {}) -> None:
