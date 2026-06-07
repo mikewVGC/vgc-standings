@@ -20,6 +20,7 @@ export default {
             monUsageSearch: '',
             playerStandingsSearch: '',
             usageFilter: 'all',
+            usageShowMegas: false,
 
             filters: {
                 items: [],
@@ -234,6 +235,7 @@ export default {
                         filteredUsage: this.filteredUsage,
                         monUsageSearch: this.monUsageSearch,
                         usageFilter: this.usageFilter,
+                        usageShowMegas: this.usageShowMegas,
                     };
 
                 case 'mon':
@@ -490,6 +492,13 @@ export default {
                 this.usage.forEach(u => {
                     u.counts['phase2Conversion'] = u.counts.phase2 / u.counts.total;
                     u.counts['cutConversion'] = u.counts.cut / u.counts.phase2;
+
+                    if (u.forms.length) {
+                        u.forms.forEach(f => {
+                            f.counts['phase2Conversion'] = f.counts.phase2 / f.counts.total;
+                            f.counts['cutConversion'] = f.counts.cut / f.counts.phase2;
+                        });
+                    }
                 });
 
                 this.loaded = true;
@@ -1169,7 +1178,16 @@ export default {
         },
         'usage': {
             template: '#usage-template',
-            props: [ 'model', 'season', 'usage', 'eventInfo', 'filteredUsage', 'monUsageSearch', 'usageFilter' ],
+            props: [
+                'model',
+                'season',
+                'usage',
+                'eventInfo',
+                'filteredUsage',
+                'monUsageSearch',
+                'usageFilter',
+                'usageShowMegas',
+            ],
             created: function() {
                 document.title = `Usage Stats -- ${this.eventInfo.name} -- Reportworm Standings`;
 
@@ -1212,6 +1230,9 @@ export default {
                 },
                 updateUsageFilter(e) {
                     this.$parent.updateUsageFilter(e.target.value);
+                },
+                toggleMegas() {
+                    this.$parent.usageShowMegas = !this.$parent.usageShowMegas;
                 },
             }
         },

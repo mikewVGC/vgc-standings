@@ -592,8 +592,38 @@ table#usage td:nth-child(6),
 table#usage td:nth-child(8),
 table#usage td:nth-child(9),
 table#usage td:nth-child(11) {
-    /*border-right: 1px solid #A0A0A0;*/
     padding-left: 0;
+}
+
+table#usage tr.mon-usage-form td:nth-child(2) {
+    border-left: 1px solid #000000;
+    padding-left: .25em;
+    width: 36px;
+}
+
+table#usage tr.mon-usage-form td:nth-child(3),
+table#usage tr.mon-usage-form td:nth-child(5),
+table#usage tr.mon-usage-form td:nth-child(7),
+table#usage tr.mon-usage-form td:nth-child(9),
+table#usage tr.mon-usage-form td:nth-child(12) {
+    text-align: left;
+    padding-left: 0;
+}
+
+table#usage tr.mon-usage-form td:nth-child(4),
+table#usage tr.mon-usage-form td:nth-child(6),
+table#usage tr.mon-usage-form td:nth-child(8),
+table#usage tr.mon-usage-form td:nth-child(11),
+table#usage tr.mon-usage-form td:nth-child(13) {
+    text-align: right;
+}
+
+table#usage tr.mon-usage-form:nth-child(even) td:nth-child(n+2) {
+    background: #D4F2FF;
+}
+
+table#usage tr.mon-usage-form:nth-child(odd) td:nth-child(n+2) {
+    background: #C7E2ED;
 }
 
 .pct {
@@ -665,6 +695,16 @@ ul#rk9-links li {
 
 .filter-area label {
     padding-right: .35em;
+}
+
+.filter-area label#mega-usage {
+    padding-left: 1em;
+    cursor: pointer;
+}
+
+.filter-area label#mega-usage input {
+    position: relative;
+    top: .35em;
 }
 
 .searchFunc {
@@ -1299,6 +1339,9 @@ ul#pairing-round-select li a {
         display: none;
     }
 
+    .filter-area label#mega-usage {
+        padding-left: 0em;
+    }
 
     table.compact#opponents tbody td:nth-child(2) {
         max-width: 45%;
@@ -1483,6 +1526,14 @@ ul#pairing-round-select li a {
 
     table#opponents tr:nth-child(odd) td.T, tr:nth-child(odd) td.T {
         background: #DB8802;
+    }
+
+    table#usage tr.mon-usage-form:nth-child(even) td:nth-child(n+2) {
+        background: #364247;
+    }
+
+    table#usage tr.mon-usage-form:nth-child(odd) td:nth-child(n+2) {
+        background: #2c3e45;
     }
 
     .favicon {

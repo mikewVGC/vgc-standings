@@ -71,7 +71,7 @@ def compile_usage(year:int, event_code:str, prod:bool, limitless:bool = False) -
                     "forms": {},
                 }
 
-            if False and len(mega_form) and mega_form not in mon_stats[code]['forms']:
+            if len(mega_form) and mega_form not in mon_stats[code]['forms']:
                 _, _, form_name = get_mon_data_from_code(mega_form)
                 mon_stats[code]['forms'][mega_form] = {
                     "name": form_name,
@@ -157,18 +157,26 @@ def compile_usage(year:int, event_code:str, prod:bool, limitless:bool = False) -
             mon_stats[code]['players'].append(player)
 
             mon_stats[code]['counts']['total'] += 1
+            if len(mega_form):
+                mon_stats[code]['forms'][mega_form]['counts']['total'] += 1
 
             mon_stats[code]['w'] += pdata['record']['w']
             mon_stats[code]['l'] += pdata['record']['l']
 
             if player_earned_points(pdata, get_points_threshold(year, num_players)):
                 mon_stats[code]['counts']['points'] += 1
+                if len(mega_form):
+                    mon_stats[code]['forms'][mega_form]['counts']['points'] += 1
 
             if player_made_phase_two(pdata, tour_format):
                 mon_stats[code]['counts']['phase2'] += 1
+                if len(mega_form):
+                    mon_stats[code]['forms'][mega_form]['counts']['phase2'] += 1
 
             if player_made_cut(pdata, tour_format):
                 mon_stats[code]['counts']['cut'] += 1
+                if len(mega_form):
+                    mon_stats[code]['forms'][mega_form]['counts']['cut'] += 1
 
     mon_stats = list(mon_stats.values())
 
@@ -185,6 +193,7 @@ def compile_usage(year:int, event_code:str, prod:bool, limitless:bool = False) -
 
     for mon_stat in mon_stats:
         mon_stat['distinct'] = len(mon_hashes[mon_stat['code']])
+        mon_stat['forms'] = list(mon_stat['forms'].values())
 
         for sort in sorts:
             mon_stat[sort] = sorted(

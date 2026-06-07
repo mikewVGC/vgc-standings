@@ -527,6 +527,10 @@ __TEMPLATE_FOOTER__
                 <option value="phase2">Made Phase 2</option>
                 <option value="cut">Made Top Cut</option>
             </select>
+
+            <label id="mega-usage" v-if="eventInfo.rules.mega">
+                <input type="checkbox" @change="toggleMegas" :checked="usageShowMegas" /> Show Mega Usage
+            </label>
         </div>
     </div>
 
@@ -538,7 +542,9 @@ __TEMPLATE_FOOTER__
                     <th class="sortable"
                         title="Pokemon"
                         @click="sortUsage('name')"
-                        :class="getSortedClass('name')">Name</th>
+                        :class="getSortedClass('name')"
+                        colspan="2"
+                    >Name</th>
                     <th class="sortable"
                         title="Total used"
                         @click="sortUsage('total')"
@@ -585,7 +591,7 @@ __TEMPLATE_FOOTER__
                             :title="mon.name"
                         >{{ mon.name }}</div>
                     </td>
-                    <td><a :href="`/${season}/${eventInfo.code}/mon/${mon.code}`">{{ mon.name }}</a></td>
+                    <td colspan="2"><a :href="`/${season}/${eventInfo.code}/mon/${mon.code}`">{{ mon.name }}</a></td>
                     <td>{{ mon.counts.total }}</td>
                     <td><span class="pct">({{ getPct(mon.counts.total / eventInfo.playerCount, 4) }})</span></td>
                     <td>{{ mon.counts.points }}</td>
@@ -597,7 +603,11 @@ __TEMPLATE_FOOTER__
                     <td><span class="pct">({{ getPct(mon.counts.cut / eventInfo.cutCount, 4) }})</span></td>
                     <td>{{ getPct(mon.counts.cutConversion, 5) }}</td>
                 </tr>
-                <tr v-if="mon.forms" v-for="monform, fname in mon.forms">
+                <tr
+                    class="mon-usage-form"
+                    v-if="mon.forms && usageShowMegas"
+                    v-for="monform, fname in mon.forms"
+                >
                     <td></td>
                     <td>
                         <div
@@ -605,17 +615,26 @@ __TEMPLATE_FOOTER__
                             :style="{ backgroundPosition: getSpritePos(monform.code) }"
                             :title="monform.name"
                         >{{ monform.name }}</div>
-                        {{ monform.name }}
                     </td>
-                    <td colspan="10"></td>
+                    <td>{{ monform.name }}</td>
+                    <td>{{ monform.counts.total }}</td>
+                    <td><span class="pct">({{ getPct(monform.counts.total / eventInfo.playerCount, 4) }})</span></td>
+                    <td>{{ monform.counts.points }}</td>
+                    <td><span class="pct">({{ getPct(monform.counts.points / eventInfo.playerCount, 4) }})</span></td>
+                    <td>{{ monform.counts.phase2 }}</td>
+                    <td><span class="pct">({{ getPct(monform.counts.phase2 / eventInfo.playerCount, 4) }})</span></td>
+                    <td>{{ getPct(monform.counts.phase2Conversion, 5) }}</td>
+                    <td>{{ monform.counts.cut }}</td>
+                    <td><span class="pct">({{ getPct(monform.counts.cut / eventInfo.playerCount, 4) }})</span></td>
+                    <td>{{ getPct(monform.counts.cutConversion, 5) }}</td>
                 </tr>
             </template>
                 <tr v-if="usage.length == 0" v-cloak>
-                    <td colspan="12">No usage stats for this event yet.</td>
+                    <td colspan="13">No usage stats for this event yet.</td>
                 </tr>
 
                 <tr v-if="usage.length && !filteredUsage.length" v-cloak>
-                    <td colspan="12">No results</td>
+                    <td colspan="13">No results</td>
                 </tr>
             </tbody>
         </table>
