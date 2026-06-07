@@ -575,7 +575,8 @@ __TEMPLATE_FOOTER__
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="mon in filteredUsage">
+            <template v-for="mon in filteredUsage">
+                <tr>
                     <td>
                         <div
                             class="monicon"
@@ -595,6 +596,19 @@ __TEMPLATE_FOOTER__
                     <td><span class="pct">({{ getPct(mon.counts.cut / eventInfo.cutCount, 4) }})</span></td>
                     <td>{{ getPct(mon.counts.cutConversion, 5) }}</td>
                 </tr>
+                <tr v-if="mon.forms" v-for="monform, fname in mon.forms">
+                    <td></td>
+                    <td>
+                        <div
+                            class="monicon"
+                            :style="{ backgroundPosition: getSpritePos(monform.code) }"
+                            :title="monform.name"
+                        >{{ monform.name }}</div>
+                        {{ monform.name }}
+                    </td>
+                    <td colspan="10"></td>
+                </tr>
+            </template>
                 <tr v-if="usage.length == 0" v-cloak>
                     <td colspan="12">No usage stats for this event yet.</td>
                 </tr>

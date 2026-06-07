@@ -74,7 +74,7 @@ def process_playlatamscraper_event(
 
             mon_name = fix_mon_name(mon['species'])
             mon_code = make_mon_code(mon_name)
-            dex_num, ptype = get_mon_data_from_code(mon_code)
+            dex_num, ptype, _ = get_mon_data_from_code(mon_code)
 
             alt = get_mon_alt_from_code(mon_code)
             if alt:

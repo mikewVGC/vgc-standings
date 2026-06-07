@@ -62,7 +62,7 @@ def process_pokedata_event(data:list, tour_format:list, official_order:list, eve
             mon_name = fix_mon_name(mon['name'])
             mon_code = make_mon_code(mon_name)
             mon_alt_code = get_icon_alt(mon_code, mon, event_info['rules']['mega'])
-            dex_num, ptype = get_mon_data_from_code(mon_code)
+            dex_num, ptype, _ = get_mon_data_from_code(mon_code)
 
             alt = get_mon_alt_from_code(mon_alt_code) if mon_alt_code else get_mon_alt_from_code(mon_code)
             if alt:

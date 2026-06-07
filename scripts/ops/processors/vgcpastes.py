@@ -93,7 +93,7 @@ def parse_paste(paste:str, event_info:dict) -> list:
                 continue
 
             mon_code = make_mon_code(mon['species'])
-            dex_num, ptype = get_mon_data_from_code(mon_code)
+            dex_num, ptype, _ = get_mon_data_from_code(mon_code)
 
             alt = get_mon_alt_from_code(mon_code)
             if alt:

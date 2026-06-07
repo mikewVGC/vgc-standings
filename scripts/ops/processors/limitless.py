@@ -87,7 +87,7 @@ def process_limitless_event(data:list, tour_format:list, official_order:list, ev
                 mon_code = "aegislash"
                 mon_name = "Aegislash"
 
-            dex_num, ptype = get_mon_data_from_code(mon_code)
+            dex_num, ptype, _ = get_mon_data_from_code(mon_code)
 
             tera_type = "" if 'tera' not in mon else mon['tera']
             if not event_info['rules']['tera']:

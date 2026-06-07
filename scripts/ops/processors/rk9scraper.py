@@ -60,7 +60,7 @@ def process_rk9scraper_event(
 
             mon_code = make_mon_code(mon_name)
             mon_alt_code = get_icon_alt(mon_code, mon, event_info['rules']['mega'])
-            dex_num, ptype = get_mon_data_from_code(mon_code)
+            dex_num, ptype, _ = get_mon_data_from_code(mon_code)
 
             alt = get_mon_alt_from_code(mon_alt_code) if mon_alt_code else get_mon_alt_from_code(mon_code)
             if alt:
@@ -68,6 +68,9 @@ def process_rk9scraper_event(
 
             mon_item = mon['item'] if len(mon['item']) else 'No Item'
             nature = mon['nature'] if 'nature' in mon else ""
+
+            if nature == "Naïve":
+                nature = "Naive"
 
             team.append(TeamMember(
                 name=mon_name,

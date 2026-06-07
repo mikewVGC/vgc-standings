@@ -8,7 +8,7 @@ from lib.tournament import (
     player_made_cut,
     get_points_threshold,
 )
-from lib.formes import get_mon_data_from_code, get_mon_alt_from_code
+from lib.formes import get_mon_data_from_code, get_mon_alt_from_code, get_mega_form
 from lib.util import make_item_code
 
 
@@ -36,16 +36,21 @@ def compile_usage(year:int, event_code:str, prod:bool, limitless:bool = False) -
     for player, pdata in standings.items():
         for mon in pdata['team']:
             code = mon['code']
+
+            mega_form = ""
+            if event_info['rules']['mega']:
+                mega_form = get_mega_form(code, mon)
+
             if code not in mon_stats:
-                dexNum, ptype = get_mon_data_from_code(code)
+                dex_num, ptype, _ = get_mon_data_from_code(code)
                 alt = get_mon_alt_from_code(code)
                 if alt:
-                    dexNum = alt
+                    dex_num = alt
 
                 mon_stats[code] = {
                     "name": mon['name'].title(),
                     "code": code,
-                    "dex": dexNum,
+                    "dex": dex_num,
                     "counts": {
                         "total": 0,
                         "points": 0,
@@ -63,6 +68,20 @@ def compile_usage(year:int, event_code:str, prod:bool, limitless:bool = False) -
                     "natures": {},
                     "moves": {},
                     "teammates": {},
+                    "forms": {},
+                }
+
+            if False and len(mega_form) and mega_form not in mon_stats[code]['forms']:
+                _, _, form_name = get_mon_data_from_code(mega_form)
+                mon_stats[code]['forms'][mega_form] = {
+                    "name": form_name,
+                    "code": mega_form,
+                    "counts": {
+                        "total": 0,
+                        "points": 0,
+                        "phase2": 0,
+                        "cut": 0,
+                    }
                 }
 
             if code not in mon_hashes:

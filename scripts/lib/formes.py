@@ -13,16 +13,16 @@ cosmetic_forms = {
     "tatsugiristretchy": "tatsugiri",
 }
 
-# returns: dex #, primary typing
-def get_mon_data_from_code(mon_code:str) -> (int, str):
+# returns: dex #, primary typing, name
+def get_mon_data_from_code(mon_code:str) -> (int, str, str):
     if mon_code in pokedex:
-        return pokedex[mon_code]['num'], pokedex[mon_code]['types'][0]
+        return pokedex[mon_code]['num'], pokedex[mon_code]['types'][0], pokedex[mon_code]['name']
     
     if mon_code in cosmetic_forms:
         cosmetic_code = cosmetic_forms[mon_code]
-        return pokedex[cosmetic_code]['num'], pokedex[cosmetic_code]['types'][0]
+        return pokedex[cosmetic_code]['num'], pokedex[cosmetic_code]['types'][0], pokedex[cosmetic_code]['name']
 
-    return 0, ''
+    return 0, '', ''
 
 # same idea, but just returns the name
 def get_mon_name_from_code(mon_code:str) -> str:
@@ -430,6 +430,7 @@ battle_change_forms = {
     "terapagos": "terapagosterastal",
 }
 
+
 def get_icon_alt(mon_code:str, mon_data:dict, megas_legal:bool) -> str:
     if mon_code in item_change_forms:
         for item_change in item_change_forms[mon_code]:
@@ -449,5 +450,23 @@ def get_icon_alt(mon_code:str, mon_data:dict, megas_legal:bool) -> str:
 
     if mon_code in battle_change_forms:
         return battle_change_forms[mon_code]
+
+    return ""
+
+
+def get_mega_form(mon_code:str, mon_data:dict) -> str:
+    if mon_code not in item_change_forms:
+        return ""
+
+    for item_change in item_change_forms[mon_code]:
+        if mon_data['item'] == item_change['item']:
+            altform = item_change['form']
+
+            if (altform.endswith('mega') or
+                altform.endswith('megax') or
+                altform.endswith('megay') or
+                altform.endswith('megaz')
+            ):
+                return altform
 
     return ""
