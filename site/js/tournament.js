@@ -493,7 +493,7 @@ export default {
                     u.counts['phase2Conversion'] = u.counts.phase2 / u.counts.total;
                     u.counts['cutConversion'] = u.counts.cut / u.counts.phase2;
 
-                    if (u.forms.length) {
+                    if (u.forms && u.forms.length) {
                         u.forms.forEach(f => {
                             f.counts['phase2Conversion'] = f.counts.phase2 / f.counts.total;
                             f.counts['cutConversion'] = f.counts.cut / f.counts.phase2;
