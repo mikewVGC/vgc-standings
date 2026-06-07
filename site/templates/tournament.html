@@ -230,6 +230,7 @@ __TEMPLATE_FOOTER__
                     <div v-if="eventInfo.rules.tera"><span class="attr">Tera Type:</span> <span :class="`type-${mon.tera.toLowerCase()}`">{{ mon.tera }}</span>  </div>
                     <div v-if="'nature' in mon && mon.nature.length">{{ mon.nature }} Nature  </div>
                     <div v-for="move in mon.moves">- {{ move }}  </div>
+                    <div class="kinda-hide"><br /></div>
                 </div>
             </div>
         </div>
