@@ -78,6 +78,7 @@ def process_pokedata_event(data:list, tour_format:list, official_order:list, eve
                 dex=dex_num,
                 ptype=ptype.lower(),
                 tera=mon['teratype'] if 'teratype' in mon else "",
+                nature=mon['stat_alignment'] if 'stat_alignment' in mon else "",
                 ability=mon['ability'],
                 item=mon_item,
                 itemcode=make_item_code(mon_item),
