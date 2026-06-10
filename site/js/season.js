@@ -9,6 +9,7 @@ export default {
 
             eventSearchStr: '',
             eventTypeFilter: 'all',
+            eventRegionFilter: 'all',
 
             currentView: 'loading',
 
@@ -26,6 +27,8 @@ export default {
                         futureMajors: this.filteredFutureMajors,
                         inProgressMajors: this.filteredInProgressMajors,
                         eventSearchStr: this.eventSearchStr,
+                        eventTypeFilter: this.eventTypeFilter,
+                        eventRegionFilter: this.eventRegionFilter,
                     }
             }
 
@@ -33,13 +36,13 @@ export default {
         },
 
         filteredMajors() {
-            return this.searchEventList(this.majors, this.eventSearchStr);
+            return this.searchEventList(this.majors, this.eventSearchStr, this.eventRegionFilter);
         },
         filteredFutureMajors() {
-            return this.searchEventList(this.futureMajors, this.eventSearchStr);
+            return this.searchEventList(this.futureMajors, this.eventSearchStr, this.eventRegionFilter);
         },
         filteredInProgressMajors() {
-            return this.searchEventList(this.inProgressMajors, this.eventSearchStr);
+            return this.searchEventList(this.inProgressMajors, this.eventSearchStr, this.eventRegionFilter);
         },
     },
     methods: {
@@ -63,6 +66,8 @@ export default {
                 if (event.key === 'Escape') {
                     if (this.currentView == 'season-main') {
                         this.eventSearchStr = '';
+                        this.eventTypeFilter = 'all';
+                        this.eventRegionFilter = 'all';
                     }
                 }
             });
@@ -70,18 +75,25 @@ export default {
             this.setSeason(chips[1]);
         },
 
-        searchEventList(events, searchStr) {
-            if (searchStr.length < 2) {
+        searchEventList(events, searchStr, regionFilter) {
+            if (searchStr.length < 2 && regionFilter == 'all') {
                 return events;
             }
 
-            return events.filter((e) => {
-                return e.name.toLowerCase().includes(
-                    searchStr
-                        .toLowerCase()
-                        .normalize('NFD')
-                        .replace(/[\u0300-\u036f]/g, '')
-                );
+            return events.filter((ev) => {
+                let nameMatch = true;
+                if (searchStr.length) {
+                    nameMatch = ev.name.toLowerCase().includes(
+                        searchStr
+                            .toLowerCase()
+                            .normalize('NFD')
+                            .replace(/[\u0300-\u036f]/g, '')
+                    );
+                }
+
+                let regionMatch = regionFilter == 'all' || ev.region == regionFilter;
+
+                return nameMatch && regionMatch;
             });
         },
 
@@ -149,7 +161,15 @@ export default {
         },
         'season-main': {
             template: '#season-main-template',
-            props: [ 'season', 'majors', 'futureMajors', 'inProgressMajors', 'eventSearchStr' ],
+            props: [
+                'season',
+                'majors',
+                'futureMajors',
+                'inProgressMajors',
+                'eventSearchStr',
+                'eventTypeFilter',
+                'eventRegionFilter',
+            ],
             methods: {
                 searchEvents(e) {
                     this.$parent.eventSearchStr = e.target.value;
@@ -162,6 +182,9 @@ export default {
                 },
                 updateEventsFilter(e) {
                     this.$parent.eventTypeFilter = e.target.value;
+                },
+                updateRegionFilter(e) {
+                    this.$parent.eventRegionFilter = e.target.value;
                 },
             },
         },

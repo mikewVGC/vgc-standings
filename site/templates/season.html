@@ -22,27 +22,40 @@ __TEMPLATE_FOOTER__
     <h2>{{ season }} VGC Event Calendar</h2>
 
     <div id="season-search">
-
-        <input
-            type="text"
-            placeholder="Search by event name"
-            id="eventNameSearch"
-            @input="searchEvents"
-            :value="eventSearchStr"
-        />
-        <div
-            class="searchFunc clearSearch"
-            v-if="eventSearchStr.length"
-            @click="clearEventSearch"
-        >&times;</div>
+        <div>
+            <input
+                type="text"
+                placeholder="Search by event name"
+                id="eventNameSearch"
+                @input="searchEvents"
+                :value="eventSearchStr"
+            />
+            <div
+                class="searchFunc clearSearch"
+                v-if="eventSearchStr.length"
+                @click="clearEventSearch"
+            >&times;</div>
+        </div>
 
         <div id="event-type-select">
             <label><strong>View:</strong></label>
-            <select @change="updateEventsFilter">
+            <select @change="updateEventsFilter" :value="eventTypeFilter">
                 <option value="all">All Events</option>
                 <option value="in-progress">In Progress Events</option>
                 <option value="completed">Completed Events</option>
                 <option value="upcoming">Upcoming Events</option>
+            </select>
+        </div>
+
+        <div id="event-region-select">
+            <label><strong>Region:</strong></label>
+            <select @change="updateRegionFilter" :value="eventRegionFilter">
+                <option value="all">All Regions</option>
+                <option value="North America">North America</option>
+                <option value="Europe">Europe</option>
+                <option value="Latin America">Latin America</option>
+                <option value="Oceania">Oceania</option>
+                <option value="Middle East & South Africa">Middle East & South Africa</option>
             </select>
         </div>
 
