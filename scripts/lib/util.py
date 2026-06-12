@@ -132,6 +132,16 @@ def fix_mon_name(name:str) -> str:
 
 
 """
+rk9 spells naive with the fancy i... you know the one
+"""
+def fix_nature(nature:str) -> str:
+    if nature == "Naïve":
+        return "Naive"
+
+    return nature
+
+
+"""
 makes the "________ the XXXX season!" string on the homa page
 """
 def make_season_info_str(majors:dict) -> str:

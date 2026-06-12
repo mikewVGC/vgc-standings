@@ -9,6 +9,7 @@ from lib.tournament import (
 from lib.util import (
     make_code,
     fix_mon_name,
+    fix_nature,
     make_mon_code,
     make_item_code,
 )
@@ -78,7 +79,7 @@ def process_pokedata_event(data:list, tour_format:list, official_order:list, eve
                 dex=dex_num,
                 ptype=ptype.lower(),
                 tera=mon['teratype'] if 'teratype' in mon else "",
-                nature=mon['stat_alignment'] if 'stat_alignment' in mon else "",
+                nature=fix_nature(mon['stat_alignment'] if 'stat_alignment' in mon else ""),
                 ability=mon['ability'],
                 item=mon_item,
                 itemcode=make_item_code(mon_item),

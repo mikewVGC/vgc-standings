@@ -8,6 +8,7 @@ from lib.tournament import (
 from lib.util import (
     make_code,
     fix_mon_name,
+    fix_nature,
     make_mon_code,
     make_item_code,
 )
@@ -67,10 +68,6 @@ def process_rk9scraper_event(
                 dex_num = alt
 
             mon_item = mon['item'] if len(mon['item']) else 'No Item'
-            nature = mon['nature'] if 'nature' in mon else ""
-
-            if nature == "Naïve":
-                nature = "Naive"
 
             team.append(TeamMember(
                 name=mon_name,
@@ -81,7 +78,7 @@ def process_rk9scraper_event(
                 ptype=ptype.lower(),
                 tera=mon['tera'],
                 ability=mon['ability'],
-                nature=nature,
+                nature=fix_nature(mon['nature'] if 'nature' in mon else ""),
                 item=mon_item,
                 itemcode=make_item_code(mon_item),
                 moves=mon['moves'],
