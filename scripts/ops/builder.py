@@ -104,7 +104,7 @@ class Builder():
                     tokens = []
                     if 'tokens' in step_data:
                         for token_data in step_data['tokens']:
-                            token = token_data
+                            token = token_data.copy()
                             if token['location'] == "loop":
                                 token['location'] = "value"
                                 token['value'] = item[token_data['name']]
