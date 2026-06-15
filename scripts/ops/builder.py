@@ -12,10 +12,10 @@ from ops.config import Config
 
 class Builder():
 
-    def __init__(self, config:Config, prod:bool = False, cache:dict = {}) -> None:
+    def __init__(self, config:Config, cache:dict = {}) -> None:
         self.config = config
         self.flags = {
-            "prod": prod,
+            "mode": config.mode,
         }
         self.cache = cache
         self.refs = {}
@@ -196,8 +196,14 @@ class Builder():
         for file_data in step_data['files']:
             f_type = file_data['type']
             f_ref = file_data['ref']
+            full_ref = False
+            if f_type in self.refs and f_ref in self.refs[f_type]:
+                full_ref = self.refs[f_type][f_ref]
+            else:
+                print(f"Couldn't find ref '{f_type}/{f_ref}', skipping")
 
-            copy_ops[self.refs[f_type][f_ref]] = file_data['dest']
+            if full_ref:
+                copy_ops[full_ref] = file_data['dest']
 
         for src, dest in copy_ops.items():
             shutil.copy(src, dest)

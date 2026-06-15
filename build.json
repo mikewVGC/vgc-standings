@@ -46,19 +46,19 @@
                     {
                         "token": "__VUE__",
                         "type": "flag",
-                        "name": "prod",
+                        "name": "mode",
                         "values": [
-                            { "value": true, "type": "tpl", "ref": "vue-prod" },
-                            { "value": false, "type": "tpl", "ref": "vue" }
+                            { "value": "prod", "type": "tpl", "ref": "vue-prod" },
+                            { "value": "dev", "type": "tpl", "ref": "vue" }
                         ]
                     },
                     {
                         "token": "__STYLESHEET_FILE__",
                         "type": "flag",
-                        "name": "prod",
+                        "name": "mode",
                         "values": [
-                            { "value": true, "type": "filename", "location": "/static/style.min.css", "ts": true },
-                            { "value": false, "type": "filename", "location": "/static/style.css", "ts": true }
+                            { "value": "prod", "type": "filename", "location": "/static/style.min.css", "ts": true },
+                            { "value": "dev", "type": "filename", "location": "/static/style.css", "ts": true }
                         ]
                     },
                     {
@@ -73,8 +73,8 @@
             "type": "command",
             "condition": {
                 "type": "flag",
-                "name": "prod",
-                "value": true
+                "name": "mode",
+                "value": "prod"
             },
             "run": [ "go", "run", "scripts/packer/main.go" ]
         },
@@ -82,8 +82,8 @@
             "type": "copy",
             "condition": {
                 "type": "flag",
-                "name": "prod",
-                "value": false
+                "name": "mode",
+                "value": "dev"
             },
             "files": [
                 {
@@ -122,19 +122,19 @@
                 {
                     "token": "__VUE__",
                     "type": "flag",
-                    "name": "prod",
+                    "name": "mode",
                     "values": [
-                        { "value": true, "type": "tpl", "ref": "vue-prod" },
-                        { "value": false, "type": "tpl", "ref": "vue" }
+                        { "value": "prod", "type": "tpl", "ref": "vue-prod" },
+                        { "value": "dev", "type": "tpl", "ref": "vue" }
                     ]
                 },
                 {
                     "token": "__SCRIPT_FILE__",
                     "type": "flag",
-                    "name": "prod",
+                    "name": "mode",
                     "values": [
-                        { "value": true, "type": "filename", "location": "/static/home.min.js", "ts": true },
-                        { "value": false, "type": "filename", "location": "/static/home.js", "ts": true }
+                        { "value": "prod", "type": "filename", "location": "/static/home.min.js", "ts": true },
+                        { "value": "dev", "type": "filename", "location": "/static/home.js", "ts": true }
                     ]
                 }
             ]
@@ -147,19 +147,19 @@
                 {
                     "token": "__SCRIPT_FILE__",
                     "type": "flag",
-                    "name": "prod",
+                    "name": "mode",
                     "values": [
-                        { "value": true, "type": "filename", "location": "/static/season.min.js", "ts": true },
-                        { "value": false, "type": "filename", "location": "/static/season.js", "ts": true }
+                        { "value": "prod", "type": "filename", "location": "/static/season.min.js", "ts": true },
+                        { "value": "dev", "type": "filename", "location": "/static/season.js", "ts": true }
                     ]
                 },
                 {
                     "token": "__STYLESHEET_FILE__",
                     "type": "flag",
-                    "name": "prod",
+                    "name": "mode",
                     "values": [
-                        { "value": true, "type": "filename", "location": "/static/style.min.css", "ts": true },
-                        { "value": false, "type": "filename", "location": "/static/style.css", "ts": true }
+                        { "value": "prod", "type": "filename", "location": "/static/style.min.css", "ts": true },
+                        { "value": "dev", "type": "filename", "location": "/static/style.css", "ts": true }
                     ]
                 }
             ]
@@ -172,10 +172,10 @@
                 {
                     "token": "__SCRIPT_FILE__",
                     "type": "flag",
-                    "name": "prod",
+                    "name": "mode",
                     "values": [
-                        { "value": true, "type": "filename", "location": "/static/tournament.min.js", "ts": true },
-                        { "value": false, "type": "filename", "location": "/static/tournament.js", "ts": true }
+                        { "value": "prod", "type": "filename", "location": "/static/tournament.min.js", "ts": true },
+                        { "value": "dev", "type": "filename", "location": "/static/tournament.js", "ts": true }
                     ]
                 },
                 {

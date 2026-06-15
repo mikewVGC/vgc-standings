@@ -62,8 +62,8 @@ $data_dir = "{$data_dir_base}/{$current_season}";
 elog("Got " . count($tournament_settings) . " tours to check");
 
 if ($build_prod) {
-    elog("Will build as production (--prod)");
-    $build_prod = '--prod';
+    elog("Will build as production (--mode=prod)");
+    $build_prod = '--mode=prod';
 } else {
     $build_prod = '';
 }

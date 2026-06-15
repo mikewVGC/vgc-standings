@@ -77,7 +77,7 @@ This will process and build all events found via `manifest.json`. Standings and 
 
 Notably when first processing regionals you will need to create the corresponding `{season}` directory in `public/data` as Porygon will not create them (I might fix this some day).
 
-You can create a production build by using the `--prod` flag. This will minify the CSS and Javascript and a few other optimizations. You can skip event processing and only rebuild the templates with the `--build-only` flag. If you only want to build a smaller set of events you can use the `--process` argument. The format is a list of one or more years and codes separated by a comma formatted as such: `2025:baltimore,2026:toronto`. You can also process a full season with: `2025:*`.
+You can create a production build by using `--mode=prod`. This will minify the CSS and Javascript and a few other optimizations. You can skip event processing and only rebuild the templates with the `--build-only` flag. If you only want to build a smaller set of events you can use the `--process` argument. The format is a list of one or more years and codes separated by a comma formatted as such: `2025:baltimore,2026:toronto`. You can also process a full season with: `2025:*`.
 
 ### Limitless Support
 
@@ -127,11 +127,12 @@ In the root you need to create a simple `config.json` file with the following it
 ```
 {
     "monImgBase": "",
-    "googleTag": ""
+    "googleTag": "",
+    "mode": "dev"
 }
 ```
 
-`googleTag` is optional (leave it blank if you don't want to use it) and contains your Google Analytics tag, but only the part *after* the `G-`. `monImgBase` is if you want to load the large Pokemon images from a CDN or object storage and should contain the full root URL of their location. You can leave this blank and it will assume the images are in `public/static/img/art`.
+`googleTag` is optional (leave it blank if you don't want to use it) and contains your Google Analytics tag, but only the part *after* the `G-`. `monImgBase` is if you want to load the large Pokemon images from a CDN or object storage and should contain the full root URL of their location. You can leave this blank and it will assume the images are in `public/static/img/art`. `mode` is either "dev" (the default) or "prod" and determines the build (use "dev" for local work). Note that you can override this with the `--mode` flag.
 
 There's an optional field, `liveRefresh`, which can be set to the live event refresh rate. Basically this is how often, in seconds, live events will check if there have been changes made to the standings (via a file created by Regieleki). If you leave this out live mode will refresh every four minutes. If you try to set it lower than 30 it will be set back to 30.
 

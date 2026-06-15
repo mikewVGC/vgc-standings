@@ -16,10 +16,10 @@ from lib.ruleset import load_rulesets
 
 def main():
     parser = argparse.ArgumentParser(
-        prog="python3 porygon.py",
+        prog="./scripts/porygon.py",
         description="Porygon is a simple script used for building regional/IC standings for Reportworm Standings. Please see README.md for more info.",
     )
-    parser.add_argument('--prod', action="store_true", help="Build production version")
+    parser.add_argument('--mode', default="dev", help="Build dev/prod/local version (dev default)")
     parser.add_argument('--build-only', action="store_true", help="Don't process any events, only rebuild pages")
     parser.add_argument('--process', help="Only process specified regional(s). Format: year1:name1,year2:name2")
     parser.add_argument('--limitless', action="store_true", help="Process Limitless events instead of official ones")
@@ -41,6 +41,9 @@ def main():
         print("Couldn't load config, but that's okay")
         config = Config({})
 
+    if cl.mode:
+        config.mode = cl.mode
+
     manifest_file = "data/majors/manifest.json"
     if cl.limitless:
         manifest_file = "data/majors/manifest-limitless.json"
@@ -54,16 +57,16 @@ def main():
         print("Could not find manifest, exiting")
         return
 
-    builder_cache = BuilderCache(cl.prod)
+    builder_cache = BuilderCache(config.mode == 'prod')
 
     if not cl.build_only:
-        process_data(manifest, allowlist, builder_cache, cl.prod, cl.limitless)
+        process_data(manifest, allowlist, builder_cache, config, cl.limitless)
 
     if cl.limitless:
         print("Finished!")
         return
 
-    build_site(config, cl.prod, builder_cache)
+    build_site(config, builder_cache)
 
     print("All done!")
 
@@ -71,7 +74,7 @@ def process_data(
     manifest:dict,
     allowlist:list,
     builder_cache:BuilderCache,
-    prod:bool,
+    config:Config,
     limitless:bool = False
 ):
     non_current_seasons = {}
@@ -115,13 +118,13 @@ def process_data(
                     event_code,
                     event_info,
                     rulesets.get_ruleset(event_info['format']),
-                    prod,
+                    config.mode == 'prod',
                     limitless
                 )
 
             if event_should_be_processed and majors[event_code]['processed']:
                 print("building usage... ", end="")
-                compile_usage(year, event_code, prod, limitless)
+                compile_usage(year, event_code, config.mode == 'prod', limitless)
 
             builder_cache.add_meta_ssi(
                 f"{year}/{event_code}",
@@ -156,8 +159,8 @@ def process_data(
     builder_cache.save()
 
 
-def build_site(config:Config, prod:bool, builder_cache:BuilderCache):
-    builder = Builder(config, prod, builder_cache.load())
+def build_site(config:Config, builder_cache:BuilderCache):
+    builder = Builder(config, builder_cache.load())
 
     print("[ALL] Building site...", end="")
     builder.build()

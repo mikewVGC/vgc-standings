@@ -977,14 +977,14 @@ ul#pairing-round-select li a {
 }
 
 /* this is like 800px display? ... works for sideways phones */
-@media (max-width: 50.5em) {
+@media (max-width: 55.5em) {
     .team-container {
         width: 110px;
     }
 }
 
 /* mobile */
-@media (max-width: 40.5em) {
+@media (max-width: 45.5em) {
     h1, h2 {
         margin-top: .1em;
     }
@@ -1118,6 +1118,7 @@ ul#pairing-round-select li a {
 
     table.main-standings tr {
         display: block;
+        position: relative;
     }
 
     table.main-standings td {
@@ -1147,11 +1148,13 @@ ul#pairing-round-select li a {
     }
 
     table.main-standings td:nth-child(2) {
-        display: none;
+        position: absolute;
+        top: .7em;
     }
 
     table.main-standings td:nth-child(3) {
         width: 68%;
+        padding-left: 1.55em;
     }
 
     table.main-standings td:nth-child(3)::before {
@@ -1160,7 +1163,7 @@ ul#pairing-round-select li a {
 
     table.main-standings td:nth-child(4) {
         position: absolute;
-        right: 1.75em;
+        right: 1.7em;
     }
 
     table.main-standings td:nth-child(4)::before {

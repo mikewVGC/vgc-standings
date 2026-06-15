@@ -12,6 +12,7 @@ public/static/*.css
 public/static/img/art/*
 public/static/img/flags/*
 public/static/ssi/*
+site/js/vue.esm-browser.js
 venv
 .venv
 .ruff_cache
