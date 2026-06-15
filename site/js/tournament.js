@@ -173,12 +173,6 @@ export default {
 
                     let totalPairings = pairings.length;
 
-                    if (this.hideFinishedPairings) {
-                        pairings = pairings.filter(p => {
-                            return !p.winner.length && p.other != 'Late';
-                        });
-                    }
-
                     if (pairings.length) {
                         roundName = pairings[0].rname;
                         roundNum = pairings[0].round;
@@ -186,6 +180,12 @@ export default {
 
                     if (roundName == roundNum) {
                         roundName = `Round ${roundNum}`;
+                    }
+
+                    if (this.hideFinishedPairings) {
+                        pairings = pairings.filter(p => {
+                            return !p.winner.length && p.other != 'Late';
+                        });
                     }
 
                     return {
