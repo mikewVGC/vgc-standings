@@ -19,7 +19,7 @@ def main():
         prog="./scripts/porygon.py",
         description="Porygon is a simple script used for building regional/IC standings for Reportworm Standings. Please see README.md for more info.",
     )
-    parser.add_argument('--mode', default="dev", help="Build dev/prod/local version (dev default)")
+    parser.add_argument('--mode', help="Build dev/prod/local version (dev default)")
     parser.add_argument('--build-only', action="store_true", help="Don't process any events, only rebuild pages")
     parser.add_argument('--process', help="Only process specified regional(s). Format: year1:name1,year2:name2")
     parser.add_argument('--limitless', action="store_true", help="Process Limitless events instead of official ones")
