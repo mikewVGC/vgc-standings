@@ -150,7 +150,7 @@ footer p {
 
 .home-events-container {
     display: grid;
-    grid-template-columns: calc(33% - .5em) calc(33% - .5em) 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(calc(32% - .5em), 1fr));
     gap: 1em;
 }
 
