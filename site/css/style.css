@@ -1063,6 +1063,14 @@ ul#pairing-round-select li a {
         grid-template-columns: 100%;
     }
 
+    .event-block.full-block.past-season-block {
+        grid-template-columns: 100%;
+    }
+
+    .event-block.full-block.past-season-block:last-child {
+        margin-bottom: 1em;
+    }
+
     .event-block.full-block > div {
         display: block;
     }
