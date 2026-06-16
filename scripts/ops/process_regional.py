@@ -188,15 +188,18 @@ def process_regional(
         event_info['cutCount'] = list(players_in_cut_round.values())[0]
 
     event_info['status'] = determine_event_status(event_info, players_ordered)
-    if event_info['status'] == 'complete' and event_info['code'] != 'worlds-day-1':
-        event_info['winner'] = next(iter(players_ordered.values())).name
-    else:
+    event_info['winner'] = ''
+    if event_info['code'] == 'worlds-day-1':
         event_info['winner'] = '-'
+    elif event_info['status'] == 'complete':
+        event_info['winner'] = next(iter(players_ordered.values())).name
 
+    if event_info['status'] == 'complete' and not event_info['code'].startswith('worlds'):
         # one more loop for points!
         if not limitless:
             for player in players_ordered.values():
                 player.points = get_points_earned(year, len(players_ordered), player.place, event_is_ic)
+
 
     indent_amt = 2
     separators = None
@@ -269,6 +272,9 @@ def was_event_processed(year:int, event_code:str) -> (bool, dict):
     event_info['status'] = determine_event_status(event_info)
     event_info['winner'] = ''
     if event_info['status'] == 'complete':
-        event_info['winner'] = next(iter(data['standings'].values()))['name']
+        if event_info['code'] == 'worlds-day-1':
+            event_info['winner'] = '-'
+        else:
+            event_info['winner'] = next(iter(data['standings'].values()))['name']
 
     return True, event_info
