@@ -194,6 +194,14 @@ footer p {
     padding-bottom: 0;
 }
 
+.event-block.full-block.past-season-block {
+    grid-template-columns: 40% 20% 30% 10%;
+}
+
+.event-block.full-block.past-season-block div.title {
+    padding-left: 0;
+}
+
 #season-search {
     display: grid;
     grid-template-columns: 255px 1fr 1fr;

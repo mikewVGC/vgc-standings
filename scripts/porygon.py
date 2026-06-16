@@ -82,6 +82,8 @@ def process_data(
         non_current_seasons[season] = {
             "year": season,
             "dates": "",
+            "events": 0,
+            "champ": "",
         }
 
     rulesets = load_rulesets()
@@ -121,6 +123,12 @@ def process_data(
                     config.mode == 'prod',
                     limitless
                 )
+
+            if year in non_current_seasons:
+                non_current_seasons[year]['events'] += 1
+
+            if event_code == "worlds" and 'winner' in majors[event_code]:
+                non_current_seasons[year]['champ'] = majors[event_code]['winner']
 
             if event_should_be_processed and majors[event_code]['processed']:
                 print("building usage... ", end="")

@@ -95,9 +95,28 @@ __TEMPLATE_HEADER__
 
     <h2 v-if="pastSeasons.length > 0">Previous Seasons</h2>
 
-    <ul v-cloak>
-        <li v-for="season in pastSeasons"><a :href="`/${season.year}`"><p><strong>{{ season.year }} Season</strong></a> - Took place from {{ season.dates }}</p></li>
-    </ul>
+    <div v-if="pastSeasons.length > 0" v-cloak>
+
+        <a
+            v-for="season in pastSeasons"
+            :href="`/${season.year}`"
+            class="event-block full-block past-season-block"
+        >
+            <div class="title">
+                <div>{{ season.year }} Season</div>
+                <em>{{ season.dates }}</em>
+            </div>
+            <div>
+                <strong>Events</strong>
+                {{ season.events }}
+            </div>
+            <div>
+                <strong>World Champion</strong>
+                {{ season.champ }}
+            </div>
+        </a>
+
+    </div>
 
     <h2>Combined Stats</h2>
 
