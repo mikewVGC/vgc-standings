@@ -95,6 +95,8 @@ def process_limitless_event(data:list, tour_format:list, official_order:list, ev
 
             mon_alt_code = get_icon_alt(mon_code, mon, event_info['rules']['mega'])
 
+            nature = "" if 'nature' not in mon else mon['nature']
+
             mon_alt_name = ""
             if mon_alt_code:
                 mon_alt_name = get_mon_name_from_code(mon_alt_code)
@@ -116,6 +118,7 @@ def process_limitless_event(data:list, tour_format:list, official_order:list, ev
                 dex=dex_num,
                 ptype=ptype.lower(),
                 tera=str(tera_type),
+                nature=str(nature),
                 ability=mon['ability'],
                 item=mon['item'],
                 itemcode=make_item_code(mon['item']),

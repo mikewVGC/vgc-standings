@@ -189,10 +189,13 @@ def process_regional(
 
     event_info['status'] = determine_event_status(event_info, players_ordered)
     event_info['winner'] = ''
+    event_info['winner_flag'] = ''
     if event_info['code'] == 'worlds-day-1':
         event_info['winner'] = '-'
     elif event_info['status'] == 'complete':
-        event_info['winner'] = next(iter(players_ordered.values())).name
+        winner = next(iter(players_ordered.values()))
+        event_info['winner'] = winner.name
+        event_info['winner_flag'] = winner.country
 
     if event_info['status'] == 'complete' and not event_info['code'].startswith('worlds'):
         # one more loop for points!

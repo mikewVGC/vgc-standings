@@ -90,6 +90,15 @@ The scripts also support Limitless data (if you get tournament pairings and stan
 
 Notably Limitless processing will not rebuild the site, so you'll need to run it normally without the `limitless` flag in order to see changes.
 
+### Tests
+
+There are some simple unit tests using Python's build-in `unittest` functionality. They can all be run via:
+
+```
+cd scripts
+python -m unittest discover -v
+```
+
 ### Ruff Formatting
 
 I've added ruff to the repo to keep myself honest, at least on the Python side. You should run it on the `scripts/` directory and fix whatever it says to fix:

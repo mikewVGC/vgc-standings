@@ -30,6 +30,7 @@ class Ruleset():
             'natures': self.natures,
         }
 
+
 class RulesetCollection():
     def __init__(self, rulesets:list[Ruleset]) -> None:
         self.rulesets = rulesets
@@ -41,8 +42,10 @@ class RulesetCollection():
 
         return None
 
+
 def create_ruleset(rule_data):
     return Ruleset(**rule_data)
+
 
 def load_rulesets():    
     rulesets = []

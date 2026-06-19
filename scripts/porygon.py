@@ -84,6 +84,7 @@ def process_data(
             "dates": "",
             "events": 0,
             "champ": "",
+            "champ_flag": "",
         }
 
     rulesets = load_rulesets()
@@ -129,6 +130,7 @@ def process_data(
 
             if event_code == "worlds" and 'winner' in majors[event_code]:
                 non_current_seasons[year]['champ'] = majors[event_code]['winner']
+                non_current_seasons[year]['champ_flag'] = majors[event_code]['winner_flag']
 
             if event_should_be_processed and majors[event_code]['processed']:
                 print("building usage... ", end="")

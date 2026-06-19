@@ -110,7 +110,10 @@ __TEMPLATE_HEADER__
                 <strong>Events</strong>
                 {{ season.events }}
             </div>
-            <div>
+            <div
+                class="world-champ"
+                :style="`background-image:url(/static/img/flags/${season.champ_flag}.svg)`"
+            >
                 <strong>World Champion</strong>
                 {{ season.champ }}
             </div>

@@ -10,7 +10,7 @@ from ops.format_models import Player
 
 """
 returns (day 1 rounds, day 2 rounds, top cut min)
-I don't think actually uses the third value yet?
+I don't think anything actually uses the third value yet?
 """
 def get_tournament_structure(season:int, competitors:int, event_info:dict) -> tuple | None:
     if season == "limitless":
