@@ -63,6 +63,7 @@ def main():
         process_data(manifest, allowlist, builder_cache, config, cl.limitless)
 
     if cl.limitless:
+        build_site(config, builder_cache)
         print("Finished!")
         return
 
@@ -155,6 +156,7 @@ def process_data(
         )
 
     if limitless:
+        builder_cache.save()
         return
 
     # home (/) requires some bootstrap data

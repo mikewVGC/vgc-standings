@@ -162,7 +162,8 @@ class Builder():
                 if loc == 'config':
                     replace_val = self.config.get_by_token(token_info['key'])
                 elif loc == 'cache':
-                    replace_val = json.dumps(self.cache[token_info['key']])
+                    if token_info['key'] in self.cache:
+                        replace_val = json.dumps(self.cache[token_info['key']])
                 elif loc == 'value':
                     replace_val = token_info[loc]
             elif token_type == 'date':
