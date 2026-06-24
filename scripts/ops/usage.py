@@ -8,7 +8,11 @@ from lib.tournament import (
     player_made_cut,
     get_points_threshold,
 )
-from lib.formes import get_mon_data_from_code, get_mon_alt_from_code, get_mega_form
+from lib.formes import (
+    get_mon_data_from_code,
+    get_mon_alt_from_code,
+    get_mega_form,
+)
 from lib.util import make_item_code
 
 
@@ -34,6 +38,11 @@ def compile_usage(year:int, event_code:str, prod:bool, limitless:bool = False) -
     mon_hashes = {}
 
     for player, pdata in standings.items():
+
+        earned_points = player_earned_points(pdata, get_points_threshold(year, num_players))
+        made_phase_two = player_made_phase_two(pdata, tour_format)
+        made_cut = player_made_cut(pdata, tour_format)
+
         for mon in pdata['team']:
             code = mon['code']
 
@@ -101,9 +110,20 @@ def compile_usage(year:int, event_code:str, prod:bool, limitless:bool = False) -
                 mon_stats[code]['items'][item_code] = {
                     'name': item_name,
                     'code': item_code,
-                    'count': 0,
+                    'count': {
+                        "total": 0,
+                        "points": 0,
+                        "phase2": 0,
+                        "cut": 0,
+                    },
                 }
-            mon_stats[code]['items'][item_code]['count'] += 1
+            mon_stats[code]['items'][item_code]['count']['total'] += 1
+            if earned_points:
+                mon_stats[code]['items'][item_code]['count']['points'] += 1
+            if made_phase_two:
+                mon_stats[code]['items'][item_code]['count']['phase2'] += 1
+            if made_cut:
+                mon_stats[code]['items'][item_code]['count']['cut'] += 1
 
             if event_info['status'] == "complete" and 'points' in pdata:
                 mon_stats[code]['points'] += pdata['points']
@@ -112,34 +132,79 @@ def compile_usage(year:int, event_code:str, prod:bool, limitless:bool = False) -
             if ability not in mon_stats[code]['abilities']:
                 mon_stats[code]['abilities'][ability] = {
                     'name': ability,
-                    'count': 0,
+                    'count': {
+                        "total": 0,
+                        "points": 0,
+                        "phase2": 0,
+                        "cut": 0,
+                    },
                 }
-            mon_stats[code]['abilities'][ability]['count'] += 1
+            mon_stats[code]['abilities'][ability]['count']['total'] += 1
+            if earned_points:
+                mon_stats[code]['abilities'][ability]['count']['points'] += 1
+            if made_phase_two:
+                mon_stats[code]['abilities'][ability]['count']['phase2'] += 1
+            if made_cut:
+                mon_stats[code]['abilities'][ability]['count']['cut'] += 1
 
-            tera = mon['tera'] if mon['tera'] else "Unknown"
-            if tera not in mon_stats[code]['teras']:
+            tera = mon['tera'] if mon['tera'] else ""
+            if len(tera) and tera not in mon_stats[code]['teras']:
                 mon_stats[code]['teras'][tera] = {
                     'name': tera,
-                    'count': 0,
+                    'count': {
+                        "total": 0,
+                        "points": 0,
+                        "phase2": 0,
+                        "cut": 0,
+                    },
                 }
-            mon_stats[code]['teras'][tera]['count'] += 1
+            if len(tera):
+                mon_stats[code]['teras'][tera]['count']['total'] += 1
+                if earned_points:
+                    mon_stats[code]['teras'][tera]['count']['points'] += 1
+                if made_phase_two:
+                    mon_stats[code]['teras'][tera]['count']['phase2'] += 1
+                if made_cut:
+                    mon_stats[code]['teras'][tera]['count']['cut'] += 1
 
             nature = mon['nature'] if mon['nature'] else ""
             if len(nature) and nature not in mon_stats[code]['natures']:
                 mon_stats[code]['natures'][nature] = {
                     'name': nature,
-                    'count': 0,
+                    'count': {
+                        "total": 0,
+                        "points": 0,
+                        "phase2": 0,
+                        "cut": 0,
+                    },
                 }
             if len(nature):
-                mon_stats[code]['natures'][nature]['count'] += 1
+                mon_stats[code]['natures'][nature]['count']['total'] += 1
+                if earned_points:
+                    mon_stats[code]['natures'][nature]['count']['points'] += 1
+                if made_phase_two:
+                    mon_stats[code]['natures'][nature]['count']['phase2'] += 1
+                if made_cut:
+                    mon_stats[code]['natures'][nature]['count']['cut'] += 1
 
             for move_name in mon['moves']:
                 if move_name not in mon_stats[code]['moves']:
                     mon_stats[code]['moves'][move_name] = {
                         'name': move_name,
-                        'count': 0,
+                        'count':{
+                            "total": 0,
+                            "points": 0,
+                            "phase2": 0,
+                            "cut": 0,
+                        },
                     }
-                mon_stats[code]['moves'][move_name]['count'] += 1
+                mon_stats[code]['moves'][move_name]['count']['total'] += 1
+                if earned_points:
+                    mon_stats[code]['moves'][move_name]['count']['points'] += 1
+                if made_phase_two:
+                    mon_stats[code]['moves'][move_name]['count']['phase2'] += 1
+                if made_cut:
+                    mon_stats[code]['moves'][move_name]['count']['cut'] += 1
 
             for tmate in pdata['team']:
                 mate_code = tmate['code']
@@ -150,9 +215,20 @@ def compile_usage(year:int, event_code:str, prod:bool, limitless:bool = False) -
                     mon_stats[code]['teammates'][mate_code] = {
                         'name': tmate['name'],
                         'code': mate_code,
-                        'count': 0,
+                        'count': {
+                            "total": 0,
+                            "points": 0,
+                            "phase2": 0,
+                            "cut": 0,
+                        },
                     }
-                mon_stats[code]['teammates'][mate_code]['count'] += 1
+                mon_stats[code]['teammates'][mate_code]['count']['total'] += 1
+                if earned_points:
+                    mon_stats[code]['teammates'][mate_code]['count']['points'] += 1
+                if made_phase_two:
+                    mon_stats[code]['teammates'][mate_code]['count']['phase2'] += 1
+                if made_cut:
+                    mon_stats[code]['teammates'][mate_code]['count']['cut'] += 1
 
             mon_stats[code]['players'].append(player)
 
@@ -163,17 +239,17 @@ def compile_usage(year:int, event_code:str, prod:bool, limitless:bool = False) -
             mon_stats[code]['w'] += pdata['record']['w']
             mon_stats[code]['l'] += pdata['record']['l']
 
-            if player_earned_points(pdata, get_points_threshold(year, num_players)):
+            if earned_points:
                 mon_stats[code]['counts']['points'] += 1
                 if len(mega_form):
                     mon_stats[code]['forms'][mega_form]['counts']['points'] += 1
 
-            if player_made_phase_two(pdata, tour_format):
+            if made_phase_two:
                 mon_stats[code]['counts']['phase2'] += 1
                 if len(mega_form):
                     mon_stats[code]['forms'][mega_form]['counts']['phase2'] += 1
 
-            if player_made_cut(pdata, tour_format):
+            if made_cut:
                 mon_stats[code]['counts']['cut'] += 1
                 if len(mega_form):
                     mon_stats[code]['forms'][mega_form]['counts']['cut'] += 1
@@ -198,7 +274,7 @@ def compile_usage(year:int, event_code:str, prod:bool, limitless:bool = False) -
         for sort in sorts:
             mon_stat[sort] = sorted(
                 list(mon_stat[sort].values()),
-                key=lambda x: (-x['count'], x['name'])
+                key=lambda x: (-x['count']['total'], x['name'])
             )
 
     indent_amt = 2

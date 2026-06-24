@@ -654,8 +654,8 @@ __TEMPLATE_FOOTER__
             >{{ name }}</div>
         </td>
         <td>{{ name }}</td>
-        <td>{{ count }}</td>
-        <td><span class="pct">({{ getPct(count / total) }})</span></td>
+        <td>{{ count[category] }}</td>
+        <td><span class="pct">({{ getPct(count[category] / total) }})</span></td>
     </tr>
 </template>
 
@@ -721,8 +721,25 @@ __TEMPLATE_FOOTER__
 
         <h3>
             {{ mon.name }} Configurations
-            <div id="clear-mon-filter" @click="resetFilters()" v-if="isFiltered()" v-cloak>Clear</div>
         </h3>
+
+        <div class="filter-area">
+
+            <div class="section">
+                <label>Filter:</label>
+                <select @change="updatePhaseFilter" :value="phaseFilter">
+                    <option value="total">All</option>
+                    <option value="points">Earned Points</option>
+                    <option value="phase2">Phase 2</option>
+                    <option value="cut">Top Cut</option>
+                </select>
+            </div>
+
+            <div class="section">
+                <div id="clear-mon-filter" @click="resetFilters()" v-if="isFiltered()" v-cloak>Clear</div>
+            </div>
+
+        </div>
 
         <div class="mon-config-container">
             <div class="config-container">
@@ -742,7 +759,8 @@ __TEMPLATE_FOOTER__
                             :code="moveInfo.name"
                             :name="moveInfo.name"
                             :count="moveInfo.count"
-                            :total="mon.counts.total"
+                            :category="phaseFilter"
+                            :total="mon.counts[phaseFilter]"
                             iconclass=""
                             type="moves"
                         ></tr>
@@ -769,7 +787,8 @@ __TEMPLATE_FOOTER__
                             :code="itemInfo.code"
                             :name="itemInfo.name"
                             :count="itemInfo.count"
-                            :total="mon.counts.total"
+                            :category="phaseFilter"
+                            :total="mon.counts[phaseFilter]"
                             iconclass="itemicon"
                             type="items"
                         ></tr>
@@ -796,7 +815,8 @@ __TEMPLATE_FOOTER__
                             :code="tmateInfo.code"
                             :name="tmateInfo.name"
                             :count="tmateInfo.count"
-                            :total="mon.counts.total"
+                            :category="phaseFilter"
+                            :total="mon.counts[phaseFilter]"
                             iconclass="monicon"
                             type="teammates"
                         ></tr>
@@ -822,7 +842,8 @@ __TEMPLATE_FOOTER__
                             :code="teraInfo.name"
                             :name="teraInfo.name"
                             :count="teraInfo.count"
-                            :total="mon.counts.total"
+                            :category="phaseFilter"
+                            :total="mon.counts[phaseFilter]"
                             :iconclass="`tera-icon tera-${teraInfo.name.toLowerCase()}`"
                             type="teras"
                         ></tr>
@@ -849,7 +870,8 @@ __TEMPLATE_FOOTER__
                             :code="natureInfo.name"
                             :name="natureInfo.name"
                             :count="natureInfo.count"
-                            :total="mon.counts.total"
+                            :category="phaseFilter"
+                            :total="mon.counts[phaseFilter]"
                             iconclass=""
                             type="natures"
                         ></tr>
@@ -876,7 +898,8 @@ __TEMPLATE_FOOTER__
                             :code="abilityInfo.name"
                             :name="abilityInfo.name"
                             :count="abilityInfo.count"
-                            :total="mon.counts.total"
+                            :category="phaseFilter"
+                            :total="mon.counts[phaseFilter]"
                             iconclass=""
                             type="abilities"
                         ></tr>

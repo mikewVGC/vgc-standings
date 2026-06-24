@@ -564,7 +564,7 @@ h3 span {
     -ms-user-select: none;
 }
 
-#team-copy, #clear-mon-filter {
+#team-copy {
     display: inline-block;
     float: right;
     border: 1px solid #000;
@@ -574,6 +574,16 @@ h3 span {
     cursor: pointer;
     background: #E8E8E8;
     color: #000;
+}
+
+#clear-mon-filter {
+    border: 1px solid #000;
+    border-radius: .25em;
+    padding: .15em .5em;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    background: #E8E8E8;
 }
 
 table#usage thead tr {

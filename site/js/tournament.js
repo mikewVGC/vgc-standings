@@ -31,6 +31,8 @@ export default {
                 natures: [],
             },
 
+            phaseFilter: 'total',
+
             filteredPlayers: [],
 
             hideFinishedPairings: false,
@@ -253,6 +255,7 @@ export default {
                         monImgBase: this.monImgBase,
                         standings: this.standings,
                         filteredPlayers: this.filteredPlayers,
+                        phaseFilter: this.phaseFilter,
                     };
             }
 
@@ -711,13 +714,27 @@ export default {
                         this.filters.teammates.every(
                             m => this.standings[pcode].team.filter(t => t.code == m).length > 0
                         )
-                    )
+                    ) &&
+                    this.playerMeetsPhaseRequirements(pcode)
                 ) {
                     this.filteredPlayers.push(pcode);
                 }
             }
 
             this.sortTeams(this.filters.teammates);
+        },
+
+        playerMeetsPhaseRequirements(pcode) {
+            switch (this.phaseFilter) {
+                case 'points':
+                    return this.standings[pcode].points > 0;
+                case 'phase2':
+                    return this.standings[pcode].p2;
+                case 'cut':
+                    return this.standings[pcode].cut;
+            }
+
+            return true;
         },
 
         resetFilters() {
@@ -727,6 +744,7 @@ export default {
             this.filters.moves = [];
             this.filters.abilities = [];
             this.filters.teammates = [];
+            this.phaseFilter = 'total';
 
             this.resetTeamSort();
         },
@@ -742,6 +760,7 @@ export default {
             }
 
             return (
+                this.phaseFilter != 'total' ||
                 this.filters.items.length ||
                 this.filters.teras.length ||
                 this.filters.natures.length ||
@@ -749,6 +768,10 @@ export default {
                 this.filters.abilities.length ||
                 teamFilter
             );
+        },
+
+        updatePhaseFilter(newVal) {
+            this.phaseFilter = newVal;
         },
 
         getSortedClass(column) {
@@ -1238,7 +1261,15 @@ export default {
         },
         'mon': {
             template: '#mon-template',
-            props: [ 'season', 'monImgBase', 'eventInfo', 'mon', 'standings', 'filteredPlayers' ],
+            props: [
+                'season',
+                'monImgBase',
+                'eventInfo',
+                'mon',
+                'standings',
+                'filteredPlayers',
+                'phaseFilter',
+            ],
             created: function(self) {
                 document.title = `${this.mon.name} -- Usage Stats -- ${this.eventInfo.name} -- Reportworm Standings`;
 
@@ -1286,7 +1317,7 @@ export default {
                 },
                 'usage-list-icon': {
                     template: '#usage-list-icon-template',
-                    props: [ 'code', 'name', 'count', 'type', 'total', 'type', 'iconclass' ],
+                    props: [ 'code', 'name', 'count', 'category', 'type', 'total', 'type', 'iconclass' ],
                     methods: {
                         getSpritePos(name) {
                             return this.$parent.getSpritePos(name);
@@ -1333,6 +1364,10 @@ export default {
                 },
                 isFav(playerCode) {
                     return this.$parent.isFav(playerCode);
+                },
+                updatePhaseFilter(e) {
+                    this.$parent.updatePhaseFilter(e.target.value);
+                    this.$parent.applyFilters(this.mon);
                 },
             },
         },
