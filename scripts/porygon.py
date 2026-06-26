@@ -71,6 +71,7 @@ def main():
 
     print("All done!")
 
+
 def process_data(
     manifest:dict,
     allowlist:list,
@@ -78,15 +79,21 @@ def process_data(
     config:Config,
     limitless:bool = False
 ):
-    non_current_seasons = {}
+    past_seasons = {}
+    future_seasons = {}
     for season in list(filter(lambda s: s != manifest['current'], manifest['seasons'])):
-        non_current_seasons[season] = {
+        season_data = {
             "year": season,
             "dates": "",
             "events": 0,
             "champ": "",
             "champ_flag": "",
         }
+
+        if season < manifest['current']:
+            past_seasons[season] = season_data
+        elif season > manifest['current']:
+            future_seasons[season] = season_data
 
     rulesets = load_rulesets()
 
@@ -102,9 +109,13 @@ def process_data(
 
             del data
 
-        if year in non_current_seasons:
+        if year in past_seasons:
             first, _, worlds = get_season_bookends(majors)
-            non_current_seasons[year]['dates'] = make_nice_date_str(first['start'], worlds['start'], use_full_months=True)
+            past_seasons[year]['dates'] = make_nice_date_str(first['start'], worlds['start'], use_full_months=True)
+
+        if year in future_seasons:
+            first, _, worlds = get_season_bookends(majors)
+            future_seasons[year]['dates'] = make_nice_date_str(first['start'], worlds['start'], use_full_months=True)
 
         print(f"Building {year}")
 
@@ -126,12 +137,14 @@ def process_data(
                     limitless
                 )
 
-            if year in non_current_seasons:
-                non_current_seasons[year]['events'] += 1
+            if year in past_seasons:
+                past_seasons[year]['events'] += 1
+            if year in future_seasons:
+                future_seasons[year]['events'] += 1
 
             if event_code == "worlds" and 'winner' in majors[event_code]:
-                non_current_seasons[year]['champ'] = majors[event_code]['winner']
-                non_current_seasons[year]['champ_flag'] = majors[event_code]['winner_flag']
+                past_seasons[year]['champ'] = majors[event_code]['winner']
+                past_seasons[year]['champ_flag'] = majors[event_code]['winner_flag']
 
             if event_should_be_processed and majors[event_code]['processed']:
                 print("building usage... ", end="")
@@ -160,12 +173,15 @@ def process_data(
         return
 
     # home (/) requires some bootstrap data
-    non_current_seasons = list(non_current_seasons.values())
-    non_current_seasons.reverse()
+    past_seasons = list(past_seasons.values())
+    past_seasons.reverse()
+
+    future_seasons = list(future_seasons.values())
+    # future_seasons will probably only ever have one year, so we don't need to sort it
 
     builder_cache.add_cache_data(
         'home_bootstrap',
-        get_home_bootstrap_data(manifest['current'], current_majors, non_current_seasons)
+        get_home_bootstrap_data(manifest['current'], current_majors, past_seasons, future_seasons)
     )
 
     builder_cache.save()

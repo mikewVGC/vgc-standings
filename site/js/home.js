@@ -10,6 +10,7 @@ export default {
             inProgress: [],
 
             pastSeasons: [],
+            futureSeasons: [],
 
             showCredits: false,
 
@@ -33,6 +34,7 @@ export default {
             this.upcoming = data.upcoming;
             this.inProgress = data.inProgress;
             this.pastSeasons = data.pastSeasons;
+            this.futureSeasons = data.futureSeasons;
         },
     }
 }

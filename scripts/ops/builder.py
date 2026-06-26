@@ -7,6 +7,7 @@ import shutil
 import subprocess
 
 from datetime import date
+from pathlib import Path
 
 from ops.config import Config
 
@@ -221,7 +222,11 @@ class Builder():
                 main_ssi = ssi_base.replace('__TITLE__', ssi_data['title'])
                 main_ssi = main_ssi.replace('__DESCRIPTION__', ssi_data['description'])
 
-                with open(f"public/static/ssi/{ssi_data['file']}.html", 'w') as file:
+                f_pathname = f"public/static/ssi/{ssi_data['file']}.html"
+                f_path = Path(f_pathname)
+                f_path.parent.mkdir(parents=True, exist_ok=True)
+
+                with open(f_pathname, 'w') as file:
                     file.write(main_ssi)
 
 
@@ -275,6 +280,9 @@ class Template():
 
     def output(self) -> None:
         compiled = self.compile()
+
+        f_path = Path(self.dest)
+        f_path.parent.mkdir(parents=True, exist_ok=True)
 
         with open(self.dest, "w") as file:
             file.write(compiled)

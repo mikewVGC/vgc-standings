@@ -5,7 +5,7 @@ from lib.util import (
     get_season_bookends,
 )
 
-def get_home_bootstrap_data(year:int, majors:dict, all_other_seasons:dict) -> dict:
+def get_home_bootstrap_data(year:int, majors:dict, past_seasons:dict, future_seasons:dict) -> dict:
     first_major, last_major, worlds = get_season_bookends(majors)
 
     recent = list(filter(lambda major: major['status'] == "complete", list(majors.values())))
@@ -23,5 +23,6 @@ def get_home_bootstrap_data(year:int, majors:dict, all_other_seasons:dict) -> di
         "recent": recent[0:3],
         "upcoming": upcoming[0:3],
         "inProgress": in_progress,
-        "pastSeasons": all_other_seasons,
+        "pastSeasons": past_seasons,
+        "futureSeasons": future_seasons,
     }

@@ -104,131 +104,81 @@ def compile_usage(year:int, event_code:str, prod:bool, limitless:bool = False) -
 
             mon_hashes[code][mon_hash] += 1
 
-            item_name = mon['item'] if mon['item'] else "No Item"
-            item_code = make_item_code(item_name)
-            if item_code not in mon_stats[code]['items']:
-                mon_stats[code]['items'][item_code] = {
-                    'name': item_name,
-                    'code': item_code,
-                    'count': {
-                        "total": 0,
-                        "points": 0,
-                        "phase2": 0,
-                        "cut": 0,
-                    },
-                }
-            mon_stats[code]['items'][item_code]['count']['total'] += 1
-            if earned_points:
-                mon_stats[code]['items'][item_code]['count']['points'] += 1
-            if made_phase_two:
-                mon_stats[code]['items'][item_code]['count']['phase2'] += 1
-            if made_cut:
-                mon_stats[code]['items'][item_code]['count']['cut'] += 1
-
             if event_info['status'] == "complete" and 'points' in pdata:
                 mon_stats[code]['points'] += pdata['points']
 
+            item_name = mon['item'] if mon['item'] else "No Item"
+            item_code = make_item_code(item_name)
+            update_mon_stats(
+                mon_stats[code],
+                item_code,
+                item_name,
+                'items',
+                earned_points,
+                made_phase_two,
+                made_cut
+            )
+
             ability = mon['ability'] if mon['ability'] else "Unknown"
-            if ability not in mon_stats[code]['abilities']:
-                mon_stats[code]['abilities'][ability] = {
-                    'name': ability,
-                    'count': {
-                        "total": 0,
-                        "points": 0,
-                        "phase2": 0,
-                        "cut": 0,
-                    },
-                }
-            mon_stats[code]['abilities'][ability]['count']['total'] += 1
-            if earned_points:
-                mon_stats[code]['abilities'][ability]['count']['points'] += 1
-            if made_phase_two:
-                mon_stats[code]['abilities'][ability]['count']['phase2'] += 1
-            if made_cut:
-                mon_stats[code]['abilities'][ability]['count']['cut'] += 1
+            update_mon_stats(
+                mon_stats[code],
+                ability,
+                ability,
+                'abilities',
+                earned_points,
+                made_phase_two,
+                made_cut
+            )
 
             tera = mon['tera'] if mon['tera'] else ""
-            if len(tera) and tera not in mon_stats[code]['teras']:
-                mon_stats[code]['teras'][tera] = {
-                    'name': tera,
-                    'count': {
-                        "total": 0,
-                        "points": 0,
-                        "phase2": 0,
-                        "cut": 0,
-                    },
-                }
             if len(tera):
-                mon_stats[code]['teras'][tera]['count']['total'] += 1
-                if earned_points:
-                    mon_stats[code]['teras'][tera]['count']['points'] += 1
-                if made_phase_two:
-                    mon_stats[code]['teras'][tera]['count']['phase2'] += 1
-                if made_cut:
-                    mon_stats[code]['teras'][tera]['count']['cut'] += 1
+                update_mon_stats(
+                    mon_stats[code],
+                    tera,
+                    tera,
+                    'teras',
+                    earned_points,
+                    made_phase_two,
+                    made_cut
+                )
 
             nature = mon['nature'] if mon['nature'] else ""
-            if len(nature) and nature not in mon_stats[code]['natures']:
-                mon_stats[code]['natures'][nature] = {
-                    'name': nature,
-                    'count': {
-                        "total": 0,
-                        "points": 0,
-                        "phase2": 0,
-                        "cut": 0,
-                    },
-                }
             if len(nature):
-                mon_stats[code]['natures'][nature]['count']['total'] += 1
-                if earned_points:
-                    mon_stats[code]['natures'][nature]['count']['points'] += 1
-                if made_phase_two:
-                    mon_stats[code]['natures'][nature]['count']['phase2'] += 1
-                if made_cut:
-                    mon_stats[code]['natures'][nature]['count']['cut'] += 1
+                update_mon_stats(
+                    mon_stats[code],
+                    nature,
+                    nature,
+                    'natures',
+                    earned_points,
+                    made_phase_two,
+                    made_cut
+                )
 
             for move_name in mon['moves']:
-                if move_name not in mon_stats[code]['moves']:
-                    mon_stats[code]['moves'][move_name] = {
-                        'name': move_name,
-                        'count':{
-                            "total": 0,
-                            "points": 0,
-                            "phase2": 0,
-                            "cut": 0,
-                        },
-                    }
-                mon_stats[code]['moves'][move_name]['count']['total'] += 1
-                if earned_points:
-                    mon_stats[code]['moves'][move_name]['count']['points'] += 1
-                if made_phase_two:
-                    mon_stats[code]['moves'][move_name]['count']['phase2'] += 1
-                if made_cut:
-                    mon_stats[code]['moves'][move_name]['count']['cut'] += 1
+                update_mon_stats(
+                    mon_stats[code],
+                    move_name,
+                    move_name,
+                    'moves',
+                    earned_points,
+                    made_phase_two,
+                    made_cut
+                )
 
             for tmate in pdata['team']:
                 mate_code = tmate['code']
                 if mate_code == code:
                     continue
 
-                if mate_code not in mon_stats[code]['teammates']:
-                    mon_stats[code]['teammates'][mate_code] = {
-                        'name': tmate['name'],
-                        'code': mate_code,
-                        'count': {
-                            "total": 0,
-                            "points": 0,
-                            "phase2": 0,
-                            "cut": 0,
-                        },
-                    }
-                mon_stats[code]['teammates'][mate_code]['count']['total'] += 1
-                if earned_points:
-                    mon_stats[code]['teammates'][mate_code]['count']['points'] += 1
-                if made_phase_two:
-                    mon_stats[code]['teammates'][mate_code]['count']['phase2'] += 1
-                if made_cut:
-                    mon_stats[code]['teammates'][mate_code]['count']['cut'] += 1
+                update_mon_stats(
+                    mon_stats[code],
+                    mate_code,
+                    tmate['name'],
+                    'teammates',
+                    earned_points,
+                    made_phase_two,
+                    made_cut
+                )
 
             mon_stats[code]['players'].append(player)
 
@@ -285,3 +235,32 @@ def compile_usage(year:int, event_code:str, prod:bool, limitless:bool = False) -
 
     with open(f"public/data/{year}/{event_code}-usage.json", 'w') as file:
         file.write(json.dumps(mon_stats, indent=indent_amt, separators=separators))
+
+
+def update_mon_stats(
+    mon_stats:dict,
+    info_code:str,
+    info_name:str,
+    stat_category:str,
+    earned_points:bool,
+    made_phase_two:bool,
+    made_cut:bool
+):
+    if info_code not in mon_stats[stat_category]:
+        mon_stats[stat_category][info_code] = {
+            'name': info_name,
+            'code': info_code,
+            'count': {
+                "total": 0,
+                "points": 0,
+                "phase2": 0,
+                "cut": 0,
+            },
+        }
+    mon_stats[stat_category][info_code]['count']['total'] += 1
+    if earned_points:
+        mon_stats[stat_category][info_code]['count']['points'] += 1
+    if made_phase_two:
+        mon_stats[stat_category][info_code]['count']['phase2'] += 1
+    if made_cut:
+        mon_stats[stat_category][info_code]['count']['cut'] += 1

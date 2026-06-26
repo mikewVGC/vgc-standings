@@ -93,7 +93,28 @@ __TEMPLATE_HEADER__
 
     </div>
 
-    <h2 v-if="pastSeasons.length > 0">Previous Seasons</h2>
+    <h2 v-if="futureSeasons.length > 0" v-cloak>Upcoming Season</h2>
+
+    <div v-if="futureSeasons.length > 0" v-cloak>
+
+        <a
+            v-for="season in futureSeasons"
+            :href="`/${season.year}`"
+            class="event-block full-block past-season-block"
+        >
+            <div class="title">
+                <div>{{ season.year }} Season</div>
+                <em>{{ season.dates }}</em>
+            </div>
+            <div>
+                <strong>Events</strong>
+                {{ season.events }}
+            </div>
+        </a>
+
+    </div>
+
+    <h2 v-if="pastSeasons.length > 0" v-cloak>Previous Seasons</h2>
 
     <div v-if="pastSeasons.length > 0" v-cloak>
 
