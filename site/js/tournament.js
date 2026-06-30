@@ -705,16 +705,12 @@ export default {
                 let pcode = monData.players[i];
                 let [ pmon ] = this.standings[pcode].team.filter(m => m.code == monData.code);
 
-                if ((!this.filters.items.length || this.filters.items.includes(pmon.itemcode)) &&
-                    (!this.filters.teras.length || this.filters.teras.includes(pmon.tera)) &&
-                    (!this.filters.natures.length || this.filters.natures.includes(pmon.nature)) &&
-                    (!this.filters.moves.length || this.filters.moves.every(m => pmon.moves.includes(m))) &&
-                    (!this.filters.abilities.length || this.filters.abilities.includes(pmon.ability)) &&
-                    (!this.filters.teammates.length ||
-                        this.filters.teammates.every(
-                            m => this.standings[pcode].team.filter(t => t.code == m).length > 0
-                        )
-                    ) &&
+                if (this.filterIncludes('items', pmon.itemcode) &&
+                    this.filterIncludes('teras', pmon.tera) &&
+                    this.filterIncludes('natures', pmon.nature) &&
+                    this.filterIncludes('abilities', pmon.ability) &&
+                    this.filterEvery('moves', m => pmon.moves.includes(m)) &&
+                    this.filterEvery('teammates', m => this.standings[pcode].team.filter(t => t.code == m).length > 0) &&
                     this.playerMeetsPhaseRequirements(pcode)
                 ) {
                     this.filteredPlayers.push(pcode);
@@ -722,6 +718,14 @@ export default {
             }
 
             this.sortTeams(this.filters.teammates);
+        },
+
+        filterIncludes(filterType, filterCode) {
+            return !this.filters[filterType].length || this.filters[filterType].includes(filterCode);
+        },
+
+        filterEvery(filterType, filterFunc) {
+            return !this.filters[filterType].length || this.filters[filterType].every(filterFunc);
         },
 
         playerMeetsPhaseRequirements(pcode) {

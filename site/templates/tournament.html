@@ -726,7 +726,7 @@ __TEMPLATE_FOOTER__
         <div class="filter-area">
 
             <div class="section">
-                <label>Filter:</label>
+                <label>Show Phase:</label>
                 <select @change="updatePhaseFilter" :value="phaseFilter">
                     <option value="total">All</option>
                     <option value="points">Earned Points</option>
@@ -753,6 +753,18 @@ __TEMPLATE_FOOTER__
                         </tr>
                     </thead>
                     <tbody>
+                        <!-- <tr>
+                            <td colspan="5">
+                                <select>
+                                    <option>Match Any</option>
+                                    <option>Match All</option>
+                                </select>
+                                <select>
+                                    <option>Include</option>
+                                    <option>Exclude</option>
+                                </select>
+                            </td>
+                        </tr> -->
                         <tr
                             is="vue:usage-list-icon"
                             v-for="moveInfo in mon.moves"
