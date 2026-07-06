@@ -56,8 +56,12 @@ def compile_usage(year:int, event_code:str, prod:bool, limitless:bool = False) -
                 if alt:
                     dex_num = alt
 
+                title_name = mon['name'].title()
+                if title_name == "Kommo-O":
+                    title_name = "Kommo-o"
+
                 mon_stats[code] = {
-                    "name": mon['name'].title(),
+                    "name": title_name,
                     "code": code,
                     "dex": dex_num,
                     "counts": {

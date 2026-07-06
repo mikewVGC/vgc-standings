@@ -666,7 +666,7 @@ __TEMPLATE_FOOTER__
         <h2>{{ mon.name }} Usage &mdash; {{ eventInfo.name }}</h2>
 
         <div class="usage-container usage-list" id="usage-stats">
-            <h3>Overall Usage</h3>
+            <h3>Usage &amp; Info</h3>
 
             <table>
                 <tr>
@@ -693,6 +693,10 @@ __TEMPLATE_FOOTER__
                         {{ mon.counts.cut }} <span class="pct">({{ getPct(mon.counts.cut / eventInfo.cutCount, 4) }})</span>
                     </td>
                 </tr>
+                <tr>
+                    <td>Record</td>
+                    <td>{{ mon.w }} - {{ mon.l }}</td>
+                </tr>
             </table>
         </div>
 
@@ -715,6 +719,10 @@ __TEMPLATE_FOOTER__
                 <tr>
                     <td>Phase 2 &rarr; Cut</td>
                     <td>{{ getPct(mon.counts.cutConversion, 5) }}</td>
+                </tr>
+                <tr>
+                    <td>Win Rate</td>
+                    <td>{{ getPct(mon.w / (mon.w + mon.l), 5) }}</td>
                 </tr>
             </table>
         </div>
