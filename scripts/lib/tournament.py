@@ -76,7 +76,7 @@ def get_tournament_structure(season:int, competitors:int, event_info:dict) -> tu
         elif competitors >= 4:
             return (3, 0, 0)
 
-    if season == 2026:
+    if season == 2026 or season == 2027:
         if competitors >= 4097:
             return (9, 6, 8)
         elif competitors >= 2049:
@@ -137,7 +137,7 @@ def get_points_threshold(season:int, competitors:int) -> int | None:
         if competitors >= 8:
             return 8
 
-    if season == 2025 or season == 2026 or season == "limitless":
+    if season == 2025 or season == 2026 or season == 2027 or season == "limitless":
         if competitors >= 2049:
             return 1024
         if competitors >= 1025:
@@ -239,7 +239,7 @@ def get_points_earned(season:int, competitors:int, place:int, ic:bool = False) -
         elif place <= 1024 and competitors >= 2049:
             return 40 if ic else 20
 
-    if season == 2026:
+    if season == 2026 or season == 2027:
         if place == 1:
             return 500 if ic else 350
         elif place == 2 and competitors >= 4:
@@ -259,9 +259,15 @@ def get_points_earned(season:int, competitors:int, place:int, ic:bool = False) -
         elif place <= 256 and competitors >= 513:
             return 100 if ic else 60
         elif place <= 512 and competitors >= 1025:
-            return 80 if ic else 40
+            if season == 2026:
+                return 80 if ic else 40
+            elif season == 2027:
+                return 85 if ic else 42
         elif place <= 1024 and competitors >= 2049:
-            return 40 if ic else 20
+            if season == 2026:
+                return 40 if ic else 20
+            elif season == 2027:
+                return 42 if ic else 22
 
     return 0
 

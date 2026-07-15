@@ -49,9 +49,9 @@ image_alts = {
     "taurospaldeacombat": 10250,
     "taurospaldeaaqua": 10252,
     "taurospaldeablaze": 10251,
-    # castform -- not in SV
+    # castform -- not in SV -- also forme changes are weather dependent
     # deoxys -- not VGC legal
-    # burmy / wormadam -- not in SV
+    # burmy / wormadam -- not in SV / champs
     "shelloseast": "422-e",
     "gastrodoneast": "423-e",
     "rotomfan": 10011,
@@ -81,11 +81,12 @@ image_alts = {
     "enamorustherian": 10249,
     "kyuremblack": 10022,
     "kyuremwhite": 10023,
+    # not vgc legal
     # keldeo
     # meloetta
     # genesect
     # greninja (???)
-    # vivilion -- do I actually want to do this?
+    # vivilion -- the pattern isn't selected in rk9/limitless
     "meowsticf": 10025,
     "zygarde10": 10118,
     "zygardecomplete": 10120,
@@ -94,11 +95,11 @@ image_alts = {
     "oricoriosensu": 10125,
     "lycanrocdusk": 10152,
     "lycanrocmidnight": 10126,
-    # silvally -- todo probably?
-    # minior?
+    # silvally -- TODO whenever (if) it comes back
+    # minior -- I don't think you select the color (+ not in champs)
     "necrozmadawnwings": 10156,
     "necrozmaduskmane": 10155,
-    "necrozmaultra": 10157, # can't be in a teamsheet?
+    "necrozmaultra": 10157, # likely skipping this one
     # megearna
     "toxtricitylowkey": 10184,
     "indeedeef": 10186,
@@ -110,7 +111,7 @@ image_alts = {
     "calyrexice": 10193,
     "ursalunabloodmoon": 10272,
     "oinkolognef": 10254,
-    "mausholdfour": 10257, # need to fix ts
+    "mausholdfour": 10257, # need to fix
     "squawkabillyblue": 10260,
     "squawkabillywhite": 10261,
     "squawkabillyyellow": 10262,
@@ -129,7 +130,7 @@ image_alts = {
     "frillishf": "592-f",
     "jellicentf": "593-f",
     "pyroarf": "668-f",
-    # ratatta
+    # ratatta -- not in champs
     # raticate
     "raichualola": 10100,
     "sandshrewalola": 10101,
@@ -183,10 +184,10 @@ image_alts = {
     "decidueyehisui": 10244,
     "floetteeternal": 10061,
 
-    # gmax forms can go here, if needed
+    # gmax forms can go here, if needed ... some day?
     # 10196 -> 10228
 
-    #MEGAS -- these won't be in teamsheets, but we might edit them in for asthetics
+    # MEGAS -- edited into teamsheets for asthetics
     "venusaurmega": 10033,
     "charizardmegax": 10034,
     "charizardmegay": 10035,
@@ -238,7 +239,7 @@ image_alts = {
     "salamencemega": 10089,
     "beedrillmega": 10090,
 
-    # NEW megas -- these likely need to be uploaded
+    # NEW megas
     "clefablemega": 10278,
     "victreebelmega": 10279,
     "starmiemega": 10280,
@@ -391,7 +392,7 @@ item_change_forms = {
     "pyroar": [{ "item": "Pyroarite", "form": "pyroarmega" }],
     "floetteeternal": [{ "item": "Floettite", "form": "floettemega" }],
     "malamar": [{ "item": "Malamarite", "form": "malamarmega" }],
-    "barbaricle": [{ "item": "Barbaracite", "form": "barbariclemega" }],
+    "barbaracle": [{ "item": "Barbaracite", "form": "barbaraclemega" }],
     "dragalge": [{ "item": "Dragalgite", "form": "dragalgemega" }],
     "hawlucha": [{ "item": "Hawluchanite", "form": "hawluchamega" }],
     "zygarde": [{ "item": "Zygardite", "form": "zygardemega" }],
