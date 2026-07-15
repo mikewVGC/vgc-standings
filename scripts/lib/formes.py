@@ -259,7 +259,7 @@ image_alts = {
     "pyroarmega": 10295,
     "floettemega": 10296,
     "malamarmega": 10297,
-    "barbariclemega": 10298,
+    "barbaraclemega": 10298,
     "dragalgemega": 10299,
     "hawluchamega": 10300,
     "zygardemega": 10301,
