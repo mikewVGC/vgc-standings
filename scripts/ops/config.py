@@ -21,6 +21,14 @@ class Config:
         if 'mode' in config:
             self.mode = config['mode']
 
+    def __dict__(self):
+        return {
+            "mon_img_base": self.mon_img_base,
+            "google_tag": self.google_tag,
+            "live_refresh": self.live_refresh,
+            "mode": self.mode,
+        }
+
     def get_by_token(self, token:str) -> Any:
         if hasattr(self, token):
             return getattr(self, token)

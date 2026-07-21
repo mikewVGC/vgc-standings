@@ -1,11 +1,12 @@
-#!./venv/bin/python
+#!.venv/bin/python
 
 import argparse
 import json
 
+from reportworm_builder.builder import Builder
+
 from ops.process_regional import process_regional, process_season, was_event_processed
 from ops.config import Config
-from ops.builder import Builder
 from ops.builder_cache import BuilderCache
 from ops.usage import compile_usage
 from ops.home_bootstrap import get_home_bootstrap_data
@@ -188,7 +189,7 @@ def process_data(
 
 
 def build_site(config:Config, builder_cache:BuilderCache):
-    builder = Builder(config, builder_cache.load())
+    builder = Builder(config.__dict__(), builder_cache.load())
 
     print("[ALL] Building site...", end="")
     builder.build()

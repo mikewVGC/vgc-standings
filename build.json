@@ -41,7 +41,7 @@
                         "token": "__GOOGLE_TAG__",
                         "type": "value",
                         "location": "config",
-                        "key": "googleTag"
+                        "key": "google_tag"
                     },
                     {
                         "token": "__VUE__",
@@ -197,13 +197,13 @@
                     "token": "__MON_IMG_BASE__",
                     "type": "value",
                     "location": "config",
-                    "key": "monImgBase"
+                    "key": "mon_img_base"
                 },
                 {
                     "token": "__LIVE_UPDATE_FREQUENCY__",
                     "type": "value",
                     "location": "config",
-                    "key": "liveRefresh"
+                    "key": "live_refresh"
                 }
             ]
         },
