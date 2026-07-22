@@ -137,7 +137,7 @@ def get_points_threshold(season:int, competitors:int) -> int | None:
         if competitors >= 8:
             return 8
 
-    if season == 2025 or season == 2026 or season == 2027 or season == "limitless":
+    if season in [2025, 2026, 2027, "limitless"]:
         if competitors >= 2049:
             return 1024
         if competitors >= 1025:
@@ -239,7 +239,7 @@ def get_points_earned(season:int, competitors:int, place:int, ic:bool = False) -
         elif place <= 1024 and competitors >= 2049:
             return 40 if ic else 20
 
-    if season == 2026 or season == 2027:
+    if season in [2026, 2027]:
         if place == 1:
             return 500 if ic else 350
         elif place == 2 and competitors >= 4:
@@ -298,7 +298,9 @@ get a fudged timezone for the event
 """
 def _get_event_tz(event_info:dict) -> ZoneInfo:
     tz = None
-    if event_info['region'] == 'North America':
+    if 'tz' in event_info:
+        tz = ZoneInfo(event_info['tz'])
+    elif event_info['region'] == 'North America':
         tz = ZoneInfo("America/Chicago")
     elif event_info['region'] == 'Europe':
         tz = ZoneInfo("Europe/Berlin")
