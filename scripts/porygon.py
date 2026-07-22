@@ -4,10 +4,10 @@ import argparse
 import json
 
 from reportworm_builder.builder import Builder
+from reportworm_builder.builder_cache import BuilderCache
 
 from ops.process_regional import process_regional, process_season, was_event_processed
 from ops.config import Config
-from ops.builder_cache import BuilderCache
 from ops.usage import compile_usage
 from ops.home_bootstrap import get_home_bootstrap_data
 from lib.util import get_season_bookends, make_nice_date_str
@@ -58,7 +58,7 @@ def main():
         print("Could not find manifest, exiting")
         return
 
-    builder_cache = BuilderCache(config.mode == 'prod')
+    builder_cache = BuilderCache("data/builder", config.mode == 'prod')
 
     if not cl.build_only:
         process_data(manifest, allowlist, builder_cache, config, cl.limitless)
