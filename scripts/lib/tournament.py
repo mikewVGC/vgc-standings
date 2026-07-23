@@ -8,6 +8,20 @@ from lib.limitless import determine_tournament_structure
 
 from ops.format_models import Player
 
+from lib.tourlib import(
+    structure2023,
+    structure2024,
+    structure2025,
+    structure2026,
+    structure2027,
+
+    points2023,
+    points2024,
+    points2025,
+    points2026,
+    points2027,
+)
+
 """
 returns (day 1 rounds, day 2 rounds, top cut min)
 I don't think anything actually uses the third value yet?
@@ -16,89 +30,16 @@ def get_tournament_structure(season:int, competitors:int, event_info:dict) -> tu
     if season == "limitless":
         return determine_tournament_structure(season, competitors, event_info)
 
-    # the first three 2023 regionals had no day 2, instead day 1 rolled into top cut
-    if season == 2023 and event_info['code'] in ['san-diego', 'liverpool', 'orlando']:
-        if competitors >= 513:
-            return (10, 0, 5)
-        elif competitors >= 410: # liverpool had 487, the other two > 513
-            return (9, 0, 5)
-
-    # lima and bogota 2024 are a little messed up because they're mixed divisioon
-    if season == 2024 and (event_info['code'] in ['lima', 'bogota']):
-        return (6, 0, 3)
-
-    # notably 2024 worlds uses the 2025 structure
-    if season == 2024 and event_info['code'] == "worlds":
-        return (8, 3, 8)
-
-    # 2023 - 2024 did not have asym top cut, the last element is # cut rounds (3 = top 8)
-    if season == 2023 or season == 2024:
-        if competitors >= 800:
-            return (9, 6, 3)
-        elif competitors >= 227:
-            return (9, 5, 3)
-        elif competitors >= 129:
-            return (8, 0, 3)
-        elif competitors >= 65:
-            return (7, 0, 3)
-        elif competitors >= 33:
-            return (6, 0, 3)
-        elif competitors >= 21:
-            return (5, 0, 3)
-        elif competitors >= 13:
-            return (5, 0, 2)
-        elif competitors >= 9:
-            return (4, 0, 2)
-        elif competitors >= 4:
-            return (3, 0, 0)
-
-    if season == 2025:
-        if competitors >= 4097:
-            return (9, 5, 8)
-        elif competitors >= 2049:
-            return (9, 4, 8)
-        elif competitors >= 1025:
-            return (8, 4, 8)
-        elif competitors >= 513:
-            return (8, 3, 8)
-        elif competitors >= 257:
-            return (8, 2, 8)
-        elif competitors >= 129:
-            return (7, 2, 8)
-        elif competitors >= 65:
-            return (6, 2, 8)
-        elif competitors >= 33:
-            return (7, 0, 6)
-        elif competitors >= 17:
-            return (6, 0, 4)
-        elif competitors >= 9:
-            return (4, 0, 2)
-        elif competitors >= 4:
-            return (3, 0, 0)
-
-    if season == 2026 or season == 2027:
-        if competitors >= 4097:
-            return (9, 6, 8)
-        elif competitors >= 2049:
-            return (8, 6, 8)
-        elif competitors >= 1025:
-            return (8, 5, 8)
-        elif competitors >= 513:
-            return (8, 4, 8)
-        elif competitors >= 257:
-            return (8, 3, 8)
-        elif competitors >= 129:
-            return (8, 2, 8)
-        elif competitors >= 65:
-            return (7, 2, 8)
-        elif competitors >= 33:
-            return (7, 0, 6)
-        elif competitors >= 17:
-            return (6, 0, 4)
-        elif competitors >= 9:
-            return (4, 0, 2)
-        elif competitors >= 4:
-            return (3, 0, 0)
+    if season == 2023:
+        return structure2023.get_tournament_structure(competitors, event_info)
+    elif season == 2024:
+        return structure2024.get_tournament_structure(competitors, event_info)
+    elif season == 2025:
+        return structure2025.get_tournament_structure(competitors, event_info)
+    elif season == 2026:
+        return structure2026.get_tournament_structure(competitors, event_info)
+    elif season == 2027:
+        return structure2027.get_tournament_structure(competitors, event_info)
 
     return None
 
@@ -107,37 +48,7 @@ def get_tournament_structure(season:int, competitors:int, event_info:dict) -> tu
 given a number of competitors, return how many will earn points
 """
 def get_points_threshold(season:int, competitors:int) -> int | None:
-    if season == 2023:
-        if competitors >= 800:
-            return 256
-        if competitors >= 400:
-            return 128
-        if competitors >= 200:
-            return 64
-        if competitors >= 100:
-            return 32
-        if competitors >= 48:
-            return 16
-        if competitors >= 8:
-            return 8
-
-    if season == 2024:
-        if competitors >= 1024:
-            return 512
-        if competitors >= 512:
-            return 256
-        if competitors >= 256:
-            return 128
-        if competitors >= 128:
-            return 64
-        if competitors >= 80:
-            return 32
-        if competitors >= 48:
-            return 16
-        if competitors >= 8:
-            return 8
-
-    if season in [2025, 2026, 2027, "limitless"]:
+    if season == "limitless":
         if competitors >= 2049:
             return 1024
         if competitors >= 1025:
@@ -159,6 +70,17 @@ def get_points_threshold(season:int, competitors:int) -> int | None:
         if competitors >= 4:
             return 2
 
+    if season == 2023:
+        return points2023.get_points_threshold(competitors)
+    elif season == 2024:
+        return points2024.get_points_threshold(competitors)
+    elif season == 2025:
+        return points2025.get_points_threshold(competitors)
+    elif season == 2026:
+        return points2026.get_points_threshold(competitors)
+    elif season == 2027:
+        return points2027.get_points_threshold(competitors)
+
     return None
 
 """
@@ -170,104 +92,15 @@ def get_points_earned(season:int, competitors:int, place:int, ic:bool = False) -
         return 0
 
     if season == 2023:
-        if place == 1:
-            return 500 if ic else 200
-        elif place == 2:
-            return 400 if ic else 160
-        elif place <= 4:
-            return 320 if ic else 130
-        elif place <= 8:
-            return 250 if ic else 100
-        elif place <= 16 and competitors >= 48:
-            return 200 if ic else 80
-        elif place <= 32 and competitors >= 100:
-            return 160 if ic else 60
-        elif place <= 64 and competitors >= 200:
-            return 130 if ic else 50
-        elif place <= 128 and competitors >= 400:
-            return 100 if ic else 40
-        elif place <= 256 and competitors >= 800:
-            return 80 if ic else 30
-        elif place <= 512 and competitors >= 1600 and ic:
-            return 60
-
-    if season == 2024:
-        if place == 1:
-            return 500 if ic else 200
-        elif place == 2:
-            return 400 if ic else 160
-        elif place <= 4:
-            return 320 if ic else 130
-        elif place <= 8:
-            return 250 if ic else 100
-        elif place <= 16 and competitors >= 48:
-            return 200 if ic else 80
-        elif place <= 32 and competitors >= 80:
-            return 160 if ic else 60
-        elif place <= 64 and competitors >= 128:
-            return 130 if ic else 50
-        elif place <= 128 and competitors >= 256:
-            return 100 if ic else 40
-        elif place <= 256 and competitors >= 512:
-            return 80 if ic else 30
-        elif place <= 512 and competitors >= 1024:
-            return 60 if ic else 20
-        elif place <= 1024 and competitors >= 2046 and ic:
-            return 50
-
-    if season == 2025:
-        if place == 1:
-            return 500 if ic else 350
-        elif place == 2 and competitors >= 4:
-            return 480 if ic else 325
-        elif place <= 4 and competitors >= 8:
-            return 420 if ic else 300
-        elif place <= 8 and competitors >= 17:
-            return 380 if ic else 280
-        elif place <= 16 and competitors >= 33:
-            return 300 if ic else 160
-        elif place <= 32 and competitors >= 65:
-            return 200 if ic else 125
-        elif place <= 64 and competitors >= 129:
-            return 150 if ic else 100
-        elif place <= 128 and competitors >= 257:
-            return 120 if ic else 80
-        elif place <= 256 and competitors >= 513:
-            return 100 if ic else 60
-        elif place <= 512 and competitors >= 1025:
-            return 80 if ic else 40
-        elif place <= 1024 and competitors >= 2049:
-            return 40 if ic else 20
-
-    if season in [2026, 2027]:
-        if place == 1:
-            return 500 if ic else 350
-        elif place == 2 and competitors >= 4:
-            return 480 if ic else 325
-        elif place <= 4 and competitors >= 8:
-            return 420 if ic else 300
-        elif place <= 8 and competitors >= 17:
-            return 380 if ic else 280
-        elif place <= 16 and competitors >= 33:
-            return 300 if ic else 200
-        elif place <= 32 and competitors >= 65:
-            return 240 if ic else 160
-        elif place <= 64 and competitors >= 129:
-            return 180 if ic else 120
-        elif place <= 128 and competitors >= 257:
-            return 140 if ic else 80
-        elif place <= 256 and competitors >= 513:
-            return 100 if ic else 60
-        elif place <= 512 and competitors >= 1025:
-            if season == 2026:
-                return 80 if ic else 40
-            elif season == 2027:
-                return 85 if ic else 45
-        elif place <= 1024 and competitors >= 2049:
-            if season == 2026:
-                return 40 if ic else 20
-            elif season == 2027:
-                return 42 if ic else 22
+        return points2023.get_points_earned(competitors, place, ic)
+    elif season == 2024:
+        return points2024.get_points_earned(competitors, place, ic)
+    elif season == 2025:
+        return points2025.get_points_earned(competitors, place, ic)
+    elif season == 2026:
+        return points2026.get_points_earned(competitors, place, ic)
+    elif season == 2027:
+        return points2027.get_points_earned(competitors, place, ic)
 
     return 0
 
@@ -418,4 +251,3 @@ def player_made_cut(player:dict, tour_format:list) -> bool:
     if player['drop'] == -1 and len(player['rounds']) > tour_format[0] + tour_format[1]:
         return True
     return False
-
