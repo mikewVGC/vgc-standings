@@ -49,7 +49,8 @@
                         "name": "mode",
                         "values": [
                             { "value": "prod", "type": "tpl", "ref": "vue-prod" },
-                            { "value": "dev", "type": "tpl", "ref": "vue" }
+                            { "value": "dev", "type": "tpl", "ref": "vue" },
+                            { "value": "local", "type": "tpl", "ref": "vue-local" }
                         ]
                     },
                     {
@@ -58,7 +59,7 @@
                         "name": "mode",
                         "values": [
                             { "value": "prod", "type": "filename", "location": "/static/style.min.css", "ts": true },
-                            { "value": "dev", "type": "filename", "location": "/static/style.css", "ts": true }
+                            { "values": [ "dev", "local" ], "type": "filename", "location": "/static/style.css", "ts": true }
                         ]
                     },
                     {
@@ -120,21 +121,12 @@
                     "key": "home_bootstrap"
                 },
                 {
-                    "token": "__VUE__",
-                    "type": "flag",
-                    "name": "mode",
-                    "values": [
-                        { "value": "prod", "type": "tpl", "ref": "vue-prod" },
-                        { "value": "dev", "type": "tpl", "ref": "vue" }
-                    ]
-                },
-                {
                     "token": "__SCRIPT_FILE__",
                     "type": "flag",
                     "name": "mode",
                     "values": [
                         { "value": "prod", "type": "filename", "location": "/static/home.min.js", "ts": true },
-                        { "value": "dev", "type": "filename", "location": "/static/home.js", "ts": true }
+                        { "values": [ "dev", "local" ], "type": "filename", "location": "/static/home.js", "ts": true }
                     ]
                 }
             ]
@@ -150,7 +142,7 @@
                     "name": "mode",
                     "values": [
                         { "value": "prod", "type": "filename", "location": "/static/season.min.js", "ts": true },
-                        { "value": "dev", "type": "filename", "location": "/static/season.js", "ts": true }
+                        { "values": [ "dev", "local" ], "type": "filename", "location": "/static/season.js", "ts": true }
                     ]
                 },
                 {
@@ -159,7 +151,7 @@
                     "name": "mode",
                     "values": [
                         { "value": "prod", "type": "filename", "location": "/static/style.min.css", "ts": true },
-                        { "value": "dev", "type": "filename", "location": "/static/style.css", "ts": true }
+                        { "values": [ "dev", "local" ], "type": "filename", "location": "/static/style.css", "ts": true }
                     ]
                 }
             ]
@@ -175,7 +167,7 @@
                     "name": "mode",
                     "values": [
                         { "value": "prod", "type": "filename", "location": "/static/tournament.min.js", "ts": true },
-                        { "value": "dev", "type": "filename", "location": "/static/tournament.js", "ts": true }
+                        { "values": [ "dev", "local" ], "type": "filename", "location": "/static/tournament.js", "ts": true }
                     ]
                 },
                 {
