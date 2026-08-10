@@ -208,13 +208,30 @@ __TEMPLATE_FOOTER__
         </div>
     </div>
 
-    <h2>Teamsheet Paste<div id="team-copy" @click="teamCopy()" v-if="player.team.length > 0">Copy</div></h2>
+    <div class="teamsheet-header">
+        <div><h2>Teamsheet</h2></div>
+        <div>
+            <div id="teamsheet-style" class="button-gutter">
+                <div
+                    class="basic-button"
+                    :class="{ active: isActiveTeamsheetStyle('paste') }"
+                    @click="setTeamsheetStyle('paste')">Paste</div>
+                <div
+                    class="basic-button"
+                    :class="{ active: isActiveTeamsheetStyle('visual') }"
+                    @click="setTeamsheetStyle('visual')">Visual</div>
+            </div>
+        </div>
+        <div>
+            <div id="team-copy" class="basic-button" @click="teamCopy()" v-if="player.team.length > 0">Copy Team</div>
+        </div>
+    </div>
 
     <p v-if="player.team.length == 0">No teamsheet currently available.</p>
 
     <div class="table-holder">
 
-        <div id="team">
+        <div id="team" v-if="teamsheetStyle == 'paste'">
             <div v-for="mon in player.team" class="paste-mon">
                 <div class="mon-big-img">
                     <img :src="`${monImgBase}/${mon.dex}.png`" width="150" height="150" />
@@ -229,8 +246,64 @@ __TEMPLATE_FOOTER__
                     <div class="kinda-hide">Level: 50  </div>
                     <div v-if="eventInfo.rules.tera"><span class="attr">Tera Type:</span> <span :class="`type-${mon.tera.toLowerCase()}`">{{ mon.tera }}</span>  </div>
                     <div v-if="'nature' in mon && mon.nature.length">{{ mon.nature }} Nature  </div>
-                    <div v-for="move in mon.moves">- {{ move }}  </div>
+                    <div v-for="move in mon.moves"><span :class="`type-${move.type.toLowerCase()}`">-</span> {{ move.name }}  </div>
                     <div class="kinda-hide"><br /></div>
+                </div>
+            </div>
+        </div>
+        <div id="team-new" v-else>
+            <div v-for="mon in player.team" class="paste-mon">
+                <div class="mon-name">
+                    <strong>{{ mon.name }}</strong>
+                    <div v-if="mon.stype" class="type-icon" :class="`type-icon-${mon.ptype}`"></div>
+                    <div v-else class="type-icon"></div>
+                    <div v-if="mon.stype" class="type-icon" :class="`type-icon-${mon.stype}`"></div>
+                    <div v-else class="type-icon" :class="`type-icon-${mon.ptype}`"></div>
+                </div>
+                <div class="mon-big-img">
+                    <img :src="`${monImgBase}/${mon.dex}.png`" width="150" height="150" />
+                        <div
+                            class="itemicon hditemicon"
+                            :style="{ backgroundPosition: getHDItemSpritePos(mon.itemcode) }"
+                        ></div>
+                </div>
+                <div class="mon-info">
+                    <div>
+                        <div>
+                            <span>Held Item</span>
+                            {{ mon.item }}
+                        </div>
+                        <div>
+                            <span>Ability</span>
+                            {{ mon.ability }}
+                        </div>
+                        <div v-if="eventInfo.rules.tera" class="tera-icon-display">
+                            <span>Tera Type</span>
+                            <div>
+                                <div
+                                    v-if="mon.tera"
+                                    class="tera-icon tera-icon-sm"
+                                    :class="`tera-${mon.tera.toLowerCase()}`"
+                                ></div> {{ mon.tera }}
+                            </div>
+                        </div>
+                        <div v-if="'nature' in mon && mon.nature.length">
+                            <span>Stat Alignment</span>
+                            {{ mon.nature }} (<span class="sta-up">+{{ getNatureUp(mon.nature) }}</span> <span class="sta-down">-{{ getNatureDown(mon.nature) }}</span>)
+                        </div>
+                    </div>
+                    <div>
+                        <div id="mon-moves">
+                            <span>Moves</span>
+                            <div v-for="move in mon.moves">
+                                <div
+                                    v-if="move.type"
+                                    class="type-icon type-icon-sm"
+                                    :class="`type-icon-${move.type}`"
+                                ></div> {{ move.name }}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -243,6 +316,20 @@ __TEMPLATE_FOOTER__
         <input type="checkbox" @change="toggleOpponentsCompact" />
         <span>Compact View</span>
     </label>
+
+    <div class="mon-filters">
+        <p v-if="playerMonFilter.length" class="smaller-text mon-filter-text" v-cloak>Filtered:</p>
+        <p v-else class="smaller-text mon-filter-text" v-cloak>
+            Teams can be filtered by clicking on individual Pokemon.
+        </p>
+        <div v-for="mon in playerMonFilter"
+            class="player-mon-filter"
+            @click="removePlayerMonFilter(mon.code)"
+        >
+            <div class="monicon" :style="{ backgroundPosition: getSpritePos(mon.code) }"></div>
+            <p>{{ mon.name }} <span class="close">&times;</p>
+        </div>
+    </div>
 
     <table id="opponents" :class="isOpponentsCompact() ? 'compact' : ''">
 
@@ -262,7 +349,14 @@ __TEMPLATE_FOOTER__
             </tr>
         </thead>
         <tbody>
-            <tr v-for="opp in phase.rounds" :class="[ opp.bye ? 'bye' : '' ]">
+        <template v-for="opp in phase.rounds">
+            <tr
+                :class="[
+                    opp.bye ? 'bye' : '',
+                    (playerMonFilter.length && oppTeamFiltered(opponents[opp.opp].team) == playerMonFilter.length) ? 'highlight-row' : '',
+                    (playerMonFilter.length > 0 && oppTeamFiltered(opponents[opp.opp].team) != playerMonFilter.length) ? 'fade-row' : ''
+                ]"
+            >
                 <td>{{ opp.rname }}</td>
                 <td>
                     <template v-if="opp.bye">Bye</template>
@@ -285,18 +379,18 @@ __TEMPLATE_FOOTER__
                 </td>
                 <td class="team-container">
                     <div v-if="opponents[opp.opp].team">
-                        <a :href="`/${season}/${eventInfo.code}/player/${opp.opp}`">
-                            <div
-                                v-for="mon in opponents[opp.opp].team"
-                                class="monicon"
-                                :style="{ backgroundPosition: getSpritePos(mon.altcode || mon.code) }"
-                                :title="mon.name"
-                            >{{ mon.name }}</div>
-                        </a>
+                        <div
+                            v-for="mon in opponents[opp.opp].team"
+                            class="monicon monicon-filter"
+                            @click="applyPlayerMonFilter(mon.altcode || mon.code, mon.altname || mon.name)"
+                            :style="{ backgroundPosition: getSpritePos(mon.altcode || mon.code) }"
+                            :title="mon.altname || mon.name"
+                        >{{ mon.name }}</div>
                     </div>
                     <div v-else class="monicon monicon-ph"></div>
                 </td>
             </tr>
+        </template>
         </tbody>
 
     </template>
@@ -744,7 +838,12 @@ __TEMPLATE_FOOTER__
             </div>
 
             <div class="section">
-                <div id="clear-mon-filter" @click="resetFilters()" v-if="isFiltered()" v-cloak>Clear</div>
+                <div
+                    id="clear-mon-filter"
+                    class="basic-button"
+                    @click="resetFilters()"
+                    v-if="isFiltered()"
+                    v-cloak>Clear</div>
             </div>
 
         </div>

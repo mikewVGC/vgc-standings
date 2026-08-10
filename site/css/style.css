@@ -5,7 +5,7 @@ body {
 }
 
 a {
-    color: #0000C0;
+    color: #0D47A1;
 }
 
 div#app {
@@ -38,8 +38,8 @@ header#header h1 {
 }
 
 .tabgroup {
-    background: #F8F8F8;
-    border: 1px solid #000;
+    background: #F0F0F0;
+    border: 1px solid #254852;
     border-radius: .45em;
     padding: .2em 0;
     position: relative;
@@ -102,15 +102,33 @@ footer p {
     display: none !important;
 }
 
+.basic-button {
+    display: inline-block;
+    text-align: center;
+    background: #E8E8E8;
+    padding: .25em .5em;
+    border: 1px solid #254852;
+    border-radius: .25em;
+    font-weight: bold;
+    cursor: pointer;
+    color: #404040;
+}
+
+.button-gutter {
+    padding: .25em;
+    background: #F0F0F0;
+    border-radius: .25em;
+}
+
 #current-season {
-    border: 1px solid #222;
+    border: 1px solid #254852;
     background: #F8F8F8;
     border-radius: .75em;
     padding: .75em;
 }
 
 #current-season h2 {
-    border-bottom: 1px double #222;
+    border-bottom: 1px double #254852;
     padding: .5em 0;
     margin: .2em 0;
 }
@@ -120,13 +138,25 @@ footer p {
     margin: 0;
 }
 
-.event-in-progress, .event-incomplete-data, .event-team-submit {
+.event-in-progress, .event-incomplete-data, .event-team-submit, .info-block {
     background: #B8EEFC;
     color: #254852;
     border: 1px solid #254852;
     border-radius: .2em;
     padding: .5em;
     margin-top: .5em;
+}
+
+.info-icon {
+    border: 1px solid #254852;
+    border-radius: 1em;
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    overflow: display;
+    text-align: center;
+    padding: .1em;
+    font-weight: bold;
 }
 
 .event-incomplete-data {
@@ -254,7 +284,7 @@ footer p {
 
 .event-block div.title div {
     text-decoration: underline;
-    color: #0000C0;
+    color: #0D47A1;
 }
 
 .event-block div.title strong {
@@ -393,19 +423,19 @@ td.W, td.L, td.T, table#opponents td:nth-child(3) {
 }
 
 table#opponents td.W, td.W {
-    background: #D1FFD1;
+    background: #C8E6C9;
 }
 
 table#opponents tr:nth-child(odd) td.W, tr:nth-child(odd) td.W {
-    background: #BEE8BE;
+    background: #A5D6A7;
 }
 
 table#opponents td.L, td.L {
-    background: #FFD1D1;
+    background: #FFCDD2;
 }
 
 table#opponents tr:nth-child(odd) td.L, tr:nth-child(odd) td.L {
-    background: #E8BEBE;
+    background: #EF9A9A;
 }
 
 table#opponents td.T, td.T {
@@ -454,6 +484,65 @@ table#favorites {
     image-rendering: pixelated;
 }
 
+.monicon-filter {
+    cursor: pointer;
+}
+
+tr.highlight-row td {
+    box-shadow:
+        inset 0  4px 0px 0px rgba(255, 255, 255, .75),
+        inset 0 -4px 0px 0px rgba(255, 255, 255, .75);
+}
+
+tr.highlight-row:nth-child(even) td {
+    background: #90CAF9;
+}
+
+tr.highlight-row:nth-child(odd) td {
+    background: #64B5F6;
+}
+
+#opp-header {
+    margin-bottom: .20em;
+}
+
+.mon-filters {
+    margin-bottom: .25em;
+    display: inline-block;
+}
+
+.player-mon-filter {
+    display: inline-block;
+    border: 1px solid #000000;
+    background: #E8E8E8;
+    border-radius: .25em;
+    padding: .15em .25em;
+    font-size: .8em;
+    margin: 0 .5em .1em 0;
+    cursor: pointer;
+}
+
+.player-mon-filter p {
+    display: inline-block;
+    vertical-align: top;
+    margin: .3em .25em 0 .5em;
+}
+
+.player-mon-filter span.close {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.mon-filter-text {
+    display: inline-block;
+    margin-right: .5em;
+    vertical-align: top;
+}
+
+tr.fade-row td {
+    opacity: 0.25;
+}
+
 .itemicon {
     background: url(/static/img/itemicons-sheet.png?3) no-repeat;
     width: 24px;
@@ -468,15 +557,49 @@ table#favorites {
     image-rendering: unset;
 }
 
-.tera-icon {
+.tera-icon, .type-icon {
     width: 30px;
     height: 30px;
     background-position: center center;
     background-size: 28px 28px;
+    background-repeat: no-repeat;
     display: inline-block;
     overflow: hidden;
     text-indent: -9999em;
     image-rendering: pixelated;
+}
+
+.tera-icon-sm {
+    width: 24px;
+    height: 24px;
+    background-size: 22px 22px;
+}
+
+.tera-icon-display > div {
+    padding-top: .25em;
+}
+
+.tera-icon-display .tera-icon {
+    float: left;
+    position: relative;
+    top: -5px;
+}
+
+.type-icon {
+    width: 24px;
+    height: 24px;
+    background-size: 24px 24px;
+}
+
+.type-icon-sm {
+    width: 14px;
+    height: 14px;
+    background-size: 14px 14px;
+}
+
+#mon-moves .type-icon-sm {
+    position: relative;
+    top: 2px;
 }
 
 .tera-normal   { background-image: url(/static/img/types/tera-normal.png); }
@@ -498,6 +621,26 @@ table#favorites {
 .tera-dark     { background-image: url(/static/img/types/tera-dark.png); }
 .tera-fairy    { background-image: url(/static/img/types/tera-fairy.png); }
 .tera-stellar  { background-image: url(/static/img/types/tera-stellar.png); }
+
+.type-icon-normal   { background-image: url(/static/img/types/type-normal.png); }
+.type-icon-fighting { background-image: url(/static/img/types/type-fighting.png); }
+.type-icon-flying   { background-image: url(/static/img/types/type-flying.png); }
+.type-icon-poison   { background-image: url(/static/img/types/type-poison.png); }
+.type-icon-ground   { background-image: url(/static/img/types/type-ground.png); }
+.type-icon-rock     { background-image: url(/static/img/types/type-rock.png); }
+.type-icon-bug      { background-image: url(/static/img/types/type-bug.png); }
+.type-icon-ghost    { background-image: url(/static/img/types/type-ghost.png); }
+.type-icon-steel    { background-image: url(/static/img/types/type-steel.png); }
+.type-icon-fire     { background-image: url(/static/img/types/type-fire.png); }
+.type-icon-water    { background-image: url(/static/img/types/type-water.png); }
+.type-icon-grass    { background-image: url(/static/img/types/type-grass.png); }
+.type-icon-electric { background-image: url(/static/img/types/type-electric.png); }
+.type-icon-psychic  { background-image: url(/static/img/types/type-psychic.png); }
+.type-icon-ice      { background-image: url(/static/img/types/type-ice.png); }
+.type-icon-dragon   { background-image: url(/static/img/types/type-dragon.png); }
+.type-icon-dark     { background-image: url(/static/img/types/type-dark.png); }
+.type-icon-fairy    { background-image: url(/static/img/types/type-fairy.png); }
+.type-icon-stellar  { background-image: url(/static/img/types/type-stellar.png); }
 
 .monicon-ph {
     background: transparent;
@@ -523,29 +666,78 @@ h3 span {
     font-size: .8em;
 }
 
+.teamsheet-header {
+    display: grid;
+    grid-template-columns: 1fr fit-content(300px) fit-content(300px);
+    grid-gap: .5em;
+    padding-bottom: 1em;
+}
+
+.teamsheet-header #teamsheet-style {
+    margin-top: .8em;
+}
+
+.teamsheet-header #teamsheet-style div {
+    border: 0;
+    background: revert;
+}
+
+.teamsheet-header #teamsheet-style div.active {
+    background: #FFFFFF;
+    color: #000000;
+    border: 1px solid #254852;
+}
+
 #team {
     font: 15px "M+ 1m", monospace;
     display: grid;
     grid-template-columns: 50% 50%;
 }
 
-#team div {
+#team-new {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: .75em;
+    font-size: .9em;
+}
+
+#team-new .paste-mon {
+    border: 1px solid #254852;
+    border-radius: .25em;
+    padding: .5em;
+}
+
+#team-new .mon-name {
+    grid-column: span 2;
+    background: #F0F0F0;
+    padding: .25em;
+    font-size: 1.2em;
+    display: grid;
+    grid-template-columns: 1fr 24px 24px;
+    grid-gap: .25em;
+}
+
+#team div, #team-new div {
     white-space: nowrap;
     overflow: display;
 }
 
-#team .paste-mon {
+.paste-mon {
     display: grid;
     grid-template-columns: 150px 1fr;
     padding-bottom: 1em;
     grid-gap: 1em;
 }
 
-#team .paste-mon div {
+#team-new .paste-mon {
+    display: block;
+}
+
+.paste-mon div {
     padding-bottom: .1em;
 }
 
-#team .paste-mon div.itemicon {
+.paste-mon div.itemicon {
     padding-left: 0;
     padding-bottom: 0;
     overflow: hidden;
@@ -554,7 +746,7 @@ h3 span {
     top: 112px;
 }
 
-#team .mon-big-img {
+.mon-big-img {
     position: relative;
     width: 150px;
     height: 150px;
@@ -564,26 +756,51 @@ h3 span {
     -ms-user-select: none;
 }
 
+#team-new .mon-big-img {
+    width: 150px;
+    height: 165px;
+    margin: auto;
+}
+
+#team-new .mon-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: .5em;
+}
+
+#team-new .mon-info > div > div {
+    padding-bottom: .5em;
+}
+
+#team-new .mon-info span:not(.tera-type) {
+    display: block;
+    font-size: 0.8em;
+    color: #505050;
+    padding-bottom: .1em;
+}
+
+#team-new .mon-info span.tera-type {
+    display: inline;
+    font-size: 1em;
+}
+
+#team-new .mon-info span.sta-up {
+    display: inline;
+    color: #F44336;
+    font-size: .85em;
+}
+
+#team-new .mon-info span.sta-down {
+    display: inline;
+    color: #2196F3;
+    font-size: .85em;
+}
+
 #team-copy {
-    display: inline-block;
-    float: right;
-    border: 1px solid #000;
-    border-radius: .25em;
-    font-size: .75em;
-    padding: .15em .5em;
-    cursor: pointer;
-    background: #E8E8E8;
-    color: #000;
+    margin-top: 1em;
 }
 
 #clear-mon-filter {
-    border: 1px solid #000;
-    border-radius: .25em;
-    padding: .15em .5em;
-    cursor: pointer;
-    font-size: 1.1em;
-    font-weight: bold;
-    background: #E8E8E8;
 }
 
 table#usage thead tr {
@@ -676,6 +893,10 @@ ul#standings-info li:last-child, ul#standings-sections li:last-child {
 .small-note {
     font-size: .75em;
     float: right;
+}
+
+.smaller-text {
+    font-size: .9em;
 }
 
 ul#standings-sections {
@@ -1266,6 +1487,34 @@ ul#pairing-round-select li a {
         padding-bottom: 1em;
     }
 
+    .teamsheet-header {
+        grid-template-columns: fit-content(300px) 1fr;
+    }
+
+    .teamsheet-header #teamsheet-style {
+        margin: 0;
+    }
+
+    #team-copy {
+        margin-top: .25em;
+    }
+
+    #team-new {
+        display: block;
+    }
+
+    .teamsheet-header div:first-child {
+        grid-column: 1 / 3;
+    }
+
+    .teamsheet-header div:last-child {
+        text-align: right;
+    }
+
+    .teamsheet-header div:first-child h2 {
+        margin: 0;
+    }
+
     #opp-header {
         float: left;
         display: inline-block;
@@ -1376,6 +1625,26 @@ ul#pairing-round-select li a {
         display: none;
     }
 
+    tr.highlight-row td {
+        box-shadow: revert;
+    }
+
+    tr.highlight-row:nth-child(even) {
+        background: #90CAF9;
+    }
+
+    tr.highlight-row:nth-child(even) td {
+        background: transparent;
+    }
+
+    tr.highlight-row:nth-child(odd) {
+        background: #64B5F6;
+    }
+
+    tr.highlight-row:nth-child(odd) td {
+        background: transparent;
+    }
+
     .filter-area label#mega-usage {
         padding-left: 0em;
     }
@@ -1449,12 +1718,12 @@ ul#pairing-round-select li a {
 /* dark mode */
 @media (prefers-color-scheme: dark) {
     body {
-        background: #222222;
+        background: #212121;
         color: #FFFFFF;
     }
 
     a {
-        color: #1BD9F7;
+        color: #4FC3F7;
     }
 
     h2 em, h3 em {
@@ -1466,12 +1735,20 @@ ul#pairing-round-select li a {
         color: #E8E8E8;
     }
 
+    .button-gutter {
+        background: #606068;
+    }
+
+    #teamsheet-style .basic-button:not(.active) {
+        color: #E8E8E8;
+    }
+
     header#header h1 {
         background-image: url(/static/img/logo-white.png);
     }
 
     .tabgroup {
-        background: #404048;
+        background: #303038;
         border: 1px solid #88888A;
     }
 
@@ -1490,19 +1767,19 @@ ul#pairing-round-select li a {
     }
 
     .event-block div.title div {
-        color: #1BD9F7;
+        color: #4FC3F7;
     }
 
     .event-block div.title strong {
-        color: #E0E0E0;
+        color: #BDBDBD;
     }
 
     .event-block div strong {
-        color: #E0E0E0;
+        color: #BDBDBD;
     }
 
     .season-events-container .event-block:nth-child(odd) {
-        background: #202020;
+        background: #404048;
     }
 
     .event-block.up-block div.title {
@@ -1542,19 +1819,19 @@ ul#pairing-round-select li a {
     }
 
     table#opponents td.W, td.W {
-        background: #25802C;
+        background: #2E7D32;
     }
 
     table#opponents tr:nth-child(odd) td.W, tr:nth-child(odd) td.W {
-        background: #2FA139;
+        background: #1B5E20;
     }
 
     table#opponents td.L, td.L {
-        background: #802525;
+        background: #C62828;
     }
 
     table#opponents tr:nth-child(odd) td.L, tr:nth-child(odd) td.L {
-        background: #A12F2F;
+        background: #B71C1C;
     }
 
     table#opponents td.T, td.T {
@@ -1563,6 +1840,25 @@ ul#pairing-round-select li a {
 
     table#opponents tr:nth-child(odd) td.T, tr:nth-child(odd) td.T {
         background: #DB8802;
+    }
+
+    tr.highlight-row td {
+        box-shadow:
+            inset 0  4px 0px 0px rgba(0, 0, 0, .75),
+            inset 0 -4px 0px 0px rgba(0, 0, 0, .75);
+    }
+
+    tr.highlight-row:nth-child(even) td {
+        background: #1565C0;
+    }
+
+    tr.highlight-row:nth-child(odd) td {
+        background: #0D47A1;
+    }
+
+    .player-mon-filter {
+        border: 1px solid #88888A;
+        background: #303038;
     }
 
     table#usage tr.mon-usage-form:nth-child(even) td:nth-child(n+2) {
@@ -1584,7 +1880,7 @@ ul#pairing-round-select li a {
     }
 
     #current-season {
-        background: #404048;
+        background: #424242;
         border: 1px solid #88888A;
     }
 
@@ -1628,6 +1924,26 @@ ul#pairing-round-select li a {
         color: #DDD;
     }
 
+    #team-new .mon-name {
+        background: #303038;
+    }
+
+    #team-new .paste-mon {
+        border: 1px solid #88888A;
+    }
+
+    #team-new .mon-info span:not(.tera-type) {
+        color: #D0D0D0;
+    }
+
+    #team-new .mon-info span.sta-up {
+        color: #EF5350;
+    }
+
+    #team-new .mon-info span.sta-down {
+        color: #42A5F5;
+    }
+
     /* mobile dark mode */
     @media (max-width: 30.5em) {
         table.main-standings td::before {
@@ -1636,6 +1952,18 @@ ul#pairing-round-select li a {
 
         table#opponents td::before {
             color: #D0D0D0;
+        }
+
+        tr.highlight-row td {
+            box-shadow: revert;
+        }
+
+        tr.highlight-row:nth-child(even) {
+            background: #1565C0;
+        }
+
+        tr.highlight-row:nth-child(odd) {
+            background: #0D47A1;
         }
 
         ul#standings-info li {

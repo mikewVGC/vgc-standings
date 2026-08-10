@@ -14,7 +14,9 @@ from lib.formes import (
     get_icon_alt,
 )
 
-from ops.format_models import TeamMember
+from lib.moves import get_move_info_from_name
+
+from ops.format_models import TeamMember, Move
 
 
 def process_vgcpastes_teamlist(players:dict, event_info:dict, year:int, code:str) -> bool:
@@ -93,11 +95,16 @@ def parse_paste(paste:str, event_info:dict) -> list:
                 continue
 
             mon_code = make_mon_code(mon['species'])
-            dex_num, ptype, _ = get_mon_data_from_code(mon_code)
+            dex_num, ptype, stype, _ = get_mon_data_from_code(mon_code)
 
             alt = get_mon_alt_from_code(mon_code)
             if alt:
                 dex_num = alt
+
+            moves = [ Move(name=m) for m in moves if m ]
+            for move in moves:
+                _, _, _, move.type = get_move_info_from_name(move.name)
+                move.type = move.type.lower()
 
             mons.append(TeamMember(
                 name=mon['species'],
@@ -106,6 +113,7 @@ def parse_paste(paste:str, event_info:dict) -> list:
                 altcode=get_icon_alt(mon_code, mon, event_info['rules']['mega']),
                 dex=dex_num,
                 ptype=ptype.lower(),
+                stype=stype.lower(),
                 tera=mon['tera'] if 'tera' in mon else '',
                 nature=mon['nature'] if 'nature' in mon else '',
                 ability=mon['ability'],

@@ -51,7 +51,7 @@ def compile_usage(year:int, event_code:str, prod:bool, limitless:bool = False) -
                 mega_form = get_mega_form(code, mon)
 
             if code not in mon_stats:
-                dex_num, ptype, _ = get_mon_data_from_code(code)
+                dex_num, _, _, _ = get_mon_data_from_code(code)
                 alt = get_mon_alt_from_code(code)
                 if alt:
                     dex_num = alt
@@ -85,7 +85,7 @@ def compile_usage(year:int, event_code:str, prod:bool, limitless:bool = False) -
                 }
 
             if len(mega_form) and mega_form not in mon_stats[code]['forms']:
-                _, _, form_name = get_mon_data_from_code(mega_form)
+                _, _, _, form_name = get_mon_data_from_code(mega_form)
                 mon_stats[code]['forms'][mega_form] = {
                     "name": form_name,
                     "code": mega_form,
@@ -100,7 +100,11 @@ def compile_usage(year:int, event_code:str, prod:bool, limitless:bool = False) -
             if code not in mon_hashes:
                 mon_hashes[code] = {}
 
-            moves = sorted(mon['moves'])
+            moves = [ m['name'] for m in mon['moves'] ]
+
+            moves = sorted(moves)
+            mon['moves'] = moves
+
             mon_hash = f"{mon['code']}-{mon['ability']}-{mon['item']}-{mon['tera']}" + '-'.join(moves)
 
             if mon_hash not in mon_hashes[code]:

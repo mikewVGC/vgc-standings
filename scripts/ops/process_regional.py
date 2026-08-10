@@ -79,7 +79,7 @@ def process_regional(
         ...
 
     official_order = []
-    # thanks to rk9 (would be nice if they published official res!)
+    # official standings usually thanks to rk9 (it would be nice if they published official res too!)
     official_standings = f"data/majors/{year}/{code}-official.txt"
     official_standings_found = False
     try:

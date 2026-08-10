@@ -55,8 +55,8 @@ Python mostly, but also Go and PHP in the event you plan to run a live version (
     * The relevant `event-code` should match the one in the corresponding `{season}.json` file in `data/majors`.
 * Optionally grab the final standings order RK9 (go to the pairings and click the "Standings" tab):
     * Paste the final standings into `data/majors/{season}/{event-code}-official.txt`
-* Grab `pokedex.json` from Showdown: https://play.pokemonshowdown.com/data/
-    * Place it in `data/common`
+* Grab `pokedex.json` and `moves.json` from Showdown: https://play.pokemonshowdown.com/data/
+    * Place them in `data/common`
 * Grab flags from https://flagicons.lipis.dev
     * Copy the 1x1 icons into `public/static/img/flags` (you'll have to create it).
 * Retrieve teamsheet/pokepaste art from https://github.com/PokeAPI/sprites
@@ -71,7 +71,7 @@ Porygon is a simple command line script used to process standings data and rebui
 ./scripts/porygon.py
 ```
 
-(Make sure you set up the venv first, otherwise you can just run `python3 scripts/porygon.py`)
+(Make sure you set up the venv first via `python -m venv .venv`, otherwise you can just run `python3 scripts/porygon.py`)
 
 This will process and build all events found via `manifest.json`. Standings and usage JSON (which serve as the API) will be put in `public/data/{season}` and static HTML pages (which display all the data) will be put in `public/static` as `index.html`, `season.html`, and `tournament.html`.
 

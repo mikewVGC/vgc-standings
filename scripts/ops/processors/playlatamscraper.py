@@ -18,8 +18,13 @@ from lib.formes import (
     get_icon_alt,
 )
 
+from lib.moves import (
+    get_move_info_from_name
+)
+
 from ops.format_models import (
     TeamMember,
+    Move,
     Round,
     Player,
 )
@@ -74,7 +79,7 @@ def process_playlatamscraper_event(
 
             mon_name = fix_mon_name(mon['species'])
             mon_code = make_mon_code(mon_name)
-            dex_num, ptype, _ = get_mon_data_from_code(mon_code)
+            dex_num, ptype, stype, _ = get_mon_data_from_code(mon_code)
 
             alt = get_mon_alt_from_code(mon_code)
             if alt:
@@ -86,6 +91,11 @@ def process_playlatamscraper_event(
                     if move == "Behemoth Bash" or move == "Behemoth Blade":
                         mon['moves'][i] = "Iron Head"
 
+            moves = [ Move(name=m) for m in mon['moves'] if m ]
+            for move in moves:
+                _, _, _, move.type = get_move_info_from_name(move.name)
+                move.type = move.type.lower()
+
             team.append(TeamMember(
                 name=mon_name,
                 code=mon_code,
@@ -93,11 +103,12 @@ def process_playlatamscraper_event(
                 altcode=get_icon_alt(mon_code, mon, event_info['rules']['mega']),
                 dex=dex_num,
                 ptype=ptype.lower(),
+                stype=stype.lower(),
                 tera=mon['tera'],
                 ability=mon['ability'],
                 item=mon['item'],
                 itemcode=make_item_code(mon['item']),
-                moves=mon['moves'],
+                moves=moves,
             ))
 
         player_code = make_code(player['name'])

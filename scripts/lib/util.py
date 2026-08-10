@@ -38,6 +38,13 @@ def make_mon_code(name:str) -> str:
 
 
 """
+same but for moves
+"""
+def make_move_code(name:str) -> str:
+    return re.sub(r"[^\w]+", '', name.lower())
+
+
+"""
 convert to showdown item code: Covert Cloak -> covertcloak
 """
 def make_item_code(name:str) -> str:

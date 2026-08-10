@@ -31,6 +31,8 @@ export default {
                 natures: [],
             },
 
+            playerMonFilter: [],
+
             phaseFilter: 'total',
 
             filteredPlayers: [],
@@ -42,6 +44,8 @@ export default {
             },
 
             opponentsCompact: false,
+
+            teamsheetStyle: 'paste',
 
             spriteCoords: {},
             hdItemCoords: {},
@@ -142,9 +146,12 @@ export default {
                     return {
                         season: this.season,
                         player: player,
+                        playerCode: player.code,
                         opponents: opps,
                         monImgBase: this.monImgBase,
                         eventInfo: this.eventInfo,
+                        playerMonFilter: this.playerMonFilter,
+                        teamsheetStyle: this.teamsheetStyle,
                     };
 
                 case 'pairings':
@@ -376,6 +383,12 @@ export default {
                 this.favs = JSON.parse(maybeFavs);
             }
 
+            // same for teamsheet display style
+            let maybeSheetStyle = localStorage.getItem('teamsheet-style')
+            if (maybeSheetStyle) {
+                this.teamsheetStyle = maybeSheetStyle;
+            }
+
             // some init setup
             const chips = window.location.pathname.split('/');
             history.pushState({ page: window.location.pathname }, null, window.location.pathname);
@@ -428,7 +441,7 @@ export default {
                 // add sorted team
                 this.resetTeamSort();
 
-                for (const [playerCode, player ] of Object.entries(this.standings)) {
+                for (const [ playerCode, player ] of Object.entries(this.standings)) {
                     // create playerCodes array
                     this.playerCodes.push(playerCode);
 
@@ -437,6 +450,35 @@ export default {
                         .toLowerCase()
                         .normalize('NFD')
                         .replace(/[\u0300-\u036f]/g, '');
+
+                    /*
+                    // build "opponent info" section
+                    this.standings[playerCode].oppInfo = {
+                        "mons": {},
+                    };
+                    for (const round of player.rounds) {
+                        const oppCode = round.opp;
+                        if (!this.standings[oppCode]) {
+                            continue;
+                        }
+
+                        const oppTeam = this.standings[oppCode].team;
+                        for (const mon of oppTeam) {
+                            const monCode = mon.code;
+                            if (!(monCode in this.standings[playerCode].oppInfo.mons)) {
+                                this.standings[playerCode].oppInfo.mons[monCode] = {
+                                    "count": 0,
+                                    "wins": 0,
+                                };
+                            }
+
+                            this.standings[playerCode].oppInfo.mons[monCode].count++;
+                            if (round.res == "W") {
+                                this.standings[playerCode].oppInfo.mons[monCode].wins++;
+                            }
+                        }
+                    }
+                    */
 
                     // compile country stats
                     let country = player.country;
@@ -709,7 +751,7 @@ export default {
                     this.filterIncludes('teras', pmon.tera) &&
                     this.filterIncludes('natures', pmon.nature) &&
                     this.filterIncludes('abilities', pmon.ability) &&
-                    this.filterEvery('moves', m => pmon.moves.includes(m)) &&
+                    this.filterEvery('moves', m => pmon.moves.filter(mv => mv.name == m).length > 0) &&
                     this.filterEvery('teammates', m => this.standings[pcode].team.filter(t => t.code == m).length > 0) &&
                     this.playerMeetsPhaseRequirements(pcode)
                 ) {
@@ -776,6 +818,10 @@ export default {
 
         updatePhaseFilter(newVal) {
             this.phaseFilter = newVal;
+        },
+
+        resetPlayerMonFilter() {
+            this.playerMonFilter = [];
         },
 
         getSortedClass(column) {
@@ -851,6 +897,104 @@ export default {
         isFav(playerCode) {
             return this.favs.findIndex(p => p == playerCode) >= 0;
         },
+
+        getNatureUp(nature) {
+            return this.getNatureStats(nature)?.up || false;
+        },
+
+        getNatureDown(nature) {
+            return this.getNatureStats(nature)?.down || false;
+        },
+
+        getNatureStats(nature) {
+            switch (nature) {
+                case 'Hardy':
+                case 'Docile':
+                case 'Bashful':
+                case 'Quirky':
+                case 'Serious':
+                    return {};
+
+                case 'Lonely':
+                    return { "up": "Atk", "down": "Def" };
+                case 'Adamant':
+                    return { "up": "Atk", "down": "SpA" };
+                case 'Naughty':
+                    return { "up": "Atk", "down": "SpD" };
+                case 'Brave':
+                    return { "up": "Atk", "down": "Spe" };
+
+                case 'Bold':
+                    return { "up": "Def", "down": "Atk" };
+                case 'Impish':
+                    return { "up": "Def", "down": "SpA" };
+                case 'Lax':
+                    return { "up": "Def", "down": "SpD" };
+                case 'Relaxed':
+                    return { "up": "Def", "down": "Spe" };
+
+                case 'Modest':
+                    return { "up": "SpA", "down": "Atk" };
+                case 'Mild':
+                    return { "up": "SpA", "down": "Def" };
+                case 'Rash':
+                    return { "up": "SpA", "down": "SpD" };
+                case 'Quiet':
+                    return { "up": "SpA", "down": "Spe" };
+
+                case 'Calm':
+                    return { "up": "SpD", "down": "Atk" };
+                case 'Gentle':
+                    return { "up": "SpD", "down": "Def" };
+                case 'Careful':
+                    return { "up": "SpD", "down": "SpA" };
+                case 'Sassy':
+                    return { "up": "SpD", "down": "Spe" };
+
+                case 'Timid':
+                    return { "up": "Spe", "down": "Atk" };
+                case 'Hasty':
+                    return { "up": "Spe", "down": "Def" };
+                case 'Jolly':
+                    return { "up": "Spe", "down": "SpA" };
+                case 'Naive':
+                    return { "up": "Spe", "down": "SpD" };
+            }
+
+            return {};
+        },
+
+        getPlayerPaste(player) {
+            let teamPaste = '';
+            if (!player.team) {
+                return "";
+            }
+
+            for (const mon of player.team) {
+                teamPaste += `${mon.name}`;
+                if (mon.item) {
+                    teamPaste += ` @ ${mon.item}`;
+                }
+                teamPaste += `  \n`;
+                teamPaste += `Ability: ${mon.ability}  \n`;
+                teamPaste += `Level: 50  \n`;
+                if (mon.tera) {
+                    teamPaste += `Tera Type: ${mon.tera}  \n`;
+                }
+                if (mon.nature) {
+                    teamPaste += `Nature: ${mon.nature}  \n`;
+                }
+                for (const move of mon.moves) {
+                    if (!move || !('name' in move)) {
+                        continue;
+                    }
+                    teamPaste += `- ${move.name}  \n`;
+                }
+                teamPaste += `\n`;
+            }
+
+            return teamPaste;
+        },
     },
     components: {
         'loading': {
@@ -923,15 +1067,24 @@ export default {
                 'season',
                 'opponents',
                 'player',
+                'playerCode',
                 'monImgBase',
                 'eventInfo',
                 'opponentsCompact',
+                'playerMonFilter',
+                'teamsheetStyle',
             ],
             created: function() {
                 this.createdOrUpdated();
+                this.$parent.resetPlayerMonFilter();
             },
             updated: function() {
                 this.createdOrUpdated();
+            },
+            watch: {
+                playerCode(newCode, oldCode) {
+                    this.$parent.resetPlayerMonFilter();
+                },
             },
             methods: {
                 createdOrUpdated() {
@@ -969,12 +1122,12 @@ export default {
                 },
                 teamCopy() {
                     this.$parent.copyToClipboard(
-                        document.getElementById('team').innerText
+                        this.$parent.getPlayerPaste(this.player)
                     );
                 
                     document.getElementById('team-copy').innerText = "Copied!";
                     setTimeout(() => {
-                        document.getElementById('team-copy').innerText = "Copy";
+                        document.getElementById('team-copy').innerText = "Copy Team";
                     }, 2000);
                 },
                 toggleOpponentsCompact() {
@@ -983,8 +1136,49 @@ export default {
                 isOpponentsCompact() {
                     return this.$parent.opponentsCompact;
                 },
+                applyPlayerMonFilter(monCode, monName) {
+                    if (this.$parent.playerMonFilter.length >= 6) {
+                        return;
+                    }
+
+                    if (!this.$parent.playerMonFilter.filter(m => m.code == monCode).length) {
+                        this.$parent.playerMonFilter.push({
+                            code: monCode,
+                            name: monName,
+                        });
+                    }
+                },
+                removePlayerMonFilter(monCode) {
+                    this.$parent.playerMonFilter = this.$parent.playerMonFilter.filter(m => m.code != monCode);
+                },
+                oppTeamFiltered(team) {
+                    if (!team) {
+                        return 0;
+                    }
+                    let found = 0;
+                    for (const mon of team) {
+                        found += this.playerMonFilter.filter((m) => {
+                            let mCode = mon.altcode || mon.code;
+                            return m.code == mCode;
+                        }).length;
+                    }
+                    return found;
+                },
                 setNav(navData) {
                     return this.$parent.setNav(navData);
+                },
+                getNatureUp(nature) {
+                    return this.$parent.getNatureUp(nature);
+                },
+                getNatureDown(nature) {
+                    return this.$parent.getNatureDown(nature);
+                },
+                isActiveTeamsheetStyle(style) {
+                    return style == this.teamsheetStyle;
+                },
+                setTeamsheetStyle(style) {
+                    this.$parent.teamsheetStyle = style;
+                    localStorage.setItem('teamsheet-style', style);
                 },
             },
         },

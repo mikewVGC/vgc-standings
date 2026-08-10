@@ -13,14 +13,18 @@ cosmetic_forms = {
     "tatsugiristretchy": "tatsugiri",
 }
 
-# returns: dex #, primary typing, name
-def get_mon_data_from_code(mon_code:str) -> (int, str, str):
+# returns: dex #, primary typing, secondary typing, name
+def get_mon_data_from_code(mon_code:str) -> (int, str, str, str):
     if mon_code in pokedex:
-        return pokedex[mon_code]['num'], pokedex[mon_code]['types'][0], pokedex[mon_code]['name']
+        pdex = pokedex[mon_code]
+        stype = pdex['types'][1] if len(pdex['types']) > 1 else ''
+        return pdex['num'], pdex['types'][0], stype, pdex['name']
     
     if mon_code in cosmetic_forms:
         cosmetic_code = cosmetic_forms[mon_code]
-        return pokedex[cosmetic_code]['num'], pokedex[cosmetic_code]['types'][0], pokedex[cosmetic_code]['name']
+        pdex = pokedex[cosmetic_code]
+        stype = pdex['types'][1] if len(pdex['types']) > 1 else ''
+        return pdex['num'], pdex['types'][0], stype, pdex['name']
 
     return 0, '', ''
 

@@ -18,10 +18,16 @@ from lib.formes import (
     get_mon_data_from_code,
     get_mon_alt_from_code,
     get_icon_alt,
+    get_mon_name_from_code,
+)
+
+from lib.moves import (
+    get_move_info_from_name
 )
 
 from ops.format_models import (
     TeamMember,
+    Move,
     Round,
     Player,
 )
@@ -61,29 +67,37 @@ def process_pokedata_event(data:list, tour_format:list, official_order:list, eve
 
         for mon in player['decklist']:
             mon_name = fix_mon_name(mon['name'])
+            mon_alt_name = mon_name
             mon_code = make_mon_code(mon_name)
             mon_alt_code = get_icon_alt(mon_code, mon, event_info['rules']['mega'])
-            dex_num, ptype, _ = get_mon_data_from_code(mon_code)
+            dex_num, ptype, stype, _ = get_mon_data_from_code(mon_code)
 
             alt = get_mon_alt_from_code(mon_alt_code) if mon_alt_code else get_mon_alt_from_code(mon_code)
             if alt:
                 dex_num = alt
+                mon_alt_name = get_mon_name_from_code(mon_alt_code)
 
             mon_item = mon['item'] if len(mon['item']) else 'No Item'
+
+            moves = [ Move(name=m) for m in mon['badges'] if m ]
+            for move in moves:
+                _, _, _, move.type = get_move_info_from_name(move.name)
+                move.type = move.type.lower()
 
             team.append(TeamMember(
                 name=mon_name,
                 code=mon_code,
-                altname=mon_name,
+                altname=mon_alt_name,
                 altcode=mon_alt_code,
                 dex=dex_num,
                 ptype=ptype.lower(),
+                stype=stype.lower(),
                 tera=mon['teratype'] if 'teratype' in mon else "",
                 nature=fix_nature(mon['stat_alignment'] if 'stat_alignment' in mon else ""),
                 ability=mon['ability'],
                 item=mon_item,
                 itemcode=make_item_code(mon_item),
-                moves=[ m for m in mon['badges'] if m ],
+                moves=moves,
             ))
 
         rounds = []

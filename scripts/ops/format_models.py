@@ -11,12 +11,18 @@ class TeamMember():
     altcode: str
     dex: int
     ptype: str
+    stype: str
     tera: str
     ability: str
     nature: str = ''
     item: str = ''
     itemcode: str = ''
-    moves: list[str] | None = None
+    moves: list[Move] | None = None
+
+@dataclass
+class Move():
+    name: str
+    type: str = ''
 
 @dataclass
 class Round():
