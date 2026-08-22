@@ -63,6 +63,7 @@ def process_vr_event(data:list, tour_format:list, official_order:list, event_inf
         "Macedonia": "North Macedonia",
         "Palestinian Territory": "State of Palestine",
         "Czech Republic": "Czechia",
+        "Côte D'Ivoire": "Côte D`Ivoire"
     }
 
     country_data = {}
@@ -152,7 +153,7 @@ def process_vr_event(data:list, tour_format:list, official_order:list, event_inf
         players[player_code] = Player(
             name=player['name'],
             code=player_code,
-            country=country,
+            country=country.lower(),
             place=1,
             record={
                 'w': wins,
