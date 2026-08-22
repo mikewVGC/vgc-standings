@@ -31,12 +31,12 @@ class TestTournament(unittest.TestCase):
 
     def test_get_tournament_structure(self):
         cases = [
-            (2023, 1000, { "code": "regional-name" }, (9, 6, 3)),
-            (1999, 100, { "code": "regional-name" }, None),
+            (2023, 1000, { "code": "regional-name" }, (9, 6, 3), "regular"),
+            (1999, 100, { "code": "regional-name" }, None, "regular"),
         ]
 
         for case in cases:
-            self.assertEqual(get_tournament_structure(*case[:3]), case[3])
+            self.assertEqual(get_tournament_structure(*case[:4]), case[3])
 
 
     def test_get_points_threshold(self):

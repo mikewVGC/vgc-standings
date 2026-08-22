@@ -126,12 +126,20 @@ export default {
             this.season = season;
 
             this.nav.push({
-                text: `${this.season} Season`,
+                text: this.getSeasonName(this.season),
                 link: `/${this.season}`,
                 active: true,
             });
 
             this.getSeason();
+        },
+
+        getSeasonName(season) {
+            if (season == "grassroots") {
+                return "Grassroots Events";
+            }
+
+            return `${season} Season`;
         },
 
         getSeason() {
@@ -186,6 +194,19 @@ export default {
                 updateRegionFilter(e) {
                     this.$parent.eventRegionFilter = e.target.value;
                 },
+                getSeasonName(season) {
+                    if (season == "grassroots") {
+                        return "Select Grassroots Events";
+                    }
+
+                    return `${season} VGC Event Calendar`;
+                },
+            },
+            components: {
+                'season-event-title': {
+                    template: '#season-event-title-template',
+                    props: [ 'event', 'season' ],
+                }
             },
         },
     },

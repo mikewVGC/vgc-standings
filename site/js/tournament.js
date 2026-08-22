@@ -403,8 +403,8 @@ export default {
         },
 
         setNav(navData) {
-            if (this.season == 'limitless') {
-                navData.shift();
+            if (this.season == 'grassroots') {
+                //navData.shift();
             }
 
             this.nav = navData;
@@ -995,6 +995,14 @@ export default {
 
             return teamPaste;
         },
+
+        getSeasonName(season) {
+            if (season == "grassroots") {
+                return "Grassroots Events";
+            }
+
+            return `${season} Season`;
+        },
     },
     components: {
         'loading': {
@@ -1007,7 +1015,7 @@ export default {
                 document.title = `${this.eventInfo.name} Standings -- Reportworm Standings`;
 
                 this.setNav([{
-                    text: `${this.season} Season`,
+                    text: this.$parent.getSeasonName(this.season),
                     link: `/${this.season}`,
                     active: false,
                     pass: 1,
@@ -1091,7 +1099,7 @@ export default {
                     document.title = `${this.player.name} -- ${this.eventInfo.name} -- Reportworm Standings`;
 
                     this.setNav([{
-                        text: `${this.season} Season`,
+                        text: this.$parent.getSeasonName(this.season),
                         link: `/${this.season}`,
                         active: false,
                         pass: 1,
@@ -1221,7 +1229,7 @@ export default {
                     document.title = `${this.round.name} Pairings -- ${this.eventInfo.name} -- Reportworm Standings`;
 
                     this.setNav([{
-                        text: `${this.season} Season`,
+                        text: this.$parent.getSeasonName(this.season),
                         link: `/${this.season}`,
                         active: false,
                         pass: 1,
@@ -1302,7 +1310,7 @@ export default {
                 document.title = `Country Stats -- ${this.eventInfo.name} -- Reportworm Standings`;
 
                 this.setNav([{
-                    text: `${this.season} Season`,
+                    text: this.$parent.getSeasonName(this.season),
                     link: `/${this.season}`,
                     active: false,
                     pass: 1,
@@ -1335,7 +1343,7 @@ export default {
                 document.title = `${this.country} Players -- Country Stats -- ${this.eventInfo.name} -- Reportworm Standings`;
 
                 this.setNav([{
-                    text: `${this.season} Season`,
+                    text: this.$parent.getSeasonName(this.season),
                     link: `/${this.season}`,
                     active: false,
                     pass: 1,
@@ -1413,7 +1421,7 @@ export default {
                 document.title = `Usage Stats -- ${this.eventInfo.name} -- Reportworm Standings`;
 
                 this.setNav([{
-                    text: `${this.season} Season`,
+                    text: this.$parent.getSeasonName(this.season),
                     link: `/${this.season}`,
                     active: false,
                     pass: 1,
@@ -1472,7 +1480,7 @@ export default {
                 document.title = `${this.mon.name} -- Usage Stats -- ${this.eventInfo.name} -- Reportworm Standings`;
 
                 this.setNav([{
-                    text: `${this.season} Season`,
+                    text: this.$parent.getSeasonName(this.season),
                     link: `/${this.season}`,
                     active: false,
                     pass: 1,

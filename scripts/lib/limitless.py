@@ -8,7 +8,7 @@ figrue out the tour_structure for a limitless tour
 """
 def determine_tournament_structure(season:int, competitors:int, event_info:dict) -> tuple | None:
     details = {}
-    with open(f"data/majors/limitless/{event_info['code']}-details.json", encoding='utf8') as file:
+    with open(f"data/majors/grassroots/{event_info['code']}-details.json", encoding='utf8') as file:
         details = json.loads(file.read())
 
     swiss_rounds_p1 = 0
@@ -28,7 +28,7 @@ def determine_tournament_structure(season:int, competitors:int, event_info:dict)
             cut_type = phase['type']
 
     pairings = []
-    with open(f"data/majors/limitless/{event_info['code']}-pairings.json", encoding='utf8') as file:
+    with open(f"data/majors/grassroots/{event_info['code']}-pairings.json", encoding='utf8') as file:
         pairings = json.loads(file.read())
 
     cut_rounds = 0

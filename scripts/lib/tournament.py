@@ -4,7 +4,8 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 from dataclasses import asdict
 
-from lib.limitless import determine_tournament_structure
+from lib.limitless import determine_tournament_structure as limitless_determine_tournament_structure
+from lib.vr import determine_tournament_structure as vr_determine_tournament_structure
 
 from ops.format_models import Player
 
@@ -22,13 +23,21 @@ from lib.tourlib import(
     points2027,
 )
 
+from constants import (
+    DT_LIMITLESS,
+    DT_VICTORYROAD,
+)
+
 """
 returns (day 1 rounds, day 2 rounds, top cut min)
 I don't think anything actually uses the third value yet?
 """
-def get_tournament_structure(season:int, competitors:int, event_info:dict) -> tuple | None:
-    if season == "limitless":
-        return determine_tournament_structure(season, competitors, event_info)
+def get_tournament_structure(season:int, competitors:int, event_info:dict, data_type:str) -> tuple | None:
+    if season == "grassroots":
+        if data_type == DT_LIMITLESS:
+            return limitless_determine_tournament_structure(season, competitors, event_info)
+        elif data_type == DT_VICTORYROAD:
+            return vr_determine_tournament_structure(season, competitors, event_info)
 
     if season == 2023:
         return structure2023.get_tournament_structure(competitors, event_info)

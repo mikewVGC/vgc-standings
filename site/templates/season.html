@@ -17,9 +17,34 @@ __TEMPLATE_FOOTER__
     <p>It'll  be ready in just a moment...</p>
 </template>
 
+<template id="season-event-title-template">
+    <div
+        class="title"
+        :style="[
+            event.flag.length ? `background-image:url(/static/img/flags/${event.flag}.svg)` : '',
+            season == 'grassroots' ? `background-image:url(/static/img/${event.flag}.png)` : ''
+        ]"
+    >
+        <strong>{{ event.region }}</strong>
+        <div v-if="event.processed">
+            <a :href="`/${season}/${event.code}`">{{ event.name }}</a><br />
+        </div>
+        <b v-else>{{ event.name }}<br /></b>
+        <em>{{ event.country }}</em><br />
+        <em>{{ event.dates }}</em>
+    </div>
+    <div>
+        <strong>Format</strong>
+        {{ event.format }}<br />
+        <em>{{ event.game }}</em>
+    </div>
+</template>
+
 <template id="season-main-template">
 
-    <h2>{{ season }} VGC Event Calendar</h2>
+    <h2>{{ getSeasonName(season) }}</h2>
+
+    <p v-if="season == 'grassroots'" v-cloak>This is a curated list of grassroots events that are hopefully relevant to the current format.</p>
 
     <div id="season-search">
         <div>
@@ -37,7 +62,7 @@ __TEMPLATE_FOOTER__
             >&times;</div>
         </div>
 
-        <div id="event-type-select">
+        <div id="event-type-select" v-if="season != 'grassroots'">
             <label><strong>View:</strong></label>
             <select @change="updateEventsFilter" :value="eventTypeFilter">
                 <option value="all">All Events</option>
@@ -47,7 +72,7 @@ __TEMPLATE_FOOTER__
             </select>
         </div>
 
-        <div id="event-region-select">
+        <div id="event-region-select" v-if="season != 'grassroots'">
             <label><strong>Region:</strong></label>
             <select @change="updateRegionFilter" :value="eventRegionFilter">
                 <option value="all">All Regions</option>
@@ -68,20 +93,7 @@ __TEMPLATE_FOOTER__
         <p>In progress event data will periodically refresh, but may not always be up to date.</p>
 
         <a v-for="event in inProgressMajors" :href="`/${season}/${event.code}`" class="event-block full-block">
-            <div
-                class="title"
-                :style="`background-image:url(/static/img/flags/${event.flag}.svg)`"
-            >
-                <strong>{{ event.region }}</strong>
-                <div>{{ event.name }}</div>
-                <em>{{ event.country }}</em><br />
-                <em>{{ event.dates }}</em>
-            </div>
-            <div>
-                <strong>Format</strong>
-                {{ event.format }}<br />
-                <em>{{ event.game }}</em>
-            </div>
+            <season-event-title :event="event" :season="season"></season-event-title>
             <div></div>
             <div>
                 <strong>Players</strong>
@@ -96,20 +108,7 @@ __TEMPLATE_FOOTER__
         <h3>Completed Events</h3>
 
         <a v-for="event in majors" :href="`/${season}/${event.code}`" class="event-block full-block">
-            <div
-                class="title"
-                :style="`background-image:url(/static/img/flags/${event.flag}.svg)`"
-            >
-                <strong>{{ event.region }}</strong>
-                <div>{{ event.name }}</div>
-                <em>{{ event.country }}</em><br />
-                <em>{{ event.dates }}</em>
-            </div>
-            <div>
-                <strong>Format</strong>
-                {{ event.format }}<br />
-                <em>{{ event.game }}</em>
-            </div>
+            <season-event-title :event="event" :season="season"></season-event-title>
             <div>
                 <strong>Winner</strong>
                 {{ event.winner }}
@@ -127,23 +126,7 @@ __TEMPLATE_FOOTER__
         <h3>Upcoming Events</h3>
 
         <div v-for="event in futureMajors" class="event-block full-block">
-            <div
-                class="title"
-                :style="`background-image:url(/static/img/flags/${event.flag}.svg)`"
-            >
-                <strong>{{ event.region }}</strong>
-                <div v-if="event.processed">
-                    <a :href="`/${season}/${event.code}`">{{ event.name }}</a><br />
-                </div>
-                <b v-else>{{ event.name }}<br /></b>
-                <em>{{ event.country }}</em><br />
-                <em>{{ event.dates }}</em>
-            </div>
-            <div>
-                <strong>Format</strong>
-                {{ event.format }}<br />
-                <em>{{ event.game }}</em>
-            </div>
+            <season-event-title :event="event" :season="season"></season-event-title>
             <div></div>
             <div></div>
         </div>

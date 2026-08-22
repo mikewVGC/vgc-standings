@@ -52,7 +52,7 @@ header#header h1 {
 }
 
 .tabgroup div#home-button {
-    background-image: url(/static/img/home-white.png);
+    background-image: url(/static/img/home-white.png?1);
     background-size: auto 22px;
     background-repeat: no-repeat;
     background-position: .5em center;
@@ -228,7 +228,9 @@ footer p {
     grid-template-columns: 40% 20% 30% 10%;
 }
 
-.event-block.full-block.past-season-block div.title {
+.event-block.full-block.past-season-block div.title,
+.event-block.full-block.grassroots-block div.title
+{
     padding-left: 0;
 }
 
@@ -238,7 +240,8 @@ footer p {
     padding-left: 45px;
 }
 
-.past-season-block .world-champ strong {
+.event-block.full-block.grassroots-block {
+    display: block;
 }
 
 #season-search {
@@ -278,7 +281,7 @@ footer p {
 
 .season-events-container .event-block.full-block div.title {
     background-size: 50px 50px;
-    padding-left: 56px;
+    padding-left: 62px;
     min-height: 50px;
 }
 
@@ -1757,7 +1760,7 @@ ul#pairing-round-select li a {
     }
 
     .tabgroup div#home-button {
-        background-image: url(/static/img/home-black.png);
+        background-image: url(/static/img/home-black.png?3);
     }
 
     .event-block {

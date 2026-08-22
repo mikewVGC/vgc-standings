@@ -23,7 +23,7 @@ def main():
     parser.add_argument('--mode', help="Build dev/prod/local version (dev default)")
     parser.add_argument('--build-only', action="store_true", help="Don't process any events, only rebuild pages")
     parser.add_argument('--process', help="Only process specified regional(s). Format: year1:name1,year2:name2")
-    parser.add_argument('--limitless', action="store_true", help="Process Limitless events instead of official ones")
+    parser.add_argument('--grassroots', action="store_true", help="Process grassroots events as well")
 
     cl = parser.parse_args()
 
@@ -46,8 +46,6 @@ def main():
         config.mode = cl.mode
 
     manifest_file = "data/majors/manifest.json"
-    if cl.limitless:
-        manifest_file = "data/majors/manifest-limitless.json"
 
     manifest = {}
     try:
@@ -61,12 +59,7 @@ def main():
     builder_cache = BuilderCache("data/builder", config.mode == 'prod')
 
     if not cl.build_only:
-        process_data(manifest, allowlist, builder_cache, config, cl.limitless)
-
-    if cl.limitless:
-        build_site(config, builder_cache)
-        print("Finished!")
-        return
+        process_data(manifest, allowlist, builder_cache, config, cl.grassroots)
 
     build_site(config, builder_cache)
 
@@ -78,7 +71,7 @@ def process_data(
     allowlist:list,
     builder_cache:BuilderCache,
     config:Config,
-    limitless:bool = False
+    grassroots:bool = False
 ):
     past_seasons = {}
     future_seasons = {}
@@ -98,8 +91,13 @@ def process_data(
 
     rulesets = load_rulesets()
 
+    process_seasons = manifest['seasons'][:]
+
+    if grassroots:
+        process_seasons = process_seasons + manifest['grassroots']
+
     current_majors = {}
-    for year in manifest['seasons']:
+    for year in process_seasons:
         majors = {}
         with open(f"data/majors/{year}.json", encoding='utf8') as file:
             data = json.loads(file.read())
@@ -129,13 +127,13 @@ def process_data(
                 majors[event_code].update(proc_event_info)
             else:
                 print(f"[{year}] Processing data for '{event_code}'... ", end="")
-                majors[event_code] = process_regional(
+                majors[event_code], data_type = process_regional(
                     year,
                     event_code,
                     event_info,
                     rulesets.get_ruleset(event_info['format']),
                     config.mode == 'prod',
-                    limitless
+                    grassroots
                 )
 
             if year in past_seasons:
@@ -149,7 +147,7 @@ def process_data(
 
             if event_should_be_processed and majors[event_code]['processed']:
                 print("building usage... ", end="")
-                compile_usage(year, event_code, config.mode == 'prod', limitless)
+                compile_usage(year, event_code, config.mode == 'prod', data_type)
 
             builder_cache.add_meta_ssi(
                 f"{year}/{event_code}",
@@ -168,10 +166,6 @@ def process_data(
             f"{year} Season -- Reportworm Standings",
             f"Reportworm Standings showcases standings and teamsheets for the {year} VGC Season.",
         )
-
-    if limitless:
-        builder_cache.save()
-        return
 
     # home (/) requires some bootstrap data
     past_seasons = list(past_seasons.values())

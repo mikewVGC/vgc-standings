@@ -17,16 +17,18 @@ cosmetic_forms = {
 def get_mon_data_from_code(mon_code:str) -> (int, str, str, str):
     if mon_code in pokedex:
         pdex = pokedex[mon_code]
-        stype = pdex['types'][1] if len(pdex['types']) > 1 else ''
-        return pdex['num'], pdex['types'][0], stype, pdex['name']
+        if 'types' in pdex:
+            stype = pdex['types'][1] if len(pdex['types']) > 1 else ''
+            return pdex['num'], pdex['types'][0], stype, pdex['name']
     
     if mon_code in cosmetic_forms:
         cosmetic_code = cosmetic_forms[mon_code]
         pdex = pokedex[cosmetic_code]
-        stype = pdex['types'][1] if len(pdex['types']) > 1 else ''
-        return pdex['num'], pdex['types'][0], stype, pdex['name']
+        if 'types' in pdex:
+            stype = pdex['types'][1] if len(pdex['types']) > 1 else ''
+            return pdex['num'], pdex['types'][0], stype, pdex['name']
 
-    return 0, '', ''
+    return 0, '', '', ''
 
 # same idea, but just returns the name
 def get_mon_name_from_code(mon_code:str) -> str:

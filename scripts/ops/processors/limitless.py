@@ -20,10 +20,15 @@ from lib.formes import (
     get_mon_base_form_from_code,
 )
 
+from lib.moves import (
+    get_move_info_from_name
+)
+
 from ops.format_models import (
     TeamMember,
     Round,
     Player,
+    Move,
 )
 
 """
@@ -35,7 +40,7 @@ def process_limitless_event(data:list, tour_format:list, official_order:list, ev
     players_in_cut_round = {}
 
     details = {}
-    with open(f"data/majors/limitless/{event_info['code']}-details.json", encoding='utf8') as file:
+    with open(f"data/majors/grassroots/{event_info['code']}-details.json", encoding='utf8') as file:
         details = json.loads(file.read())
 
     # limitless allows numerical names for players, which messes up the front-end... don't ask
@@ -87,7 +92,7 @@ def process_limitless_event(data:list, tour_format:list, official_order:list, ev
                 mon_code = "aegislash"
                 mon_name = "Aegislash"
 
-            dex_num, ptype, _ = get_mon_data_from_code(mon_code)
+            dex_num, ptype, stype, _ = get_mon_data_from_code(mon_code)
 
             tera_type = "" if 'tera' not in mon else mon['tera']
             if not event_info['rules']['tera']:
@@ -110,6 +115,11 @@ def process_limitless_event(data:list, tour_format:list, official_order:list, ev
             if alt:
                 dex_num = alt
 
+            moves = [ Move(name=m) for m in mon['attacks'] if m ]
+            for move in moves:
+                _, _, _, move.type = get_move_info_from_name(move.name)
+                move.type = move.type.lower()
+
             team.append(TeamMember(
                 name=mon_name,
                 code=mon_code,
@@ -117,12 +127,13 @@ def process_limitless_event(data:list, tour_format:list, official_order:list, ev
                 altcode=mon_alt_code,
                 dex=dex_num,
                 ptype=ptype.lower(),
+                stype=stype.lower(),
                 tera=str(tera_type),
                 nature=str(nature),
                 ability=mon['ability'],
                 item=mon['item'],
                 itemcode=make_item_code(mon['item']),
-                moves=mon['attacks'],
+                moves=moves,
             ))
 
         place = player['placing']
@@ -176,7 +187,7 @@ def process_limitless_event(data:list, tour_format:list, official_order:list, ev
 
 def get_grouped_pairings(code:str, tour_format:list, details:dict, number_players:dict) -> dict:
     pairings = []
-    with open(f"data/majors/limitless/{code}-pairings.json", encoding='utf8') as file:
+    with open(f"data/majors/grassroots/{code}-pairings.json", encoding='utf8') as file:
         pairings = json.loads(file.read())
 
     pairings_by_player = {}

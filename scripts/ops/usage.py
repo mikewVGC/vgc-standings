@@ -16,7 +16,7 @@ from lib.formes import (
 from lib.util import make_item_code
 
 
-def compile_usage(year:int, event_code:str, prod:bool, limitless:bool = False) -> None:
+def compile_usage(year:int, event_code:str, prod:bool, data_type:str) -> None:
     data = {}
     try:
         with open(f"public/data/{year}/{event_code}.json", 'r') as file:
@@ -30,7 +30,7 @@ def compile_usage(year:int, event_code:str, prod:bool, limitless:bool = False) -
 
     num_players = len(standings.keys())
 
-    tour_format = get_tournament_structure(year, num_players, data['event'])
+    tour_format = get_tournament_structure(year, num_players, data['event'], data_type)
 
     mon_stats = {}
     # item_stats = {}

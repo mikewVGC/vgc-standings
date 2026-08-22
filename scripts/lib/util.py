@@ -219,6 +219,8 @@ def make_nice_date_str(start:str, end:str, separator:str = '-', use_full_months:
     nice_str = f"{start_month} {start_day}{insert_start_year} {separator} {end_day}"
     if start_month != end_month:
         nice_str = f"{start_month} {start_day}{insert_start_year} {separator} {end_month} {end_day}"
+    elif start_day == end_day:
+        nice_str = f"{start_month} {start_day}{insert_start_year}"
 
     return f"{nice_str}, {end_year}"
 
