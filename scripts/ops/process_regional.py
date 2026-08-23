@@ -213,7 +213,7 @@ def process_regional(
 
     if event_info['status'] == 'complete' and not event_info['code'].startswith('worlds'):
         # one more loop for points!
-        if not grassroots:
+        if year != 'grassroots':
             for player in players_ordered.values():
                 player.points = get_points_earned(year, len(players_ordered), player.place, event_is_ic)
 
