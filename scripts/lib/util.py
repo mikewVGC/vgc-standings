@@ -31,6 +31,20 @@ def make_code(name:str) -> str:
 
 
 """
+makes a "unique" player code (appends a number)
+"""
+def make_unique_player_code(player_code:str, players:dict) -> str:
+    if player_code in players:
+        num = 1
+        adjusted_pcode = player_code
+        while adjusted_pcode in players:
+            adjusted_pcode = f"{player_code}-{num}"
+            num += 1
+        player_code = adjusted_pcode
+
+    return player_code
+
+"""
 make a lookup code from a mon name
 """
 def make_mon_code(name:str) -> str:

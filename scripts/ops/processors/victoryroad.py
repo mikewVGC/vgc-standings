@@ -11,6 +11,7 @@ from lib.util import (
     make_code,
     make_mon_code,
     make_item_code,
+    make_unique_player_code,
 )
 
 from lib.formes import (
@@ -63,7 +64,7 @@ def process_vr_event(data:list, tour_format:list, official_order:list, event_inf
         "Macedonia": "North Macedonia",
         "Palestinian Territory": "State of Palestine",
         "Czech Republic": "Czechia",
-        "Côte D'Ivoire": "Côte D`Ivoire"
+        "Côte D'Ivoire": "Côte D`Ivoire",
     }
 
     country_data = {}
@@ -72,10 +73,17 @@ def process_vr_event(data:list, tour_format:list, official_order:list, event_inf
         country_data = { value: key for key, value in country_data.items() }
         country_data = { key.lower(): value for key, value in country_data.items() }
 
+    dupe_player_map = {}
+
     for player in data:
         player_code = make_code(player['name'])
         if player_code.isdigit():
             player_code = f"{player_code}_"
+
+        alt_player_code = make_unique_player_code(player_code, players)
+        if alt_player_code != player_code:
+            dupe_player_map[alt_player_code] = player_code
+            player_code = alt_player_code
 
         player_pairings = []
         if player['id'] in pairings_by_player:
@@ -176,6 +184,18 @@ def process_vr_event(data:list, tour_format:list, official_order:list, event_inf
         if player_made_phase_two(players[player_code], tour_format):
             phase_two_count += 1
             players[player_code].p2 = True
+
+    # for dupe-coded players who had their code changes (player-name -> player-name-1)
+    # we need to fix their code on all their opponent's opponents list
+    for new_code, old_code in dupe_player_map.items():
+        for pl_round in players[new_code].rounds:
+            opp_code = pl_round.opp
+            opp_rnum = pl_round.round
+
+            for opp in players[opp_code].rounds:
+                if opp.round == opp_rnum:
+                    opp.opp = new_code
+                    break
 
     # this part is just used to set the players_in_cut_round var
     for p_code, rounds in pairings_by_player.items():

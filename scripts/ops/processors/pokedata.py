@@ -12,6 +12,7 @@ from lib.util import (
     fix_nature,
     make_mon_code,
     make_item_code,
+    make_unique_player_code,
 )
 
 from lib.formes import (
@@ -140,14 +141,10 @@ def process_pokedata_event(data:list, tour_format:list, official_order:list, eve
             print('uh oh', player, pdata)
 
         player_code = make_code(pdata[0][0].strip())
-        if player_code in players:
-            num = 1
-            adjusted_pcode = player_code
-            while adjusted_pcode in players:
-                adjusted_pcode = f"{player_code}-{num}"
-                num += 1
-            dupes.append(adjusted_pcode)
-            player_code = adjusted_pcode
+        adjusted_player_code = make_unique_player_code(player_code, players)
+        if adjusted_player_code != player_code:
+            dupes.append(adjusted_player_code)
+            player_code = adjusted_player_code
 
         player_country = pdata[0][1] if len(pdata[0]) > 1 else ""
         if len(player_country) > 1:
