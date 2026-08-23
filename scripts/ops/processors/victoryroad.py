@@ -192,6 +192,10 @@ def process_vr_event(data:list, tour_format:list, official_order:list, event_inf
             opp_code = pl_round.opp
             opp_rnum = pl_round.round
 
+            if not len(opp_code) or opp_code not in players:
+                # probably a bye, we can skip
+                continue
+
             for opp in players[opp_code].rounds:
                 if opp.round == opp_rnum:
                     opp.opp = new_code
