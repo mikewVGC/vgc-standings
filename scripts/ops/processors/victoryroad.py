@@ -25,6 +25,11 @@ from lib.moves import (
     get_move_info_from_name
 )
 
+from lib.mon import (
+    create_team_member_from_mon,
+    MonDictMap,
+)
+
 from ops.format_models import (
     TeamMember,
     Round,
@@ -73,6 +78,8 @@ def process_vr_event(data:list, tour_format:list, official_order:list, event_inf
         country_data = { value: key for key, value in country_data.items() }
         country_data = { key.lower(): value for key, value in country_data.items() }
 
+    mon_map = MonDictMap(name="species")
+
     dupe_player_map = {}
 
     for player in data:
@@ -105,48 +112,7 @@ def process_vr_event(data:list, tour_format:list, official_order:list, event_inf
 
         team = []
         for mon in player['team']:
-
-            mon_code = make_mon_code(mon['species'])
-
-            dex_num, ptype, stype, _ = get_mon_data_from_code(mon_code)
-
-            mon_alt_code = get_icon_alt(mon_code, mon, event_info['rules']['mega'])
-
-            mon_alt_name = ""
-            if mon_alt_code:
-                mon_alt_name = get_mon_name_from_code(mon_alt_code)
-
-            nature = "" if 'nature' not in mon else mon['nature']
-
-            alt = ""
-            if mon_alt_code:
-                alt = get_mon_alt_from_code(mon_alt_code)
-            else:
-                alt = get_mon_alt_from_code(mon_code)
-
-            if alt:
-                dex_num = alt
-
-            moves = [ Move(name=m) for m in mon['moves'] if m ]
-            for move in moves:
-                _, _, _, move.type = get_move_info_from_name(move.name)
-                move.type = move.type.lower()
-
-            team.append(TeamMember(
-                name=mon['species'],
-                code=mon_code,
-                altname=mon_alt_name,
-                altcode=mon_alt_code,
-                dex=dex_num,
-                ptype=ptype.lower(),
-                stype=stype.lower(),
-                tera="",
-                nature=str(nature),
-                ability=mon['ability'] if 'ability' in mon else '',
-                item=mon['item'],
-                itemcode=make_item_code(mon['item']),
-                moves=moves,
-            ))
+            team.append(create_team_member_from_mon(mon, mon_map, event_info))
 
         # simple replace
         if player['country'] in country_map:

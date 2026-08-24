@@ -18,6 +18,11 @@ from lib.formes import (
     get_icon_alt,
 )
 
+from lib.mon import (
+    create_team_member_from_mon,
+    MonDictMap,
+)
+
 from lib.moves import (
     get_move_info_from_name
 )
@@ -46,6 +51,8 @@ def process_playlatamscraper_event(
 
     dupe_names = {}
     dupes = []
+
+    mon_map = MonDictMap(name="species")
 
     for player in data:
         team = []
@@ -77,39 +84,13 @@ def process_playlatamscraper_event(
             if mon['species'].startswith('Vivillon'):
                 mon['species'] = 'Vivillon'
 
-            mon_name = fix_mon_name(mon['species'])
-            mon_code = make_mon_code(mon_name)
-            dex_num, ptype, stype, _ = get_mon_data_from_code(mon_code)
-
-            alt = get_mon_alt_from_code(mon_code)
-            if alt:
-                dex_num = alt
-
             # for consistency
             if mon['species'] == 'Zamazenta' or mon['species'] == 'Zacian':
                 for i, move in enumerate(mon['moves']):
                     if move == "Behemoth Bash" or move == "Behemoth Blade":
                         mon['moves'][i] = "Iron Head"
 
-            moves = [ Move(name=m) for m in mon['moves'] if m ]
-            for move in moves:
-                _, _, _, move.type = get_move_info_from_name(move.name)
-                move.type = move.type.lower()
-
-            team.append(TeamMember(
-                name=mon_name,
-                code=mon_code,
-                altname=mon_name,
-                altcode=get_icon_alt(mon_code, mon, event_info['rules']['mega']),
-                dex=dex_num,
-                ptype=ptype.lower(),
-                stype=stype.lower(),
-                tera=mon['tera'],
-                ability=mon['ability'],
-                item=mon['item'],
-                itemcode=make_item_code(mon['item']),
-                moves=moves,
-            ))
+            team.append(create_team_member_from_mon(mon, mon_map, event_info))
 
         player_code = make_code(player['name'])
         op_code = player_code

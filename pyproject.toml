@@ -3,6 +3,7 @@ name = "vgc-standings"
 version = "0.0.0"
 requires-python = ">=3.10"
 dependencies = [
+    "paste-parser",
     "reportworm-builder",
 ]
 
@@ -13,3 +14,4 @@ dev = [
 
 [tool.uv.sources]
 reportworm-builder = { git = "https://github.com/mikewVGC/reportworm-builder.git" }
+paste-parser = { git = "https://github.com/mikewVGC/paste-parser.git" }

@@ -5,6 +5,9 @@ import re
 
 from urllib import request
 from urllib.error import URLError, HTTPError
+from dataclasses import asdict
+
+from paste_parser.paste_parser import PasteParser
 
 from lib.util import make_code, make_mon_code, make_item_code
 
@@ -16,7 +19,15 @@ from lib.formes import (
 
 from lib.moves import get_move_info_from_name
 
-from ops.format_models import TeamMember, Move
+from lib.mon import (
+    create_team_member_from_mon,
+    MonDictMap,
+)
+
+from ops.format_models import (
+    TeamMember,
+    Move,
+)
 
 
 def process_vgcpastes_teamlist(players:dict, event_info:dict, year:int, code:str) -> bool:
@@ -37,12 +48,14 @@ def process_vgcpastes_teamlist(players:dict, event_info:dict, year:int, code:str
     except FileNotFoundError:
         return False
 
+    mon_map = MonDictMap(name="species")
+
     for player, paste in player_pastes.items():
         if len(paste) == 0:
             continue
-        paste = fetch_paste(paste).splitlines()
+        paste = fetch_paste(paste)
         if len(paste):
-            players[player].team = parse_paste(paste, event_info)
+            players[player].team = parse_paste(paste, event_info, mon_map)
 
     return True
 
@@ -71,87 +84,17 @@ def fetch_paste(url:str) -> str:
     return data
 
 
-def parse_paste(paste:str, event_info:dict) -> list:
+def parse_paste(paste:str, event_info:dict, mon_map:MonDictMap) -> list:
+    parser = PasteParser()
+
+    parsed_mons = parser.parse(paste)
+
     mons = []
 
-    paste.append("\n")
-
-    # slightly awkward regexes from the pokepaste source
-    main_reg = r"^(?:(.* \()([A-Z][a-z0-9:']+\.?(?:[- ][A-Za-z][a-z0-9:']*\.?)*)(\))|([A-Z][a-z0-9:']+\.?(?:[- ][A-Za-z][a-z0-9:']*\.?)*))(?:( \()([MF])(\)))?(?:( @ )([A-Z][a-z0-9:']*(?:[- ][A-Z][a-z0-9:']*)*))?( *)$"
-    move_reg = r"^(-)( ([A-Z][a-z\']*(?:[- ][A-Za-z][a-z\']*)*)(?: \[([A-Z][a-z]+)\])?(?: / [A-Z][a-z\']*(?:[- ][A-Za-z][a-z\']*)*)* *)$"
-    # stat_reg = r"^(\d+ HP)?( / )?(\d+ Atk)?( / )?(\d+ Def)?( / )?(\d+ SpA)?( / )?(\d+ SpD)?( / )?(\d+ Spe)?( *)$"
-
-    mon = { 'item': '' }
-    moves = []
-    for line in paste:
-        line = line.strip()
-
-        # As One is messing with the nickname part of the regex and I dont' feel like fixing it
-        if line.startswith("Ability: As One"):
-            line = "Ability: As One  "
-
-        if len(line) == 0:
-            if 'species' not in mon:
-                continue
-
-            mon_code = make_mon_code(mon['species'])
-            dex_num, ptype, stype, _ = get_mon_data_from_code(mon_code)
-
-            alt = get_mon_alt_from_code(mon_code)
-            if alt:
-                dex_num = alt
-
-            moves = [ Move(name=m) for m in moves if m ]
-            for move in moves:
-                _, _, _, move.type = get_move_info_from_name(move.name)
-                move.type = move.type.lower()
-
-            mons.append(TeamMember(
-                name=mon['species'],
-                altname=mon['species'],
-                code=mon_code,
-                altcode=get_icon_alt(mon_code, mon, event_info['rules']['mega']),
-                dex=dex_num,
-                ptype=ptype.lower(),
-                stype=stype.lower(),
-                tera=mon['tera'] if 'tera' in mon else '',
-                nature=mon['nature'] if 'nature' in mon else '',
-                ability=mon['ability'],
-                item=mon['item'],
-                itemcode=make_item_code(mon['item']),
-                moves=moves,
-            ))
-            mon = {
-                'item': ''
-            }
-            moves = []
-            continue
-
-        matches = re.findall(main_reg, line)
-        if len(matches):
-            if len(matches[0][1]): # species is here if there's a nickname
-                mon['species'] = matches[0][1]
-            if len(matches[0][8]):
-                mon['item'] = matches[0][8]
-            if len(matches[0][3]):
-                if matches[0][3].startswith("Ability: "):
-                    _, mon['ability'] = matches[0][3].split(': ')
-                elif matches[0][3].startswith("Tera Type: "):
-                    _, mon['tera'] = matches[0][3].split(': ')
-                elif matches[0][3].startswith("Shiny: "):
-                    ...
-                elif matches[0][3].endswith(" Nature"):
-                    mon['nature'], _ = matches[0][3].split(' Nature')
-                else:
-                    mon['species'] = matches[0][3] # if there's no nickname species is here!
-        
-        matches = re.findall(move_reg, line)
-        if len(matches):
-            if len(matches[0][2]):
-                moves.append(matches[0][2])
-
-        # stats aren't in these pastes, but maybe some day?
-        # matches = re.findall(stat_reg, line)
+    for mon in parsed_mons:
+        mons.append(
+            create_team_member_from_mon(asdict(mon), mon_map, event_info)
+        )
 
     return mons
 

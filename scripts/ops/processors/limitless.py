@@ -64,8 +64,11 @@ def process_limitless_event(data:list, tour_format:list, official_order:list, ev
 
         for mon in player['decklist']:
             # limitless data requires a lot of normalization because it accepts both
-            # the base form and mega form for teamsheets... I don't think other
-            # data sources will do this, so this section will likely be less convoluted
+            # the base form and mega form for teamsheets, and there are often typoes
+            # in other fields (especially moves).
+
+            # other data sources can use create_team_member_from_mon but since limitless
+            # is so wild west I'm not implementing it here
 
             mon_code = make_mon_code(mon['id'])
 
