@@ -141,7 +141,7 @@ def process_data(
             if year in future_seasons:
                 future_seasons[year]['events'] += 1
 
-            if event_code == "worlds" and 'winner' in majors[event_code]:
+            if event_code == "worlds" and 'winner' in majors[event_code] and year in past_seasons:
                 past_seasons[year]['champ'] = majors[event_code]['winner']
                 past_seasons[year]['champ_flag'] = majors[event_code]['winner_flag']
 
