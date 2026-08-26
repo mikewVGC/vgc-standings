@@ -159,7 +159,12 @@ export default {
 
                 this.inProgressMajors.reverse();
 
-                document.title = `VGC Events for the ${this.season} Season -- Reportworm Standings`;
+                let seasonTitle = `Events for the ${this.season} Season`;
+                if (this.season == 'grassroots') {
+                    seasonTitle = 'Grassroots Events'
+                }
+
+                document.title = `VGC ${seasonTitle} -- Reportworm Standings`;
             });
         },
     },
