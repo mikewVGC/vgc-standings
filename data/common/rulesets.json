@@ -51,5 +51,17 @@
         "game": "Champions",
         "mega": true,
         "natures": true
+    },
+    {
+        "name": "Regulation M-B",
+        "game": "Champions",
+        "mega": true,
+        "natures": true
+    },
+    {
+        "name": "Regulation M-C",
+        "game": "Champions",
+        "mega": true,
+        "natures": true
     }
 ]
