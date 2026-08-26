@@ -118,6 +118,10 @@ def process_data(
 
         print(f"Building {year}")
 
+        season_title = f"{year} Season"
+        if year == "grassroots":
+            season_title = "Grassroots Events"
+
         for event_code, event_info in majors.items():
             event_should_be_processed = len(allowlist) == 0 or f"{year}-{event_code}" in allowlist or f"{year}-*" in allowlist
 
@@ -151,7 +155,7 @@ def process_data(
 
             builder_cache.add_meta_ssi(
                 f"{year}/{event_code}",
-                f"{event_info['name']} Standings -- {year} Season -- Reportworm Standings",
+                f"{event_info['name']} Standings -- {season_title} -- Reportworm Standings",
                 f"Reportworm Standings showcases standings and teamsheets for the {year} {event_info['name']}.",
             )
 
@@ -163,7 +167,7 @@ def process_data(
 
         builder_cache.add_meta_ssi(
             f"{year}",
-            f"{year} Season -- Reportworm Standings",
+            f"{season_title} -- Reportworm Standings",
             f"Reportworm Standings showcases standings and teamsheets for the {year} VGC Season.",
         )
 
