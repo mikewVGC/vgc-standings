@@ -470,7 +470,7 @@ table#favorites {
 }
 
 .team-container {
-    width: 220px;
+    width: 240px;
 }
 
 .team-container a {
@@ -485,6 +485,10 @@ table#favorites {
     overflow: hidden;
     text-indent: -9999em;
     image-rendering: pixelated;
+}
+
+.monicon {
+    width: 40px;
 }
 
 .monicon-filter {
@@ -1230,7 +1234,7 @@ ul#pairing-round-select li a {
 /* this is like 800px display? ... works for sideways phones */
 @media (max-width: 55.5em) {
     .team-container {
-        width: 110px;
+        width: 120px;
     }
 }
 
@@ -1363,7 +1367,7 @@ ul#pairing-round-select li a {
     }
 
     .team-container {
-        width: 220px;
+        width: 240px;
     }
 
     table.main-standings thead {
