@@ -166,8 +166,8 @@ def fix_nature(nature:str) -> str:
 makes the "________ the XXXX season!" string on the homa page
 """
 def make_season_info_str(majors:dict) -> str:
-    complete = len(list(filter(lambda major: major['processed'], list(majors.values()))))
-    upcoming = len(list(filter(lambda major: not major['processed'], list(majors.values()))))
+    complete = len(list(filter(lambda major: major['status'] == 'complete', list(majors.values()))))
+    upcoming = len(list(filter(lambda major: major['status'] != 'complete', list(majors.values()))))
 
     if complete == 0:
         return "We're getting ready for the first events of"
