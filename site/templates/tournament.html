@@ -155,15 +155,17 @@ __TEMPLATE_FOOTER__
         <td>{{ showDrop && player.drop != -1 ? player.drop : '&nbsp;' }}</td>
         <td>{{ player.cut && !alwaysShowRes ? '&nbsp;' : getPct(player.res.opp, 5) }}</td>
         <td>{{ player.cut && !alwaysShowRes ? '&nbsp;' : getPct(player.res.oppopp, 5) }}</td>
-        <td class="team-container">
-            <a :href="`/${season}/${eventInfo.code}/player/${player.code}`">
-                <div
-                    v-for="mon in player[teamKey ? teamKey : 'team']"
-                    class="monicon"
-                    :style="{ backgroundPosition: getSpritePos(mon.altcode || mon.code) }"
-                    :title="mon.name"
-                >{{ mon.name }}</div>
-            </a>
+        <td>
+            <div class="team-container">
+                <a :href="`/${season}/${eventInfo.code}/player/${player.code}`">
+                    <div
+                        v-for="mon in player[teamKey ? teamKey : 'team']"
+                        class="monicon"
+                        :style="{ backgroundPosition: getSpritePos(mon.altcode || mon.code) }"
+                        :title="mon.name"
+                    >{{ mon.name }}</div>
+                </a>
+            </div>
         </td>
     </tr>
 </template>
@@ -377,17 +379,19 @@ __TEMPLATE_FOOTER__
                     {{ !opp.cut ? getPct(opponents[opp.opp].res.opp) : "" }}
                     </template>
                 </td>
-                <td class="team-container">
-                    <div v-if="opponents[opp.opp].team">
-                        <div
-                            v-for="mon in opponents[opp.opp].team"
-                            class="monicon monicon-filter"
-                            @click="applyPlayerMonFilter(mon.altcode || mon.code, mon.altname || mon.name)"
-                            :style="{ backgroundPosition: getSpritePos(mon.altcode || mon.code) }"
-                            :title="mon.altname || mon.name"
-                        >{{ mon.name }}</div>
+                <td>
+                    <div class="team-container">
+                        <div v-if="opponents[opp.opp].team">
+                            <div
+                                v-for="mon in opponents[opp.opp].team"
+                                class="monicon monicon-filter"
+                                @click="applyPlayerMonFilter(mon.altcode || mon.code, mon.altname || mon.name)"
+                                :style="{ backgroundPosition: getSpritePos(mon.altcode || mon.code) }"
+                                :title="mon.altname || mon.name"
+                            >{{ mon.name }}</div>
+                        </div>
+                        <div v-else class="monicon monicon-ph"></div>
                     </div>
-                    <div v-else class="monicon monicon-ph"></div>
                 </td>
             </tr>
         </template>
