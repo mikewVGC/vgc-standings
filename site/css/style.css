@@ -1456,7 +1456,6 @@ ul#pairing-round-select li a {
     table.main-standings td:nth-child(11)
     {
         width: 15%;
-        height: 52px;
     }
 
     table.main-standings td:nth-child(9)::before {
