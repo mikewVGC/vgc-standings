@@ -1070,8 +1070,9 @@ ul#rk9-links li {
 }
 
 #item-info td:nth-child(2), #tera-info td:nth-child(2), #teammate-info td:nth-child(2) {
-    width: 24px;
     overflow: hidden;
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .config-container td:nth-child(4) {
