@@ -93,6 +93,9 @@ def process_pokedata_event(data:list, tour_format:list, official_order:list, eve
 
             opp_code = make_code(opp_name)
 
+            if opp_code == "none" and opp['result'] == "W":
+                opp_code = "bye"
+
             phase = 1
             if int(rnd) > tour_format[0] + tour_format[1]:
                 phase = 3 # top cut
