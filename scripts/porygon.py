@@ -162,7 +162,7 @@ def process_data(
             print("Done!")
 
         print(f"[{year}] Processing season data... ", end="")
-        process_season(year, majors)
+        process_season(year, majors, config.mode == "prod")
         print("Done!")
 
         builder_cache.add_meta_ssi(

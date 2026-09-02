@@ -10,7 +10,7 @@ __TEMPLATE_HEADER__
 
     <p>Welcome to <em>Reportworm Standings</em>, where you can find full standings and teamsheets for VGC majors such as regionals and international championships.</p>
 
-    <p v-cloak>{{ seasonStatus }} the <strong><a :href="`/${currentSeason}`">{{ currentSeason }} VGC Season</a></strong>. The season runs from {{ seasonDates }}. The <strong>{{ currentSeason }} World Championships</strong> will be played <em>{{ worldsDate }}</em>.</p>
+    <p v-cloak>{{ seasonStatus }} the <strong><a :href="`/${currentSeason}`">{{ currentSeason }} VGC Season</a></strong>. The season {{ strRuns }} from {{ seasonDates }}. The <strong>{{ currentSeason }} World Championships</strong> {{ strWill }} played <em>{{ worldsDate }}</em>.</p>
 
     <div id="current-season" v-cloak>
 

@@ -262,7 +262,7 @@ def get_data_and_type(year:int, code:str):
 """
 build the season json... this mostly just copies the corresponding <year>.json
 """
-def process_season(year:int, season_data:dict) -> None:
+def process_season(year:int, season_data:dict, prod:bool) -> None:
     for code, event_data in season_data.items():
         event_data["dates"] = make_nice_date_str(event_data['start'], event_data['end'])
 
@@ -270,8 +270,14 @@ def process_season(year:int, season_data:dict) -> None:
     season_data = [ event_data for event_data in season_data if 'hide' not in event_data or not event_data['hide'] ]
     season_data.reverse()
 
+    indent_amt = 2
+    separators = None
+    if prod:
+        indent_amt = None
+        separators = (',', ':')
+
     with open(f"public/data/{year}.json", 'w') as file:
-        file.write(json.dumps(season_data))
+        file.write(json.dumps(season_data, indent=indent_amt, separators=separators))
 
 
 """

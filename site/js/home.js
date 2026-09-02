@@ -9,6 +9,9 @@ export default {
             upcoming: [],
             inProgress: [],
 
+            strRuns: "runs",
+            strWill: "will be",
+
             pastSeasons: [],
             futureSeasons: [],
 
@@ -35,6 +38,11 @@ export default {
             this.inProgress = data.inProgress;
             this.pastSeasons = data.pastSeasons;
             this.futureSeasons = data.futureSeasons;
+
+            if (!this.upcoming.length) {
+                this.strRuns = "ran";
+                this.strWill = "were";
+            }
         },
     }
 }
