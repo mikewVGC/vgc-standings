@@ -598,17 +598,6 @@ tr.fade-row td {
     background-size: 24px 24px;
 }
 
-.type-icon-sm {
-    width: 14px;
-    height: 14px;
-    background-size: 14px 14px;
-}
-
-#mon-moves .type-icon-sm {
-    position: relative;
-    top: 2px;
-}
-
 .tera-normal   { background-image: url(/static/img/types/tera-normal.png); }
 .tera-fighting { background-image: url(/static/img/types/tera-fighting.png); }
 .tera-flying   { background-image: url(/static/img/types/tera-flying.png); }
@@ -708,12 +697,6 @@ h3 span {
     font-size: .9em;
 }
 
-#team-new .paste-mon {
-    border: 1px solid #254852;
-    border-radius: .25em;
-    padding: .5em;
-}
-
 #team-new .mon-name {
     grid-column: span 2;
     background: #F0F0F0;
@@ -737,11 +720,23 @@ h3 span {
 }
 
 #team-new .paste-mon {
+    border: 1px solid #254852;
+    border-radius: .25em;
+    padding: .5em;
     display: block;
+    overflow: hidden;
 }
 
 .paste-mon div {
     padding-bottom: .1em;
+}
+
+#team-new #mon-moves div {
+    padding-left: 18px;
+    white-space: normal;
+    background-size: 14px 14px;
+    background-position: 0px 2px;
+    background-repeat: no-repeat;
 }
 
 .paste-mon div.itemicon {

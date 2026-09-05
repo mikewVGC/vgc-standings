@@ -297,13 +297,10 @@ __TEMPLATE_FOOTER__
                     <div>
                         <div id="mon-moves">
                             <span>Moves</span>
-                            <div v-for="move in mon.moves">
-                                <div
-                                    v-if="move.type"
-                                    class="type-icon type-icon-sm"
-                                    :class="`type-icon-${move.type}`"
-                                ></div> {{ move.name }}
-                            </div>
+                            <div
+                                v-for="move in mon.moves"
+                                :class="`type-icon-${move.type}`"
+                            >{{ move.name }}</div>
                         </div>
                     </div>
                 </div>
