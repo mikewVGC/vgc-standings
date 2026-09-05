@@ -1237,6 +1237,10 @@ ul#pairing-round-select li a {
     .team-container {
         width: 120px;
     }
+
+    #team-new {
+        overflow: scroll;
+    }
 }
 
 /* mobile */
@@ -1719,6 +1723,10 @@ ul#pairing-round-select li a {
     .config-container-big {
         position: revert;
         height: 12em;
+    }
+
+    #team-new .paste-mon {
+        margin-bottom: .5em;
     }
 }
 
