@@ -277,20 +277,24 @@ image_alts = {
     "chimecomega": 10306,
     "absolmegaz": 10307,
     "staraptormega": 10308,
-    "lucariomegaz": 10309,
-    "heatranmega": 10310,
-    "darkraimega": 10311, # probably not legal
+    "garchompmegaz": 10309,
+    "lucariomega": 10310,
+    "heatranmega": 10311,
+    "darkraimega": 10312, # probably not legal
     "golurkmega": 10313,
     "meowsticmmega": 10314,
-    "meowsticfmega": 10314,
     "crabominablemega": 10315,
     "golisopodmega": 10316,
     "magearnamega": 10317, # also not legal
-    "zeraoramega": 10319, #samsies
+    "magearnaoriginalmega": 10318, # magearna again
+    "zeraoramega": 10319, # not legal
     "scovillainmega": 10320,
     "glimmoramega": 10321,
+    #
+    #
     "tatsugirimega": 10324,
     "baxcaliburmega": 10325,
+    "meowsticfmega": 10326,
 }
 
 """
