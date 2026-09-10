@@ -278,7 +278,7 @@ image_alts = {
     "absolmegaz": 10307,
     "staraptormega": 10308,
     "garchompmegaz": 10309,
-    "lucariomega": 10310,
+    "lucariomegaz": 10310,
     "heatranmega": 10311,
     "darkraimega": 10312, # probably not legal
     "golurkmega": 10313,
