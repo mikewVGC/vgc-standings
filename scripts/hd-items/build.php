@@ -2,7 +2,7 @@
 
 function build_item_coords($data) {
     $w = 3120;
-    $h = 3420;
+    $h = 3510;
     $x_num = 26;
 
     $items = json_decode($data, true);
@@ -787,6 +787,33 @@ $json_data = '[
     "barbaracite",
     "dragalgite",
     "falinksite",
+    "lucarionitez",
+    "baxcalibrite",
+    "garchompitez",
+
+    "golisopite",
+    "salamencite",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
     "",
     "",
     ""

@@ -557,8 +557,8 @@ tr.fade-row td {
 }
 
 .hditemicon {
-    background: url(/static/img/item-sprite-hd.webp?3) no-repeat;
-    background-size: 1040px 1140px;
+    background: url(/static/img/item-sprite-hd.webp?9) no-repeat;
+    background-size: 1040px 1170px;
     width: 40px;
     height: 40px;
     image-rendering: unset;
