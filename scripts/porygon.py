@@ -10,6 +10,7 @@ from ops.process_regional import process_regional, process_season, was_event_pro
 from ops.config import Config
 from ops.usage import compile_usage
 from ops.home_bootstrap import get_home_bootstrap_data
+from lib.scanner import DataScanner
 from lib.util import get_season_bookends, make_nice_date_str
 from lib.ruleset import load_rulesets
 
@@ -24,6 +25,7 @@ def main():
     parser.add_argument('--build-only', action="store_true", help="Don't process any events, only rebuild pages")
     parser.add_argument('--process', help="Only process specified regional(s). Format: year1:name1,year2:name2")
     parser.add_argument('--grassroots', action="store_true", help="Process grassroots events as well")
+    parser.add_argument('--missing-team-scan', action="store_true", help="Run a scan for missing teams. No other processing.")
 
     cl = parser.parse_args()
 
@@ -54,6 +56,13 @@ def main():
     except FileNotFoundError:
         # manifest is required
         print("Could not find manifest, exiting")
+        return
+
+    if cl.missing_team_scan:
+        print("Team scan selected, running now...")
+        scanner = DataScanner(manifest)
+        scanner.scan()
+        print("Done! Exiting.")
         return
 
     builder_cache = BuilderCache("data/builder", config.mode == 'prod')
