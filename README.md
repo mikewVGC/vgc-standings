@@ -90,6 +90,22 @@ The scripts also support Limitless data (if you get tournament pairings and stan
 
 Notably Limitless processing will not rebuild the site, so you'll need to run it normally without the `limitless` flag in order to see changes.
 
+### Team Scanner
+
+This is mostly for my own purposes, but you can run it with the `--missing-team-scan` option and it will scan the `public/data` directory for any players with a missing team. Players are usually missing teams because they got disqualified (and RK9 deletes them from the player list entirely when this happens), but sometimes it happens due to a name change. In those cases I can often track down their team and find it.
+
+You can create `scanner.json` in the project root and a list of events to ignore in the scan once you've decided you can't find any more teams:
+
+```
+{
+    "ignore": [
+        "2026/queretaro"
+    ]
+}
+```
+
+There's no reason to run this unless you have the full data set. I'm just documenting it here!
+
 ### Tests
 
 There are some simple unit tests using Python's build-in `unittest` functionality. They can all be run via:

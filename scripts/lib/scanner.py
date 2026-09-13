@@ -1,10 +1,22 @@
 
+# brain-square-quarter
+
 import json
 
 class DataScanner:
 
     def __init__(self, manifest:dict):
         self.manifest = manifest
+
+        config = {}
+        try:
+            with open("scanner.json") as file:
+                config = json.loads(file.read())
+        except FileNotFoundError:
+            ...
+
+        self.ignore_list = config['ignore'] if 'ignore' in config else []
+
 
     def scan(self):
         for year in self.manifest['seasons']:
@@ -22,6 +34,10 @@ class DataScanner:
     def scan_season(self, season_data:list, year:int):
         for event_info in season_data:
             event = {}
+
+            if f"{year}/{event_info['code']}" in self.ignore_list:
+                continue
+
             try:
                 with open(f"public/data/{year}/{event_info['code']}.json") as file:
                     event = json.loads(file.read())

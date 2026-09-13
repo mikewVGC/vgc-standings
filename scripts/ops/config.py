@@ -8,6 +8,7 @@ class Config:
         self.google_tag = ""
         self.live_refresh = 420
         self.mode = "dev"
+        self.sprite_coords = ""
 
         if 'monImgBase' in config:
             self.mon_img_base = config['monImgBase']
@@ -21,12 +22,16 @@ class Config:
         if 'mode' in config:
             self.mode = config['mode']
 
+        if 'sprite_coords' in config:
+            self.sprite_coords = config['sprite_coords']
+
     def __dict__(self):
         return {
             "mon_img_base": self.mon_img_base,
             "google_tag": self.google_tag,
             "live_refresh": self.live_refresh,
             "mode": self.mode,
+            "sprite_coords": self.sprite_coords,
         }
 
     def get_by_token(self, token:str) -> Any:

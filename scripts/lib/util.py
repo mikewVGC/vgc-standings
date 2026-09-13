@@ -129,7 +129,8 @@ def fix_mon_name(name:str) -> str:
         "Flower",
     )
 
-    mon_info = re.findall(r"([\w -]+)(\[(\w)\]){0,1}", name)
+    # - is for mostly tauros, ’ is for sirfetch'd
+    mon_info = re.findall(r"([\w ’-]+)(\[(\w)\]){0,1}", name)
     fixed_name = mon_info[0][0].strip()
 
     if len(mon_info) > 1:

@@ -57,6 +57,7 @@ class TestUtil(unittest.TestCase):
             ('Gastrodon [East Sea]', 'Gastrodon'),
             ('Indeedee [Female]', 'Indeedee-F'), # sexism is real
             ('Meowstic [Male]', 'Meowstic'),
+            ('Sirfetch’d', 'Sirfetch’d'),
         ]
 
         for case in cases:
@@ -76,7 +77,7 @@ class TestUtil(unittest.TestCase):
     def test_make_season_info_str(self):
         self.assertEqual(
             make_season_info_str({
-                "naic": { "processed": True },
+                "naic": { "processed": True, "status": "complete" },
             }),
             "We've just started"
         )
