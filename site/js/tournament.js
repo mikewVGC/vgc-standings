@@ -31,8 +31,6 @@ export default {
                 natures: [],
             },
 
-            playerMonFilter: [],
-
             phaseFilter: 'total',
 
             filteredPlayers: [],
@@ -46,6 +44,8 @@ export default {
             opponentsCompact: false,
 
             teamsheetStyle: 'paste',
+
+            shownOppTeamRow: '',
 
             spriteCoords: {},
             hdItemCoords: {},
@@ -150,8 +150,8 @@ export default {
                         opponents: opps,
                         monImgBase: this.monImgBase,
                         eventInfo: this.eventInfo,
-                        playerMonFilter: this.playerMonFilter,
                         teamsheetStyle: this.teamsheetStyle,
+                        shownOppTeamRow: this.shownOppTeamRow,
                     };
 
                 case 'pairings':
@@ -820,10 +820,6 @@ export default {
             this.phaseFilter = newVal;
         },
 
-        resetPlayerMonFilter() {
-            this.playerMonFilter = [];
-        },
-
         getSortedClass(column) {
             const sortInfo = this.sorts.usage;
             if (sortInfo.column == column) {
@@ -1079,19 +1075,40 @@ export default {
                 'monImgBase',
                 'eventInfo',
                 'opponentsCompact',
-                'playerMonFilter',
                 'teamsheetStyle',
+                'shownOppTeamRow',
             ],
             created: function() {
                 this.createdOrUpdated();
-                this.$parent.resetPlayerMonFilter();
             },
             updated: function() {
                 this.createdOrUpdated();
             },
             watch: {
                 playerCode(newCode, oldCode) {
-                    this.$parent.resetPlayerMonFilter();
+                    this.hideOppTeam();
+                },
+            },
+            components: {
+                'paste-mon': {
+                    template: '#paste-mon-template',
+                    props: [
+                        'team',
+                        'monImgBase',
+                        'eventInfo',
+                        'teamsheetStyle',
+                    ],
+                    methods: {
+                        getHDItemSpritePos(itemCode) {
+                            return this.$parent.getHDItemSpritePos(itemCode);
+                        },
+                        getNatureDown(nature) {
+                            return this.$parent.getNatureDown(nature);
+                        },
+                        getNatureUp(nature) {
+                            return this.$parent.getNatureUp(nature);
+                        },
+                    },
                 },
             },
             methods: {
@@ -1144,33 +1161,18 @@ export default {
                 isOpponentsCompact() {
                     return this.$parent.opponentsCompact;
                 },
-                applyPlayerMonFilter(monCode, monName) {
-                    if (this.$parent.playerMonFilter.length >= 6) {
-                        return;
-                    }
-
-                    if (!this.$parent.playerMonFilter.filter(m => m.code == monCode).length) {
-                        this.$parent.playerMonFilter.push({
-                            code: monCode,
-                            name: monName,
-                        });
+                showOppTeam(phase, row) {
+                    return this.shownOppTeamRow == `${phase}-${row}`;
+                },
+                displayOppTeam(phase, row) {
+                    if (this.showOppTeam(phase, row)) {
+                        this.$parent.shownOppTeamRow = '';
+                    } else {
+                        this.$parent.shownOppTeamRow = `${phase}-${row}`;
                     }
                 },
-                removePlayerMonFilter(monCode) {
-                    this.$parent.playerMonFilter = this.$parent.playerMonFilter.filter(m => m.code != monCode);
-                },
-                oppTeamFiltered(team) {
-                    if (!team) {
-                        return 0;
-                    }
-                    let found = 0;
-                    for (const mon of team) {
-                        found += this.playerMonFilter.filter((m) => {
-                            let mCode = mon.altcode || mon.code;
-                            return m.code == mCode;
-                        }).length;
-                    }
-                    return found;
+                hideOppTeam() {
+                    this.$parent.shownOppTeamRow = '';
                 },
                 setNav(navData) {
                     return this.$parent.setNav(navData);
