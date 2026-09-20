@@ -980,7 +980,7 @@ export default {
                     teamPaste += `Tera Type: ${mon.tera}  \n`;
                 }
                 if (mon.nature) {
-                    teamPaste += `Nature: ${mon.nature}  \n`;
+                    teamPaste += `${mon.nature} Nature\n`;
                 }
                 for (const move of mon.moves) {
                     if (!move || !('name' in move)) {
