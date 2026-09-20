@@ -57,7 +57,7 @@ def get_tournament_structure(season:int, competitors:int, event_info:dict, data_
 given a number of competitors, return how many will earn points
 """
 def get_points_threshold(season:int, competitors:int) -> int | None:
-    if season == "limitless":
+    if season == "grassroots":
         if competitors >= 2049:
             return 1024
         if competitors >= 1025:

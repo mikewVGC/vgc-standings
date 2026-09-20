@@ -882,9 +882,16 @@ table#usage tr.mon-usage-form td:nth-child(2) {
     width: 36px;
 }
 
+table#usage tr.mon-usage-form td:nth-child(3) {
+    font-size: .9em;
+}
+
 table#usage tr.mon-usage-form td:nth-child(3),
-table#usage tr.mon-usage-form td:nth-child(4),
-table#usage tr.mon-usage-form td:nth-child(6),
+table#usage tr.mon-usage-form td:nth-child(5) {
+    text-align: left;
+    padding-left: .5em;
+}
+
 table#usage tr.mon-usage-form td:nth-child(8),
 table#usage tr.mon-usage-form td:nth-child(10),
 table#usage tr.mon-usage-form td:nth-child(13) {
@@ -893,15 +900,17 @@ table#usage tr.mon-usage-form td:nth-child(13) {
 }
 
 table#usage tr.mon-usage-form td:nth-child(4),
+table#usage tr.mon-usage-form td:nth-child(7),
+table#usage tr.mon-usage-form td:nth-child(9),
+table#usage tr.mon-usage-form td:nth-child(11),
+table#usage tr.mon-usage-form td:nth-child(12),
 table#usage tr.mon-usage-form td:nth-child(14) {
     text-align: right;
 }
 
-table#usage tr.mon-usage-form td:nth-child(5),
-table#usage tr.mon-usage-form td:nth-child(7),
-table#usage tr.mon-usage-form td:nth-child(9),
-table#usage tr.mon-usage-form td:nth-child(12) {
-    padding-left: .4em;
+table#usage tr.mon-usage-form td:nth-child(6) {
+    text-align: right;
+    font-size: .9em;
 }
 
 table#usage tr.mon-usage-form:nth-child(even) td:nth-child(n+2) {

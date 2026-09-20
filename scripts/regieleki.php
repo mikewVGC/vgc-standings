@@ -163,7 +163,7 @@ while (1) {
 
     if (!empty($process_cmd)) {
         elog("Building Reportworm... ", '');
-        exec("python3 scripts/porygon.py {$build_prod} --process " . implode(',', $process_cmd));
+        exec("./scripts/porygon.py {$build_prod} --process " . implode(',', $process_cmd));
         elog_cont("Done!");
     } else {
         elog("Nothing to process right now...");

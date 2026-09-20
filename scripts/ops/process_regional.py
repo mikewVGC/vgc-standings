@@ -201,6 +201,10 @@ def process_regional(
     if len(players_in_cut_round.values()):
         event_info['cutCount'] = list(players_in_cut_round.values())[0]
 
+    event_info['earn_points'] = True
+    if event_info['code'].startswith('worlds') or year == "grassroots":
+        event_info['earn_points'] = False
+
     event_info['status'] = determine_event_status(event_info, players_ordered)
     event_info['winner'] = ''
     event_info['winner_flag'] = ''
@@ -211,11 +215,14 @@ def process_regional(
         event_info['winner'] = winner.name
         event_info['winner_flag'] = winner.country
 
-    if event_info['status'] == 'complete' and not event_info['code'].startswith('worlds'):
+    if (
+        event_info['status'] == 'complete'
+        and not event_info['code'].startswith('worlds')
+        and year != 'grassroots'
+    ):
         # one more loop for points!
-        if year != 'grassroots':
-            for player in players_ordered.values():
-                player.points = get_points_earned(year, len(players_ordered), player.place, event_is_ic)
+        for player in players_ordered.values():
+            player.points = get_points_earned(year, len(players_ordered), player.place, event_is_ic)
 
 
     indent_amt = 2

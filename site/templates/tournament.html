@@ -610,7 +610,7 @@ __TEMPLATE_FOOTER__
             <label>Display Only:</label>
             <select @change="updateUsageFilter" :value="usageFilter">
                 <option value="all">All Pokemon</option>
-                <option value="points">{{ eventInfo.code.startsWith('worlds') ?
+                <option value="points">{{ !eventInfo.earn_points ?
                     `Top ${eventInfo.points}` :
                     `Points Earned (Top ${eventInfo.points})` }}</option>
                 <option value="phase2">Made Phase 2</option>
@@ -730,7 +730,7 @@ __TEMPLATE_FOOTER__
                 </tr>
 
                 <tr v-if="usage.length && !filteredUsage.length" v-cloak>
-                    <td colspan="13">No results</td>
+                    <td colspan="14">No results</td>
                 </tr>
             </tbody>
         </table>
@@ -802,7 +802,7 @@ __TEMPLATE_FOOTER__
             <table>
                 <tr>
                     <td>Points Earned</td>
-                    <td>{{ eventInfo.code.startsWith('worlds') ? '-' : mon.points.toLocaleString() }}</td>
+                    <td>{{ !eventInfo.earn_points ? '-' : mon.points.toLocaleString() }}</td>
                 </tr>
                 <tr>
                     <td>Distinct Configs</td>
@@ -833,7 +833,9 @@ __TEMPLATE_FOOTER__
                 <label>Show Phase:</label>
                 <select @change="updatePhaseFilter" :value="phaseFilter">
                     <option value="total">All</option>
-                    <option value="points">Earned Points</option>
+                    <option value="points">{{ eventInfo.earn_points ?
+                        "Earned Points" :
+                        `Top ${eventInfo.points}` }}</option>
                     <option value="phase2">Phase 2</option>
                     <option value="cut">Top Cut</option>
                 </select>

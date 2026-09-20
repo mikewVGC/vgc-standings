@@ -66,13 +66,13 @@ def compile_usage(year:int, event_code:str, prod:bool, data_type:str) -> None:
                     "dex": dex_num,
                     "counts": {
                         "total": 0,
-                        "points": 0,
+                        "points": 0, # number who won points
                         "phase2": 0,
                         "cut": 0,
                     },
                     "w": 0,
                     "l": 0,
-                    "points": 0,
+                    "points": 0, # sum total of all points earned
                     "distinct": 0,
                     "players": [],
                     "items": {},
