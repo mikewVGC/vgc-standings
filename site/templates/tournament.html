@@ -641,6 +641,11 @@ __TEMPLATE_FOOTER__
                         colspan="2"
                     >Total</th>
                     <th class="sortable"
+                        title="Win rate"
+                        @click="sortUsage('winRate')"
+                        :class="getSortedClass('winRate')"
+                    >WR</th>
+                    <th class="sortable"
                         :title="`Number that earned points (Top ${eventInfo.points})`"
                         @click="sortUsage('points')"
                         :class="getSortedClass('points')"
@@ -683,6 +688,7 @@ __TEMPLATE_FOOTER__
                     <td colspan="2"><a :href="`/${season}/${eventInfo.code}/mon/${mon.code}`">{{ mon.name }}</a></td>
                     <td>{{ mon.counts.total }}</td>
                     <td><span class="pct">({{ getPct(mon.counts.total / eventInfo.playerCount, 4) }})</span></td>
+                    <td>{{ getPct(mon.counts.winRate, 5) }}</td>
                     <td>{{ mon.counts.points }}</td>
                     <td><span class="pct">({{ getPct(mon.counts.points / eventInfo.playerCount, 4) }})</span></td>
                     <td>{{ mon.counts.phase2 }}</td>
@@ -708,6 +714,7 @@ __TEMPLATE_FOOTER__
                     <td>{{ monform.name }}</td>
                     <td>{{ monform.counts.total }}</td>
                     <td><span class="pct">({{ getPct(monform.counts.total / eventInfo.playerCount, 4) }})</span></td>
+                    <td>{{ getPct(monform.counts.winRate) }}</td>
                     <td>{{ monform.counts.points }}</td>
                     <td><span class="pct">({{ getPct(monform.counts.points / eventInfo.playerCount, 4) }})</span></td>
                     <td>{{ monform.counts.phase2 }}</td>

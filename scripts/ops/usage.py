@@ -94,6 +94,8 @@ def compile_usage(year:int, event_code:str, prod:bool, data_type:str) -> None:
                         "points": 0,
                         "phase2": 0,
                         "cut": 0,
+                        "w": 0,
+                        "l": 0,
                     }
                 }
 
@@ -196,6 +198,10 @@ def compile_usage(year:int, event_code:str, prod:bool, data_type:str) -> None:
 
             mon_stats[code]['w'] += pdata['record']['w']
             mon_stats[code]['l'] += pdata['record']['l']
+
+            if len(mega_form):
+                mon_stats[code]['forms'][mega_form]['counts']['w'] += pdata['record']['w']
+                mon_stats[code]['forms'][mega_form]['counts']['l'] += pdata['record']['l']
 
             if earned_points:
                 mon_stats[code]['counts']['points'] += 1

@@ -537,11 +537,13 @@ export default {
                 this.usage.forEach(u => {
                     u.counts['phase2Conversion'] = u.counts.phase2 / u.counts.total;
                     u.counts['cutConversion'] = u.counts.cut / u.counts.phase2;
+                    u.counts['winRate'] = u.w / (u.w + u.l);
 
                     if (u.forms && u.forms.length) {
                         u.forms.forEach(f => {
                             f.counts['phase2Conversion'] = f.counts.phase2 / f.counts.total;
                             f.counts['cutConversion'] = f.counts.cut / f.counts.phase2;
+                            f.counts['winRate'] = f.counts.w / (f.counts.w + f.counts.l);
                         });
                     }
                 });
