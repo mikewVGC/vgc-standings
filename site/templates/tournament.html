@@ -739,8 +739,11 @@ __TEMPLATE_FOOTER__
 </template>
 
 <template id="usage-list-icon-template">
-    <tr @click="toggleFilter(type, code)">
-        <td><input type="checkbox" :checked="hasFilter(type, code)" /></td>
+    <tr @click="toggleFilter"
+        :data-type="type"
+        :data-code="code"
+    >
+        <td><input type="checkbox" /></td>
         <td>
             <div
                 v-if="code != 'noitem' && iconclass.length"
@@ -864,18 +867,6 @@ __TEMPLATE_FOOTER__
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- <tr>
-                            <td colspan="5">
-                                <select>
-                                    <option>Match Any</option>
-                                    <option>Match All</option>
-                                </select>
-                                <select>
-                                    <option>Include</option>
-                                    <option>Exclude</option>
-                                </select>
-                            </td>
-                        </tr> -->
                         <tr
                             is="vue:usage-list-icon"
                             v-for="moveInfo in mon.moves"
@@ -884,6 +875,7 @@ __TEMPLATE_FOOTER__
                             :count="moveInfo.count"
                             :category="phaseFilter"
                             :total="mon.counts[phaseFilter]"
+                            @toggle-filter="toggleFilter"
                             iconclass=""
                             type="moves"
                         ></tr>
@@ -912,6 +904,7 @@ __TEMPLATE_FOOTER__
                             :count="itemInfo.count"
                             :category="phaseFilter"
                             :total="mon.counts[phaseFilter]"
+                            @toggle-filter="toggleFilter"
                             iconclass="itemicon"
                             type="items"
                         ></tr>
@@ -940,6 +933,7 @@ __TEMPLATE_FOOTER__
                             :count="tmateInfo.count"
                             :category="phaseFilter"
                             :total="mon.counts[phaseFilter]"
+                            @toggle-filter="toggleFilter"
                             iconclass="monicon"
                             type="teammates"
                         ></tr>
@@ -968,6 +962,7 @@ __TEMPLATE_FOOTER__
                             :category="phaseFilter"
                             :total="mon.counts[phaseFilter]"
                             :iconclass="`tera-icon tera-${teraInfo.name.toLowerCase()}`"
+                            @toggle-filter="toggleFilter"
                             type="teras"
                         ></tr>
                         <tr v-if="mon.teras.length < 3" v-for="n in 3 - mon.teras.length"><td colspan="5"></td></tr>
@@ -995,6 +990,7 @@ __TEMPLATE_FOOTER__
                             :count="natureInfo.count"
                             :category="phaseFilter"
                             :total="mon.counts[phaseFilter]"
+                            @toggle-filter="toggleFilter"
                             iconclass=""
                             type="natures"
                         ></tr>
@@ -1023,6 +1019,7 @@ __TEMPLATE_FOOTER__
                             :count="abilityInfo.count"
                             :category="phaseFilter"
                             :total="mon.counts[phaseFilter]"
+                            @toggle-filter="toggleFilter"
                             iconclass=""
                             type="abilities"
                         ></tr>

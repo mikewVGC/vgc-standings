@@ -722,24 +722,44 @@ export default {
             this.filteredPlayers = players.slice();
         },
 
-        toggleFilter(filterType, filterCode, monData) {
-            if (!this.filters[filterType].includes(filterCode)) {
+        // filter for individual mon pages
+        toggleFilter(filterType, filterCode, cb, monData) {
+            let filter = this.filters[filterType].find(f => f.code == filterCode);
+
+            if (!filter) {
                 // add filter
-                this.filters[filterType].push(filterCode);
+                filter = { code: filterCode, filter: "includes" }
+                this.filters[filterType].push(filter);
             } else {
+                // flip to exclude
+                if (filter.filter == "includes") {
+                    filter.filter = "excludes";
+
                 // remove filter
-                this.filters[filterType] = this.filters[filterType].filter(v => v != filterCode);
+                } else {
+                    this.filters[filterType] = this.filters[filterType].filter(f => f.code != filterCode);
+                    filter = null;
+                }
 
                 if (filterType == 'teammates') {
                     this.resetTeamSort();
                 }
             }
 
-            this.applyFilters(monData);
-        },
+            if (cb) {
+                if (!filter) {
+                    cb.indeterminate = false;
+                    cb.checked = false;
+                } else if (filter.filter == "includes") {
+                    cb.indeterminate = false;
+                    cb.checked = true;
+                } else if (filter.filter == "excludes") {
+                    cb.indeterminate = true;
+                    cb.checked = false;
+                }
+            }
 
-        hasFilter(filterType, filterValue) {
-            return this.filters[filterType].includes(filterValue);
+            this.applyFilters(monData);
         },
 
         applyFilters(monData) {
@@ -749,27 +769,45 @@ export default {
                 let pcode = monData.players[i];
                 let [ pmon ] = this.standings[pcode].team.filter(m => m.code == monData.code);
 
-                if (this.filterIncludes('items', pmon.itemcode) &&
-                    this.filterIncludes('teras', pmon.tera) &&
-                    this.filterIncludes('natures', pmon.nature) &&
-                    this.filterIncludes('abilities', pmon.ability) &&
-                    this.filterEvery('moves', m => pmon.moves.filter(mv => mv.name == m).length > 0) &&
-                    this.filterEvery('teammates', m => this.standings[pcode].team.filter(t => t.code == m).length > 0) &&
+                if (this.filterExact('items', pmon.itemcode) &&
+                    this.filterExact('teras', pmon.tera) &&
+                    this.filterExact('natures', pmon.nature) &&
+                    this.filterExact('abilities', pmon.ability) &&
+                    this.filterCombined('moves', pmon.moves, 'name') &&
+                    this.filterCombined('teammates', this.standings[pcode].team, 'code') &&
                     this.playerMeetsPhaseRequirements(pcode)
                 ) {
                     this.filteredPlayers.push(pcode);
                 }
             }
 
-            this.sortTeams(this.filters.teammates);
+            this.sortTeams(this.filters.teammates.map(t => t.code));
         },
 
-        filterIncludes(filterType, filterCode) {
-            return !this.filters[filterType].length || this.filters[filterType].includes(filterCode);
+        filterExact(filterType, filterCode) {
+            return (
+                !this.filters[filterType].length ||
+                this.filters[filterType].some(f => f.code == filterCode && f.filter == "includes") ||
+                this.filters[filterType].every(f => f.code != filterCode && f.filter == "excludes")
+            );
         },
 
-        filterEvery(filterType, filterFunc) {
-            return !this.filters[filterType].length || this.filters[filterType].every(filterFunc);
+        filterCombined(filterType, dataset, dataKey) {
+            return (
+                !this.filters[filterType].length ||
+                this.filters[filterType].every(f => {
+                    const contains = dataset.some(d => d[dataKey] == f.code);
+
+                    if (f.filter == "includes") {
+                        return contains;
+                    }
+                    if (f.filter == "excludes") {
+                        return !contains;
+                    }
+
+                    return true;
+                })
+            );
         },
 
         playerMeetsPhaseRequirements(pcode) {
@@ -794,6 +832,11 @@ export default {
             this.filters.teammates = [];
             this.phaseFilter = 'total';
 
+            document.querySelectorAll('.config-container input[type=checkbox]').forEach(e => {
+                e.indeterminate = false;
+                e.checked = false;
+            });
+
             this.resetTeamSort();
         },
 
@@ -802,7 +845,7 @@ export default {
             if (
                 monCodeException &&
                 this.filters.teammates.length == 1 &&
-                this.filters.teammates.includes(monCodeException)
+                this.filters.teammates.some(f => f.code == monCodeException)
             ) {
                 teamFilter = 0;
             }
@@ -1528,6 +1571,7 @@ export default {
                 'usage-list-icon': {
                     template: '#usage-list-icon-template',
                     props: [ 'code', 'name', 'count', 'category', 'type', 'total', 'type', 'iconclass' ],
+                    emits: [ 'toggle-filter' ],
                     methods: {
                         getSpritePos(name) {
                             return this.$parent.getSpritePos(name);
@@ -1535,11 +1579,15 @@ export default {
                         getPct(dec, precision) {
                             return this.$parent.getPct(dec, precision)
                         },
-                        hasFilter(type, code) {
-                            return this.$parent.hasFilter(type, code);
-                        },
-                        toggleFilter(type, code) {
-                            return this.$parent.toggleFilter(type, code);
+                        toggleFilter(e) {
+                            const parent = e.target.closest('tr');
+                            const cb = parent.querySelector('input[type=checkbox]');
+
+                            this.$emit('toggle-filter', {
+                                type: parent.dataset.type,
+                                code: parent.dataset.code,
+                                cb: cb,
+                            });
                         },
                     },
                 },
@@ -1551,11 +1599,13 @@ export default {
                 getSpritePos(name) {
                     return this.$parent.getSpritePos(name);
                 },
-                hasFilter(type, code) {
-                    return this.$parent.hasFilter(type, code, this.mon);
-                },
-                toggleFilter(type, code) {
-                    return this.$parent.toggleFilter(type, code, this.mon);
+                toggleFilter(eventData) {
+                    return this.$parent.toggleFilter(
+                        eventData.type,
+                        eventData.code,
+                        eventData.cb,
+                        this.mon,
+                    );
                 },
                 isFiltered() {
                     return this.$parent.isFiltered(this.mon.code);
@@ -1564,7 +1614,7 @@ export default {
                     // reset
                     this.$parent.resetFilters();
                     // reapply the current mon
-                    this.toggleFilter('teammates', this.mon.code);
+                    this.toggleFilter({ type: 'teammates', code: this.mon.code, filter: "empty" });
                 },
                 setNav(navData) {
                     return this.$parent.setNav(navData);
