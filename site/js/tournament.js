@@ -164,6 +164,7 @@ export default {
                     }
 
                     let pairings = this.getPairings(secondary);
+                    console.log(pairings);
                     let roundName = secondary;
                     let roundNum = secondary;
                     let matchesComplete = 0;
@@ -595,22 +596,29 @@ export default {
                     continue;
                 }
 
-                let match = player.rounds.find(m => m.round == round);
+                const match = player.rounds.find(m => m.round == round);
                 if (!match) {
                     continue;
                 }
 
-                let opp = match?.opp || "";
+                const opp = match?.opp || "";
                 if (opp) {
                     checked[opp] = true;
                 }
                 checked[playerCode] = true;
 
+                const oppMatch = this.standings[opp]?.rounds.find(m => m.round == round) || false;
+                if (opp == "martin-steinbaron") {
+                    console.log(match, oppMatch);
+                }
+
                 let winner = "";
                 if (match.res == 'W') {
                     winner = playerCode;
-                } else if (match.res == 'L') {
+                } else if (match.res == 'L' && oppMatch?.res == 'W') {
                     winner = opp;
+                } else if(match.res == 'L' && oppMatch?.res == 'L') {
+                    winner = 'none';
                 } else if (match.res == 'T') {
                     winner = 'tie';
                 }

@@ -50,4 +50,4 @@ class DataScanner:
     def scan_players(self, standings_data:dict, event_code:str):
         for player in standings_data.values():
             if len(player['team']) == 0:
-                print(f"[scanner][{event_code}] MISSING TEAM! Team for {player['name']} ({player['code']}) is empty.")
+                print(f"[scanner][{event_code}] MISSING TEAM! Team for ({player['place']}) {player['name']} ({player['code']}) is empty.")
