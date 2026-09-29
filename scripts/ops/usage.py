@@ -12,6 +12,7 @@ from lib.formes import (
     get_mon_data_from_code,
     get_mon_alt_from_code,
     get_mega_form,
+    title_case_pokemon,
 )
 from lib.util import make_item_code
 
@@ -56,13 +57,7 @@ def compile_usage(year:int, event_code:str, prod:bool, data_type:str) -> None:
                 if alt:
                     dex_num = alt
 
-                title_name = mon['name'].title()
-                if title_name == "Kommo-O":
-                    title_name = "Kommo-o"
-                if title_name == "Sirfetch'D":
-                    title_name = "Sirfetch'd"
-                if title_name == "Farfetch'D":
-                    title_name = "Farfetch'd"
+                title_name = title_case_pokemon(mon['name'])
 
                 mon_stats[code] = {
                     "name": title_name,

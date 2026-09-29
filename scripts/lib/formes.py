@@ -481,3 +481,16 @@ def get_mega_form(mon_code:str, mon_data:dict) -> str:
                 return altform
 
     return ""
+
+
+non_title_mons = [
+    "Farfetch'd",
+    "Kommo-o",
+    "Sirfetch'd",
+]
+
+def title_case_pokemon(mon_name:str) -> str:
+    if mon_name in non_title_mons:
+        return mon_name
+
+    return mon_name.title()
