@@ -112,6 +112,7 @@ def fix_mon_name(name:str) -> str:
         #"Family of Four": "Four",
         "Rapid Strike": "Rapid-Strike",
         "Low Key": "Low-Key",
+        "’d": "'d", # for some semblance of sanity
     }
 
     # these are present in rk9 but not in Showdown names
@@ -129,8 +130,8 @@ def fix_mon_name(name:str) -> str:
         "Flower",
     )
 
-    # - is for mostly tauros, ’ is for sirfetch'd
-    mon_info = re.findall(r"([\w ’-]+)(\[(\w)\]){0,1}", name)
+    # - is for mostly tauros, ' is for sirfetch'd
+    mon_info = re.findall(r"([\w '’-]+)(\[(\w)\]){0,1}", name)
     fixed_name = mon_info[0][0].strip()
 
     if len(mon_info) > 1:
@@ -146,6 +147,11 @@ def fix_mon_name(name:str) -> str:
             secondary = ""
         elif secondary in converted:
             secondary = converted[secondary]
+
+        # ridiculous special case for the fetch'd bros
+        if secondary == "'d":
+            fixed_name = f"{fixed_name}{secondary}"
+            secondary = ""
 
         if len(secondary):
             fixed_name = f"{fixed_name}-{secondary}"

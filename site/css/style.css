@@ -8,7 +8,7 @@ a {
     color: #0D47A1;
 }
 
-div#app {
+main#app {
     max-width: 50em;
     margin: auto;
     position: relative;
