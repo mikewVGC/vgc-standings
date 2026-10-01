@@ -3,32 +3,27 @@ import json
 import math
 import re
 
+from lib.formes import (
+    get_icon_alt,
+    get_mon_alt_from_code,
+    get_mon_base_form_from_code,
+    get_mon_data_from_code,
+    get_mon_name_from_code,
+)
+from lib.moves import get_move_info_from_name
 from lib.tournament import (
     player_made_phase_two,
 )
-
 from lib.util import (
-    make_mon_code,
     make_item_code,
-)
-
-from lib.formes import (
-    get_mon_data_from_code,
-    get_mon_alt_from_code,
-    get_icon_alt,
-    get_mon_name_from_code,
-    get_mon_base_form_from_code,
-)
-
-from lib.moves import (
-    get_move_info_from_name
+    make_mon_code,
 )
 
 from ops.format_models import (
-    TeamMember,
-    Round,
-    Player,
     Move,
+    Player,
+    Round,
+    TeamMember,
 )
 
 """
@@ -97,13 +92,13 @@ def process_limitless_event(data:list, tour_format:list, official_order:list, ev
 
             dex_num, ptype, stype, _ = get_mon_data_from_code(mon_code)
 
-            tera_type = "" if 'tera' not in mon else mon['tera']
+            tera_type = mon.get('tera', "")
             if not event_info['rules']['tera']:
                 tera_type = ""
 
             mon_alt_code = get_icon_alt(mon_code, mon, event_info['rules']['mega'])
 
-            nature = "" if 'nature' not in mon else mon['nature']
+            nature = mon.get('nature', "")
 
             mon_alt_name = ""
             if mon_alt_code:
@@ -158,7 +153,7 @@ def process_limitless_event(data:list, tour_format:list, official_order:list, ev
                 'opp': 0,
                 'oppopp': 0,
             },
-            cut=True if len(player_pairings) > tour_format[0] + tour_format[1] else False,
+            cut=len(player_pairings) > tour_format[0] + tour_format[1],
             p2=False,
             drop=-1 if player['drop'] is None else player['drop'],
             points=0,
@@ -173,7 +168,7 @@ def process_limitless_event(data:list, tour_format:list, official_order:list, ev
             phase_two_count += 1
             players[player_code].p2 = True
 
-    for p_code, rounds in pairings_by_player.items():
+    for rounds in pairings_by_player.values():
         # this part is just used to set the players_in_cut_round var
         #drop_round = -1
         for r_data in rounds:
@@ -210,8 +205,7 @@ def get_grouped_pairings(code:str, tour_format:list, details:dict, number_player
     cut_rounds = 0
 
     for match in pairings:
-        if match['phase'] > max_phase:
-            max_phase = match['phase']
+        max_phase = max(max_phase, match['phase'])
 
         if match['phase'] == 1:
             continue
@@ -219,8 +213,7 @@ def get_grouped_pairings(code:str, tour_format:list, details:dict, number_player
             continue
 
         res = re.findall(r"^T([0-9]{1,3})-[0-9]{1,2}$", match['match'])
-        if int(res[0]) > max_cut:
-            max_cut = int(res[0])
+        max_cut = max(max_cut, int(res[0]))
 
     if max_cut > 0:
         cut_rounds = math.floor(math.log2(max_cut))

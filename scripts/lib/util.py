@@ -2,9 +2,7 @@
 import datetime
 import re
 import unicodedata
-
 from urllib.parse import quote
-
 
 """
 make player names URL friendly:
@@ -213,8 +211,8 @@ def get_season_bookends(majors:dict) -> (dict, dict, dict):
 this makes lame-o 2025-10-15 - 2025-10-17 style dates into coolio Oct. 15 - 17, 2025 style
 """
 def make_nice_date_str(start:str, end:str, separator:str = '-', use_full_months:bool = False) -> str:
-    start_dt = datetime.datetime.strptime(start, "%Y-%m-%d")
-    end_dt = datetime.datetime.strptime(end, "%Y-%m-%d")
+    start_dt = datetime.datetime.strptime(start, "%Y-%m-%d").astimezone()
+    end_dt = datetime.datetime.strptime(end, "%Y-%m-%d").astimezone()
 
     month_code = '%b'
     if use_full_months:

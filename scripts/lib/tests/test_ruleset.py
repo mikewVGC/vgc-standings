@@ -5,6 +5,7 @@ from lib.ruleset import (
     RulesetCollection,
 )
 
+
 class TestRuleset(unittest.TestCase):
     
     def test_create_empty_ruleset(self):

@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 
-
 pokedex = {}
 with open("data/common/pokedex.json") as file:
     pokedex = json.loads(file.read())
@@ -290,8 +289,6 @@ image_alts = {
     "zeraoramega": 10319, # not legal
     "scovillainmega": 10320,
     "glimmoramega": 10321,
-    #
-    #
     "tatsugirimega": 10324,
     "baxcaliburmega": 10325,
     "meowsticfmega": 10326,
@@ -473,11 +470,7 @@ def get_mega_form(mon_code:str, mon_data:dict) -> str:
         if mon_data['item'] == item_change['item']:
             altform = item_change['form']
 
-            if (altform.endswith('mega') or
-                altform.endswith('megax') or
-                altform.endswith('megay') or
-                altform.endswith('megaz')
-            ):
+            if altform.endswith(('mega', 'megax', 'megay', 'megaz')):
                 return altform
 
     return ""

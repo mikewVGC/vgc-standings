@@ -1,40 +1,22 @@
 
 import json
-
 from operator import itemgetter
 
+from lib.mon import (
+    MonDictMap,
+    create_team_member_from_mon,
+)
 from lib.tournament import (
     player_made_phase_two,
 )
-
 from lib.util import (
     make_code,
-    make_mon_code,
-    make_item_code,
     make_unique_player_code,
 )
 
-from lib.formes import (
-    get_mon_data_from_code,
-    get_mon_alt_from_code,
-    get_icon_alt,
-    get_mon_name_from_code,
-)
-
-from lib.moves import (
-    get_move_info_from_name
-)
-
-from lib.mon import (
-    create_team_member_from_mon,
-    MonDictMap,
-)
-
 from ops.format_models import (
-    TeamMember,
-    Round,
     Player,
-    Move,
+    Round,
 )
 
 # this should actually be called process_battlefy_event but... nobody else uses battlefy
@@ -139,7 +121,7 @@ def process_vr_event(data:list, tour_format:list, official_order:list, event_inf
                 'opp': 0,
                 'oppopp': 0,
             },
-            cut=True if len(player_pairings) > tour_format[0] + tour_format[1] else False,
+            cut=len(player_pairings) > tour_format[0] + tour_format[1],
             p2=False,
             drop=-1,
             points=0,
@@ -153,7 +135,7 @@ def process_vr_event(data:list, tour_format:list, official_order:list, event_inf
 
     # for dupe-coded players who had their code changes (player-name -> player-name-1)
     # we need to fix their code on all their opponent's opponents list
-    for new_code, old_code in dupe_player_map.items():
+    for new_code in dupe_player_map:
         for pl_round in players[new_code].rounds:
             opp_code = pl_round.opp
             opp_rnum = pl_round.round
@@ -168,7 +150,7 @@ def process_vr_event(data:list, tour_format:list, official_order:list, event_inf
                     break
 
     # this part is just used to set the players_in_cut_round var
-    for p_code, rounds in pairings_by_player.items():
+    for rounds in pairings_by_player.values():
         for r_data in rounds:
             if r_data.phase != 3:
                 continue
@@ -200,8 +182,7 @@ def get_grouped_pairings(event_code:str, tour_format, number_players):
             if pl['id'] not in pairings_by_player:
                 pairings_by_player[pl['id']] = []
 
-            if match['round'] > max_phase_round:
-                max_phase_round = match['round']
+            max_phase_round = max(max_phase_round, match['round'])
 
             phase = 1
             for i, stage in enumerate(stages):

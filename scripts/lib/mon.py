@@ -3,31 +3,28 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from lib.util import (
-    fix_mon_name,
-    fix_nature,
-    make_mon_code,
-    make_item_code,
+from ops.format_models import (
+    Move,
+    TeamMember,
 )
 
 from lib.formes import (
-    get_mon_data_from_code,
-    get_mon_alt_from_code,
     get_icon_alt,
+    get_mon_alt_from_code,
+    get_mon_data_from_code,
     get_mon_name_from_code,
 )
-
-from lib.moves import (
-    get_move_info_from_name
+from lib.moves import get_move_info_from_name
+from lib.util import (
+    fix_mon_name,
+    fix_nature,
+    make_item_code,
+    make_mon_code,
 )
 
-from ops.format_models import (
-    TeamMember,
-    Move,
-)
 
 @dataclass
-class MonDictMap():
+class MonDictMap:
     name:str = "name"
     moves:str = "moves"
     item:str = "item"
@@ -63,9 +60,9 @@ def create_team_member_from_mon(mon:dict, key_map:MonDictMap, event_info:dict) -
         dex=dex_num,
         ptype=ptype.lower(),
         stype=stype.lower(),
-        tera=mon[key_map.tera] if key_map.tera in mon else "",
-        nature=fix_nature(mon[key_map.nature] if key_map.nature in mon else ""),
-        ability=mon[key_map.ability] if key_map.ability in mon else "",
+        tera=mon.get(key_map.tera, ""),
+        nature=fix_nature(mon.get(key_map.nature, "")),
+        ability=mon.get(key_map.ability, ""),
         item=mon_item,
         itemcode=make_item_code(mon_item),
         moves=moves,

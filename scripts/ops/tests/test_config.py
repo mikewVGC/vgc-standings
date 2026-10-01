@@ -2,6 +2,7 @@ import unittest
 
 from ops.config import Config
 
+
 class TestConfig(unittest.TestCase):
     
     def test_init_config(self):

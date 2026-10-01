@@ -1,18 +1,18 @@
 
 import json
 
+from lib.formes import (
+    get_mega_form,
+    get_mon_alt_from_code,
+    get_mon_data_from_code,
+    title_case_pokemon,
+)
 from lib.tournament import (
+    get_points_threshold,
     get_tournament_structure,
     player_earned_points,
-    player_made_phase_two,
     player_made_cut,
-    get_points_threshold,
-)
-from lib.formes import (
-    get_mon_data_from_code,
-    get_mon_alt_from_code,
-    get_mega_form,
-    title_case_pokemon,
+    player_made_phase_two,
 )
 from lib.util import make_item_code
 
@@ -236,7 +236,7 @@ def compile_usage(year:int, event_code:str, prod:bool, data_type:str) -> None:
 
         for sort in sorts:
             mon_stat[sort] = sorted(
-                list(mon_stat[sort].values()),
+                mon_stat[sort].values(),
                 key=lambda x: (-x['count']['total'], x['name'])
             )
 

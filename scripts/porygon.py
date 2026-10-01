@@ -3,16 +3,15 @@
 import argparse
 import json
 
-from reportworm_builder.builder import Builder
-from reportworm_builder.builder_cache import BuilderCache
-
-from ops.process_regional import process_regional, process_season, was_event_processed
-from ops.config import Config
-from ops.usage import compile_usage
-from ops.home_bootstrap import get_home_bootstrap_data
+from lib.ruleset import load_rulesets
 from lib.scanner import DataScanner
 from lib.util import get_season_bookends, make_nice_date_str
-from lib.ruleset import load_rulesets
+from ops.config import Config
+from ops.home_bootstrap import get_home_bootstrap_data
+from ops.process_regional import process_regional, process_season, was_event_processed
+from ops.usage import compile_usage
+from reportworm_builder.builder import Builder
+from reportworm_builder.builder_cache import BuilderCache
 
 # every day I try to make this a little less crazy
 
@@ -137,7 +136,7 @@ def process_data(
             if not event_should_be_processed:
                 print(f"[{year}] Checking for processed data for '{event_code}'... ", end="")
                 _, proc_event_info = was_event_processed(year, event_code)
-                majors[event_code].update(proc_event_info)
+                event_info.update(proc_event_info)
             else:
                 print(f"[{year}] Processing data for '{event_code}'... ", end="")
                 majors[event_code], data_type = process_regional(
@@ -154,11 +153,11 @@ def process_data(
             if year in future_seasons:
                 future_seasons[year]['events'] += 1
 
-            if event_code == "worlds" and 'winner' in majors[event_code] and year in past_seasons:
-                past_seasons[year]['champ'] = majors[event_code]['winner']
-                past_seasons[year]['champ_flag'] = majors[event_code]['winner_flag']
+            if event_code == "worlds" and 'winner' in event_info and year in past_seasons:
+                past_seasons[year]['champ'] = event_info['winner']
+                past_seasons[year]['champ_flag'] = event_info['winner_flag']
 
-            if event_should_be_processed and majors[event_code]['processed']:
+            if event_should_be_processed and event_info['processed']:
                 print("building usage... ", end="")
                 compile_usage(year, event_code, config.mode == 'prod', data_type)
 

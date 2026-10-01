@@ -1,43 +1,40 @@
 
+import dataclasses
 import json
 import re
-import dataclasses
-
 from collections import OrderedDict
 from pathlib import Path
 
-from ops.processors.pokedata import process_pokedata_event
-from ops.processors.rk9scraper import process_rk9scraper_event
-from ops.processors.vgcpastes import process_vgcpastes_teamlist
-from ops.processors.playlatamscraper import process_playlatamscraper_event
-from ops.processors.limitless import process_limitless_event
-from ops.processors.victoryroad import process_vr_event
-
+from constants import (
+    DT_LIMITLESS,
+    DT_PLAYLATAMSCRAPER,
+    DT_POKEDATA,
+    DT_POKEDATA_NEW,
+    DT_RK9SCRAPER,
+    DT_VICTORYROAD,
+)
+from lib.res import calculate_oppopp, calculate_res, calculate_win_pct
+from lib.ruleset import Ruleset
+from lib.tournament import (
+    determine_event_status,
+    get_points_earned,
+    get_points_threshold,
+    get_round_name,
+    get_tournament_structure,
+)
 from lib.util import (
     make_code,
     make_nice_date_str,
 )
-from lib.tournament import (
-    get_tournament_structure,
-    get_round_name,
-    determine_event_status,
-    get_points_earned,
-    get_points_threshold,
-)
-from lib.res import (
-    calculate_win_pct,
-    calculate_res,
-    calculate_oppopp
-)
-from lib.ruleset import Ruleset
 
-from constants import (
-    DT_POKEDATA,
-    DT_RK9SCRAPER,
-    DT_PLAYLATAMSCRAPER,
-    DT_LIMITLESS,
-    DT_VICTORYROAD,
-)
+from ops.processors.limitless import process_limitless_event
+from ops.processors.playlatamscraper import process_playlatamscraper_event
+from ops.processors.pokedata import process_pokedata_event
+from ops.processors.pokedata_new import process_pokedata_new_event
+from ops.processors.rk9scraper import process_rk9scraper_event
+from ops.processors.vgcpastes import process_vgcpastes_teamlist
+from ops.processors.victoryroad import process_vr_event
+
 
 class EnhancedJSONEncoder(json.JSONEncoder):
     def default(self, o):
@@ -59,7 +56,7 @@ def process_regional(
 
     try:
         data, data_type = get_data_and_type(year, code)
-    except Exception as e:
+    except FileNotFoundError as e:
         print(f"{e} ", end="")
 
         event_info['processed'] = False
@@ -106,7 +103,9 @@ def process_regional(
     phase_two_count = 0
     players_in_cut_round = {}
 
-    if data_type == DT_POKEDATA:
+    if data_type == DT_POKEDATA_NEW:
+        players, phase_two_count, players_in_cut_round = process_pokedata_new_event(data, tour_format, official_order, event_info, year, code)
+    elif data_type == DT_POKEDATA:
         players, phase_two_count, players_in_cut_round = process_pokedata_event(data, tour_format, official_order, event_info)
     elif data_type == DT_RK9SCRAPER:
         players, phase_two_count, players_in_cut_round = process_rk9scraper_event(data, tour_format, official_order, event_info, year, code)
@@ -156,7 +155,7 @@ def process_regional(
             ]
         )
     ):
-        custom_sorted = sorted(list(players.values()), key=lambda player: (
+        custom_sorted = sorted(players.values(), key=lambda player: (
             -player.place,
             player.record['w'],
             player.res['self'],
@@ -189,7 +188,7 @@ def process_regional(
         players[player].place = pidx + 1
         players_ordered[player] = players[player]
 
-    event_is_ic = True if event_info['code'] in ('ocic', 'laic', 'euic', 'naic') else False
+    event_is_ic = event_info['code'] in ('ocic', 'laic', 'euic', 'naic')
 
     event_info['processed'] = True
     event_info['dates'] = make_nice_date_str(event_info['start'], event_info['end'])
@@ -199,7 +198,7 @@ def process_regional(
     event_info['cutCount'] = 0
     # worlds day 1 doesn't have cut
     if len(players_in_cut_round.values()):
-        event_info['cutCount'] = list(players_in_cut_round.values())[0]
+        event_info['cutCount'] = next(iter(players_in_cut_round.values()))
 
     event_info['earn_points'] = True
     if event_info['code'].startswith('worlds') or year == "grassroots":
@@ -208,7 +207,7 @@ def process_regional(
     event_info['status'] = determine_event_status(event_info, players_ordered)
     event_info['winner'] = ''
     event_info['winner_flag'] = ''
-    if 'noWinner' in event_info and event_info['noWinner']:
+    if event_info.get('noWinner'):
         event_info['winner'] = '-'
     elif event_info['status'] == 'complete':
         winner = next(iter(players_ordered.values()))
@@ -245,6 +244,7 @@ figure out which format the data is stored in based on the path
 """
 def get_data_and_type(year:int, code:str):
     paths = [
+        (f"data/majors/{year}/{code}-standings.pd.json", DT_POKEDATA_NEW),
         (f"data/majors/{year}/{code}-standings.json", DT_POKEDATA),
         (f"data/majors/{year}/{code}-roster.json", DT_RK9SCRAPER),
         (f"data/majors/{year}/{code}-roster.pl.json",DT_PLAYLATAMSCRAPER),
@@ -261,16 +261,20 @@ def get_data_and_type(year:int, code:str):
         if file_path.is_file():
             with open(path_loc, encoding='utf8') as file:
                 data = json.loads(file.read())
+
+                if path_type == DT_POKEDATA_NEW:
+                    data = data['standings']['players']
+
                 return data, path_type
 
-    raise Exception("Main standings file not found, maybe this hasn't happened yet?")
+    raise FileNotFoundError("Main standings file not found, maybe this hasn't happened yet?")
 
 
 """
 build the season json... this mostly just copies the corresponding <year>.json
 """
 def process_season(year:int, season_data:dict, prod:bool) -> None:
-    for code, event_data in season_data.items():
+    for event_data in season_data.values():
         event_data["dates"] = make_nice_date_str(event_data['start'], event_data['end'])
 
     season_data = list(season_data.values())

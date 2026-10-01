@@ -3,8 +3,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+
 @dataclass
-class TeamMember():
+class TeamMember:
     name: str
     code: str
     altname: str
@@ -20,12 +21,12 @@ class TeamMember():
     moves: list[Move] | None = None
 
 @dataclass
-class Move():
+class Move:
     name: str
     type: str = ''
 
 @dataclass
-class Round():
+class Round:
     round: int
     rname: str
     opp: str
@@ -37,7 +38,7 @@ class Round():
     drop: int = 0
 
 @dataclass
-class Player():
+class Player:
     name: str
     code: str
     country: str

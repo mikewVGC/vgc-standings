@@ -1,26 +1,25 @@
 import unittest
-
-from unittest.mock import patch
 from datetime import datetime, timezone
-
-from lib.tournament import (
-    get_tournament_structure,
-    get_points_threshold,
-    get_points_earned,
-    get_round_name,
-    tour_in_progress,
-)
+from unittest.mock import patch
 
 from ops.format_models import (
     Player,
     Round,
 )
 
+from lib.tournament import (
+    get_points_earned,
+    get_points_threshold,
+    get_round_name,
+    get_tournament_structure,
+    tour_in_progress,
+)
+
 
 class MockDatetime(datetime):
     @classmethod
     def now(cls, tz=None):
-        return datetime(2023, 5, 5, 10, 0, 0).replace(tzinfo=timezone.utc)
+        return datetime(2023, 5, 5, 10, 0, 0, tzinfo=timezone.utc).replace(tzinfo=timezone.utc)
 
 
 class TestTournament(unittest.TestCase):

@@ -40,8 +40,7 @@ def determine_tournament_structure(season:int, competitors:int, event_info:dict)
                 continue
 
             res = re.findall(r"^T([0-9]{1,3})-[0-9]{1,2}$", match['match'])
-            if int(res[0]) > max_cut:
-                max_cut = int(res[0])
+            max_cut = max(max_cut, int(res[0]))
 
         cut_rounds = math.floor(math.log2(max_cut))
 

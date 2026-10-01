@@ -3,6 +3,7 @@
 
 import json
 
+
 class DataScanner:
 
     def __init__(self, manifest:dict):
@@ -15,7 +16,7 @@ class DataScanner:
         except FileNotFoundError:
             ...
 
-        self.ignore_list = config['ignore'] if 'ignore' in config else []
+        self.ignore_list = config.get('ignore', [])
 
 
     def scan(self):

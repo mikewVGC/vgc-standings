@@ -1,38 +1,22 @@
 
 import json
 
+from lib.mon import (
+    MonDictMap,
+    create_team_member_from_mon,
+)
 from lib.tournament import (
     player_made_phase_two,
 )
-
 from lib.util import (
     make_code,
-    fix_mon_name,
-    make_mon_code,
-    make_item_code,
-)
-
-from lib.formes import (
-    get_mon_data_from_code,
-    get_mon_alt_from_code,
-    get_icon_alt,
-)
-
-from lib.mon import (
-    create_team_member_from_mon,
-    MonDictMap,
-)
-
-from lib.moves import (
-    get_move_info_from_name
 )
 
 from ops.format_models import (
-    TeamMember,
-    Move,
-    Round,
     Player,
+    Round,
 )
+
 
 def process_playlatamscraper_event(
     data:list,
@@ -153,7 +137,7 @@ def process_playlatamscraper_event(
                 'opp': 0,
                 'oppopp': 0,
             },
-            cut=True if len(player_pairings) > tour_format[0] + tour_format[1] else False,
+            cut=len(player_pairings) > tour_format[0] + tour_format[1],
             p2=False,
             drop=-1,
             points=0,
@@ -165,7 +149,7 @@ def process_playlatamscraper_event(
             phase_two_count += 1
             players[player_code].p2 = True
 
-    for p_code, rounds in pairings_by_player.items():
+    for rounds in pairings_by_player.values():
         # this part is just used to set the players_in_cut_round var
         for r_data in rounds:
             if r_data.phase == 3:

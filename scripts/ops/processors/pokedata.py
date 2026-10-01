@@ -1,47 +1,28 @@
 
-import re
 import json
+import re
 
+from lib.mon import (
+    MonDictMap,
+    create_team_member_from_mon,
+)
 from lib.tournament import (
     player_made_phase_two,
 )
-
 from lib.util import (
     make_code,
-    fix_mon_name,
-    fix_nature,
-    make_mon_code,
-    make_item_code,
     make_unique_player_code,
 )
 
-from lib.formes import (
-    get_mon_data_from_code,
-    get_mon_alt_from_code,
-    get_icon_alt,
-    get_mon_name_from_code,
-)
-
-from lib.mon import (
-    create_team_member_from_mon,
-    MonDictMap,
-)
-
-from lib.moves import (
-    get_move_info_from_name
-)
-
 from ops.format_models import (
-    TeamMember,
-    Move,
-    Round,
     Player,
+    Round,
 )
 
 """
 process pokedata's json format (where most data comes from)
 """
-def process_pokedata_event(data:list, tour_format:list, official_order:list, event_info:dict) -> (list, int, dict):
+def process_pokedata_event(data:list, tour_format:list, official_order:list, event_info:dict) -> (dict, int, dict):
 
     name_reg = r"^([^\[]+)( {0,1}\[[A-Z]{0,2}\]){0,1}$"
 
@@ -151,7 +132,7 @@ def process_pokedata_event(data:list, tour_format:list, official_order:list, eve
                 'opp': 0,
                 'oppopp': 0,
             },
-            cut=True if len(rounds) > tour_format[0] + tour_format[1] else False,
+            cut=len(rounds) > tour_format[0] + tour_format[1],
             p2=False,
             drop=player['drop'],
             points=0,
@@ -204,11 +185,11 @@ def fix_duplicates(players:dict, dupes:list) -> None:
             found_ctr = 0
             if rnd.opp == pcode:
                 # in theory this should always work
-                player_dupe = list(filter(lambda d: d.startswith(pcode), dupes))[0]
+                player_dupe = next(filter(lambda d: d.startswith(pcode), dupes))
 
                 # first one we find we'll give to the dupe (which is not necessarily correct)
                 if found_ctr == 0:
-                    swap = players[pcode].rounds.pop(i)
+                    swap = player.rounds.pop(i)
                     players[player_dupe].rounds.append(swap)
                     found_ctr += 1
 

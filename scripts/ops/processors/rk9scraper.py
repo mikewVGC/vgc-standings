@@ -1,38 +1,21 @@
 
 import json
 
+from lib.mon import (
+    MonDictMap,
+    create_team_member_from_mon,
+)
 from lib.tournament import (
     player_made_phase_two,
 )
-
 from lib.util import (
-    make_code,
     fix_mon_name,
-    fix_nature,
-    make_mon_code,
-    make_item_code,
-)
-
-from lib.formes import (
-    get_mon_data_from_code,
-    get_mon_alt_from_code,
-    get_icon_alt,
-)
-
-from lib.mon import (
-    create_team_member_from_mon,
-    MonDictMap,
-)
-
-from lib.moves import (
-    get_move_info_from_name
+    make_code,
 )
 
 from ops.format_models import (
-    TeamMember,
-    Move,
-    Round,
     Player,
+    Round,
 )
 
 """
@@ -128,7 +111,7 @@ def process_rk9scraper_event(
                 'opp': 0,
                 'oppopp': 0,
             },
-            cut=True if len(player_pairings) > tour_format[0] + tour_format[1] else False,
+            cut=len(player_pairings) > tour_format[0] + tour_format[1],
             p2=False,
             drop=-1,
             points=0,

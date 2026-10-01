@@ -1,6 +1,7 @@
 
 import json
 
+
 def determine_tournament_structure(season:int, competitors:int, event_info:dict) -> tuple | None:
 
     details = {}

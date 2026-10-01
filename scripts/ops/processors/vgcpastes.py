@@ -1,33 +1,16 @@
 
 from __future__ import annotations
 
-import re
-
-from urllib import request
-from urllib.error import URLError, HTTPError
 from dataclasses import asdict
-
-from paste_parser.paste_parser import PasteParser
-
-from lib.util import make_code, make_mon_code, make_item_code
-
-from lib.formes import (
-    get_mon_data_from_code,
-    get_mon_alt_from_code,
-    get_icon_alt,
-)
-
-from lib.moves import get_move_info_from_name
+from urllib import request
+from urllib.error import HTTPError, URLError
 
 from lib.mon import (
-    create_team_member_from_mon,
     MonDictMap,
+    create_team_member_from_mon,
 )
-
-from ops.format_models import (
-    TeamMember,
-    Move,
-)
+from lib.util import make_code
+from paste_parser.paste_parser import PasteParser
 
 
 def process_vgcpastes_teamlist(players:dict, event_info:dict, year:int, code:str) -> bool:

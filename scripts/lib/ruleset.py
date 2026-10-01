@@ -1,7 +1,8 @@
 
 import json
 
-class Ruleset():
+
+class Ruleset:
     def __init__(self, **kwargs) -> None:
         self.name = ""
         self.game = ""
@@ -31,7 +32,7 @@ class Ruleset():
         }
 
 
-class RulesetCollection():
+class RulesetCollection:
     def __init__(self, rulesets:list[Ruleset]) -> None:
         self.rulesets = rulesets
 

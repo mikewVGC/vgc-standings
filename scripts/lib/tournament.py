@@ -1,32 +1,31 @@
 from __future__ import annotations
 
+from dataclasses import asdict
 from datetime import datetime
 from zoneinfo import ZoneInfo
-from dataclasses import asdict
-
-from lib.limitless import determine_tournament_structure as limitless_determine_tournament_structure
-from lib.vr import determine_tournament_structure as vr_determine_tournament_structure
-
-from ops.format_models import Player
-
-from lib.tourlib import(
-    structure2023,
-    structure2024,
-    structure2025,
-    structure2026,
-    structure2027,
-
-    points2023,
-    points2024,
-    points2025,
-    points2026,
-    points2027,
-)
 
 from constants import (
     DT_LIMITLESS,
     DT_VICTORYROAD,
 )
+from ops.format_models import Player
+
+from lib.limitless import (
+    determine_tournament_structure as limitless_determine_tournament_structure,
+)
+from lib.tourlib import (
+    points2023,
+    points2024,
+    points2025,
+    points2026,
+    points2027,
+    structure2023,
+    structure2024,
+    structure2025,
+    structure2026,
+    structure2027,
+)
+from lib.vr import determine_tournament_structure as vr_determine_tournament_structure
 
 """
 returns (day 1 rounds, day 2 rounds, top cut min)
@@ -236,14 +235,11 @@ def player_made_phase_two(player:dict|Player, tour_format:list) -> bool:
         return True
 
     # lazy check for after phase 1 has completed
-    if (
+    return (
         len(pl['rounds']) == tour_format[0] and
         tour_format[1] > 0 and
         pl['record']['l'] <= 2
-    ):
-        return True
-
-    return False
+    )
 
 
 # some easy helper functions ... notably these are called
@@ -257,6 +253,4 @@ def player_earned_points(player:dict, points_threshold:int) -> bool:
 
 
 def player_made_cut(player:dict, tour_format:list) -> bool:
-    if player['drop'] == -1 and len(player['rounds']) > tour_format[0] + tour_format[1]:
-        return True
-    return False
+    return player['drop'] == -1 and len(player['rounds']) > tour_format[0] + tour_format[1]

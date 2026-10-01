@@ -1,17 +1,17 @@
 import unittest
-
 from urllib.parse import quote
 
 from lib.util import (
-    make_code,
-    make_mon_code,
-    make_item_code,
     fix_mon_name,
     fix_nature,
-    make_season_info_str,
     get_season_bookends,
+    make_code,
+    make_item_code,
+    make_mon_code,
     make_nice_date_str,
+    make_season_info_str,
 )
+
 
 class TestUtil(unittest.TestCase):
 

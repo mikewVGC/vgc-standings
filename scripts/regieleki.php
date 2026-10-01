@@ -15,13 +15,18 @@ if (!file_exists(__DIR__ . "/../regieleki.ini")) {
 
 elog("Regieleki starting!");
 
-$data_dir_base = __DIR__ . "/../data/majors";
+$data_dir_base = realpath(__DIR__ . "/../data/majors");
 
 // parse regieleki.ini (see README)
 $ini_data = parse_ini_file("regieleki.ini", true);
 
 $tournament_settings = [];
 $tour_tracker = [];
+
+// notably: standings json should always exist, roster may or may not
+
+$pokedata_standings_url = "https://www.pokedata.ovh/standings2/standings/%%TOUR_ID%%_Masters.json";
+$pokedata_roster_url = "https://www.pokedata.ovh/standings2/RosterData/%%TOUR_ID%%.json";
 
 foreach ($ini_data as $section => $data) {
     if ($section == "main_config") {
@@ -34,8 +39,8 @@ foreach ($ini_data as $section => $data) {
     $tournament_settings[$section] = [
         'start' => time(),
         'end' => time() + 28800, // 8 hours
-        'remote' => $data['pokedata_url'],
-        'local' => "{$data_dir_base}/{$current_season}/{$section}-standings.json",
+        'remote_id' => $data['pokedata_id'],
+        'local_base' => "{$data_dir_base}/{$current_season}/{$section}",
         'process' => "{$current_season}:{$section}",
     ];
 
@@ -73,7 +78,7 @@ elog("Setup done. Running...");
 $backoff = 0;
 $attempts = 0;
 
-$updates_file = __DIR__ . "/../public/data/{$current_season}/updates.json";
+$updates_file = realpath(__DIR__ . "/../public/data/{$current_season}/updates.json");
 if (!file_exists($updates_file)) {
     elog("Updates file not found, creating empty one");
     file_put_contents($updates_file, "{}");
@@ -111,50 +116,68 @@ while (1) {
 
     $process_cmd = [];
     foreach ($to_process as $tour => $process) {
-        elog("[{$tour}] Downloading {$process['remote']}... ", '');
+        $download_urls = [
+            'standings' => str_replace('%%TOUR_ID%%', $process['remote_id'], $pokedata_standings_url),
+            'roster'    => str_replace('%%TOUR_ID%%', $process['remote_id'], $pokedata_roster_url),
+        ];
 
-        try {
-            $remote_data = make_request($process['remote']);
-        } catch (Exception $e) {
-            elog_cont($e->getMessage());
-            continue;
-        }
+        foreach ($download_urls as $data_type => $download_url) {
+            elog("[{$tour}] Downloading {$download_url}... ", '');
 
-        if (json_decode($remote_data) === null) {
-            $attempts++;
-
-            // backoff starts at +1 minute
-            $backoff = 30 * pow(2, $attempts);
-
-            elog_cont("Invalid JSON, starting backoff...");
-            break;
-        } else {
-            $backoff = 0;
-            $attempts = 0;
-        }
-
-        elog_cont("Done!");
-
-        $tour_hash = sha1($remote_data);
-
-        if (!isset($updates[$tour])) {
-            $updates[$tour] = "";
-        }
-
-        if ($updates[$tour] !== $tour_hash) {
-            if (file_put_contents($process['local'], $remote_data) === false){
-                elog_cont("[{$tour}] Unable to write to '{$local_file}', skipping");
+            try {
+                $remote_data = make_request($download_url);
+            } catch (Exception $e) {
+                elog_cont($e->getMessage());
                 continue;
             }
-            $updates[$tour] = $tour_hash;
 
-            $process_cmd[] = $process['process'];
-        } else {
-            elog("[{$tour}] No changes to tour data, moving on");
+            if (json_decode($remote_data) === null) {
+                // roster data not existing is normal, so we should just move on
+                if ($data_type == "roster") {
+                    elog_cont("Unable to download roster, probably doesn't exist yet.");
+                    continue;
+                } else {
+                    $attempts++;
+
+                    // backoff starts at +1 minute
+                    $backoff = 30 * pow(2, $attempts);
+
+                    elog_cont("Invalid JSON, starting backoff...");
+                    break 2;
+                }
+            } else {
+                $backoff = 0;
+                $attempts = 0;
+            }
+
+            elog_cont("Done!");
+
+            $tour_hash = sha1($remote_data);
+
+            if (!isset($updates[$tour])) {
+                $updates[$tour] = [
+                    'standings' => "",
+                    'roster' => "",
+                ];
+            }
+
+            if ($updates[$tour][$data_type] !== $tour_hash) {
+                $local_file = "{$process['local_base']}-{$data_type}.pd.json";
+                if (file_put_contents($local_file, $remote_data) === false){
+                    elog_cont("[{$tour}] Unable to write to '{$local_file}', skipping");
+                    continue;
+                }
+                $updates[$tour][$data_type] = $tour_hash;
+
+                $process_cmd[] = $process['process'];
+            } else {
+                elog("[{$tour}] No changes to tour data, moving on");
+            }
+
+            sleep(1);
         }
 
-        // small sleep between downloads
-        sleep(mt_rand(1, 3));
+        sleep(1);
     }
 
     if (file_put_contents($updates_file, json_encode($updates)) === false) {

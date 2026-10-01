@@ -1,9 +1,10 @@
 
 from lib.util import (
-    make_season_info_str,
-    make_nice_date_str,
     get_season_bookends,
+    make_nice_date_str,
+    make_season_info_str,
 )
+
 
 def get_home_bootstrap_data(year:int, majors:dict, past_seasons:dict, future_seasons:dict) -> dict:
     first_major, last_major, worlds = get_season_bookends(majors)
