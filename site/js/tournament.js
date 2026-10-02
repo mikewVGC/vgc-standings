@@ -55,7 +55,10 @@ export default {
 
             nav: [],
 
-            latestHash: '',
+            latestHashes: {
+                standings: '',
+                roster: '',
+            },
             liveUpdateFrequency: 240,
         }
     },
@@ -564,8 +567,27 @@ export default {
             }).then((r) => {
                 return r.json();
             }).then((d) => {
-                const latestHash = d[this.eventInfo.code] || '';
-                if (this.latestHash.length && latestHash && latestHash != this.latestHash) {
+                const latestHashes = d[this.eventInfo.code] || false;
+                let standings = "";
+                let roster = "";
+                if (latestHashes) {
+                    standings = latestHashes.standings;
+                    roster = latestHashes.roster;
+                }
+
+                let standingsChange = (
+                    this.latestHashes.standings.length &&
+                    standings.length &&
+                    standings != this.latestHashes.standings
+                );
+
+                let rosterChange = (
+                    this.latestHashes.roster.length &&
+                    roster.length &&
+                    roster != this.latestHashes.roster
+                );
+
+                if (rosterChange || standingsChange) {
                     this.getRegional(() => {
                         // don't need to fetch usage during an event, probably
                         // but we can add it here later if needed...
@@ -577,7 +599,8 @@ export default {
                     }, this.liveUpdateFrequency * 1000);
                 }
 
-                this.latestHash = latestHash;
+                this.latestHashes.standings = standings;
+                this.latestHashes.roster = roster;
             });
         },
 
