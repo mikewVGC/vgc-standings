@@ -122,6 +122,9 @@ def process_pokedata_new_event(
         if player['c'] == "UK":
             player['c'] = "GB"
 
+        if not player['c']:
+            player['c'] = ""
+
         players[player_code] = Player(
             name=player['n'],
             code=player_code,
