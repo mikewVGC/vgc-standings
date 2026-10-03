@@ -40,7 +40,7 @@ def process_pokedata_new_event(
             # filter out non-masters players, sorry jrs and srs
             if r['d'] != 'M':
                 continue
-            roster_lookup[r['#']] = i
+            roster_lookup[make_code(r['n'])] = i
 
     players = {}
     phase_two_count = 0
@@ -55,25 +55,28 @@ def process_pokedata_new_event(
 
         team = []
         if len(roster):
-            player_roster_data = roster[roster_lookup[f"{i + 1}"]]
+            if player_code not in roster_lookup:
+                print(f"Could not find '{player_code}' in roster data")
+            else:
+                player_roster_data = roster[roster_lookup[player_code]]
 
-            mon_map = MonDictMap()
+                mon_map = MonDictMap()
 
-            for mon in player_roster_data['tl']:
-                team.append(
-                    create_team_member_from_mon(
-                        {
-                            "name": mon[5],
-                            "moves": mon[7],
-                            "item": mon[6],
-                            "ability": mon[4],
-                            "tera": mon[3],
-                            "nature": mon[2],
-                        },
-                        mon_map,
-                        event_info,
+                for mon in player_roster_data['tl']:
+                    team.append(
+                        create_team_member_from_mon(
+                            {
+                                "name": mon[5],
+                                "moves": mon[7],
+                                "item": mon[6],
+                                "ability": mon[4],
+                                "tera": mon[3],
+                                "nature": mon[2],
+                            },
+                            mon_map,
+                            event_info,
+                        )
                     )
-                )
 
         player_pairings = []
 
