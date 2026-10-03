@@ -90,8 +90,10 @@ def process_pokedata_new_event(
                     res = 'W'
                 elif res == 0:
                     res = 'L'
-                else:
+                elif res == 1:
                     res = 'T'
+                else:
+                    res = ''
 
                 phase = 1
                 if rnum > tour_format[0] + tour_format[1]:
