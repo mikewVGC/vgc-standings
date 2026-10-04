@@ -36,7 +36,18 @@ def process_pokedata_new_event(
 
     roster_lookup = {}
     if len(roster):
+        corrections = []
+        try:
+            with open(f"data/majors/{year}/{code}-roster-corrections.pd.json", encoding='utf8') as file:
+                corrections = json.loads(file.read())
+        except FileNotFoundError:
+            ...
+
         for i, r in enumerate(roster):
+            for c in corrections:
+                if r['n'] == c['roster_name']:
+                    roster[i]['n'] = c['standings_name']
+
             # filter out non-masters players, sorry jrs and srs
             if r['d'] != 'M':
                 continue
