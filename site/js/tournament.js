@@ -33,6 +33,8 @@ export default {
 
             phaseFilter: 'total',
 
+            keyboardShortcuts: true,
+
             filteredPlayers: [],
 
             hideFinishedPairings: false,
@@ -114,6 +116,7 @@ export default {
                         playerStandingsSearch: this.playerStandingsSearch,
                         filteredStandings: this.filteredStandings,
                         validFavs: this.validFavs,
+                        keyboardShortcuts: this.keyboardShortcuts,
                     };
 
                 case 'player':
@@ -360,6 +363,10 @@ export default {
             });
 
             document.addEventListener("keydown", (e) => {
+                if (!this.keyboardShortcuts) {
+                    return;
+                }
+
                 // ctrl+F, F3, cmd+F use the built in searches
                 if (e.code === 'F3' || ((e.ctrlKey || e.metaKey) && e.code === 'KeyF')) {
                     if (this.currentView == 'standings-main') {
@@ -388,9 +395,20 @@ export default {
             }
 
             // same for teamsheet display style
-            let maybeSheetStyle = localStorage.getItem('teamsheet-style')
+            let maybeSheetStyle = localStorage.getItem('teamsheet-style');
             if (maybeSheetStyle) {
                 this.teamsheetStyle = maybeSheetStyle;
+            }
+
+            // and keyboard shortcuts
+            let maybeKeyboardShortcuts = localStorage.getItem('tour-keyboard-shortcuts');
+            if (maybeKeyboardShortcuts !== null) {
+                if (maybeKeyboardShortcuts.toLowerCase() == "true") {
+                    maybeKeyboardShortcuts = true;
+                } else {
+                    maybeKeyboardShortcuts = false;
+                }
+                this.keyboardShortcuts = maybeKeyboardShortcuts;
             }
 
             // some init setup
@@ -955,6 +973,11 @@ export default {
             this.opponentsCompact = !this.opponentsCompact;
         },
 
+        toggleKeyboardShortcuts() {
+            this.keyboardShortcuts = !this.keyboardShortcuts;
+            localStorage.setItem('tour-keyboard-shortcuts', this.keyboardShortcuts);
+        },
+
         toggleFav(playerCode) {
             let findPlayer = this.favs.findIndex(p => p == playerCode);
             if (findPlayer >= 0) {
@@ -1082,7 +1105,15 @@ export default {
         },
         'standings-main': {
             template: '#standings-main-template',
-            props: [ 'season', 'standings', 'eventInfo', 'playerStandingsSearch', 'filteredStandings', 'validFavs' ],
+            props: [
+                'season',
+                'standings',
+                'eventInfo',
+                'playerStandingsSearch',
+                'filteredStandings',
+                'validFavs',
+                'keyboardShortcuts',
+            ],
             created: function() {
                 document.title = `${this.eventInfo.name} Standings -- Reportworm Standings`;
 
@@ -1135,6 +1166,9 @@ export default {
                 },
                 toggleFav(playerCode) {
                     this.$parent.toggleFav(playerCode);
+                },
+                toggleKeyboardShortcuts() {
+                    this.$parent.toggleKeyboardShortcuts();
                 },
                 isFav(playerCode) {
                     return this.$parent.isFav(playerCode);

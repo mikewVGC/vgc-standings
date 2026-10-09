@@ -86,19 +86,31 @@ __TEMPLATE_FOOTER__
         </tbody>
     </table>
 
-    <div class="filter-area" v-if="standings">
-        <input
-            type="text"
-            placeholder="Search by name"
-            id="playerStandingsSearch"
-            @input="searchPlayerStandings"
-            :value="playerStandingsSearch"
-        />
-        <div
-            class="searchFunc clearSearch"
-            v-if="playerStandingsSearch.length"
-            @click="clearStandingsSearch"
-        >&times;</div>
+    <div class="filter-area standings-filter" v-if="standings">
+        <div class="section player-search-section">
+            <input
+                type="text"
+                placeholder="Search by name"
+                id="playerStandingsSearch"
+                @input="searchPlayerStandings"
+                :value="playerStandingsSearch"
+            />
+            <div
+                class="searchFunc clearSearch"
+                v-if="playerStandingsSearch.length"
+                @click="clearStandingsSearch"
+            >&times;</div>
+        </div>
+        <div class="section">
+            <label for="setting-keyboard-shortcut">
+                <input
+                    type="checkbox"
+                    id="setting-keyboard-shortcut"
+                    @change="toggleKeyboardShortcuts"
+                    :checked="!keyboardShortcuts"
+                /> Disable keyboard shortcuts
+            </label>
+        </div>
     </div>
 
     <table id="standings" class="main-standings">

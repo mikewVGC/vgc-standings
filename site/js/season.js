@@ -89,6 +89,15 @@ export default {
                             .normalize('NFD')
                             .replace(/[\u0300-\u036f]/g, '')
                     );
+
+                    if (!nameMatch && ev.winner) {
+                        nameMatch = ev.winner.toLowerCase().includes(
+                            searchStr
+                                .toLowerCase()
+                                .normalize('NFD')
+                                .replace(/[\u0300-\u036f]/g, '')
+                        );
+                    }
                 }
 
                 let regionMatch = regionFilter == 'all' || ev.region == regionFilter;
