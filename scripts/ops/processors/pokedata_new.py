@@ -141,6 +141,12 @@ def process_pokedata_new_event(
         if not player['c']:
             player['c'] = ""
 
+        if player_code in players:
+            num = 1
+            while player_code in players:
+                player_code = f"{player_code}-{num}"
+                num += 1
+
         players[player_code] = Player(
             name=player['n'],
             code=player_code,
