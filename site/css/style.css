@@ -1548,7 +1548,7 @@ ul#pairing-round-select li a {
     table.main-standings td:nth-child(10),
     table.main-standings td:nth-child(11)
     {
-        width: 15%;
+        width: 13%;
     }
 
     table.main-standings td:nth-child(9)::before {
@@ -1754,6 +1754,10 @@ ul#pairing-round-select li a {
 
     .filter-area label#mega-usage {
         padding-left: 0em;
+    }
+
+    .filter-area.standings-filter {
+        display: block;
     }
 
     table.compact#opponents tbody td:nth-child(2) {

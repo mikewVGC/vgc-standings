@@ -289,7 +289,7 @@ __TEMPLATE_FOOTER__
 
     <div class="teamsheet-header">
         <div><h2>Teamsheet</h2></div>
-        <div>
+        <div v-if="player.team.length > 0">
             <div id="teamsheet-style" class="button-gutter">
                 <div
                     class="basic-button"
