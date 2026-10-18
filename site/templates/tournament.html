@@ -754,6 +754,7 @@ __TEMPLATE_FOOTER__
     <tr @click="toggleFilter"
         :data-type="type"
         :data-code="code"
+        :data-name="name"
     >
         <td><input type="checkbox" /></td>
         <td>
@@ -841,6 +842,10 @@ __TEMPLATE_FOOTER__
         <h3>
             {{ mon.name }} Configurations
         </h3>
+
+        <p class="smaller-still-text">
+            <strong>Pro Tip:</strong> Click checkboxes a second time (shows a dash) to exclude that criteria.
+        </p>
 
         <div class="filter-area">
 
@@ -1051,6 +1056,10 @@ __TEMPLATE_FOOTER__
             <span v-if="isFiltered()" v-cloak>(Filtered)</span>
         </span>
     </h3>
+
+    <p class="smaller-text" v-if="isFiltered()" v-cloak>
+        <strong>Current Filters &mdash;</strong> {{ getFilterStr(mon.code) }}
+    </p>
 
     <table id="mon-users" class="main-standings">
         <thead>

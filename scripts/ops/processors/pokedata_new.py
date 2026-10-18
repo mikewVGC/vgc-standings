@@ -46,7 +46,12 @@ def process_pokedata_new_event(
         for i, r in enumerate(roster):
             for c in corrections:
                 if r['n'] == c['roster_name']:
-                    roster[i]['n'] = c['standings_name']
+                    fixed_name = c['standings_name']
+                    if 'corrected_name' in c:
+                        fixed_name = c['corrected_name']
+                    r['n'] = fixed_name
+
+                    roster[i] = r
 
             # filter out non-masters players, sorry jrs and srs
             if r['d'] != 'M':
@@ -59,6 +64,12 @@ def process_pokedata_new_event(
 
     player_lookup = {}
     for i, player in enumerate(data):
+        for c in corrections:
+            if player['n'] == c['standings_name'] and 'corrected_name' in c:
+                data[i]['n'] = c['corrected_name']
+                if 'country' in c:
+                    data[i]['c'] = c['country']
+
         player_lookup[player['i']] = i
 
     for i, player in enumerate(data):
@@ -99,6 +110,9 @@ def process_pokedata_new_event(
 
                 if not table:
                     table = 0
+
+                if opp_id == None:
+                    opp_id = -1
 
                 if res == 3:
                     res = 'W'

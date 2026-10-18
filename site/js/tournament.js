@@ -170,7 +170,6 @@ export default {
                     }
 
                     let pairings = this.getPairings(secondary);
-                    console.log(pairings);
                     let roundName = secondary;
                     let roundNum = secondary;
                     let matchesComplete = 0;
@@ -649,9 +648,6 @@ export default {
                 checked[playerCode] = true;
 
                 const oppMatch = this.standings[opp]?.rounds.find(m => m.round == round) || false;
-                if (opp == "martin-steinbaron") {
-                    console.log(match, oppMatch);
-                }
 
                 let winner = "";
                 if (match.res == 'W') {
@@ -772,12 +768,12 @@ export default {
         },
 
         // filter for individual mon pages
-        toggleFilter(filterType, filterCode, cb, monData) {
+        toggleFilter(filterType, filterCode, filterName, cb, monData) {
             let filter = this.filters[filterType].find(f => f.code == filterCode);
 
             if (!filter) {
                 // add filter
-                filter = { code: filterCode, filter: "includes" }
+                filter = { code: filterCode, name: filterName, filter: "includes" }
                 this.filters[filterType].push(filter);
             } else {
                 // flip to exclude
@@ -809,6 +805,52 @@ export default {
             }
 
             this.applyFilters(monData);
+        },
+
+        getFilterStr(monCode) {
+            let filters = {
+                includes: [],
+                excludes: [],
+            };
+
+            this.filters.teammates.forEach(t => {
+                if (t.code != monCode) {
+                    filters[t.filter].push(`${t.name} (Teammate)`);
+                }
+            });
+
+            this.filters.items.forEach(i => {
+                filters[i.filter].push(`${i.name} (Item)`);
+            });
+
+            this.filters.teras.forEach(t => {
+                filters[t.filter].push(`${t.name} Tera`);
+            });
+
+            this.filters.natures.forEach(n => {
+                filters[n.filter].push(`${n.name} Nature`);
+            });
+
+            this.filters.moves.forEach(m => {
+                filters[m.filter].push(`${m.name} (Move)`);
+            });
+
+            this.filters.abilities.forEach(a => {
+                filters[a.filter].push(`${a.name} (Ability)`);
+            });
+
+            let filterStr = '';
+            if (filters.includes.length) {
+                filterStr = `Has: ${filters.includes.join(', ')}`;
+            }
+            if (filters.excludes.length) {
+                filterStr = filterStr +
+                    (filterStr.length ? '; ' : '') +
+                    `Doesn't have: ${filters.excludes.join(', ')}`
+                ;
+            }
+
+            return filterStr;
         },
 
         applyFilters(monData) {
@@ -1651,6 +1693,7 @@ export default {
                             this.$emit('toggle-filter', {
                                 type: parent.dataset.type,
                                 code: parent.dataset.code,
+                                name: parent.dataset.name,
                                 cb: cb,
                             });
                         },
@@ -1668,6 +1711,7 @@ export default {
                     return this.$parent.toggleFilter(
                         eventData.type,
                         eventData.code,
+                        eventData.name,
                         eventData.cb,
                         this.mon,
                     );
@@ -1679,7 +1723,12 @@ export default {
                     // reset
                     this.$parent.resetFilters();
                     // reapply the current mon
-                    this.toggleFilter({ type: 'teammates', code: this.mon.code, filter: "empty" });
+                    this.toggleFilter({
+                        type: 'teammates',
+                        code: this.mon.code,
+                        name: this.mon.name,
+                        filter: "empty",
+                    });
                 },
                 setNav(navData) {
                     return this.$parent.setNav(navData);
@@ -1693,6 +1742,9 @@ export default {
                 updatePhaseFilter(e) {
                     this.$parent.updatePhaseFilter(e.target.value);
                     this.$parent.applyFilters(this.mon);
+                },
+                getFilterStr(monCode) {
+                    return this.$parent.getFilterStr(monCode);
                 },
             },
         },
