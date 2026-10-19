@@ -87,6 +87,7 @@ def fix_mon_name(name:str) -> str:
         "Red-Striped",
         "Chest",
         "Altered",
+        "Average", # Gourgeist
 
         "West", # rk9 doesn't differentiate between Gastrodon forms but other platforms do sometimes
         "East", # west is the default to match Showdown, and also pink gastro is better anyway
@@ -126,6 +127,7 @@ def fix_mon_name(name:str) -> str:
         "Kyurem",
         "Sea",
         "Flower",
+        "Size",
     )
 
     # - is for mostly tauros, ' is for sirfetch'd
