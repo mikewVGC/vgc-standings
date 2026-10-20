@@ -6,6 +6,8 @@
             "home",
             "season",
             "tournament",
+            "terms",
+            "privacy",
             "ssi"
         ],
         "refs": {
@@ -196,6 +198,38 @@
                     "type": "value",
                     "location": "config",
                     "key": "live_refresh"
+                }
+            ]
+        },
+        "terms": {
+            "type": "html",
+            "base-ref": "terms",
+            "out": "public/static/terms.html",
+            "tokens": [
+                {
+                    "token": "__STYLESHEET_FILE__",
+                    "type": "flag",
+                    "name": "mode",
+                    "values": [
+                        { "value": "prod", "type": "filename", "location": "/static/style.min.css", "ts": true },
+                        { "values": [ "dev", "local" ], "type": "filename", "location": "/static/style.css", "ts": true }
+                    ]
+                }
+            ]
+        },
+        "privacy": {
+            "type": "html",
+            "base-ref": "privacy",
+            "out": "public/static/privacy.html",
+            "tokens": [
+                {
+                    "token": "__STYLESHEET_FILE__",
+                    "type": "flag",
+                    "name": "mode",
+                    "values": [
+                        { "value": "prod", "type": "filename", "location": "/static/style.min.css", "ts": true },
+                        { "values": [ "dev", "local" ], "type": "filename", "location": "/static/style.css", "ts": true }
+                    ]
                 }
             ]
         },

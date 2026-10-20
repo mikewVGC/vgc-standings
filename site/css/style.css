@@ -95,7 +95,17 @@ footer {
 }
 
 footer p {
-    line-height: 1.6em;
+    line-height: 1.5em;
+}
+
+footer p span {
+    display: inline-block;
+    border-right: 1px solid #000000;
+    padding: 0 .5em;
+}
+
+footer p span:nth-child(4) {
+    border-right: 0;
 }
 
 [v-cloak] {
@@ -1853,6 +1863,11 @@ ul#pairing-round-select li a {
         background-color: #606068;
         color: #E8E8E8;
     }
+
+    footer p span {
+        border-right: 1px solid #E8E8E8;
+    }
+
 
     .button-gutter {
         background: #606068;
