@@ -44,19 +44,7 @@ __TEMPLATE_FOOTER__
         <li><strong>Phase Two</strong>: {{ eventInfo.phase2Count }}</li>
     </ul>
 
-    <ul id="standings-sections">
-        <li><strong>Sections:</strong></li>
-        <li><a :href="`/${season}/${eventInfo.code}/usage`">Pokemon Usage Stats</a></li>
-        <li><a :href="`/${season}/${eventInfo.code}/countries`">Players by Country</a></li>
-        <li>
-            <a :href="`/${season}/${eventInfo.code}/pairings`">Pairings</a>
-            <!--<ul id="rk9-links">
-                <li><strong>RK9:</strong></li>
-                <li><a href="" target="_blank">Roster</a></il>
-                <li><a href="" target="_blank">Pairings</a></li>
-            </ul>-->
-        </li>
-    </ul>
+    __SECTIONS_NAV__
 
     <table id="favorites" class="main-standings" v-if="validFavs.length" v-cloak>
         <thead>
@@ -509,6 +497,8 @@ __TEMPLATE_FOOTER__
 
     <h2>{{ eventInfo.name }} Players by Country</h2>
 
+    <p><strong>Total Countries:</strong> {{ countryStats.length }}</p>
+
     <div class="table-holder">
 
         <table id="country-stats">
@@ -559,7 +549,20 @@ __TEMPLATE_FOOTER__
 
 <template id="country-template">
 
-    <h2>Players from {{ country }} &mdash; {{ eventInfo.name }}</h2>
+    <h2 id="country-players-title">
+        <img
+            :src="`/static/img/flags/${countryStats.country}.svg`"
+            :title="`${country} Flag`"
+            width="32"
+        /> Players from {{ country }} &mdash; {{ eventInfo.name }}
+    </h2>
+
+    <ul id="standings-info">
+        <li><strong>Total Players:</strong> {{ countryStats.players.length }}</li>
+        <li><strong>Phase Two:</strong>  {{ countryStats.phase2 }}</li>
+        <li><strong>Pct. In Phase Two:</strong>  {{ getPct(countryStats.phase2 / countryStats.players.length) }}</li>
+        <li><strong>Top Cut:</strong>  {{ countryStats.cut }}</li>
+    </ul>
 
     <table id="country-players" class="main-standings">
         <thead>

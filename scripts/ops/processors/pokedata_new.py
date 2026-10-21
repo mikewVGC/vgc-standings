@@ -35,8 +35,9 @@ def process_pokedata_new_event(
         ...
 
     roster_lookup = {}
+    corrections = []
+
     if len(roster):
-        corrections = []
         try:
             with open(f"data/majors/{year}/{code}-roster-corrections.pd.json", encoding='utf8') as file:
                 corrections = json.loads(file.read())

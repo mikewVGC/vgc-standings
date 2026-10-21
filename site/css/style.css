@@ -521,6 +521,11 @@ table#favorites {
     margin-bottom: .5em;
 }
 
+#country-players-title img {
+    position: relative;
+    top: 4px;
+}
+
 .team-container {
     width: 240px;
 }

@@ -173,6 +173,11 @@
                     ]
                 },
                 {
+                    "token": "__SECTIONS_NAV__",
+                    "type": "tpl",
+                    "ref": "tour-sections-nav"
+                },
+                {
                     "token": "__SPRITE_COORDS_DATA__",
                     "type": "file",
                     "location": "data/common/map-coords.json"
