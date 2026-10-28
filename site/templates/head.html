@@ -1,15 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!--# if expr="$tournament" -->
-        <!--# include file="/static/ssi/$tournament.html" -->
-    <!--# elif expr="$season" -->
-        <!--# include file="/static/ssi/$season.html" -->
-    <!--# else -->
+<!--# if expr="$readable_name" -->
+    <title><!--# echo var="readable_name" --> -- <!--# echo var="tour_name" --> -- Reportworm Standings</title>
+    <meta name="description" content="Reportworm Standings <!--# echo var='description_info' --> for <!--# echo var='readable_name' --> in the <!--# echo var='season' --> <!--# echo var='tour_name' -->" />
+<!--# elif expr="$is_usage = /true/" -->
+    <title><!--# echo var="tour_name" --> Pokemon Usage Stats -- <!--# echo var="season_name" --> -- Reportworm Standings</title>
+    <meta name="description" content="Reportworm Standings Pokemon usage and conversion rates for the <!--# echo var='season' --> <!--# echo var='tour_name' -->" />
+<!--# elif expr="$is_pairings = /true/" -->
+    <title><!--# echo var="tour_name" --> Pairings -- <!--# echo var="season_name" --> -- Reportworm Standings</title>
+    <meta name="description" content="Reportworm Standings tournament pairings for the <!--# echo var='season' --> <!--# echo var='tour_name' -->" />
+<!--# elif expr="$tour_name" -->
+    <title><!--# echo var="tour_name" --> Standings -- <!--# echo var="season_name" --> -- Reportworm Standings</title>
+    <meta name="description" content="Reportworm Standings showcases standings and teamsheets for the <!--# echo var='season' --> <!--# echo var='tour_name' -->" />
+<!--# elif expr="$season_name" -->
+    <title><!--# echo var="season_name" --> -- Reportworm Standings</title>
+    <meta name="description" content="Reportworm Standings showcases VGC standings and teamsheets for the <!--# echo var='season_name' -->" />
+<!--# else -->
     <title>Reportworm Standings</title>
-
     <meta name="description" content="Reportworm Standings showcases standings and teamsheets for all major VGC events such as regionals and international championships." />
-    <!--# endif -->
+<!--# endif -->
     <meta name="keywords" content="Pokemon, VGC, VGC standings, VGC regional, VGC teamsheets, Pokemon Video Game Championship, Pokemon events, Pokemon regional standings" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

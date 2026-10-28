@@ -249,8 +249,8 @@ def player_made_phase_two(player:dict|Player, tour_format:list) -> bool:
 def player_earned_points(player:dict, points_threshold:int) -> bool:
     if not points_threshold:
         return False
-    return player['place'] <= points_threshold
+    return player.place <= points_threshold
 
 
 def player_made_cut(player:dict, tour_format:list) -> bool:
-    return player['drop'] == -1 and len(player['rounds']) > tour_format[0] + tour_format[1]
+    return player.drop == -1 and len(player.rounds) > tour_format[0] + tour_format[1]

@@ -7,8 +7,7 @@
             "season",
             "tournament",
             "terms",
-            "privacy",
-            "ssi"
+            "privacy"
         ],
         "refs": {
             "tpl": "site/templates",

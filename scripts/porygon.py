@@ -3,13 +3,19 @@
 import argparse
 import json
 
+from lib.keymap import KeyMap
 from lib.ruleset import load_rulesets
 from lib.scanner import DataScanner
 from lib.util import get_season_bookends, make_nice_date_str
 from ops.config import Config
 from ops.home_bootstrap import get_home_bootstrap_data
-from ops.process_regional import process_regional, process_season, was_event_processed
-from ops.usage import compile_usage
+from ops.process_regional import (
+    process_regional,
+    process_season,
+    was_event_processed,
+    write_regional,
+)
+from ops.usage import compile_usage, write_usage
 from reportworm_builder.builder import Builder
 from reportworm_builder.builder_cache import BuilderCache
 
@@ -22,9 +28,10 @@ def main():
     )
     parser.add_argument('--mode', help="Build dev/prod/local version (dev default)")
     parser.add_argument('--build-only', action="store_true", help="Don't process any events, only rebuild pages")
-    parser.add_argument('--process', help="Only process specified regional(s). Format: year1:name1,year2:name2")
+    parser.add_argument('--process', help="Only process specified regional(s). Format: year1:name1,year2:name2. Wildcard is allowed for names (2025:*)")
     parser.add_argument('--grassroots', action="store_true", help="Process grassroots events as well")
     parser.add_argument('--missing-team-scan', action="store_true", help="Run a scan for missing teams. No other processing.")
+    parser.add_argument('--build-nginx-map', action="store_true", help="Build the mappings file for nginx (requires nginx reload)")
 
     cl = parser.parse_args()
 
@@ -68,6 +75,10 @@ def main():
 
     if not cl.build_only:
         process_data(manifest, allowlist, builder_cache, config, cl.grassroots)
+
+    # build nginx mappings file (doesn't need to happen every time)
+    if cl.build_nginx_map:
+        build_nginx_map(manifest['seasons'] + manifest['grassroots'])
 
     build_site(config, builder_cache)
 
@@ -126,12 +137,10 @@ def process_data(
 
         print(f"Building {year}")
 
-        season_title = f"{year} Season"
-        if year == "grassroots":
-            season_title = "Grassroots Events"
-
         for event_code, event_info in majors.items():
             event_should_be_processed = len(allowlist) == 0 or f"{year}-{event_code}" in allowlist or f"{year}-*" in allowlist
+
+            players = {}
 
             if not event_should_be_processed:
                 print(f"[{year}] Checking for processed data for '{event_code}'... ", end="")
@@ -139,7 +148,7 @@ def process_data(
                 event_info.update(proc_event_info)
             else:
                 print(f"[{year}] Processing data for '{event_code}'... ", end="")
-                majors[event_code], data_type = process_regional(
+                majors[event_code], players, data_type = process_regional(
                     year,
                     event_code,
                     event_info,
@@ -147,6 +156,14 @@ def process_data(
                     config.mode == 'prod',
                     grassroots
                 )
+
+                if event_info['status'] != 'upcoming':
+                    write_regional(
+                        f"{year}/{event_code}",
+                        event_info,
+                        players,
+                        config.mode == 'prod'
+                    )
 
             if year in past_seasons:
                 past_seasons[year]['events'] += 1
@@ -159,25 +176,15 @@ def process_data(
 
             if event_should_be_processed and event_info['processed']:
                 print("building usage... ", end="")
-                compile_usage(year, event_code, config.mode == 'prod', data_type)
+                mon_stats = compile_usage(year, event_info, players, config.mode == 'prod', data_type)
 
-            builder_cache.add_meta_ssi(
-                f"{year}/{event_code}",
-                f"{event_info['name']} Standings -- {season_title} -- Reportworm Standings",
-                f"Reportworm Standings showcases standings and teamsheets for the {year} {event_info['name']}.",
-            )
+                write_usage(f"{year}/{event_code}", mon_stats, config.mode == 'prod')
 
             print("Done!")
 
         print(f"[{year}] Processing season data... ", end="")
         process_season(year, majors, config.mode == "prod")
         print("Done!")
-
-        builder_cache.add_meta_ssi(
-            f"{year}",
-            f"{season_title} -- Reportworm Standings",
-            f"Reportworm Standings showcases standings and teamsheets for the {year} VGC Season.",
-        )
 
     # home (/) requires some bootstrap data
     past_seasons = list(past_seasons.values())
@@ -194,6 +201,9 @@ def process_data(
     builder_cache.save()
 
 
+"""
+simple call to Builder
+"""
 def build_site(config:Config, builder_cache:BuilderCache):
     builder = Builder(config.__dict__(), builder_cache.load())
 
@@ -201,6 +211,44 @@ def build_site(config:Config, builder_cache:BuilderCache):
     builder.build()
     print("Done!")
 
+
+"""
+build the nginx map separate (this will read all compiled files)
+"""
+def build_nginx_map(process_seasons):
+    key_map = KeyMap()
+
+    for year in process_seasons:
+        events = []
+        with open(f"public/data/{year}.json", encoding='utf8') as sfile:
+            events = json.loads(sfile.read())
+        for event in events:
+            key_map.add_mapping(f"event/{event['code']}", event['name'])
+
+            event_data = {}
+            try:
+                with open(f"public/data/{year}/{event['code']}.json", encoding='utf8') as efile:
+                    event_data = json.loads(efile.read())
+            except FileNotFoundError:
+                continue
+
+            for player in event_data['standings'].values():
+                key_map.add_mapping(f"player/{player['code']}", player['name'])
+
+            usage = []
+            try:
+                with open(f"public/data/{year}/{event['code']}-usage.json", encoding='utf8') as ufile:
+                    usage = json.loads(ufile.read())
+            except FileNotFoundError:
+                continue
+
+            for mon in usage:
+                key_map.add_mapping(f"mon/{mon['code']}", mon['name'])
+
+    # final keymap stuff
+    key_map.add_mapping('mon', "usage information and conversion rates")
+    key_map.add_mapping('player', "teamsheet and opponents")
+    key_map.dump()
 
 if __name__ == "__main__":
     main()

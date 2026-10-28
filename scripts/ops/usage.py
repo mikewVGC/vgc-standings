@@ -1,5 +1,6 @@
 
 import json
+from dataclasses import asdict
 
 from lib.formes import (
     get_mega_form,
@@ -17,21 +18,10 @@ from lib.tournament import (
 from lib.util import make_item_code
 
 
-def compile_usage(year:int, event_code:str, prod:bool, data_type:str) -> None:
-    data = {}
-    try:
-        with open(f"public/data/{year}/{event_code}.json", 'r') as file:
-            data = json.loads(file.read())
-    except FileNotFoundError:
-        print(f"usage could not read public/data/{year}/{event_code}.json", end="")
-        return
-
-    standings = data['standings']
-    event_info = data['event']
-
+def compile_usage(year:int, event_info:dict, standings:dict, prod:bool, data_type:str) -> list:
     num_players = len(standings.keys())
 
-    tour_format = get_tournament_structure(year, num_players, data['event'], data_type)
+    tour_format = get_tournament_structure(year, num_players, event_info, data_type)
 
     mon_stats = {}
     # item_stats = {}
@@ -44,12 +34,12 @@ def compile_usage(year:int, event_code:str, prod:bool, data_type:str) -> None:
         made_phase_two = player_made_phase_two(pdata, tour_format)
         made_cut = player_made_cut(pdata, tour_format)
 
-        for mon in pdata['team']:
-            code = mon['code']
+        for mon in pdata.team:
+            code = mon.code
 
             mega_form = ""
             if event_info['rules']['mega']:
-                mega_form = get_mega_form(code, mon)
+                mega_form = get_mega_form(code, asdict(mon))
 
             if code not in mon_stats:
                 dex_num, _, _, _ = get_mon_data_from_code(code)
@@ -57,7 +47,7 @@ def compile_usage(year:int, event_code:str, prod:bool, data_type:str) -> None:
                 if alt:
                     dex_num = alt
 
-                title_name = title_case_pokemon(mon['name'])
+                title_name = title_case_pokemon(mon.name)
 
                 mon_stats[code] = {
                     "name": title_name,
@@ -101,22 +91,22 @@ def compile_usage(year:int, event_code:str, prod:bool, data_type:str) -> None:
             if code not in mon_hashes:
                 mon_hashes[code] = {}
 
-            moves = [ m['name'] for m in mon['moves'] ]
+            moves = [ m.name for m in mon.moves ]
 
             moves = sorted(moves)
-            mon['moves'] = moves
+            mon.moves = moves
 
-            mon_hash = f"{mon['code']}-{mon['ability']}-{mon['item']}-{mon['tera']}" + '-'.join(moves)
+            mon_hash = f"{mon.code}-{mon.ability}-{mon.item}-{mon.tera}" + '-'.join(moves)
 
             if mon_hash not in mon_hashes[code]:
                 mon_hashes[code][mon_hash] = 0
 
             mon_hashes[code][mon_hash] += 1
 
-            if event_info['status'] == "complete" and 'points' in pdata:
-                mon_stats[code]['points'] += pdata['points']
+            if event_info['status'] == "complete":
+                mon_stats[code]['points'] += pdata.points
 
-            item_name = mon['item'] if mon['item'] else "No Item"
+            item_name = mon.item if len(mon.item) else "No Item"
             item_code = make_item_code(item_name)
             update_mon_stats(
                 mon_stats[code],
@@ -128,7 +118,7 @@ def compile_usage(year:int, event_code:str, prod:bool, data_type:str) -> None:
                 made_cut
             )
 
-            ability = mon['ability'] if mon['ability'] else "Unknown"
+            ability = mon.ability if mon.ability else "Unknown"
             update_mon_stats(
                 mon_stats[code],
                 ability,
@@ -139,7 +129,7 @@ def compile_usage(year:int, event_code:str, prod:bool, data_type:str) -> None:
                 made_cut
             )
 
-            tera = mon['tera'] if mon['tera'] else ""
+            tera = mon.tera if mon.tera else ""
             if len(tera):
                 update_mon_stats(
                     mon_stats[code],
@@ -151,7 +141,7 @@ def compile_usage(year:int, event_code:str, prod:bool, data_type:str) -> None:
                     made_cut
                 )
 
-            nature = mon['nature'] if mon['nature'] else ""
+            nature = mon.nature if len(mon.nature) else ""
             if len(nature):
                 update_mon_stats(
                     mon_stats[code],
@@ -163,7 +153,7 @@ def compile_usage(year:int, event_code:str, prod:bool, data_type:str) -> None:
                     made_cut
                 )
 
-            for move_name in mon['moves']:
+            for move_name in mon.moves:
                 update_mon_stats(
                     mon_stats[code],
                     move_name,
@@ -174,15 +164,15 @@ def compile_usage(year:int, event_code:str, prod:bool, data_type:str) -> None:
                     made_cut
                 )
 
-            for tmate in pdata['team']:
-                mate_code = tmate['code']
+            for tmate in pdata.team:
+                mate_code = tmate.code
                 if mate_code == code:
                     continue
 
                 update_mon_stats(
                     mon_stats[code],
                     mate_code,
-                    tmate['name'],
+                    tmate.name,
                     'teammates',
                     earned_points,
                     made_phase_two,
@@ -195,12 +185,12 @@ def compile_usage(year:int, event_code:str, prod:bool, data_type:str) -> None:
             if len(mega_form):
                 mon_stats[code]['forms'][mega_form]['counts']['total'] += 1
 
-            mon_stats[code]['w'] += pdata['record']['w']
-            mon_stats[code]['l'] += pdata['record']['l']
+            mon_stats[code]['w'] += pdata.record['w']
+            mon_stats[code]['l'] += pdata.record['l']
 
             if len(mega_form):
-                mon_stats[code]['forms'][mega_form]['counts']['w'] += pdata['record']['w']
-                mon_stats[code]['forms'][mega_form]['counts']['l'] += pdata['record']['l']
+                mon_stats[code]['forms'][mega_form]['counts']['w'] += pdata.record['w']
+                mon_stats[code]['forms'][mega_form]['counts']['l'] += pdata.record['l']
 
             if earned_points:
                 mon_stats[code]['counts']['points'] += 1
@@ -240,13 +230,17 @@ def compile_usage(year:int, event_code:str, prod:bool, data_type:str) -> None:
                 key=lambda x: (-x['count']['total'], x['name'])
             )
 
+    return mon_stats
+
+
+def write_usage(path:str, mon_stats:list, prod:bool):
     indent_amt = 2
     separators = None
     if prod:
         indent_amt = None
         separators = (',', ':')
 
-    with open(f"public/data/{year}/{event_code}-usage.json", 'w') as file:
+    with open(f"public/data/{path}-usage.json", 'w') as file:
         file.write(json.dumps(mon_stats, indent=indent_amt, separators=separators))
 
 

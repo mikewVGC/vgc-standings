@@ -5,6 +5,7 @@ data/builder
 data/common/pokedex.json
 data/common/moves.json
 data/majors
+data/nginx
 data/pastes
 public/data/*
 public/index.html

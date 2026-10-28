@@ -52,7 +52,7 @@ def process_regional(
     ruleset:Ruleset | None,
     prod:bool,
     grassroots:bool,
-) -> (dict, str):
+) -> (dict, dict, str):
 
     try:
         data, data_type = get_data_and_type(year, code)
@@ -62,7 +62,7 @@ def process_regional(
         event_info['processed'] = False
         event_info['status'] = 'upcoming'
 
-        return event_info, ""
+        return event_info, {}, ""
 
     if ruleset:
         event_info['rules'] = ruleset.dump_info()
@@ -223,20 +223,24 @@ def process_regional(
         for player in players_ordered.values():
             player.points = get_points_earned(year, len(players_ordered), player.place, event_is_ic)
 
+    return event_info, players_ordered, data_type
 
+
+"""
+save the full standings json to disk
+"""
+def write_regional(path, event_info, players, prod):
     indent_amt = 2
     separators = None
     if prod:
         indent_amt = None
         separators = (',', ':')
 
-    with open(f"public/data/{year}/{code}.json", 'w') as file:
+    with open(f"public/data/{path}.json", 'w') as file:
         file.write(json.dumps({
             "event": event_info,
-            "standings": players_ordered,
+            "standings": players,
         }, cls=EnhancedJSONEncoder, indent=indent_amt, separators=separators))
-
-    return event_info, data_type
 
 
 """
