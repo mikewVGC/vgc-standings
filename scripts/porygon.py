@@ -157,7 +157,7 @@ def process_data(
                     grassroots
                 )
 
-                if event_info['status'] != 'upcoming':
+                if len(players):
                     write_regional(
                         f"{year}/{event_code}",
                         event_info,

@@ -78,7 +78,7 @@ elog("Setup done. Running...");
 $backoff = 0;
 $attempts = 0;
 
-$updates_file = realpath(__DIR__ . "/../public/data/{$current_season}/updates.json");
+$updates_file = __DIR__ . "/../public/data/{$current_season}/updates.json";
 if (!file_exists($updates_file)) {
     elog("Updates file not found, creating empty one");
     file_put_contents($updates_file, "{}");
