@@ -21,6 +21,7 @@ export default {
             playerStandingsSearch: '',
             usageFilter: 'all',
             usageShowMegas: false,
+            usageLookup: {},
 
             filters: {
                 items: [],
@@ -555,7 +556,9 @@ export default {
             }).then((d) => {
                 this.usage = d;
 
-                this.usage.forEach(u => {
+                this.usageLookup = {};
+
+                this.usage.forEach((u, i) => {
                     u.counts['phase2Conversion'] = u.counts.phase2 / u.counts.total;
                     u.counts['cutConversion'] = u.counts.cut / u.counts.phase2;
                     u.counts['winRate'] = u.w / (u.w + u.l);
@@ -567,10 +570,20 @@ export default {
                             f.counts['winRate'] = f.counts.w / (f.counts.w + f.counts.l);
                         });
                     }
+
+                    this.usageLookup[u.code] = i;
                 });
 
                 this.loaded = true;
             });
+        },
+
+        getMonUsageByCode(code) {
+            if (this.usageLookup[code] == undefined) {
+                return false;
+            }
+
+            return this.usage[this.usageLookup[code]] || false;
         },
 
         checkForUpdates() {
@@ -726,18 +739,33 @@ export default {
         sortTeams(monsFirst) {
             for (const [playerCode, player ] of Object.entries(this.standings)) {
                 this.standings[playerCode].teamSorted.sort((a, b) => {
-                    if (monsFirst.includes(a['code']) && monsFirst.includes(b['code'])) {
-                        if (monsFirst.indexOf(a['code']) < monsFirst.indexOf(b['code'])) {
+                    if (monsFirst.includes(a.code) && monsFirst.includes(b.code)) {
+                        if (monsFirst.indexOf(a.code) < monsFirst.indexOf(b.code)) {
                             return -1;
                         }
                         return 1;
                     }
-                    if (monsFirst.includes(a['code'])) {
+                    if (monsFirst.includes(a.code)) {
                         return -1;
                     }
-                    if (monsFirst.includes(b['code'])) {
+                    if (monsFirst.includes(b.code)) {
                         return 1;
                     }
+
+                    let aUsage = this.getMonUsageByCode(a.code);
+                    let bUsage = this.getMonUsageByCode(b.code);
+
+                    if (!aUsage || !bUsage) {
+                        console.log(a.code, aUsage, b.code, bUsage);
+                        return 0;
+                    }
+
+                    if (aUsage.counts.total > bUsage.counts.total) {
+                        return -1;
+                    } else if (bUsage.counts.total > aUsage.counts.total) {
+                        return 1;
+                    }
+
                     return 0;
                 });
             }
