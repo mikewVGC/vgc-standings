@@ -733,10 +733,10 @@ __TEMPLATE_FOOTER__
                     <td>{{ monform.counts.points }}</td>
                     <td><span class="pct">({{ getPct(monform.counts.points / eventInfo.playerCount, 4) }})</span></td>
                     <td>{{ monform.counts.phase2 }}</td>
-                    <td><span class="pct">({{ getPct(monform.counts.phase2 / eventInfo.playerCount, 4) }})</span></td>
+                    <td><span class="pct">({{ getPct(monform.counts.phase2 / eventInfo.phase2Count, 4) }})</span></td>
                     <td>{{ getPct(monform.counts.phase2Conversion, 5) }}</td>
                     <td>{{ monform.counts.cut }}</td>
-                    <td><span class="pct">({{ getPct(monform.counts.cut / eventInfo.playerCount, 4) }})</span></td>
+                    <td><span class="pct">({{ getPct(monform.counts.cut / eventInfo.cutCount, 4) }})</span></td>
                     <td>{{ getPct(monform.counts.cutConversion, 5) }}</td>
                 </tr>
             </template>
