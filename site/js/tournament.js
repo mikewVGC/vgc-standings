@@ -894,7 +894,7 @@ export default {
         applyFilters(monData) {
             this.filteredPlayers = [];
 
-            console.log(this.filters);
+            //console.log(this.filters);
 
             for (let i = 0; i < monData.players.length; i++) {
                 let pcode = monData.players[i];
@@ -904,12 +904,14 @@ export default {
                     continue;
                 }
 
+                /*
                 console.log(
                     'code',
                     this.filterCombined('teammates', this.standings[pcode].team, 'code'),
                     'altcode',
                     this.filterCombined('teammates', this.standings[pcode].team, 'altcode'),
                 );
+                */
 
                 if (this.filterExact('items', pmon.itemcode) &&
                     this.filterExact('teras', pmon.tera) &&
