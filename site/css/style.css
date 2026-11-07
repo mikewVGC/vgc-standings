@@ -130,6 +130,20 @@ footer p span:nth-child(4) {
     border-radius: .25em;
 }
 
+.sm-icon {
+    width: 16px;
+    height: 16px;
+    background-size: 14px 14px;
+    background-repeat: no-repeat;
+    background-position: 2px 2px;
+    display: inline-block;
+}
+
+.ext-link-icon {
+    background-image: url(/static/img/ext-link-light.png);
+    margin-left: .25em;
+}
+
 #current-season {
     border: 1px solid #254852;
     background: #F8F8F8;
@@ -1112,6 +1126,11 @@ ul#rk9-links li {
     width: 80%;
 }
 
+.mon-usage-container h3 a {
+    float: right;
+    font-size: .8em;
+}
+
 .mon-config-container {
     grid-template-columns: repeat(3, 1fr);
     display: grid;
@@ -1278,6 +1297,12 @@ ul#pairing-round-select li a {
 
 .attr {
     color: #666666;
+}
+
+h4#player-champs-link {
+    text-align: right;
+    margin: 0;
+    padding: .4em 0;
 }
 
 #player-info-block {
@@ -1876,6 +1901,10 @@ ul#pairing-round-select li a {
 
     .button-gutter {
         background: #606068;
+    }
+
+    .ext-link-icon {
+        background-image: url(/static/img/ext-link-dark.png);
     }
 
     #teamsheet-style .basic-button:not(.active) {

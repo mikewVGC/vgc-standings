@@ -275,6 +275,14 @@ __TEMPLATE_FOOTER__
         </div>
     </div>
 
+    <h4 id="player-champs-link" v-if="eventInfo.game == 'Champions'" v-cloak>
+        <a
+            :href="`https://champs.reportworm.com/player/${player.code}`"
+            data-pass="1"
+            target="_blank"
+        >View All Results on Reportworm Champs<div class="sm-icon ext-link-icon"></div></a>
+    </h4>
+
     <div class="teamsheet-header">
         <div><h2>Teamsheet</h2></div>
         <div v-if="player.team.length > 0">
@@ -841,6 +849,14 @@ __TEMPLATE_FOOTER__
                 </tr>
             </table>
         </div>
+
+        <h4 v-if="eventInfo.game == 'Champions'" v-cloak>
+            <a
+                :href="`https://champs.reportworm.com/mon/${mon.code}`"
+                data-pass="1"
+                target="_blank"
+            >View All {{ mon.name }} Usage &amp; Trends On Reportworm Champs<div class="sm-icon ext-link-icon"></div></a>
+        </h4>
 
         <h3>
             {{ mon.name }} Configurations

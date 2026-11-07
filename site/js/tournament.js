@@ -756,15 +756,25 @@ export default {
                     let bUsage = this.getMonUsageByCode(b.code);
 
                     if (!aUsage || !bUsage) {
-                        console.log(a.code, aUsage, b.code, bUsage);
+                        // this shouldn't happen
                         return 0;
                     }
 
+                    // usage sort
                     if (aUsage.counts.total > bUsage.counts.total) {
                         return -1;
                     } else if (bUsage.counts.total > aUsage.counts.total) {
                         return 1;
                     }
+
+                    /*
+                    // alpha sort
+                    if (a.code < b.code) {
+                        return -1;
+                    } else if (b.code < a.code) {
+                        return 1;
+                    }
+                    */
 
                     return 0;
                 });
@@ -884,9 +894,22 @@ export default {
         applyFilters(monData) {
             this.filteredPlayers = [];
 
+            console.log(this.filters);
+
             for (let i = 0; i < monData.players.length; i++) {
                 let pcode = monData.players[i];
                 let [ pmon ] = this.standings[pcode].team.filter(m => m.code == monData.code);
+
+                if (!pmon) {
+                    continue;
+                }
+
+                console.log(
+                    'code',
+                    this.filterCombined('teammates', this.standings[pcode].team, 'code'),
+                    'altcode',
+                    this.filterCombined('teammates', this.standings[pcode].team, 'altcode'),
+                );
 
                 if (this.filterExact('items', pmon.itemcode) &&
                     this.filterExact('teras', pmon.tera) &&

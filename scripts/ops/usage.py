@@ -41,13 +41,16 @@ def compile_usage(year:int, event_info:dict, standings:dict, prod:bool, data_typ
             if event_info['rules']['mega']:
                 mega_form = get_mega_form(code, asdict(mon))
 
+            if len(mega_form):
+                code = mega_form
+
             if code not in mon_stats:
-                dex_num, _, _, _ = get_mon_data_from_code(code)
+                dex_num, _, _, mon_name = get_mon_data_from_code(code)
                 alt = get_mon_alt_from_code(code)
                 if alt:
                     dex_num = alt
 
-                title_name = title_case_pokemon(mon.name)
+                title_name = title_case_pokemon(mon_name)
 
                 mon_stats[code] = {
                     "name": title_name,
@@ -73,6 +76,7 @@ def compile_usage(year:int, event_info:dict, standings:dict, prod:bool, data_typ
                     "forms": {},
                 }
 
+            """
             if len(mega_form) and mega_form not in mon_stats[code]['forms']:
                 _, _, _, form_name = get_mon_data_from_code(mega_form)
                 mon_stats[code]['forms'][mega_form] = {
@@ -87,6 +91,7 @@ def compile_usage(year:int, event_info:dict, standings:dict, prod:bool, data_typ
                         "l": 0,
                     }
                 }
+            """
 
             if code not in mon_hashes:
                 mon_hashes[code] = {}
@@ -166,13 +171,23 @@ def compile_usage(year:int, event_info:dict, standings:dict, prod:bool, data_typ
 
             for tmate in pdata.team:
                 mate_code = tmate.code
+                mate_name = tmate.name
+
+                mate_mega = ""
+                if event_info['rules']['mega']:
+                    mate_mega = get_mega_form(mate_code, asdict(tmate))
+
+                if len(mate_mega):
+                    mate_code = mate_mega
+                    _, _, _, mate_name = get_mon_data_from_code(mate_mega)
+
                 if mate_code == code:
                     continue
 
                 update_mon_stats(
                     mon_stats[code],
                     mate_code,
-                    tmate.name,
+                    mate_name,
                     'teammates',
                     earned_points,
                     made_phase_two,
@@ -182,30 +197,30 @@ def compile_usage(year:int, event_info:dict, standings:dict, prod:bool, data_typ
             mon_stats[code]['players'].append(player)
 
             mon_stats[code]['counts']['total'] += 1
-            if len(mega_form):
-                mon_stats[code]['forms'][mega_form]['counts']['total'] += 1
+            #if len(mega_form):
+            #    mon_stats[code]['forms'][mega_form]['counts']['total'] += 1
 
             mon_stats[code]['w'] += pdata.record['w']
             mon_stats[code]['l'] += pdata.record['l']
 
-            if len(mega_form):
-                mon_stats[code]['forms'][mega_form]['counts']['w'] += pdata.record['w']
-                mon_stats[code]['forms'][mega_form]['counts']['l'] += pdata.record['l']
+            #if len(mega_form):
+            #    mon_stats[code]['forms'][mega_form]['counts']['w'] += pdata.record['w']
+            #    mon_stats[code]['forms'][mega_form]['counts']['l'] += pdata.record['l']
 
             if earned_points:
                 mon_stats[code]['counts']['points'] += 1
-                if len(mega_form):
-                    mon_stats[code]['forms'][mega_form]['counts']['points'] += 1
+                #if len(mega_form):
+                #    mon_stats[code]['forms'][mega_form]['counts']['points'] += 1
 
             if made_phase_two:
                 mon_stats[code]['counts']['phase2'] += 1
-                if len(mega_form):
-                    mon_stats[code]['forms'][mega_form]['counts']['phase2'] += 1
+                #if len(mega_form):
+                #    mon_stats[code]['forms'][mega_form]['counts']['phase2'] += 1
 
             if made_cut:
                 mon_stats[code]['counts']['cut'] += 1
-                if len(mega_form):
-                    mon_stats[code]['forms'][mega_form]['counts']['cut'] += 1
+                #if len(mega_form):
+                #    mon_stats[code]['forms'][mega_form]['counts']['cut'] += 1
 
     mon_stats = list(mon_stats.values())
 
