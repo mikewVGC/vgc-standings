@@ -788,6 +788,7 @@ h3 span {
     grid-template-columns: 150px 1fr;
     padding-bottom: 1em;
     grid-gap: 1em;
+    position: relative;
 }
 
 .team-new .paste-mon {
@@ -834,6 +835,13 @@ h3 span {
     width: 150px;
     height: 165px;
     margin: auto;
+}
+
+.form-change-btn {
+    display: block;
+    border: 0px;
+    padding-bottom: .5em;
+    background: #F0F0F0;
 }
 
 .team-new .mon-info {
@@ -1926,6 +1934,15 @@ h4#player-champs-link {
 
     .tabgroup div#home-button {
         background-image: url(/static/img/home-black.png?3);
+    }
+
+    .basic-button, .form-change-btn {
+        background: #404040;
+        color: #FFFFFF;
+    }
+
+    .form-change-btn {
+        background: #303038;
     }
 
     .event-block {

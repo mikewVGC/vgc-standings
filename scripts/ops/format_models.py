@@ -8,17 +8,23 @@ from dataclasses import dataclass
 class TeamMember:
     name: str
     code: str
-    altname: str
-    altcode: str
     dex: int
-    ptype: str
-    stype: str
     tera: str
     ability: str
+    alt: TeamMemberAlt | None = None
+    types: list[str] | None = None
     nature: str = ''
     item: str = ''
     itemcode: str = ''
     moves: list[Move] | None = None
+
+@dataclass
+class TeamMemberAlt:
+    name: str
+    code: str
+    dex: int
+    ability: str
+    types: list[str] | None = None
 
 @dataclass
 class Move:

@@ -12,22 +12,22 @@ cosmetic_forms = {
     "tatsugiristretchy": "tatsugiri",
 }
 
-# returns: dex #, primary typing, secondary typing, name
-def get_mon_data_from_code(mon_code:str) -> (int, str, str, str):
+# returns: dex #, type(s), name, abilities
+def get_mon_data_from_code(mon_code:str) -> (int, list, str, list):
     if mon_code in pokedex:
         pdex = pokedex[mon_code]
         if 'types' in pdex:
-            stype = pdex['types'][1] if len(pdex['types']) > 1 else ''
-            return pdex['num'], pdex['types'][0], stype, pdex['name']
+            types = [ t.lower() for t in pdex['types'] if len(t) ]
+            return pdex['num'], types, pdex['name'], list(pdex['abilities'].values())
     
     if mon_code in cosmetic_forms:
         cosmetic_code = cosmetic_forms[mon_code]
         pdex = pokedex[cosmetic_code]
         if 'types' in pdex:
-            stype = pdex['types'][1] if len(pdex['types']) > 1 else ''
-            return pdex['num'], pdex['types'][0], stype, pdex['name']
+            types = [ t.lower() for t in pdex['types'] if len(t) ]
+            return pdex['num'], types, pdex['name'], list(pdex['abilities'].values())
 
-    return 0, '', '', ''
+    return 0, [], '', []
 
 # same idea, but just returns the name
 def get_mon_name_from_code(mon_code:str) -> str:

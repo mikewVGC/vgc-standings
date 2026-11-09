@@ -24,6 +24,7 @@ from ops.format_models import (
     Player,
     Round,
     TeamMember,
+    TeamMemberAlt,
 )
 
 """
@@ -90,7 +91,7 @@ def process_limitless_event(data:list, tour_format:list, official_order:list, ev
                 mon_code = "aegislash"
                 mon_name = "Aegislash"
 
-            dex_num, ptype, stype, _ = get_mon_data_from_code(mon_code)
+            dex_num, types, _, _ = get_mon_data_from_code(mon_code)
 
             tera_type = mon.get('tera', "")
             if not event_info['rules']['tera']:
@@ -104,13 +105,25 @@ def process_limitless_event(data:list, tour_format:list, official_order:list, ev
             if mon_alt_code:
                 mon_alt_name = get_mon_name_from_code(mon_alt_code)
 
+            alt_data = None
+
             alt = ""
             if mon_alt_code:
                 alt = get_mon_alt_from_code(mon_alt_code)
             else:
                 alt = get_mon_alt_from_code(mon_code)
 
-            if alt:
+            if alt and len(mon_alt_code):
+                _, alt_types, _, alt_abilities = get_mon_data_from_code(mon_alt_code)
+
+                alt_data = TeamMemberAlt(
+                    name=mon_alt_name,
+                    code=mon_alt_code,
+                    dex=alt,
+                    types=alt_types,
+                    ability=alt_abilities[0],
+                )
+            elif alt:
                 dex_num = alt
 
             moves = [ Move(name=m) for m in mon['attacks'] if m ]
@@ -121,14 +134,12 @@ def process_limitless_event(data:list, tour_format:list, official_order:list, ev
             team.append(TeamMember(
                 name=mon_name,
                 code=mon_code,
-                altname=mon_alt_name,
-                altcode=mon_alt_code,
                 dex=dex_num,
-                ptype=ptype.lower(),
-                stype=stype.lower(),
+                types=types,
                 tera=str(tera_type),
                 nature=str(nature),
                 ability=mon['ability'],
+                alt=alt_data,
                 item=mon['item'],
                 itemcode=make_item_code(mon['item']),
                 moves=moves,

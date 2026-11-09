@@ -17,6 +17,7 @@ from lib.tournament import (
 )
 from lib.util import make_item_code
 
+
 def compile_usage(year:int, event_info:dict, standings:dict, prod:bool, data_type:str) -> list:
     num_players = len(standings.keys())
 
@@ -46,7 +47,7 @@ def compile_usage(year:int, event_info:dict, standings:dict, prod:bool, data_typ
             """
 
             if code not in mon_stats:
-                dex_num, _, _, mon_name = get_mon_data_from_code(code)
+                dex_num, _, mon_name, _ = get_mon_data_from_code(code)
                 alt = get_mon_alt_from_code(code)
                 if alt:
                     dex_num = alt
@@ -78,7 +79,7 @@ def compile_usage(year:int, event_info:dict, standings:dict, prod:bool, data_typ
                 }
 
             if len(mega_form) and mega_form not in mon_stats[code]['forms']:
-                _, _, _, form_name = get_mon_data_from_code(mega_form)
+                _, _, form_name, _ = get_mon_data_from_code(mega_form)
                 mon_stats[code]['forms'][mega_form] = {
                     "name": form_name,
                     "code": mega_form,
@@ -172,14 +173,14 @@ def compile_usage(year:int, event_info:dict, standings:dict, prod:bool, data_typ
                 mate_code = tmate.code
                 mate_name = tmate.name
 
+                """
                 mate_mega = ""
                 if event_info['rules']['mega']:
                     mate_mega = get_mega_form(mate_code, asdict(tmate))
 
-                """
                 if len(mate_mega):
                     mate_code = mate_mega
-                    _, _, _, mate_name = get_mon_data_from_code(mate_mega)
+                    _, _, _, mate_name, _ = get_mon_data_from_code(mate_mega)
                 """
 
                 if mate_code == code:

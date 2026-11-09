@@ -1313,6 +1313,25 @@ export default {
                         getNatureUp(nature) {
                             return this.$parent.getNatureUp(nature);
                         },
+                        getDexForStyle(mon) {
+                            if (this.teamsheetStyle == 'paste') {
+                                return mon.alt ? mon.alt.dex : mon.dex;
+                            }
+
+                            return mon.showAlt ? mon.alt.dex : mon.dex;
+                        },
+                        getTypesForForm(mon) {
+                            if (mon.showAlt && mon.alt) {
+                                return mon.alt.types;
+                            }
+                            return mon.types;
+                        },
+                        toggleAlt(mon) {
+                            if (mon.showAlt == undefined) {
+                                mon.showAlt = false;
+                            }
+                            mon.showAlt = !mon.showAlt;
+                        },
                     },
                 },
             },
