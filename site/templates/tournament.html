@@ -284,7 +284,7 @@ __TEMPLATE_FOOTER__
         </div>
     </div>
 
-    <h4 id="player-champs-link" v-if="eventInfo.game == 'Champions'" v-cloak>
+    <h4 id="player-champs-link" v-if="eventInfo.game == 'Champions' && season != 'grassroots'" v-cloak>
         <a
             :href="`https://champs.reportworm.com/player/${player.code}`"
             data-pass="1"
@@ -861,7 +861,7 @@ __TEMPLATE_FOOTER__
             </table>
         </div>
 
-        <h4 v-if="eventInfo.game == 'Champions'" v-cloak>
+        <h4 v-if="eventInfo.game == 'Champions' && season != 'grassroots'" v-cloak>
             <a
                 :href="`https://champs.reportworm.com/mon/${mon.code}`"
                 data-pass="1"
