@@ -30,6 +30,9 @@ def process_vr_event(data:list, tour_format:list, official_order:list, event_inf
     number_players = {}
     player_id_to_code = {}
     for player in data:
+        if not player:
+            print("Skipping None player")
+            continue
         player_code = make_code(player['name'])
         if player_code.isdigit() and player_code not in number_players:
             number_players[player_code] = f"{player_code}_"
@@ -65,6 +68,10 @@ def process_vr_event(data:list, tour_format:list, official_order:list, event_inf
     dupe_player_map = {}
 
     for player in data:
+        if not player:
+            print("Skipping None player")
+            continue
+
         player_code = make_code(player['name'])
         if player_code.isdigit():
             player_code = f"{player_code}_"
@@ -87,7 +94,7 @@ def process_vr_event(data:list, tour_format:list, official_order:list, event_inf
             elif match.res == 'L':
                 losses += 1
 
-            if match.opp:
+            if match.opp and match.opp in player_id_to_code:
                 match.opp = player_id_to_code[match.opp]
                 if match.opp in number_players:
                     match.opp = number_players[match.opp]
