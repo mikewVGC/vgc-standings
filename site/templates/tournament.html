@@ -289,7 +289,7 @@ __TEMPLATE_FOOTER__
             :href="`https://champs.reportworm.com/player/${player.code}`"
             data-pass="1"
             target="_blank"
-        >View All Results on Reportworm Champs<div class="sm-icon ext-link-icon"></div></a>
+        >All Player Results on Reportworm Champs<div class="sm-icon ext-link-icon"></div></a>
     </h4>
 
     <div class="teamsheet-header">
@@ -861,16 +861,16 @@ __TEMPLATE_FOOTER__
             </table>
         </div>
 
-        <h4 v-if="eventInfo.game == 'Champions' && season != 'grassroots'" v-cloak>
-            <a
-                :href="`https://champs.reportworm.com/mon/${mon.code}`"
-                data-pass="1"
-                target="_blank"
-            >View All {{ mon.name }} Usage &amp; Trends On Reportworm Champs<div class="sm-icon ext-link-icon"></div></a>
-        </h4>
-
         <h3>
             {{ mon.name }} Configurations
+
+            <strong v-if="eventInfo.game == 'Champions' && season != 'grassroots'" v-cloak>
+                <a
+                    :href="`https://champs.reportworm.com/mon/${mon.code}`"
+                    data-pass="1"
+                    target="_blank"
+                >All Usage &amp; Trends On Reportworm Champs<div class="sm-icon ext-link-icon"></div></a>
+            </strong>
         </h3>
 
         <p class="smaller-still-text">
