@@ -146,7 +146,7 @@ def compile_usage(year:int, event_info:dict, standings:dict, prod:bool, data_typ
                     made_cut
                 )
 
-            nature = mon.nature if len(mon.nature) else ""
+            nature = mon.nature if mon.nature else ""
             if len(nature):
                 update_mon_stats(
                     mon_stats[code],

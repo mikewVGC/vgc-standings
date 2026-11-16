@@ -71,6 +71,8 @@ def process_playlatamscraper_event(
                 mon['species'] = 'Mimikyu'
             if mon['species'].startswith('Palafin'):
                 mon['species'] = 'Palafin'
+            if mon['species'].startswith('Aegislash'):
+                mon['species'] = 'Aegislash'
 
             # for consistency
             if mon['species'] == 'Zamazenta' or mon['species'] == 'Zacian':

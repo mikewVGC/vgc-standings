@@ -68,6 +68,9 @@ convert mon name from rk9 to showdown...
 this is missing anything not present in SV
 """
 def fix_mon_name(name:str) -> str:
+    if not len(name):
+        return ""
+
     # these are "default" for multi-forme mons on Showdown
     # they get removed: Urshifu [Single Strike Form] -> Urshifu
     ignored = (
