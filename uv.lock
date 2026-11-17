@@ -461,8 +461,8 @@ wheels = [
 
 [[package]]
 name = "paste-parser"
-version = "1.0.2"
-source = { git = "https://github.com/mikewVGC/paste-parser.git#a3a92e83cde7bf0c084a540a4f92646431665fd9" }
+version = "1.0.8"
+source = { git = "https://github.com/mikewVGC/paste-parser.git#0b8019e3d62dd2fff64462ed5a300fb17bfd05a4" }
 dependencies = [
     { name = "setuptools" },
     { name = "twine" },
