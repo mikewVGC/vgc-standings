@@ -91,6 +91,7 @@ def fix_mon_name(name:str) -> str:
         "Chest",
         "Altered",
         "Average", # Gourgeist
+        "Shield",
 
         "West", # rk9 doesn't differentiate between Gastrodon forms but other platforms do sometimes
         "East", # west is the default to match Showdown, and also pink gastro is better anyway
