@@ -134,7 +134,7 @@ __TEMPLATE_FOOTER__
 </template>
 
 <template id="standings-row-template">
-    <tr>
+    <tr :class="[ player.cut ? 'player-cut': '' ]">
         <td>{{ player.place }}</td>
         <td>
             <div
@@ -352,7 +352,7 @@ __TEMPLATE_FOOTER__
         </thead>
         <tbody>
         <template v-for="opp, i in phase.rounds">
-            <tr :class="[ opp.bye ? 'bye' : '' ]" class="opp-info-line">
+            <tr :class="[ (opp.bye ? 'bye' : (opp.res ? opp.res : '')) ]" class="opp-info-line">
                 <td>{{ opp.rname }}</td>
                 <td>
                     <template v-if="opp.bye">Bye</template>

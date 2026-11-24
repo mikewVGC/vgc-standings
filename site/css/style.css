@@ -1615,6 +1615,11 @@ h4#player-champs-link {
         content: "OpRes";
     }
 
+    table.main-standings tr.player-cut td:nth-child(10)::before,
+    table.main-standings tr.player-cut td:nth-child(11)::before {
+        display: none;
+    }
+
     table.main-standings td:nth-child(12)::before {
         content: "Team";
     }
@@ -1723,8 +1728,12 @@ h4#player-champs-link {
         display: none;
     }
 
+    table#opponents tbody td {
+        padding: .2em .2em;
+    }
+
     table#opponents tbody td:nth-child(1) {
-        width: 14%;
+        width: 12%;
         text-align: center;
         white-space: nowrap;
     }
@@ -1734,8 +1743,8 @@ h4#player-champs-link {
     }
 
     table#opponents tbody td:nth-child(2) {
-        width: 60%;
-        padding-left: 20%;
+        width: 65%;
+        padding-left: 16%;
     }
 
     table#opponents tbody td:nth-child(2):before {
@@ -1744,10 +1753,10 @@ h4#player-champs-link {
 
     table#opponents tbody td:nth-child(3) {
         text-align: center;
-        width: 14%;
+        width: 12%;
         position: absolute;
         top: 0px;
-        left: 18%;
+        left: 14%;
     }
 
     table#opponents tbody td:nth-child(3)::before {

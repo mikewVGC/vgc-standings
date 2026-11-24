@@ -14,6 +14,7 @@ export default {
             countryStats: {},
             usage: [],
             allRounds: [],
+            pairings: {},
 
             favs: [],
 
@@ -170,7 +171,7 @@ export default {
                         }
                     }
 
-                    let pairings = this.getPairings(secondary);
+                    let pairings = this.pairings[secondary] || [];
                     let roundName = secondary;
                     let roundNum = secondary;
                     let matchesComplete = 0;
@@ -473,6 +474,13 @@ export default {
                         .normalize('NFD')
                         .replace(/[\u0300-\u036f]/g, '');
 
+                    for (let i = 0; i < player.rounds.length; i++) {
+                        let round = player.rounds[i].round;
+                        if (!this.pairings[round]) {
+                            this.pairings[round] = this.makePairings(round);
+                        }
+                    }
+
                     /*
                     // build "opponent info" section
                     this.standings[playerCode].oppInfo = {
@@ -640,7 +648,7 @@ export default {
             }
         },
 
-        getPairings(round) {
+        makePairings(round) {
             let pairings = [];
             let checked = {};
 
