@@ -117,6 +117,10 @@ def process_pokedata_event(data:list, tour_format:list, official_order:list, eve
         if player_country == "UK":
             player_country = "GB"
 
+        # there's somehow one player with CS... making an assumption here
+        if player_country == "CS":
+            player_country = "RS"
+
         players[player_code] = Player(
             name=pdata[0][0].strip(),
             code=player_code,
