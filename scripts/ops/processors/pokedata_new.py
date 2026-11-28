@@ -153,8 +153,8 @@ def process_pokedata_new_event(
         if player['c'] == "UK":
             player['c'] = "GB"
 
-        if player_country == "CS":
-            player_country = "RS"
+        if player['c'] == "CS":
+            player['c'] = "RS"
 
         if not player['c']:
             player['c'] = ""
